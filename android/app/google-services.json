@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "25285349571",
+    "firebase_url": "https://billow-software.firebaseio.com",
+    "project_id": "billow-software",
+    "storage_bucket": "billow-software.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25285349571:android:c946230b0c0f7342",
+        "android_client_info": {
+          "package_name": "com.sans_paper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrZbgXlnQW_f9wjjJIeijZx9YUqEd-DbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
