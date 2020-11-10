@@ -12,7 +12,7 @@ import {CommonImages} from '@constant/Images';
 import {darkGrey} from '@styles/colors';
 
 //navigation
-import {showLoginScreen, showMainScreen} from '@navigation';
+import {showLoginScreen} from '@navigation';
 
 //redux
 import {init} from '@store/common';
@@ -35,18 +35,6 @@ class InitialScreen extends React.Component {
 
   componentDidMount() {
     this.authListener = auth().onAuthStateChanged(this._onAuthStateChanged);
-  }
-
-  componentDidUpdate() {
-    const {
-      formInitStatus,
-      formFieldsInitStatus,
-      linkedItemInitStatus,
-    } = this.props;
-
-    if (formInitStatus && formFieldsInitStatus && linkedItemInitStatus) {
-      showMainScreen();
-    }
   }
 
   componentWillUnmount() {

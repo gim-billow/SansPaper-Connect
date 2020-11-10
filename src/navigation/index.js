@@ -62,6 +62,7 @@ export const showLoginScreen = () => {
 
 export const showMainScreen = async () => {
   const homeIcon = await Ionicons.getImageSource('md-home', 25);
+  const formIcon = await Ionicons.getImageSource('paper-plane', 25);
   return Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -77,9 +78,6 @@ export const showMainScreen = async () => {
                     name: screens.MainScreen,
                     options: {
                       topBar: {
-                        title: {
-                          text: 'Select Forms',
-                        },
                         visible: true,
                       },
                     },
@@ -90,6 +88,30 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'Main',
                   icon: homeIcon,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'FORM_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.FormScreen,
+                    name: screens.FormScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Form',
+                  icon: formIcon,
                 },
               },
             },

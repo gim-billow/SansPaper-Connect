@@ -4,5 +4,6 @@ export const screens = {
   MainScreen: 'MainScreen',
   LinkedItems: 'LinkedItems',
   FormScreen: 'FormScreen',
+  FormFieldsScreen: 'FormFieldsScreen',
   ActivityIndicatorOverlay: 'ActivityIndicatorOverlay',
 };

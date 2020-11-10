@@ -3,14 +3,13 @@ export const USER_ACTIONS = {
 };
 
 export const USER_SAGA_ACTIONS = {
-  UPDATE_USER_DETAILS: 'sagaActions/UPDATE_USER_DETAILS',
+  UPDATE_USER_DETAILS: 'userActions/UPDATE_USER_DETAILS',
 };
 
 export const USER_REDUCER_ACTIONS = {
   UPDATE_LOGIN_STATUS: 'userActions/UPDATE_LOGIN_STATUS',
-  UPDATE_USER_EMAIL: 'userActions/UPDATE_USER_EMAIL',
-  UPDATE_USER_ID: 'userActions/UPDATE_USER_ID',
-  UPDATE_USER_REFERENCE: 'userAction/UPDATE_USER_REFERENCE',
+  UPDATE_USER_EMAIL: 'userAction/UPDATE_USER_EMAIL',
+  UPDATE_USER_ID: 'userAction/UPDATE_USER_ID',
 };
 
 export const loginUser = (payload) => ({
