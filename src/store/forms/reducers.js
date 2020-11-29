@@ -3,7 +3,9 @@ import {FORM_REDUCER_ACTIONS} from './actions';
 
 const INIT_STATE = {
   currentFormId: '',
-  currentForm: {},
+  currentForm: {
+    fields: [],
+  },
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -29,6 +31,11 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST: {
       return produce(state, (draftState) => {
         draftState.forms = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS: {
+      return produce(state, (draftState) => {
+        draftState.currentForm.fields = action.payload;
       });
     }
     default:
