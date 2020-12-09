@@ -1,21 +1,24 @@
 import {StyleSheet} from 'react-native';
 import {lightGrey, darkGrey} from 'styles/colors';
 import {regular} from 'styles/font';
-import { red } from '@styles/colors';
+import {red} from '@styles/colors';
 
 export default StyleSheet.create({
   text: {
-    alignSelf: 'center',
+    paddingLeft: 10,
+    paddingTop: 10,
     fontSize: regular,
+  },
+  itemText: {
+    fontSize: regular,
+    paddingVertical: 5,
   },
   container: {
     marginTop: '30%',
     flex: 0,
     height: '70%',
     width: '90%',
-  },
-  listContainer: {
-    height: 500,
+    paddingTop: 10,
   },
   selectToggle: {
     marginTop: 10,
@@ -26,9 +29,6 @@ export default StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     backgroundColor: lightGrey,
-  },
-  selectedItem: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   button: {
     backgroundColor: red,
