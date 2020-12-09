@@ -6540,10 +6540,10 @@ react-native-safe-area-view@^0.14.9:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
-react-native-sectioned-multi-select@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.8.0.tgz#72eaf56b64c1014d4d335d5f169d47ec624234ab"
-  integrity sha512-vragvEK/GF5LSX/TRpw7/eupVhdgOdVe4UxHQKEaZbZ7S1moMZX+py0aWkN8iIGC9KGa4ewYgFovio+Usa4F+g==
+react-native-sectioned-multi-select@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.8.1.tgz#5ec8e4fe4136c36dc5df1222b288896760e43c86"
+  integrity sha512-iH/5PHBo64yFhKzjd+6sCG0aEvgDnUwpn3I7R0ohcGo/+gJdw47mYmJMTwJTmR9JqBFXHx+2bkQi4ij2ghfqRQ==
 
 react-native-size-matters@^0.3.1:
   version "0.3.1"

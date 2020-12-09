@@ -6,15 +6,16 @@ import {connect} from 'react-redux';
 
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentLinkedItems} from '@selector/form';
-import {loadFormFields} from '@store/forms';
+import {goToFormFieldsScreen} from '@store/navigate';
+import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
 
 class LinkedItemsList extends React.Component {
   keyExtractor = (item, index) => index.toString();
 
   onPress = (linkedItemId) => {
-    const {loadFormFields} = this.props;
-    loadFormFields({linkedItemId});
+    const {goToFormFieldsScreen} = this.props;
+    goToFormFieldsScreen({linkedItemId, componentId: screens.LinkedItems});
     // onPress();
   };
 
@@ -54,4 +55,4 @@ const mapState = createStructuredSelector({
   linkedItems: selectCurrentLinkedItems,
 });
 
-export default connect(mapState, {loadFormFields})(LinkedItemsList);
+export default connect(mapState, {goToFormFieldsScreen})(LinkedItemsList);

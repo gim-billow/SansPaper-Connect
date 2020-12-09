@@ -8,9 +8,12 @@ class FormFieldsScreen extends React.Component {
   static options = () => {
     const option = {
       topBar: {
-        visible: false,
+        visible: true,
         title: {
           text: 'Form',
+        },
+        backButton: {
+          showTitle: false,
         },
       },
     };

@@ -6,7 +6,9 @@ import {FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem} from 'react-native-elements';
 import {selectFormList} from '@selector/form/index';
-import {loadLinkedItems, updateCurrentFormId} from '@store/forms';
+import {updateCurrentFormId} from '@store/forms';
+import {screens} from '@constant/ScreenConstants';
+import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,16 +21,18 @@ class FormList extends React.Component {
   keyExtractor = (item, index) => index.toString();
 
   onPress = (linked_table, form_id) => {
-    const {loadLinkedItems, updateCurrentFormId} = this.props;
+    const {
+      goToLinkedItemScreen,
+      updateCurrentFormId,
+      goToFormFieldsScreen,
+    } = this.props;
 
     updateCurrentFormId(form_id);
     if (linked_table && linked_table !== '') {
-      loadLinkedItems(linked_table);
+      goToLinkedItemScreen(linked_table);
     } else {
-      console.log('not load like items');
-      const {componentId} = this.props;
-      const payload = {passProps: {}, componentId};
-      //pushScreenFormScreen(payload);
+      console.log('goToFormFieldsScreen');
+      goToFormFieldsScreen({componentId: screens.FormScreen});
     }
   };
 
@@ -63,6 +67,8 @@ const mapState = createStructuredSelector({
   formList: selectFormList,
 });
 
-export default connect(mapState, {loadLinkedItems, updateCurrentFormId})(
-  FormList,
-);
+export default connect(mapState, {
+  goToLinkedItemScreen,
+  updateCurrentFormId,
+  goToFormFieldsScreen,
+})(FormList);

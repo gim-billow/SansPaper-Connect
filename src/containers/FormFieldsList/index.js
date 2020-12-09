@@ -30,11 +30,11 @@ class FormFieldsList extends React.Component {
     this.setState({expanded: !expanded});
   };
 
-  updateFieldsValue = (rank, value) => {
-    const {fieldsValue} = this.state;
-    const updatedFieldsValue = assoc(rank, value, fieldsValue);
-    this.setState({fieldsValue: updatedFieldsValue});
-  };
+  // updateFieldsValue = (rank, value) => {
+  //   const {fieldsValue} = this.state;
+  //   const updatedFieldsValue = assoc(rank, value, fieldsValue);
+  //   this.setState({fieldsValue: updatedFieldsValue});
+  // };
 
   renderItem = (props) => {
     const {item} = props;
