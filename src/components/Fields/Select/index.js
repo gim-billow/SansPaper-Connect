@@ -5,11 +5,13 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import ItemWrapper from '../ItemWrapper';
 import {split, pipe, map} from 'ramda';
 import styles from './styles';
+import MandatoryField from '../MandatoryField';
 
 class Select extends Component {
   state = {
     options: [],
     selOptions: [],
+    queryOptionsMode: true,
   };
 
   componentDidMount() {
@@ -21,18 +23,29 @@ class Select extends Component {
         return {id: optArr[0], name: optArr[1] || optArr[0]};
       }),
     )(item.seloptions);
-
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({selOptions, options: [item.value]});
+    console.log('selOptions:', selOptions);
   }
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
     this.setState({options: selectedItems});
     updateFieldsValue({rank: item.rank, value: selectedItems[0]});
+    console.log('value:', selectedItems[0]);
   };
 
+  // onSelectedItemObjectsChange = (selectedItemObjects) => {
+  //   const {queryOptionsMode} = this.state;
+  //   const value = queryOptionsMode
+  //     ? pluck('id', selectedItemObjects).join('|')
+  //     : pluck('name', selectedItemObjects).join('|');
+  //   this.props.callback.fields[this.props.keyIndex].value = value;
+  //   this.setState({selectedItemObjects});
+  // };
+
   render() {
-    const {item} = this.props;
+    const {label, mandatory} = this.props.item;
     const {
       container,
       selectToggle,
@@ -44,7 +57,8 @@ class Select extends Component {
 
     return (
       <ItemWrapper>
-        <Text style={text}>{item.label}</Text>
+        <Text style={text}>{label}</Text>
+        {mandatory === 1 ? <MandatoryField /> : null}
         <SectionedMultiSelect
           styles={{
             container,
@@ -59,6 +73,7 @@ class Select extends Component {
           single
           selectText="Select from options"
           onSelectedItemsChange={this.onSelectedItemsChange}
+          // onSelectedItemObjectsChange={this.onSelectedItemObjectsChange}
           selectedItems={this.state.options}
         />
       </ItemWrapper>
