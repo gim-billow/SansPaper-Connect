@@ -44,11 +44,13 @@ const IconTextInput = ({secureTextEntry = false, ...props}) => {
         secureTextEntry={secureTextEntry}
         onChangeText={(text) => onChangeText(text)}
       />
-      <Icon
-        style={styles.icon}
-        {...iconEyeProps}
-        onPress={() => onPressIcon()}
-      />
+      {placeHolder === 'Password' ? (
+        <Icon
+          style={styles.icon}
+          {...iconEyeProps}
+          onPress={() => onPressIcon()}
+        />
+      ) : null}
     </View>
   );
 };
