@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {darkred} from '../../../assets/colors/colors';
+import {darkRed} from '@styles/colors';
 
 export default StyleSheet.create({
   text: {
@@ -7,6 +7,6 @@ export default StyleSheet.create({
     paddingLeft: 10,
     fontSize: 12,
     textAlign: 'left',
-    color: darkred,
+    color: darkRed,
   },
 });

@@ -9,3 +9,13 @@ export const getUpviseTabledQueryData = (payload) => {
   }
   return data;
 };
+
+export const sortByStringField = (data, field) => {
+  return data.sort((a, b) => {
+    return a[field].toLowerCase() < b[field].toLowerCase()
+      ? -1
+      : a[field].toLowerCase() === b[field].toLowerCase()
+      ? 0
+      : 1;
+  });
+};
