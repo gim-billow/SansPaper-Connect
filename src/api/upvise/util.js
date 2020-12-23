@@ -8,3 +8,10 @@ export const getOptions = async (table, where, organisation) => {
     where,
   });
 };
+
+export const getToolGroups = async (organisation) => {
+  return await queryUpviseTable({
+    table: UpviseTablesMap['tools.tools'],
+    organisation,
+  });
+};
