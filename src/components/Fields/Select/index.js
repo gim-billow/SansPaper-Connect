@@ -15,21 +15,21 @@ class Select extends Component {
     options: [],
     selOptions: [],
     queryOptionsMode: true,
+    counter: 0,
+    setvalProject: '0000',
   };
 
   componentDidMount() {
-    // const {item} = this.props;
-    // const selOptions = pipe(
-    //   split('|'),
-    //   map((opt, i) => {
-    //     const optArr = split(':', opt);
-    //     return {id: optArr[0], name: optArr[1] || optArr[0]};
-    //   }),
-    // )(item.seloptions);
+    const {item} = this.props;
+    if (item.seloptions.includes('categorizedTools')) {
+      setTimeout(() => {
+        this.setState({counter: this.state.counter + 1});
+      }, 500);
+
+      this.setState({setvalProject: this.props.callback.fields[0].value});
+    }
 
     this.onQueryByOptions();
-
-    // this.updateSetOptions(selOptions, [item.value]);
   }
 
   updateSetOptions = (options, value) => {
@@ -51,7 +51,10 @@ class Select extends Component {
       const queriedOptions = await getToolGroups(organization);
       formattedData = this._mapJSONToPickerItem(queriedOptions.data.items);
     } else if (seloptions.includes('categorizedTools')) {
-      // TODO:
+      const table = 'tools.tools'; //we're getting the milestones.
+      const query = 'groupid="' + this.state.valProject + '"';
+      const queriedOptions = await getOptions(table, query, organization);
+      formattedData = this._mapJSONToPickerItem(queriedOptions.data.items);
     } else if (seloptions.includes('milestone')) {
       // TODO:
     } else {
