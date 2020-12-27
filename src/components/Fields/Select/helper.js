@@ -7,7 +7,7 @@ const getQueryOptions = async (seloptions, organization) => {
   const table = regExpQuote.exec(queryArr[0])[1];
   const query = regExpDoubleQuote.exec(queryArr[1])[1];
   const queriedOptions = await getOptions(table, query, organization);
- 
+
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,
@@ -22,9 +22,9 @@ const getToolGroupsOptions = async (organization) => {
   );
 };
 
-const getCategoriesOptions = async (organization) => {
+const getCategoriesOptions = async (organization, project) => {
   const table = 'tools.tools'; //we're getting the milestones.
-  const query = 'groupid="' + this.state.valProject + '"';
+  const query = 'groupid="' + project + '"';
   const queriedOptions = await getOptions(table, query, organization);
   return map(
     (options) => pick(['id', 'name'], options),
@@ -32,17 +32,17 @@ const getCategoriesOptions = async (organization) => {
   );
 };
 
-const getMilestoneOptions = async (organization) => {
+const getMilestoneOptions = async (organization, project) => {
   const table = 'projects.milestones'; //we're getting the milestones.
-  const query = 'projectid="' + valProject +'"';
+  const query = 'projectid="' + project + '"';
   const queriedOptions = await getOptions(table, query, organization);
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,
   );
-}
+};
 
-export const getQueryByOptions = async (props) => {
+export const getQueryByOptions = async (props, project) => {
   const {seloptions} = props.item;
   const {organization} = props;
 
@@ -51,9 +51,9 @@ export const getQueryByOptions = async (props) => {
   } else if (seloptions.includes('tools.group')) {
     return getToolGroupsOptions(organization);
   } else if (seloptions.includes('categorizedTools')) {
-    return getCategoriesOptions(organization);
+    return getCategoriesOptions(organization, project);
   } else if (seloptions.includes('milestone')) {
-    return getMilestoneOptions(organization)
+    return getMilestoneOptions(organization, project);
   } else {
     return pipe(
       split('|'),

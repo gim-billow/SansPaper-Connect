@@ -12,25 +12,40 @@ class Select extends Component {
   state = {
     options: [],
     selOptions: [],
-    queryOptionsMode: true,
     counter: 0,
-    setvalProject: '0000',
+    valProject: '0000',
   };
 
   async componentDidMount() {
     const {item} = this.props;
-    if (item.seloptions.includes('categorizedTools')) {
-      setTimeout(() => {
-        this.setState({counter: this.state.counter + 1});
-      }, 500);
 
-      this.setState({setvalProject: this.props.callback.fields[0].value});
+    if (
+      item.seloptions.includes('categorizedTools') ||
+      item.seloptions.includes('milestone')
+    ) {
+      this.optionCounter();
     }
 
-    const options = await getQueryByOptions(this.props);
-    console.log('options', options);
-    this.setState({selOptions: options, options: [item.value]});
+    const options = await getQueryByOptions(this.props, this.state.valProject);
+    this.updateSetOptions(options, [item.value]);
   }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  optionCounter = () => {
+    this.timer = setTimeout(
+      () => this.setState({counter: this.state.counter + 1}),
+      500,
+    );
+
+    this.setState({valProject: this.props.currentFormFields[0].value});
+  };
+
+  updateSetOptions = (options, value) => {
+    this.setState({selOptions: options, options: value});
+  };
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
