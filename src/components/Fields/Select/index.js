@@ -4,11 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 import ItemWrapper from '../ItemWrapper';
-import {split, pipe, map} from 'ramda';
-import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
-import {getOptions, getToolGroups} from '@api/upvise/util';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
+import {getQueryByOptions} from './helper';
 
 class Select extends Component {
   state = {
@@ -19,7 +17,7 @@ class Select extends Component {
     setvalProject: '0000',
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const {item} = this.props;
     if (item.seloptions.includes('categorizedTools')) {
       setTimeout(() => {
@@ -29,55 +27,10 @@ class Select extends Component {
       this.setState({setvalProject: this.props.callback.fields[0].value});
     }
 
-    this.onQueryByOptions();
+    const options = await getQueryByOptions(this.props);
+    console.log('options', options);
+    this.setState({selOptions: options, options: [item.value]});
   }
-
-  updateSetOptions = (options, value) => {
-    this.setState({selOptions: options, options: value});
-  };
-
-  onQueryByOptions = async () => {
-    const {seloptions, value} = this.props.item;
-    const {organization} = this.props;
-    let formattedData;
-
-    if (seloptions.includes('Query.options')) {
-      const queryArr = seloptions.split(',');
-      const table = regExpQuote.exec(queryArr[0])[1];
-      const query = regExpDoubleQuote.exec(queryArr[1])[1];
-      const queriedOptions = await getOptions(table, query, organization);
-      formattedData = this._mapJSONToPickerItem(queriedOptions.data.items);
-    } else if (seloptions.includes('tools.group')) {
-      const queriedOptions = await getToolGroups(organization);
-      formattedData = this._mapJSONToPickerItem(queriedOptions.data.items);
-    } else if (seloptions.includes('categorizedTools')) {
-      const table = 'tools.tools'; //we're getting the milestones.
-      const query = 'groupid="' + this.state.valProject + '"';
-      const queriedOptions = await getOptions(table, query, organization);
-      formattedData = this._mapJSONToPickerItem(queriedOptions.data.items);
-    } else if (seloptions.includes('milestone')) {
-      // TODO:
-    } else {
-      formattedData = pipe(
-        split('|'),
-        map((opt, i) => {
-          const optArr = split(':', opt);
-          return {id: optArr[0], name: optArr[1] || optArr[0]};
-        }),
-      )(seloptions);
-    }
-
-    this.setState({selOptions: formattedData, options: [value]});
-  };
-
-  _mapJSONToPickerItem = (arr) => {
-    return arr.map((val) => {
-      return {
-        id: val.id,
-        name: val.name,
-      };
-    });
-  };
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
@@ -87,6 +40,7 @@ class Select extends Component {
 
   render() {
     const {item} = this.props;
+    const {selOptions} = this.state;
     const {container, selectToggle, selectedItem, button, itemText} = styles;
 
     return (
@@ -102,7 +56,7 @@ class Select extends Component {
               button,
               itemText,
             }}
-            items={this.state.selOptions}
+            items={selOptions}
             IconRenderer={Icon}
             uniqueKey="id"
             single
