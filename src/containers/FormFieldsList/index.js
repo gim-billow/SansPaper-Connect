@@ -33,27 +33,19 @@ class FormFieldsList extends React.Component {
 
   renderItem = (props) => {
     const {item} = props;
-<<<<<<< HEAD
     const {
       updateFormFieldValue: updatedFormFieldProps,
       organization,
       currentFormFields,
     } = this.props;
-=======
-    const {updateFormFieldValue: updateFormFieldValueProps} = this.props;
->>>>>>> master
 
     if (has(item.type, Fields)) {
       const FormFields = Fields[item.type];
       const FieldElement = React.createElement(FormFields, {
         item: item,
-<<<<<<< HEAD
         updateFieldsValue: updatedFormFieldProps,
         organization,
         currentFormFields,
-=======
-        updateFieldsValue: updateFormFieldValueProps,
->>>>>>> master
         ...fieldsProps[item.type],
       });
       return FieldElement;
