@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {has, assoc} from 'ramda';
+import {has} from 'ramda';
 
 //component
 import Fields from 'components/Fields';
@@ -30,12 +30,6 @@ class FormFieldsList extends React.Component {
     const {expanded} = this.state;
     this.setState({expanded: !expanded});
   };
-
-  // updateFieldsValue = (rank, value) => {
-  //   const {fieldsValue} = this.state;
-  //   const updatedFieldsValue = assoc(rank, value, fieldsValue);
-  //   this.setState({fieldsValue: updatedFieldsValue});
-  // };
 
   renderItem = (props) => {
     const {item} = props;
