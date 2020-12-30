@@ -538,7 +538,7 @@ PODS:
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
   - React-jsinspector (0.63.3)
-  - react-native-webview (11.0.0):
+  - react-native-webview (10.10.0):
     - React-Core
   - React-RCTActionSheet (0.63.3):
     - React-Core/RCTActionSheetHeaders (= 0.63.3)
@@ -830,7 +830,7 @@ SPEC CHECKSUMS:
   React-jsi: df07aa95b39c5be3e41199921509bfa929ed2b9d
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
-  react-native-webview: 6b7950628616679d81bdd75747e50cf6de9b5a5f
+  react-native-webview: 73e409ecc987c189772bda27ba7f0e2f3dcd2e81
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
   React-RCTAnimation: 1befece0b5183c22ae01b966f5583f42e69a83c2
   React-RCTBlob: 0b284339cbe4b15705a05e2313a51c6d8b51fa40
@@ -847,10 +847,10 @@ SPEC CHECKSUMS:
   RNFBAuth: 552aa1fe908c433e12a59ed167a7c2695efa19e7
   RNFBFirestore: 09a65d56413b9e11ab550f5f7e27106312c5fb7e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
-  WatermelonDB: 54c914a001fc262df27d18b02fd6c0715a531fb9
+  WatermelonDB: 08966a7a96bfff814c5eeaf63b5822770271ab3b
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 3809098eea0625dde4f8e367d18caac6ac2e21e9
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.9.3

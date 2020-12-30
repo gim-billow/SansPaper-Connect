@@ -52,9 +52,11 @@ class LoginScreen extends React.Component {
   state = {
     username: '',
     password: '',
+    securePassword: true,
     error: '',
     changeLogo: false,
     loading: false,
+    icon: 'eye-slash',
   };
 
   keyboardDidShowListener;
@@ -95,6 +97,13 @@ class LoginScreen extends React.Component {
 
   onPasswordChange = (password) => {
     this.setState({password});
+  };
+
+  onChangeIcon = (icon) => {
+    this.setState((prevState) => ({
+      icon: prevState.icon === 'eye' ? 'eye-slash' : 'eye',
+      securePassword: !prevState.securePassword,
+    }));
   };
 
   onLoginPress = async () => {
@@ -139,8 +148,10 @@ class LoginScreen extends React.Component {
           <IconTextInput
             onChangeText={this.onPasswordChange}
             iconProps={{...iconProps, name: 'lock'}}
+            iconEyeProps={{...iconProps, name: this.state.icon}}
             placeHolder="Password"
-            secureTextEntry={true}
+            secureTextEntry={this.state.securePassword}
+            onPressIcon={this.onChangeIcon}
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={this.onLoginPress}>

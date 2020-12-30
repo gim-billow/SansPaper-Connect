@@ -21,13 +21,20 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: darkGrey,
-    width: '85%',
+    width: '70%',
     backgroundColor: 'white',
   },
 });
 
 const IconTextInput = ({secureTextEntry = false, ...props}) => {
-  const {onChangeText, placeHolder, iconProps} = props;
+  const {
+    onChangeText,
+    placeHolder,
+    iconProps,
+    iconEyeProps,
+    onPressIcon,
+  } = props;
+
   return (
     <View style={styles.container}>
       <Icon style={styles.icon} {...iconProps} />
@@ -37,6 +44,13 @@ const IconTextInput = ({secureTextEntry = false, ...props}) => {
         secureTextEntry={secureTextEntry}
         onChangeText={(text) => onChangeText(text)}
       />
+      {placeHolder === 'Password' ? (
+        <Icon
+          style={styles.icon}
+          {...iconEyeProps}
+          onPress={() => onPressIcon()}
+        />
+      ) : null}
     </View>
   );
 };
