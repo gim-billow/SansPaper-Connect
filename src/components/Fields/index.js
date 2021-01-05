@@ -4,6 +4,7 @@ import User from './User';
 import MultiSelect from './MultiSelect';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Duration from './Duration';
 
 export default {
   text: Text,
@@ -13,4 +14,5 @@ export default {
   user: User,
   select: Select,
   selectmulti: MultiSelect,
+  duration: Duration,
 };
