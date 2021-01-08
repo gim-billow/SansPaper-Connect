@@ -20,8 +20,10 @@ const DatePicker = (props) => {
   };
 
   const handleConfirm = (date) => {
-    const dateFormat =
-      date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    const dateFormat = day + '/' + month + '/' + year;
 
     setLabel(dateFormat);
     setChangeTheme(true);
@@ -32,6 +34,7 @@ const DatePicker = (props) => {
 
   return (
     <ItemWrapper>
+      <Text style={styles.text}>{item.label}</Text>
       <View style={styles.date}>
         <Button
           mode="contained"
