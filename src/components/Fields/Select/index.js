@@ -12,36 +12,14 @@ class Select extends Component {
   state = {
     options: [],
     selOptions: [],
-    counter: 0,
     valProject: '0000',
   };
 
   async componentDidMount() {
     const {item} = this.props;
-
-    if (
-      item.seloptions.includes('categorizedTools') ||
-      item.seloptions.includes('milestone')
-    ) {
-      this.optionCounter();
-    }
-
     const options = await getQueryByOptions(this.props, this.state.valProject);
     this.updateSetOptions(options, [item.value]);
   }
-
-  componentWillUnmount() {
-    clearTimeout(this.timer);
-  }
-
-  optionCounter = () => {
-    this.timer = setTimeout(
-      () => this.setState({counter: this.state.counter + 1}),
-      500,
-    );
-
-    this.setState({valProject: this.props.currentFormFields[0].value});
-  };
 
   updateSetOptions = (options, value) => {
     this.setState({selOptions: options, options: value});
