@@ -6,6 +6,7 @@ import Select from './Select';
 import ToggleButton from './ToggleButton';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
+import DateTimePicker from './DateTimePicker';
 
 export default {
   text: Text,
@@ -17,4 +18,5 @@ export default {
   selectmulti: MultiSelect,
   date: DatePicker,
   time: TimePicker,
+  datetime: DateTimePicker,
 };
