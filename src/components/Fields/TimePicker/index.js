@@ -20,14 +20,15 @@ const TimePicker = (props) => {
   };
 
   const handleConfirm = (time) => {
-    const hrs = time.getHours();
-    const mins = time.getMinutes();
+    let hrs = time.getHours();
+    let mins = time.getMinutes();
 
-    const ampm = hrs >= 12 ? 'pm' : 'am';
-    const hrsFormat = hrs % 12;
-    const hrsCorrection = hrsFormat ? hrsFormat : 12; // the hour '0' should be '12'
-    const minsCorrection = mins < 10 ? '0' + mins : mins;
-    const timeFormat = hrsCorrection + ':' + minsCorrection + ' ' + ampm;
+    let ampm = hrs >= 12 ? 'pm' : 'am';
+    hrs = hrs % 12;
+    hrs = hrs ? hrs : 12;
+    mins = mins < 10 ? '0' + mins : mins;
+
+    const timeFormat = hrs + ':' + mins + ' ' + ampm;
 
     setLabel(timeFormat);
     setChangeTheme(true);
@@ -39,6 +40,7 @@ const TimePicker = (props) => {
 
   return (
     <ItemWrapper>
+      <Text style={styles.text}>{item.label}</Text>
       <View style={styles.date}>
         <Button
           mode="contained"
