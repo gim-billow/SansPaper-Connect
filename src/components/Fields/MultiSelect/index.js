@@ -7,35 +7,23 @@ import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions} from './helper';
-
 class MultiSelect extends Component {
   state = {
     options: [],
     selOptions: [],
-    queryOptionsMode: true,
-    counter: 0,
     setvalProject: '0000',
   };
 
   async componentDidMount() {
-    const {item} = this.props;
-    if (item.seloptions.includes('categorizedTools')) {
-      setTimeout(() => {
-        this.setState({counter: this.state.counter + 1});
-      }, 500);
-
-      this.setState({setvalProject: this.props.callback.fields[0].value});
-    }
-
     const options = await getQueryByOptions(this.props);
-    console.log('options', options);
-    this.setState({selOptions: options, options: [item.value]});
+    this.setState({selOptions: options});
   }
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
     this.setState({options: selectedItems});
-    updateFieldsValue({rank: item.rank, value: selectedItems[0]});
+    let value = selectedItems.toString().split(',').join('|');
+    updateFieldsValue({rank: item.rank, value: value});
   };
 
   render() {
