@@ -8,6 +8,7 @@ import styles from './styles';
 const Signature = (props) => {
   const {label, rank} = props.item;
   const {updateFieldsValue} = props;
+  const [saved, setSaved] = useState(false);
   const [signature, setSignature] = useState('');
   const [show, setShow] = useState(true);
 
@@ -18,6 +19,7 @@ const Signature = (props) => {
   const signaturePadClear = () => {
     console.log('sig cleared');
     setShow(false);
+    setSaved(false);
     setTimeout(() => {
       setShow(true);
     }, 0);
@@ -31,6 +33,7 @@ const Signature = (props) => {
   const signaturePadSave = () => {
     updateFieldsValue({rank: rank, value: signature});
     console.log('sig saved', signature);
+    setSaved(true);
   };
 
   return (
@@ -60,9 +63,11 @@ const Signature = (props) => {
           <View style={styles.button}>
             <Button
               mode="contained"
-              style={styles.buttonColor}
+              style={!saved ? styles.buttonColor : styles.changeButtonColor}
               onPress={signaturePadSave}>
-              <Text style={styles.text}>Save Signature</Text>
+              <Text style={!saved ? styles.text : styles.changeText}>
+                {!saved ? 'Save Signature' : 'Signature Saved'}
+              </Text>
             </Button>
           </View>
         </View>

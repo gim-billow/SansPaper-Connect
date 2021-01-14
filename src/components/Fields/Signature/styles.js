@@ -19,7 +19,11 @@ export default StyleSheet.create({
   },
   text: {
     color: lightRed,
-    fontSize: 14,
+    fontSize: 12,
+  },
+  changeText: {
+    color: 'white',
+    fontSize: 12,
   },
   container: {
     width: 400,
@@ -44,5 +48,8 @@ export default StyleSheet.create({
   },
   buttonColor: {
     backgroundColor: 'white',
+  },
+  changeButtonColor: {
+    backgroundColor: 'red',
   },
 });
