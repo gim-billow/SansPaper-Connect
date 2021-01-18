@@ -13,4 +13,5 @@ export default {
   user: User,
   select: Select,
   selectmulti: MultiSelect,
+  button: Text,
 };
