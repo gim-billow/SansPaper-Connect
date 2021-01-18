@@ -14,4 +14,5 @@ export default {
   select: Select,
   selectmulti: MultiSelect,
   button: Text,
+  score: Text,
 };
