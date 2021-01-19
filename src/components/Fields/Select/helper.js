@@ -1,5 +1,10 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
-import {getOptions, getToolGroups} from '@api/upvise/util';
+import {
+  getOptions,
+  getToolGroups,
+  getProjects,
+  getDataWithoutStatus,
+} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
 
 const getQueryOptions = async (seloptions, organization) => {
@@ -42,25 +47,60 @@ const getMilestoneOptions = async (organization, project) => {
   );
 };
 
-export const getQueryByOptions = async (props, project) => {
+const getProjectOptions = async (organization) => {
+  const queriedOptions = await getProjects(organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getWithoutStatus = async (organization, table) => {
+  const queriedOptions = await getDataWithoutStatus(organization, table);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+export const getQueryByOptions = async (props, project, type) => {
   const {seloptions} = props.item;
   const {organization} = props;
 
-  if (seloptions.includes('Query.options')) {
-    return getQueryOptions(seloptions, organization);
-  } else if (seloptions.includes('tools.group')) {
-    return getToolGroupsOptions(organization);
-  } else if (seloptions.includes('categorizedTools')) {
-    return getCategoriesOptions(organization, project);
-  } else if (seloptions.includes('milestone')) {
-    return getMilestoneOptions(organization, project);
-  } else {
-    return pipe(
-      split('|'),
-      map((opt, i) => {
-        const optArr = split(':', opt);
-        return {id: optArr[0], name: optArr[1] || optArr[0]};
-      }),
-    )(seloptions);
+  switch (type) {
+    case 'select': {
+      if (seloptions.includes('Query.options')) {
+        return getQueryOptions(seloptions, organization);
+      } else if (seloptions.includes('tools.group')) {
+        return getToolGroupsOptions(organization);
+      } else if (seloptions.includes('categorizedTools')) {
+        return getCategoriesOptions(organization, project);
+      } else if (seloptions.includes('milestone')) {
+        return getMilestoneOptions(organization, project);
+      } else {
+        return pipe(
+          split('|'),
+          map((opt, i) => {
+            const optArr = split(':', opt);
+            return {id: optArr[0], name: optArr[1] || optArr[0]};
+          }),
+        )(seloptions);
+      }
+    }
+    case 'project':
+      return getProjectOptions(organization);
+    case 'product':
+      return getWithoutStatus(organization, 'sales.products');
+    case 'opp':
+      return getWithoutStatus(organization, 'sales.opportunities');
+    case 'asset':
+      return getWithoutStatus(organization, 'assets.assets');
+    case 'tool':
+      return getWithoutStatus(organization, 'tools.tools');
+    case 'form':
+      return getWithoutStatus(organization, 'forms.forms');
+    case 'file':
+      return getWithoutStatus(organization, 'system.files');
+    default:
   }
 };

@@ -7,6 +7,7 @@ import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions} from './helper';
+import R from 'ramda';
 class MultiSelect extends Component {
   state = {
     options: [],
@@ -16,7 +17,10 @@ class MultiSelect extends Component {
 
   async componentDidMount() {
     const options = await getQueryByOptions(this.props);
-    this.setState({selOptions: options});
+    const sortByNameCaseInsensitive = R.sortBy(
+      R.compose(R.toLower, R.prop('name')),
+    );
+    this.setState({selOptions: sortByNameCaseInsensitive(options)});
   }
 
   onSelectedItemsChange = (selectedItems) => {

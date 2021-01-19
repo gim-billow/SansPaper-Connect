@@ -1,7 +1,6 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
 import {getOptions, getToolGroups} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
-
 const getQueryOptions = async (seloptions, organization) => {
   const queryArr = seloptions.split(',');
   const table = regExpQuote.exec(queryArr[0])[1];
@@ -31,7 +30,17 @@ const getCategoriesOptions = async (organization) => {
   );
 };
 
-export const getQueryByOptions = async (props) => {
+const getMilestoneOptions = async (organization, project) => {
+  const table = 'projects.milestones'; //we're getting the milestones.
+  const query = 'projectid="' + project + '"';
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+export const getQueryByOptions = async (props, project) => {
   const {seloptions} = props.item;
   const {organization} = props;
 
@@ -42,7 +51,7 @@ export const getQueryByOptions = async (props) => {
   } else if (seloptions.includes('categorizedTools')) {
     return getCategoriesOptions(organization);
   } else if (seloptions.includes('milestone')) {
-    // TODO:
+    return getMilestoneOptions(organization, project);
   } else {
     return pipe(
       split('|'),

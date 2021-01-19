@@ -13,4 +13,11 @@ export default {
   user: User,
   select: Select,
   selectmulti: MultiSelect,
+  project: Select,
+  product: Select,
+  opp: Select,
+  asset: Select,
+  tool: Select,
+  form: Select,
+  file: Select,
 };

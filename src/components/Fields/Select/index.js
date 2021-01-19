@@ -7,6 +7,7 @@ import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions} from './helper';
+import R from 'ramda';
 
 class Select extends Component {
   state = {
@@ -17,12 +18,29 @@ class Select extends Component {
 
   async componentDidMount() {
     const {item} = this.props;
-    const options = await getQueryByOptions(this.props, this.state.valProject);
+    const options = await getQueryByOptions(
+      this.props,
+      this.state.valProject,
+      item.type,
+    );
     this.updateSetOptions(options, [item.value]);
   }
 
   updateSetOptions = (options, value) => {
-    this.setState({selOptions: options, options: value});
+    const sortByNameCaseInsensitive = R.sortBy(
+      R.compose(R.toLower, R.prop('name')),
+    );
+
+    let sortlist = sortByNameCaseInsensitive(options);
+
+    var filteredOptions = sortlist.filter(function (el) {
+      return el != null;
+    });
+
+    this.setState({
+      selOptions: filteredOptions,
+      options: value,
+    });
   };
 
   onSelectedItemsChange = (selectedItems) => {
