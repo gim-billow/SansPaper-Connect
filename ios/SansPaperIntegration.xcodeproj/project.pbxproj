@@ -19,7 +19,6 @@
 		6BE2D4552AF218EE22C9749A /* libPods-SansPaperIntegration-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76D7B9B07746C0C331746E62 /* libPods-SansPaperIntegration-tvOSTests.a */; };
 		74CF52E3253DCA5F00A31EE6 /* emptyfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CF52E2253DCA5F00A31EE6 /* emptyfile.swift */; };
 		74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */; };
-		74CFDE55253DE13A00A31EE6 /* libWatermelonDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74CFDE54253DE13A00A31EE6 /* libWatermelonDB.a */; };
 		74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */; };
 		758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */; };
@@ -115,7 +114,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74CFDE55253DE13A00A31EE6 /* libWatermelonDB.a in Frameworks */,
 				758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
