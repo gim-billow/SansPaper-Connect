@@ -642,9 +642,6 @@ PODS:
     - RNFBApp
   - RNVectorIcons (7.1.0):
     - React
-  - WatermelonDB (0.20.0):
-    - React
-    - React-jsi
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -706,7 +703,6 @@ DEPENDENCIES:
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - "WatermelonDB (from `../node_modules/@nozbe/watermelondb`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -812,8 +808,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/firestore"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
-  WatermelonDB:
-    :path: "../node_modules/@nozbe/watermelondb"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -881,7 +875,6 @@ SPEC CHECKSUMS:
   RNFBAuth: 552aa1fe908c433e12a59ed167a7c2695efa19e7
   RNFBFirestore: 09a65d56413b9e11ab550f5f7e27106312c5fb7e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
-  WatermelonDB: 54c914a001fc262df27d18b02fd6c0715a531fb9
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
