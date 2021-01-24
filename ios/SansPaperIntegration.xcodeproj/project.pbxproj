@@ -21,6 +21,7 @@
 		74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */; };
 		74CFDE55253DE13A00A31EE6 /* libWatermelonDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74CFDE54253DE13A00A31EE6 /* libWatermelonDB.a */; };
 		74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */; };
 		758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */; };
 		D02E0CA78040F81540205E70 /* libPods-SansPaperIntegration-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7EB4D89CF41EA9EE936B84 /* libPods-SansPaperIntegration-tvOS.a */; };
 /* End PBXBuildFile section */
@@ -86,6 +87,7 @@
 		74CFDE64253DE1EF00A31EE6 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		74CFDE65253DE1EF00A31EE6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		74CFDE66253DE1EF00A31EE6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		76042502B7FE2D2FA1EEC4EB /* Pods-SansPaperIntegration-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOSTests/Pods-SansPaperIntegration-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		76D7B9B07746C0C331746E62 /* libPods-SansPaperIntegration-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SansPaperIntegration/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */,
 				74CFDE56253DE1EF00A31EE6 /* Fonts */,
 				74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */,
 				74CF52E2253DCA5F00A31EE6 /* emptyfile.swift */,
@@ -426,6 +429,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */,
+				74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */,
 			);
@@ -836,7 +840,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.billowsoftware.com.au.sanspaperconnect;
 				PRODUCT_NAME = SansPaperIntegration;
 				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperIntegration-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -864,7 +868,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.billowsoftware.com.au.sanspaperconnect;
 				PRODUCT_NAME = SansPaperIntegration;
 				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperIntegration-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
