@@ -63,21 +63,26 @@ const getWithoutStatus = async (organization, table) => {
   );
 };
 
-export const getQueryByOptions = async (props, project, type) => {
-  const {seloptions} = props.item;
-  const {organization} = props;
+export const getQueryByOptions = async (props) => {
+  const {seloptions, type} = props.item;
+  const {organization, projectValue} = props;
 
   switch (type) {
+    case 'selectmulti':
     case 'select': {
-      if (seloptions.includes('Query.options')) {
-        return getQueryOptions(seloptions, organization);
-      } else if (seloptions.includes('tools.group')) {
+      // the project name check order have to be in the current order, otherwise milestone will be missed
+      if (seloptions.includes('tools.group')) {
         return getToolGroupsOptions(organization);
       } else if (seloptions.includes('categorizedTools')) {
-        return getCategoriesOptions(organization, project);
+        return getCategoriesOptions(organization, projectValue);
       } else if (seloptions.includes('milestone')) {
-        return getMilestoneOptions(organization, project);
+        console.log('getting milestone options 2', props);
+        return getMilestoneOptions(organization, projectValue);
+      } else if (seloptions.includes('Query.options')) {
+        console.log('debugt  query options', seloptions);
+        return getQueryOptions(seloptions, organization);
       } else {
+        console.log('debugt  normal options', seloptions);
         return pipe(
           split('|'),
           map((opt, i) => {
@@ -102,5 +107,6 @@ export const getQueryByOptions = async (props, project, type) => {
     case 'file':
       return getWithoutStatus(organization, 'system.files');
     default:
+      return '';
   }
 };

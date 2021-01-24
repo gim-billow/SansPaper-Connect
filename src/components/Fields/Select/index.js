@@ -2,40 +2,42 @@ import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
 
 import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions} from './helper';
+import {selectProjectValue} from 'selector/form';
 import R from 'ramda';
 
 class Select extends Component {
   state = {
     options: [],
     selOptions: [],
-    valProject: '0000',
   };
 
   async componentDidMount() {
     const {item} = this.props;
-    const options = await getQueryByOptions(
-      this.props,
-      this.state.valProject,
-      item.type,
-    );
+    const options = await getQueryByOptions(this.props);
     this.updateSetOptions(options, [item.value]);
   }
 
+  async componentDidUpdate(prevProps) {
+    const {projectValue} = prevProps;
+    if (projectValue !== this.props.projectValue) {
+      const {item} = this.props;
+      const options = await getQueryByOptions(this.props);
+      this.updateSetOptions(options, [item.value]);
+    }
+  }
+
   updateSetOptions = (options, value) => {
-    const sortByNameCaseInsensitive = R.sortBy(
-      R.compose(R.toLower, R.prop('name')),
-    );
-
-    let sortlist = sortByNameCaseInsensitive(options);
-
-    var filteredOptions = sortlist.filter(function (el) {
-      return el != null;
-    });
+    const filteredOptions = R.pipe(
+      R.sortBy(R.compose(R.toLower, R.prop('name'))),
+      R.filter((option) => !R.isNil(option)),
+    )(options);
 
     this.setState({
       selOptions: filteredOptions,
@@ -50,10 +52,9 @@ class Select extends Component {
   };
 
   render() {
-    const {item} = this.props;
+    const {item, single = true} = this.props;
     const {selOptions} = this.state;
     const {container, selectToggle, selectedItem, button, itemText} = styles;
-
     return (
       <ItemWrapper>
         <Text style={styles.text}>{item.label}</Text>
@@ -70,7 +71,7 @@ class Select extends Component {
             items={selOptions}
             IconRenderer={Icon}
             uniqueKey="id"
-            single
+            single={single}
             selectText="Select from options"
             onSelectedItemsChange={this.onSelectedItemsChange}
             selectedItems={this.state.options}
@@ -81,4 +82,8 @@ class Select extends Component {
   }
 }
 
-export default Select;
+const mapState = createStructuredSelector({
+  projectValue: selectProjectValue,
+});
+
+export default connect(mapState, null)(Select);
