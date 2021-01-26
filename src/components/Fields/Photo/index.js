@@ -29,14 +29,11 @@ const Photo = (props) => {
       }).then((image) => {
         console.log('fromCamera', image);
 
-        setThumbnailImage(image.path);
-        // props.callback.fields[props.keyIndex].value = [];
-        // props.callback.fields[props.keyIndex].value[0] = {};
-        // props.callback.fields[props.keyIndex].value[0] = image;
-        updateFieldsValue({rank: rank, value: image});
-        setTitle('Retake Photo');
-        setChangeTheme(true);
         setModalVisible(!modalVisible);
+        setThumbnailImage(image.path);
+        updateFieldsValue({rank: rank, value: image});
+        setChangeTheme(true);
+        setTitle('Retake Photo');
       });
     } else {
       ImagePicker.clean()
@@ -52,11 +49,11 @@ const Photo = (props) => {
           }).then((images) => {
             console.log('images', images);
 
+            setModalVisible(!modalVisible);
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
-            setTitle('Retake Photo');
             setChangeTheme(true);
-            setModalVisible(!modalVisible);
+            setTitle('Retake Photo');
           });
         })
         .catch((e) => {
@@ -66,11 +63,11 @@ const Photo = (props) => {
   }
 
   const cancel = () => {
-    Toast.show('Success, remove the Photo');
-    setTitle('Add a Photo');
-    setThumbnailImage('');
     setChangeTheme(false);
+    setThumbnailImage('');
+    setTitle('Add a Photo');
     updateFieldsValue({rank: rank, value: ''});
+    Toast.show('Success, remove the Photo');
   };
 
   return (
@@ -109,7 +106,7 @@ const Photo = (props) => {
       </View>
       <View style={styles.centeredView}>
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
