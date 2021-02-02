@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Checkbox from './Checkbox';
 import Contact from './Contact';
 import Currency from './Currency';
 
@@ -15,6 +16,7 @@ export default {
   select: Select,
   contact: Contact,
   currency: Currency,
+  checkbox: Checkbox,
   selectmulti: Select,
   project: Select,
   product: Select,
