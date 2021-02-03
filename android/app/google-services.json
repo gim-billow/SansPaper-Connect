@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "25285349571-g1ceev33h50j2lususpo6olv3qd6dcll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sans_paper",
+            "certificate_hash": "1b2bfc207e5e9ff66d6ef657e22cc18dbd9900db"
+          }
+        },
+        {
           "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +38,51 @@
             {
               "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "25285349571-hgkfbs7ashad9qk7k4lrrq2mj0jmlcob.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.billowsoftware.sanspaper",
+                "app_store_id": "1470893509"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25285349571:android:c51c00c32327be37419276",
+        "android_client_info": {
+          "package_name": "com.sanspaper_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrZbgXlnQW_f9wjjJIeijZx9YUqEd-DbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "25285349571-hgkfbs7ashad9qk7k4lrrq2mj0jmlcob.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.billowsoftware.sanspaper",
+                "app_store_id": "1470893509"
+              }
             }
           ]
         }
