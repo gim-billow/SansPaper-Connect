@@ -6,6 +6,11 @@ import ToggleButton from './ToggleButton';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 import DateTimePicker from './DateTimePicker';
+import Duration from './Duration';
+import Signature from './Signature';
+import Checkbox from './Checkbox';
+import Contact from './Contact';
+import Currency from './Currency';
 
 export default {
   text: Text,
@@ -17,6 +22,11 @@ export default {
   date: DatePicker,
   time: TimePicker,
   datetime: DateTimePicker,
+  duration: Duration,
+  signature: Signature,
+  contact: Contact,
+  currency: Currency,
+  checkbox: Checkbox,
   selectmulti: Select,
   project: Select,
   product: Select,

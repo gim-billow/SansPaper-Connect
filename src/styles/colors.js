@@ -1,3 +1,5 @@
+export const white = '#fff';
+
 //Red
 export const red = '#b71c1c';
 export const lightRed = '#f05545';
