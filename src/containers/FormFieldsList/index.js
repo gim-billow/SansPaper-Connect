@@ -36,7 +36,6 @@ class FormFieldsList extends React.Component {
     const {
       updateFormFieldValue: updatedFormFieldProps,
       organization,
-      currentFormFields,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -45,7 +44,6 @@ class FormFieldsList extends React.Component {
         item: item,
         updateFieldsValue: updatedFormFieldProps,
         organization,
-        currentFormFields,
         ...fieldsProps[item.type],
       });
       return FieldElement;

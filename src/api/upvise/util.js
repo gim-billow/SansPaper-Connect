@@ -15,3 +15,18 @@ export const getToolGroups = async (organisation) => {
     organisation,
   });
 };
+
+export const getProjects = async (organisation) => {
+  return await queryUpviseTable({
+    table: UpviseTablesMap['projects.projects'],
+    organisation,
+    where: "status = '0'",
+  });
+};
+
+export const getDataWithoutStatus = async (organisation, tableMap) => {
+  return await queryUpviseTable({
+    table: UpviseTablesMap[tableMap],
+    organisation,
+  });
+};
