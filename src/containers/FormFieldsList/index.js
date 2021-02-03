@@ -13,6 +13,7 @@ import Fields from 'components/Fields';
 //redux,selector
 import {setCurrentForm, updateFormFieldValue} from 'store/forms';
 import {selectCurrentFormId, selectCurrentFormFields} from 'selector/form';
+import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
 import {fieldsProps} from './helper';
@@ -32,13 +33,17 @@ class FormFieldsList extends React.Component {
 
   renderItem = (props) => {
     const {item} = props;
-    const {updateFormFieldValue: updateFormFieldValueProps} = this.props;
+    const {
+      updateFormFieldValue: updatedFormFieldProps,
+      organization,
+    } = this.props;
 
     if (has(item.type, Fields)) {
       const FormFields = Fields[item.type];
       const FieldElement = React.createElement(FormFields, {
         item: item,
-        updateFieldsValue: updateFormFieldValueProps,
+        updateFieldsValue: updatedFormFieldProps,
+        organization,
         ...fieldsProps[item.type],
       });
       return FieldElement;
@@ -56,7 +61,7 @@ class FormFieldsList extends React.Component {
 
   render() {
     const {currentFormFields} = this.props;
-    console.log('rerender ==>', currentFormFields);
+    // console.log('rerender ==>', currentFormFields);
     return (
       <FlatList
         keyExtractor={this.keyExtractor}
@@ -70,6 +75,7 @@ class FormFieldsList extends React.Component {
 const mapState = createStructuredSelector({
   currentFormId: selectCurrentFormId,
   currentFormFields: selectCurrentFormFields,
+  organization: selectOrganistation,
 });
 
 export default connect(mapState, {setCurrentForm, updateFormFieldValue})(

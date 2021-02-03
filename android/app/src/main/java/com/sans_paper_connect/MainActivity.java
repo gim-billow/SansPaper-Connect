@@ -1,4 +1,4 @@
-package com.sans_paper;
+package com.sanspaper_connect;
 
 import com.reactnativenavigation.NavigationActivity;
 
