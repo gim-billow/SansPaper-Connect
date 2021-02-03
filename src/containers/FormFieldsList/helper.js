@@ -9,4 +9,7 @@ export const fieldsProps = {
     keyboardType: 'numeric',
   },
   user: {},
+  selectmulti: {
+    single: false,
+  },
 };
