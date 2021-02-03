@@ -15,6 +15,7 @@ export const getSansPaperUser = async (payload) => {
       .collection('sanspaperusers')
       .doc(userId)
       .get();
+
     return spUser;
   } catch (error) {
     console.warn('Error getting Sans Paper User', error);
@@ -56,20 +57,24 @@ export const getUpviseUserList = async (upviseUrl, upviseToken) => {
 
 export const queryUpviseTable = async (payload) => {
   let {table, organisation, where} = payload;
-  if (table == 'unybiz.projects.projects' && !where) {
+  if (table === 'unybiz.projects.projects' && !where) {
     where = 'status != 1';
+  } else if (table === 'jobs.jobs' && !where) {
+    where = 'status != 4';
   }
 
   const {upviseUrl = '', upviseToken = ''} = organisation;
-
+  const urlString = `${upviseUrl}/table?auth=${upviseToken}&table=${table}`;
+  const url = where ? `${urlString}&where=${where}` : urlString;
   const options = {
-    method: 'POST',
-    url: upviseUrl + 'table',
+    method: 'GET',
+    url,
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    data: getUpviseTabledQueryData({auth: upviseToken, table, where}),
   };
 
-  return await axios(options);
+  const upviseTableResult =  await axios(options);
+  console.log('queryUpviseTable', upviseTableResult);
+  return upviseTableResult;
 };
