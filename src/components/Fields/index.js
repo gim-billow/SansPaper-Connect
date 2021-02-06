@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import DatePicker from './DatePicker';
 import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
@@ -16,6 +17,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  date: DatePicker,
   duration: Duration,
   signature: Signature,
   contact: Contact,
