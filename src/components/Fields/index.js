@@ -4,6 +4,7 @@ import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
 import DatePicker from './DatePicker';
+import TimePicker from './TimePicker';
 import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
@@ -18,6 +19,7 @@ export default {
   user: User,
   select: Select,
   date: DatePicker,
+  time: TimePicker,
   duration: Duration,
   signature: Signature,
   contact: Contact,
