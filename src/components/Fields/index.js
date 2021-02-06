@@ -5,6 +5,7 @@ import Select from './Select';
 import ToggleButton from './ToggleButton';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
+import DateTimePicker from './DateTimePicker';
 import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
@@ -20,6 +21,7 @@ export default {
   select: Select,
   date: DatePicker,
   time: TimePicker,
+  datetime: DateTimePicker,
   duration: Duration,
   signature: Signature,
   contact: Contact,
