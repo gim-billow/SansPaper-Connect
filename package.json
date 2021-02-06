@@ -19,6 +19,7 @@
     "appcenter-crashes": "^4.0.2",
     "axios": "^0.21.1",
     "babel-preset-react-native": "^4.0.1",
+    "native-base": "^2.15.0",
     "immer": "^8.0.1",
     "ramda": "^0.27.1",
     "react": "16.13.1",

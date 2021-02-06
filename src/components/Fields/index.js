@@ -5,6 +5,7 @@ import Select from './Select';
 import ToggleButton from './ToggleButton';
 import Checkbox from './Checkbox';
 import Contact from './Contact';
+import Currency from './Currency';
 
 export default {
   text: Text,
@@ -13,8 +14,9 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
-  checkbox: Checkbox,
   contact: Contact,
+  currency: Currency,
+  checkbox: Checkbox,
   selectmulti: Select,
   project: Select,
   product: Select,
