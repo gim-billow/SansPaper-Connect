@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import PhoneNumber from './PhoneNumber';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 import DateTimePicker from './DateTimePicker';
@@ -19,6 +20,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  phone: PhoneNumber,
   date: DatePicker,
   time: TimePicker,
   datetime: DateTimePicker,
