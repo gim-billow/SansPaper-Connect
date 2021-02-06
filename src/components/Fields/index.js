@@ -20,6 +20,8 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  button: Text,
+  score: Text,
   phone: PhoneNumber,
   date: DatePicker,
   time: TimePicker,
