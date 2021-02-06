@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Contact from './Contact';
 
 export default {
   text: Text,
@@ -11,6 +12,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  contact: Contact,
   selectmulti: Select,
   project: Select,
   product: Select,
