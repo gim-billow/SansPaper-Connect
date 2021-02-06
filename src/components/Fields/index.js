@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
 import Contact from './Contact';
@@ -15,6 +16,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  duration: Duration,
   signature: Signature,
   contact: Contact,
   currency: Currency,
