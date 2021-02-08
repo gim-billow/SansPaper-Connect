@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Image from './Image';
 import DrawingBoard from './Drawing';
 import PhoneNumber from './PhoneNumber';
 import DatePicker from './DatePicker';
@@ -21,6 +22,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  image: Image,
   drawing: DrawingBoard,
   button: Text,
   score: Text,
