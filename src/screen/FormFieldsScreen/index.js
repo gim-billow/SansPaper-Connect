@@ -3,6 +3,8 @@ import React from 'react';
 import {View} from 'react-native';
 import styles from './styles';
 import FormFieldsList from '@containers/FormFieldsList';
+import {screens} from '@constant/ScreenConstants';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class FormFieldsScreen extends React.Component {
   static options = () => {
@@ -15,11 +17,18 @@ class FormFieldsScreen extends React.Component {
         backButton: {
           showTitle: false,
         },
+        rightButtons: [
+          {
+            id: screens.RightButton,
+            component: {
+              name: screens.RightButton,
+            },
+          },
+        ],
       },
     };
     return option;
   };
-
   render() {
     return (
       <View style={styles.container}>
@@ -28,5 +37,7 @@ class FormFieldsScreen extends React.Component {
     );
   }
 }
-
+function submit() {
+  alert('Done');
+}
 export default FormFieldsScreen;

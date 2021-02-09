@@ -74,7 +74,7 @@ export const queryUpviseTable = async (payload) => {
     },
   };
 
-  const upviseTableResult =  await axios(options);
+  const upviseTableResult = await axios(options);
   console.log('queryUpviseTable', upviseTableResult);
   return upviseTableResult;
 };
