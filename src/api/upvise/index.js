@@ -64,7 +64,7 @@ export const queryUpviseTable = async (payload) => {
   }
 
   const {upviseUrl = '', upviseToken = ''} = organisation;
-  const urlString = `${upviseUrl}/table?auth=${upviseToken}&table=${table}`;
+  const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
   const url = where ? `${urlString}&where=${where}` : urlString;
   const options = {
     method: 'GET',
@@ -74,7 +74,7 @@ export const queryUpviseTable = async (payload) => {
     },
   };
 
-  const upviseTableResult =  await axios(options);
+  const upviseTableResult = await axios(options);
   console.log('queryUpviseTable', upviseTableResult);
   return upviseTableResult;
 };

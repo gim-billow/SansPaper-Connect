@@ -42,6 +42,7 @@ function* goToLinkedItemScreen({payload}) {
       table: linkedItemName,
       organisation,
     });
+
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_LINKED_TABLE,
       payload: linkedItem.data.items,
