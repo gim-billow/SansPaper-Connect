@@ -3,6 +3,8 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Photo from './Photo';
+import QrScanner from './QrScanner';
 import Image from './Image';
 import DrawingBoard from './Drawing';
 import PhoneNumber from './PhoneNumber';
@@ -43,4 +45,6 @@ export default {
   tool: Select,
   form: Select,
   file: Select,
+  photo: Photo,
+  barcode: QrScanner,
 };
