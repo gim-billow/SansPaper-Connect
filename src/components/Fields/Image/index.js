@@ -4,8 +4,7 @@ import {Text} from 'react-native';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 
-const SPText = (props) => {
-  console.log('pro:', props);
+const Image = (props) => {
   const [text, setText] = React.useState('');
   const {label, rank} = props.item;
   const {updateFieldsValue} = props;
@@ -25,11 +24,10 @@ const SPText = (props) => {
         label="Insert here"
         mode="outlined"
         keyboardType={keyboardType}
-        multiline
         onChangeText={(updatedText) => onChangeText(updatedText)}
       />
     </ItemWrapper>
   );
 };
 
-export default SPText;
+export default Image;

@@ -20,7 +20,7 @@ export default StyleSheet.create({
   },
   button: {
     borderWidth: 1,
-    width: '50%',
+    flex: 1,
     height: 40,
     borderRadius: 5,
     borderColor: red,
