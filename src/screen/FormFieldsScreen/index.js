@@ -37,7 +37,4 @@ class FormFieldsScreen extends React.Component {
     );
   }
 }
-function submit() {
-  alert('Done');
-}
 export default FormFieldsScreen;
