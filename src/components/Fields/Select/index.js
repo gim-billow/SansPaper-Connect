@@ -41,13 +41,13 @@ class Select extends Component {
 
     this.setState({
       selOptions: filteredOptions,
-      options: value,
+      options: value[0] ? value : [], // if 1st value is empty string, set to empty string
     });
   };
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
-    this.setState({options: selectedItems});
+    this.setState({options: [...selectedItems]});
     updateFieldsValue({rank: item.rank, value: selectedItems[0]});
   };
 
