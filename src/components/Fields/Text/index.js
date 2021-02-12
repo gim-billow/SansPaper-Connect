@@ -7,13 +7,26 @@ import ItemWrapper from '../ItemWrapper';
 const SPText = (props) => {
   console.log('pro:', props);
   const [text, setText] = React.useState('');
-  const {label, rank} = props.item;
+  const {type, label, rank} = props.item;
   const {updateFieldsValue} = props;
   const keyboardType = props.keyboardType ? props.keyboardType : 'default';
 
   const onChangeText = (updatedText) => {
     setText(updatedText);
     updateFieldsValue({rank: rank, value: updatedText});
+  };
+
+  const keyboard = (types) => {
+    switch (types) {
+      case 'decimal':
+        return 'decimal-pad';
+      case 'numeric':
+        return 'numeric';
+      case 'email':
+        return 'email-address';
+      default:
+        return 'default';
+    }
   };
 
   return (
@@ -24,8 +37,8 @@ const SPText = (props) => {
         value={text}
         label="Insert here"
         mode="outlined"
-        keyboardType={keyboardType}
-        multiline
+        keyboardType={keyboard(type)}
+        multiline={type !== 'text' ? true : false}
         onChangeText={(updatedText) => onChangeText(updatedText)}
       />
     </ItemWrapper>

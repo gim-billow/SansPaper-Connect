@@ -47,4 +47,8 @@ export default {
   file: Select,
   photo: Photo,
   barcode: QrScanner,
+  textarea: Text,
+  decimal: Text,
+  email: Text,
+  link: Text,
 };
