@@ -57,7 +57,7 @@ class DrawingBoard extends React.Component {
                   mode="contained"
                   style={styles.buttonColor}
                   onPress={() => {
-                    this.clearBoard();
+                    this.canvas.clear();
                   }}>
                   <Text style={styles.text}>Clear</Text>
                 </Button>
@@ -71,7 +71,7 @@ class DrawingBoard extends React.Component {
                 <Button mode="contained" style={styles.buttonColor}>
                   <Text style={styles.text}>Save</Text>
                 </Button>
-            </View>
+              </View>
             }
             savePreference={() => {
               return {
