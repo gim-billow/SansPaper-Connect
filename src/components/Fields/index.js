@@ -3,6 +3,7 @@ import Header from './Header';
 import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
+import Label from './Label';
 import Photo from './Photo';
 import QrScanner from './QrScanner';
 import Image from './Image';
@@ -24,6 +25,7 @@ export default {
   toggle: ToggleButton,
   user: User,
   select: Select,
+  label: Label,
   image: Image,
   drawing: DrawingBoard,
   button: Text,
