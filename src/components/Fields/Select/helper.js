@@ -19,8 +19,45 @@ const getQueryOptions = async (seloptions, organization) => {
   );
 };
 
+const getProjectMilestonesOptions = async (organization, project) => {
+  const queryHandle = project.split(',');
+
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1]
+    .replace(')', '')
+    .replace(/"/g, '')
+    .replace(/'/g, '"')
+    .trim();
+
+  // console.log('queryhandle', query);
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getProjectOptions = async (organization, project) => {
+  const queryHandle = project.split(',');
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1].replace(');', '').replace(/"/g, '').trim();
+
+  console.log('queryhandle', query);
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
 const getToolGroupsOptions = async (organization, project) => {
-  const queriedOptions = await getToolGroups(organization);
+  const queryHandle = project.split(',');
+  // const table = 'tools.tools'; //we're getting the milestones.
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1].replace(');', '').replace(/"/g, '').trim();
+
+  // console.log('queryhandle', query);
+  const queriedOptions = await getOptions(table, query, organization);
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,
@@ -28,19 +65,28 @@ const getToolGroupsOptions = async (organization, project) => {
 };
 
 const getToolsOptions = async (organization, project) => {
-  const table = 'tools.tools'; //we're getting the milestones.
-  console.log('ok project', project);
-  const query = project
-    .split(',')[1]
-    .replace(/"([^"]+(?="))"/g, '$1')
-    .replace(/'/g, '"');
-  // const query =
-  //   'groupid="C6B65D4F611E79B099195D9851F06C" AND serialnumber LIKE "t3"';
-  const queriedOptions = await getOptions(
-    table,
-    query.replace(');', '').trim(),
-    organization,
-  );
+  const queryHandle = project.split(',');
+  const table = regExpQuote.exec(queryHandle[0])[1];
+  const querys = regExpDoubleQuote.exec(queryHandle[1])[1].replace(/'/g, '"');
+  // console.log('queryhandles', querys);
+  let query;
+  let otherQuery;
+
+  if (queryHandle.length === 2) {
+    query = regExpDoubleQuote.exec(queryHandle[1])[1].replace(/'/g, '"').trim();
+    console.log('queryhandle', query + ' ' + queryHandle.length);
+  } else if (queryHandle.length === 3) {
+    query = queryHandle[1]
+      .replace(/"([^"]+(?="))"/g, '$1')
+      .replace(/'/g, '"')
+      .replace(/3/g, 't3')
+      .trim();
+
+    otherQuery = queryHandle[2].replace(');', '').replace(/'/g, '').trim();
+
+    query = query + '&' + otherQuery;
+  }
+  const queriedOptions = await getOptions(table, query, organization);
   console.log('ok tools', query);
   return map(
     (options) => pick(['id', 'name'], options),
@@ -68,7 +114,7 @@ const getMilestoneOptions = async (organization, project) => {
   );
 };
 
-const getProjectOptions = async (organization) => {
+const getProject = async (organization) => {
   const queriedOptions = await getProjects(organization);
   return map(
     (options) => pick(['id', 'name'], options),
@@ -87,16 +133,20 @@ const getWithoutStatus = async (organization, table) => {
 export const getQueryByOptions = async (props) => {
   const {seloptions, type} = props.item;
   const {organization, projectValue} = props;
-
+  console.log('getQueryByOptions', seloptions);
   switch (type) {
     case 'selectmulti':
     case 'select': {
       // the project name check order have to be in the current order, otherwise milestone will be missed
       if (seloptions.includes('tools.group')) {
-        return getToolGroupsOptions(organization, projectValue);
+        console.log('tools.group', seloptions);
+        return getToolGroupsOptions(organization, seloptions);
       } else if (seloptions.includes('tools.tools')) {
         return getToolsOptions(organization, seloptions);
-        // return getToolGroupsOptions(organization, projectValue);
+      } else if (seloptions.includes('projects.milestones')) {
+        return getProjectMilestonesOptions(organization, seloptions);
+      } else if (seloptions.includes('projects.projects')) {
+        return getProjectOptions(organization, seloptions);
       } else if (seloptions.includes('categorizedTools')) {
         return getCategoriesOptions(organization, projectValue);
       } else if (seloptions.includes('milestone')) {
@@ -117,7 +167,7 @@ export const getQueryByOptions = async (props) => {
       }
     }
     case 'project':
-      return getProjectOptions(organization);
+      return getProject(organization);
     case 'product':
       return getWithoutStatus(organization, 'sales.products');
     case 'opp':

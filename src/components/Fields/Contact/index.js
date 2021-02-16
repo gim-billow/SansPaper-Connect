@@ -6,7 +6,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
-import {getUpviseUserList} from '@api/upvise';
+import {getQueryByOptions} from './helper';
 
 class Contact extends Component {
   state = {
@@ -16,10 +16,7 @@ class Contact extends Component {
 
   async componentDidMount() {
     const {item} = this.props;
-    const options = await getUpviseUserList(
-      this.props.organization.upviseUrl,
-      this.props.organization.upviseToken,
-    );
+    const options = await getQueryByOptions(this.props);
     this.updateSetOptions(options, [item.value]);
   }
 
