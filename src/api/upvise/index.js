@@ -139,6 +139,7 @@ export const queryUpviseTable = async (payload) => {
   const {upviseUrl = '', upviseToken = ''} = organisation;
   const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
   const url = where ? `${urlString}&where=${where}` : urlString;
+  console.log('post-url', url);
   const options = {
     method: 'GET',
     url,

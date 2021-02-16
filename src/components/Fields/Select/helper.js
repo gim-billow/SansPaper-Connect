@@ -19,8 +19,29 @@ const getQueryOptions = async (seloptions, organization) => {
   );
 };
 
-const getToolGroupsOptions = async (organization) => {
+const getToolGroupsOptions = async (organization, project) => {
   const queriedOptions = await getToolGroups(organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getToolsOptions = async (organization, project) => {
+  const table = 'tools.tools'; //we're getting the milestones.
+  console.log('ok project', project);
+  const query = project
+    .split(',')[1]
+    .replace(/"([^"]+(?="))"/g, '$1')
+    .replace(/'/g, '"');
+  // const query =
+  //   'groupid="C6B65D4F611E79B099195D9851F06C" AND serialnumber LIKE "t3"';
+  const queriedOptions = await getOptions(
+    table,
+    query.replace(');', '').trim(),
+    organization,
+  );
+  console.log('ok tools', query);
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,
@@ -72,7 +93,10 @@ export const getQueryByOptions = async (props) => {
     case 'select': {
       // the project name check order have to be in the current order, otherwise milestone will be missed
       if (seloptions.includes('tools.group')) {
-        return getToolGroupsOptions(organization);
+        return getToolGroupsOptions(organization, projectValue);
+      } else if (seloptions.includes('tools.tools')) {
+        return getToolsOptions(organization, seloptions);
+        // return getToolGroupsOptions(organization, projectValue);
       } else if (seloptions.includes('categorizedTools')) {
         return getCategoriesOptions(organization, projectValue);
       } else if (seloptions.includes('milestone')) {
