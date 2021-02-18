@@ -27,8 +27,6 @@ const Photo = (props) => {
         compressImageQuality: 0.75,
         includeBase64: true,
       }).then((image) => {
-        console.log('fromCamera', image);
-
         setModalVisible(!modalVisible);
         setThumbnailImage(image.path);
         updateFieldsValue({rank: rank, value: image});
@@ -47,8 +45,6 @@ const Photo = (props) => {
             compressImageQuality: 0.75,
             includeBase64: true,
           }).then((images) => {
-            console.log('images', images);
-
             setModalVisible(!modalVisible);
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});

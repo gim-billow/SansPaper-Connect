@@ -5,7 +5,6 @@ import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 
 const SPText = (props) => {
-  console.log('pro:', props);
   const [text, setText] = React.useState('');
   const {type, label, rank} = props.item;
   const {updateFieldsValue} = props;

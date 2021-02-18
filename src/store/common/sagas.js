@@ -19,7 +19,6 @@ function* init({payload}) {
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});
 
     const spUser = yield getSansPaperUser({userId: uid});
-    console.log('spUser ==> ', spUser);
 
     yield put({
       type: SANSPAPER_REDUCER_ACTIONS.UPDATE_SANSPAPER_USER,
@@ -56,7 +55,6 @@ function* init({payload}) {
 
     const {upviseUrl, upviseToken} = spOrganisation;
     const userList = yield getUpviseUserList(upviseUrl, upviseToken);
-    console.log('userList ===>> ', userList);
     put({
       type: SANSPAPER_REDUCER_ACTIONS.UPDATE_SANSPAPER_USER_LIST,
       payload: userList,

@@ -23,7 +23,6 @@ class DrawingBoard extends React.Component {
       'https://www.upvise.com/uws/downloadfile/?id=6A4A9F42DDFBDE79D92681F6BCD54B&auth=iqb4EdxZxm8%2BwWBg50ImWk4sta3MT4IB';
 
     RNFetchBlob.fetch('GET', imageUrl).then((res) => {
-      console.log('res.data', res.data);
       RNFetchBlob.fs
         .writeFile(this.state.path, res.data, 'base64')
         .then((res) => {

@@ -16,7 +16,6 @@ const Signature = (props) => {
   };
 
   const signaturePadClear = () => {
-    console.log('sig cleared');
     setShow(false);
     setTimeout(() => {
       setShow(true);

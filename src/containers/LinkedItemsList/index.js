@@ -9,6 +9,7 @@ import {selectCurrentLinkedItems} from '@selector/form';
 import {goToFormFieldsScreen} from '@store/navigate';
 import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
+import ItemWrapper from '../../components/Fields/ItemWrapper';
 
 class LinkedItemsList extends React.Component {
   keyExtractor = (item, index) => index.toString();
@@ -20,7 +21,6 @@ class LinkedItemsList extends React.Component {
   };
 
   renderItem = ({item}) => {
-    console.log('item', item);
     const {name, id} = item;
     return (
       <ListItem
@@ -37,12 +37,14 @@ class LinkedItemsList extends React.Component {
     const {linkedItems = []} = this.props;
     console.log(linkedItems);
     return linkedItems.length > 0 ? (
-      <FlatList
-        style={styles.container}
-        keyExtractor={this.keyExtractor}
-        data={linkedItems}
-        renderItem={this.renderItem}
-      />
+      <ItemWrapper>
+        <FlatList
+          style={styles.container}
+          keyExtractor={this.keyExtractor}
+          data={linkedItems}
+          renderItem={this.renderItem}
+        />
+      </ItemWrapper>
     ) : (
       <View>
         <Text> Error: please contact support</Text>
