@@ -35,7 +35,7 @@ class LinkedItemsList extends React.Component {
 
   render() {
     const {linkedItems = []} = this.props;
-    console.log(linkedItems);
+
     return linkedItems.length > 0 ? (
       <ItemWrapper>
         <FlatList

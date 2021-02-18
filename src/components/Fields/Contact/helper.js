@@ -11,9 +11,6 @@ const getContact = async (organization, project) => {
   );
 };
 
-export const getQueryByOptions = async (props) => {
-  const {seloptions} = props.item;
-  const {organization} = props;
-
+export const getQueryByOptions = async ({seloptions, organization}) => {
   return getContact(organization, seloptions);
 };

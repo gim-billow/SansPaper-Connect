@@ -15,8 +15,9 @@ class Contact extends Component {
   };
 
   async componentDidMount() {
-    const {item} = this.props;
-    const options = await getQueryByOptions(this.props);
+    const {item, organization} = this.props;
+    const {seloptions} = item;
+    const options = await getQueryByOptions({seloptions, organization});
     this.updateSetOptions(options, [item.value]);
   }
 

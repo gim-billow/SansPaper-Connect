@@ -29,7 +29,6 @@ const Signature = (props) => {
 
   const signaturePadSave = () => {
     updateFieldsValue({rank: rank, value: signature});
-    console.log('sig saved', signature);
   };
 
   return (
