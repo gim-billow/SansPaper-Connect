@@ -44,8 +44,8 @@ class Duration extends Component {
               value={hours}
               label="Hours"
               mode="outlined"
-              keyboardType={keyboardType}
-              multiline
+              keyboardType={'numeric'}
+              multiline={false}
               onChangeText={(number) => this.hoursChangeHandler(number)}
             />
           </View>
@@ -55,8 +55,8 @@ class Duration extends Component {
               value={minutes}
               label="Minutes"
               mode="outlined"
-              keyboardType={keyboardType}
-              multiline
+              keyboardType={'numeric'}
+              multiline={false}
               onChangeText={(number) => this.minutesChangeHandler(number)}
             />
           </View>

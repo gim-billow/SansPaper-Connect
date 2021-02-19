@@ -16,7 +16,6 @@ const Signature = (props) => {
   };
 
   const signaturePadClear = () => {
-    console.log('sig cleared');
     setShow(false);
     setTimeout(() => {
       setShow(true);
@@ -30,7 +29,6 @@ const Signature = (props) => {
 
   const signaturePadSave = () => {
     updateFieldsValue({rank: rank, value: signature});
-    console.log('sig saved', signature);
   };
 
   return (

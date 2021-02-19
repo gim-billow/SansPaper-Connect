@@ -63,7 +63,6 @@ class FormFieldsList extends React.Component {
 
   render() {
     const {currentFormFields} = this.props;
-    // console.log('rerender ==>', currentFormFields);
     return (
       <FlatList
         keyExtractor={this.keyExtractor}

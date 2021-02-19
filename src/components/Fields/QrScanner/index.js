@@ -26,8 +26,6 @@ const QrScanner = (props) => {
   };
 
   const onSuccess = (e) => {
-    console.log('scan', e);
-
     setQrDetails(e.data);
     setChangeTheme(true);
     setModalVisible(false);
