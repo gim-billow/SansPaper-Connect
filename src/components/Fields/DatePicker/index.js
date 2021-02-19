@@ -28,7 +28,7 @@ const DatePicker = (props) => {
 
     setLabel(dateFormat);
     setChangeTheme(true);
-    updateFieldsValue({rank: item.rank, value: dateFormat});
+    updateFieldsValue({rank: item.rank, value: date.getTime()});
 
     hideDatePicker();
   };
