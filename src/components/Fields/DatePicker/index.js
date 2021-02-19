@@ -25,10 +25,10 @@ const DatePicker = (props) => {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
     const dateFormat = day + '/' + month + '/' + year;
-
+    console.log('datepickers:', dateFormat);
     setLabel(dateFormat);
     setChangeTheme(true);
-    updateFieldsValue({rank: item.rank, value: dateFormat});
+    updateFieldsValue({rank: item.rank, value: date.getTime()});
 
     hideDatePicker();
   };

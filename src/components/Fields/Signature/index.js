@@ -10,6 +10,7 @@ const Signature = (props) => {
   const {updateFieldsValue} = props;
   const [signature, setSignature] = useState('');
   const [show, setShow] = useState(true);
+  const [changeTheme, setChangeTheme] = useState(false);
 
   const signaturePadError = (error) => {
     console.error(error);
@@ -17,6 +18,7 @@ const Signature = (props) => {
 
   const signaturePadClear = () => {
     console.log('sig cleared');
+    setChangeTheme(false);
     setShow(false);
     setTimeout(() => {
       setShow(true);
@@ -29,6 +31,7 @@ const Signature = (props) => {
   };
 
   const signaturePadSave = () => {
+    setChangeTheme(true);
     updateFieldsValue({rank: rank, value: signature});
     console.log('sig saved', signature);
   };
@@ -60,9 +63,18 @@ const Signature = (props) => {
           <View style={styles.button}>
             <Button
               mode="contained"
-              style={styles.buttonColor}
+              style={
+                changeTheme === true
+                  ? styles.ChangeButtonColor
+                  : styles.buttonColor
+              }
               onPress={signaturePadSave}>
-              <Text style={styles.text}>Save Signature</Text>
+              <Text
+                style={
+                  changeTheme === true ? styles.ChangeTextColor : styles.text
+                }>
+                {changeTheme === true ? 'Signature Saved' : 'Save Signature'}
+              </Text>
             </Button>
           </View>
         </View>

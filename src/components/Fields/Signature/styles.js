@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {spaceSmall, spaceMedium} from 'styles/space';
 import {regular} from 'styles/font';
-import {lightRed} from '@styles/colors';
+import {lightRed, darkRed} from '@styles/colors';
 
 export default StyleSheet.create({
   signatureColor: {
@@ -19,7 +19,11 @@ export default StyleSheet.create({
   },
   text: {
     color: lightRed,
-    fontSize: 14,
+    fontSize: 13,
+  },
+  ChangeTextColor: {
+    color: 'white',
+    fontSize: 13,
   },
   container: {
     width: 400,
@@ -44,5 +48,8 @@ export default StyleSheet.create({
   },
   buttonColor: {
     backgroundColor: 'white',
+  },
+  ChangeButtonColor: {
+    backgroundColor: darkRed,
   },
 });

@@ -47,8 +47,17 @@ class Select extends Component {
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue} = this.props;
+    let value = '';
+
+    selectedItems.map((items) => {
+      value += items.toString() + '|';
+    });
+
     this.setState({options: [...selectedItems]});
-    updateFieldsValue({rank: item.rank, value: selectedItems[0]});
+    updateFieldsValue({
+      rank: item.rank,
+      value: item.type === 'selectmulti' ? value : selectedItems[0],
+    });
   };
 
   render() {
