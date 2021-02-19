@@ -17,6 +17,7 @@ import Signature from './Signature';
 import Checkbox from './Checkbox';
 import Contact from './Contact';
 import Currency from './Currency';
+import Button from './Button';
 
 export default {
   text: Text,
@@ -28,7 +29,7 @@ export default {
   label: Label,
   image: Image,
   drawing: DrawingBoard,
-  button: Text,
+  button: Button,
   score: Text,
   phone: PhoneNumber,
   date: DatePicker,
@@ -49,4 +50,8 @@ export default {
   file: Select,
   photo: Photo,
   barcode: QrScanner,
+  textarea: Text,
+  decimal: Text,
+  email: Text,
+  link: Text,
 };

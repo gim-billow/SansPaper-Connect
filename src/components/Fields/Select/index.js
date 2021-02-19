@@ -15,7 +15,12 @@ import R from 'ramda';
 class Select extends Component {
   state = {
     options: [],
-    selOptions: [],
+    selOptions: [
+      {
+        id: '',
+        name: 'None',
+      },
+    ],
   };
 
   async componentDidMount() {
@@ -39,10 +44,10 @@ class Select extends Component {
       R.filter((option) => !R.isNil(option)),
     )(options);
 
-    this.setState({
-      selOptions: filteredOptions,
+    this.setState((prevState) => ({
+      selOptions: [...prevState.selOptions, ...filteredOptions],
       options: value[0] ? value : [], // if 1st value is empty string, set to empty string
-    });
+    }));
   };
 
   onSelectedItemsChange = (selectedItems) => {

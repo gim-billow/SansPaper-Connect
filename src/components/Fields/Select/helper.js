@@ -1,10 +1,5 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
-import {
-  getOptions,
-  getToolGroups,
-  getProjects,
-  getDataWithoutStatus,
-} from '@api/upvise/util';
+import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
 
 const getQueryOptions = async (seloptions, organization) => {
@@ -19,8 +14,80 @@ const getQueryOptions = async (seloptions, organization) => {
   );
 };
 
-const getToolGroupsOptions = async (organization) => {
-  const queriedOptions = await getToolGroups(organization);
+const getProjectMilestonesOptions = async (organization, project) => {
+  const queryHandle = project.split(',');
+
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1]
+    .replace(')', '')
+    .replace(/"/g, '')
+    .replace(/'/g, '"')
+    .trim();
+
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getProjectOptions = async (organization, project) => {
+  const queryHandle = project.split(',');
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1].replace(');', '').replace(/"/g, '').trim();
+
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getToolGroupsOptions = async (organization, project) => {
+  const queryHandle = project.split(',');
+  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
+  const query = queryHandle[1].replace(');', '').replace(/"/g, '').trim();
+
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+const getToolsOptions = async (organization, seloptions) => {
+  const queryHandle = seloptions.split(',');
+  const table = regExpQuote.exec(queryHandle[0])[1];
+
+  let query;
+  let otherQuery;
+
+  if (queryHandle.length === 2) {
+    if (!queryHandle[1].includes('`')) {
+      query = regExpDoubleQuote
+        .exec(queryHandle[1])[1]
+        .replace(/'/g, '"')
+        .trim();
+      console.log('queryhandle', query + ' ' + queryHandle.length);
+    } else {
+      query = queryHandle[1]
+        .replace('`', '')
+        .replace('`);', '')
+        .replace(/'/g, '"');
+    }
+  } else if (queryHandle.length === 3) {
+    query = queryHandle[1]
+      .replace(/"([^"]+(?="))"/g, '$1')
+      .replace(/'/g, '"')
+      .replace(/3/g, 't3')
+      .trim();
+
+    otherQuery = queryHandle[2].replace(');', '').replace(/'/g, '').trim();
+
+    query = query + '&' + otherQuery;
+  }
+
+  const queriedOptions = await getOptions(table, query, organization);
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,
@@ -47,7 +114,7 @@ const getMilestoneOptions = async (organization, project) => {
   );
 };
 
-const getProjectOptions = async (organization) => {
+const getProject = async (organization) => {
   const queriedOptions = await getProjects(organization);
   return map(
     (options) => pick(['id', 'name'], options),
@@ -66,13 +133,19 @@ const getWithoutStatus = async (organization, table) => {
 export const getQueryByOptions = async (props) => {
   const {seloptions, type} = props.item;
   const {organization, projectValue} = props;
-
+  console.log('getQueryByOptions', seloptions);
   switch (type) {
     case 'selectmulti':
     case 'select': {
       // the project name check order have to be in the current order, otherwise milestone will be missed
       if (seloptions.includes('tools.group')) {
-        return getToolGroupsOptions(organization);
+        return getToolGroupsOptions(organization, seloptions);
+      } else if (seloptions.includes('tools.tools')) {
+        return getToolsOptions(organization, seloptions);
+      } else if (seloptions.includes('projects.milestones')) {
+        return getProjectMilestonesOptions(organization, seloptions);
+      } else if (seloptions.includes('projects.projects')) {
+        return getProjectOptions(organization, seloptions);
       } else if (seloptions.includes('categorizedTools')) {
         return getCategoriesOptions(organization, projectValue);
       } else if (seloptions.includes('milestone')) {
@@ -93,7 +166,7 @@ export const getQueryByOptions = async (props) => {
       }
     }
     case 'project':
-      return getProjectOptions(organization);
+      return getProject(organization);
     case 'product':
       return getWithoutStatus(organization, 'sales.products');
     case 'opp':
