@@ -68,7 +68,6 @@ const getToolsOptions = async (organization, seloptions) => {
         .exec(queryHandle[1])[1]
         .replace(/'/g, '"')
         .trim();
-      console.log('queryhandle', query + ' ' + queryHandle.length);
     } else {
       query = queryHandle[1]
         .replace('`', '')
@@ -133,7 +132,6 @@ const getWithoutStatus = async (organization, table) => {
 export const getQueryByOptions = async (props) => {
   const {seloptions, type} = props.item;
   const {organization, projectValue} = props;
-  console.log('getQueryByOptions', seloptions);
   switch (type) {
     case 'selectmulti':
     case 'select': {
