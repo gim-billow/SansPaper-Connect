@@ -20,12 +20,14 @@ const ToggleButton = (props) => {
   };
 
   React.useEffect(() => {
-    updateFieldsValue({rank: rank, value: options[0]});
+    const defaultValue = '1';
+    updateFieldsValue({rank: rank, value: defaultValue});
   }, []);
 
   const onPress = (option) => {
     setOption(option);
-    updateFieldsValue({rank: rank, value: option});
+    const value = option === 'Yes' ? '1' : '0';
+    updateFieldsValue({rank: rank, value: value});
   };
   return (
     <ItemWrapper>
