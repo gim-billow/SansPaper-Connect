@@ -1,9 +1,36 @@
 import {StyleSheet} from 'react-native';
 import {spaceSmall, spaceMedium} from 'styles/space';
 import {regular} from 'styles/font';
-import {lightRed} from '@styles/colors';
+import {lightRed, darkRed, white} from '@styles/colors';
 
 export default StyleSheet.create({
+  strokeColorButton: {
+    marginHorizontal: 2.5,
+    marginVertical: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+  },
+  strokeWidthButton: {
+    marginHorizontal: 2.5,
+    marginVertical: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EEEBEB',
+  },
+  functionButton: {
+    marginHorizontal: 2.5,
+    marginVertical: 8,
+    height: 30,
+    width: 60,
+    backgroundColor: '#39579A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
   containerStyle: {
     backgroundColor: 'transparent',
     flex: 1,
@@ -31,6 +58,10 @@ export default StyleSheet.create({
     color: lightRed,
     fontSize: 14,
   },
+  ChangeTextColor: {
+    color: white,
+    fontSize: 13,
+  },
   container: {
     width: 400,
     height: 260,
@@ -49,6 +80,9 @@ export default StyleSheet.create({
   },
   buttonColor: {
     backgroundColor: 'white',
+  },
+  ChangeButtonColor: {
+    backgroundColor: darkRed,
   },
   box: {
     flex: 1,

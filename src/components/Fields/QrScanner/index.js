@@ -31,9 +31,6 @@ const QrScanner = (props) => {
     setModalVisible(false);
     setTitle('retake qr scan');
     updateFieldsValue({rank: rank, value: e.data});
-    Linking.openURL(e.data).catch((err) =>
-      console.error('An error occured', err),
-    );
   };
 
   return (
