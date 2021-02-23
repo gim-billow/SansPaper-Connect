@@ -4,14 +4,16 @@ import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
 import ItemWrapper from '../ItemWrapper';
 import {Button} from 'react-native-paper';
+import ImgToBase64 from 'react-native-image-base64';
 import styles from './styles';
 
 const dirs = RNFetchBlob.fs.dirs;
-
+const deleteImage = RNFetchBlob.fs.unlink;
 class DrawingBoard extends React.Component {
   state = {
     changeTheme: false,
     imageDownloaded: false,
+    base64: '',
     path:
       dirs.DocumentDir +
       '/new_image_' +
@@ -41,7 +43,16 @@ class DrawingBoard extends React.Component {
   onSave = (success, path) => {
     const {item, updateFieldsValue} = this.props;
     this.setState({changeTheme: true});
-    updateFieldsValue({rank: item.rank, value: path});
+
+    ImgToBase64.getBase64String('file://' + path)
+      .then((base64String) => {
+        updateFieldsValue({rank: item.rank, value: base64String});
+      })
+      .catch((err) => console.log(err));
+
+    deleteImage(path)
+      .then(() => console.log('Image deleted'))
+      .catch((err) => console.log(err));
   };
   render() {
     const {label} = this.props.item;
@@ -72,7 +83,7 @@ class DrawingBoard extends React.Component {
                 <View
                   style={[
                     {backgroundColor: color, borderWidth: 2},
-                    styles.strokeColorButton,
+                    styles.strokeWidthButton,
                   ]}
                 />
               );

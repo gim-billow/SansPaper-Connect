@@ -10,6 +10,8 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+    borderWidth: 1,
+    borderColor: lightRed,
   },
   strokeWidthButton: {
     marginHorizontal: 2.5,
@@ -19,14 +21,12 @@ export default StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EEEBEB',
   },
   functionButton: {
     marginHorizontal: 2.5,
     marginVertical: 8,
     height: 30,
     width: 60,
-    backgroundColor: '#39579A',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
