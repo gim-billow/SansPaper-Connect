@@ -6,11 +6,13 @@ import {ToggleButton} from 'react-native-paper';
 import styles from './styles';
 
 const Checkbox = (props) => {
-  const [tick, setTick] = useState('0');
+  const [tick, setTick] = useState(false);
   const {item, updateFieldsValue} = props;
 
   const updateCheckboxVal = () => {
-    const checkboxVal = tick === '0' ? true : false;
+    setTick(!tick);
+    const checkboxVal = tick ? '1' : '0';
+    console.log('ckbox', checkboxVal);
     updateFieldsValue({rank: item.rank, value: checkboxVal});
   };
 

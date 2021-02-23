@@ -14,19 +14,23 @@ const ToggleButton = (props) => {
     return split(':', option)[1];
   }, split('|', seloptions));
 
+  let dataOptions = map((option) => {
+    return {id: split(':', option)[0], name: split(':', option)[1]};
+  }, split('|', seloptions));
+
   const [selected, setOption] = React.useState(options[0]);
   const isSelected = (option) => {
     return option === selected;
   };
 
   React.useEffect(() => {
-    const defaultValue = '1';
-    updateFieldsValue({rank: rank, value: defaultValue});
+    updateFieldsValue({rank: rank, value: selected});
   }, []);
 
   const onPress = (option) => {
     setOption(option);
-    const value = option === 'Yes' ? '1' : '0';
+    const value =
+      option === dataOptions[0].name ? dataOptions[0].id : dataOptions[1].id;
     updateFieldsValue({rank: rank, value: value});
   };
   return (
