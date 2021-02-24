@@ -24,8 +24,14 @@ class Select extends Component {
   };
 
   async componentDidMount() {
-    const {item} = this.props;
-    const options = await getQueryByOptions(this.props);
+    const {seloptions, type} = this.props.item;
+    const {organization, projectValue, item} = this.props;
+    const options = await getQueryByOptions(
+      seloptions,
+      type,
+      organization,
+      projectValue,
+    );
     this.updateSetOptions(options, [item.value]);
   }
 

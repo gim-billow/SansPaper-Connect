@@ -15,7 +15,6 @@ import DateTimePicker from './DateTimePicker';
 import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
-import Contact from './Contact';
 import Currency from './Currency';
 import Button from './Button';
 
@@ -37,7 +36,7 @@ export default {
   datetime: DateTimePicker,
   duration: Duration,
   signature: Signature,
-  contact: Contact,
+  contact: Select,
   currency: Currency,
   checkbox: Checkbox,
   selectmulti: Select,
