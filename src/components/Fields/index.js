@@ -24,7 +24,7 @@ export default {
   numeric: Text,
   header: Header,
   toggle: ToggleButton,
-  user: User,
+  user: Select,
   select: Select,
   label: Label,
   image: Image,

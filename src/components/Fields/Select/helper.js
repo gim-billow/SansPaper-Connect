@@ -1,4 +1,5 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
+import {getUpviseUserList} from '@api/upvise';
 import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
 
@@ -132,6 +133,7 @@ const getWithoutStatus = async (organization, table) => {
 export const getQueryByOptions = async (props) => {
   const {seloptions, type} = props.item;
   const {organization, projectValue} = props;
+
   switch (type) {
     case 'selectmulti':
     case 'select': {
@@ -177,6 +179,11 @@ export const getQueryByOptions = async (props) => {
       return getWithoutStatus(organization, 'forms.forms');
     case 'file':
       return getWithoutStatus(organization, 'system.files');
+    case 'user':
+      return getUpviseUserList(
+        organization.upviseUrl,
+        organization.upviseToken,
+      );
     default:
       return '';
   }
