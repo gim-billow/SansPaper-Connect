@@ -1,4 +1,5 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
+import {getUpviseUserList} from '@api/upvise';
 import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
 
@@ -129,9 +130,22 @@ const getWithoutStatus = async (organization, table) => {
   );
 };
 
-export const getQueryByOptions = async (props) => {
-  const {seloptions, type} = props.item;
-  const {organization, projectValue} = props;
+const getContact = async (organization, project) => {
+  const table = 'contacts.contacts';
+  const query = 'groupid="' + project + '"';
+  const queriedOptions = await getOptions(table, query, organization);
+  return map(
+    (options) => pick(['id', 'name'], options),
+    queriedOptions?.data?.items,
+  );
+};
+
+export const getQueryByOptions = async (
+  seloptions,
+  type,
+  organization,
+  projectValue,
+) => {
   switch (type) {
     case 'selectmulti':
     case 'select': {
@@ -147,13 +161,10 @@ export const getQueryByOptions = async (props) => {
       } else if (seloptions.includes('categorizedTools')) {
         return getCategoriesOptions(organization, projectValue);
       } else if (seloptions.includes('milestone')) {
-        console.log('getting milestone options 2', props);
         return getMilestoneOptions(organization, projectValue);
       } else if (seloptions.includes('Query.options')) {
-        console.log('debugt  query options', seloptions);
         return getQueryOptions(seloptions, organization);
       } else {
-        console.log('debugt  normal options', seloptions);
         return pipe(
           split('|'),
           map((opt, i) => {
@@ -163,6 +174,8 @@ export const getQueryByOptions = async (props) => {
         )(seloptions);
       }
     }
+    case 'contact':
+      return getContact(organization, seloptions);
     case 'project':
       return getProject(organization);
     case 'product':
@@ -177,6 +190,11 @@ export const getQueryByOptions = async (props) => {
       return getWithoutStatus(organization, 'forms.forms');
     case 'file':
       return getWithoutStatus(organization, 'system.files');
+    case 'user':
+      return getUpviseUserList(
+        organization.upviseUrl,
+        organization.upviseToken,
+      );
     default:
       return '';
   }
