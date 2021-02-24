@@ -24,7 +24,7 @@ const ToggleButton = (props) => {
   };
 
   React.useEffect(() => {
-    updateFieldsValue({rank: rank, value: selected});
+    updateFieldsValue({rank: rank, value: dataOptions[0].id});
   }, []);
 
   const onPress = (option) => {
