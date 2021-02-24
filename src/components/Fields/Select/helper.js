@@ -129,9 +129,12 @@ const getWithoutStatus = async (organization, table) => {
   );
 };
 
-export const getQueryByOptions = async (props) => {
-  const {seloptions, type} = props.item;
-  const {organization, projectValue} = props;
+export const getQueryByOptions = async (
+  seloptions,
+  type,
+  organization,
+  projectValue,
+) => {
   switch (type) {
     case 'selectmulti':
     case 'select': {
