@@ -10,7 +10,7 @@ const Checkbox = (props) => {
   const {item, updateFieldsValue} = props;
 
   const updateCheckboxVal = () => {
-    const checkboxVal = tick === '0' ? true : false;
+    const checkboxVal = tick === '0' ? '1' : '0';
     updateFieldsValue({rank: item.rank, value: checkboxVal});
   };
 
