@@ -24,8 +24,14 @@ class Select extends Component {
   };
 
   async componentDidMount() {
-    const {item} = this.props;
-    const options = await getQueryByOptions(this.props);
+    const {seloptions, type} = this.props.item;
+    const {organization, projectValue, item} = this.props;
+    const options = await getQueryByOptions(
+      seloptions,
+      type,
+      organization,
+      projectValue,
+    );
     this.updateSetOptions(options, [item.value]);
   }
 
@@ -43,7 +49,6 @@ class Select extends Component {
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
     )(options);
-
     this.setState((prevState) => ({
       selOptions: [...prevState.selOptions, ...filteredOptions],
       options: value[0] ? value : [], // if 1st value is empty string, set to empty string
@@ -82,7 +87,9 @@ class Select extends Component {
               button,
               itemText,
             }}
-            items={selOptions}
+            items={selOptions.filter((item) => {
+              return item.name !== '';
+            })}
             IconRenderer={Icon}
             uniqueKey="id"
             single={single}
