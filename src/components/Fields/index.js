@@ -1,6 +1,5 @@
 import Text from './Text';
 import Header from './Header';
-import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
 import Label from './Label';
