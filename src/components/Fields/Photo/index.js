@@ -8,17 +8,18 @@ import ItemWrapper from '../ItemWrapper';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const Photo = (props) => {
+  const {label, rank} = props.item;
+  const {updateFieldsValue} = props;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
   const [thumbnailImage, setThumbnailImage] = useState('');
-  const [title, setTitle] = useState('Add a Photo');
-
-  const {label, rank} = props.item;
-  const {updateFieldsValue} = props;
+  const [title, setTitle] = useState('Add a ' + label);
 
   function takePicture(fromCamera) {
     if (fromCamera) {
+      setModalVisible(!modalVisible);
       ImagePicker.openCamera({
         width: 300,
         height: 400,
@@ -27,13 +28,13 @@ const Photo = (props) => {
         compressImageQuality: 0.75,
         includeBase64: true,
       }).then((image) => {
-        setModalVisible(!modalVisible);
         setThumbnailImage(image.path);
         updateFieldsValue({rank: rank, value: image});
         setChangeTheme(true);
-        setTitle('Retake Photo');
+        setTitle('Retake ' + label);
       });
     } else {
+      setModalVisible(!modalVisible);
       ImagePicker.clean()
         .then(() => {
           ImagePicker.openPicker({
@@ -45,11 +46,10 @@ const Photo = (props) => {
             compressImageQuality: 0.75,
             includeBase64: true,
           }).then((images) => {
-            setModalVisible(!modalVisible);
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
             setChangeTheme(true);
-            setTitle('Retake Photo');
+            setTitle('Retake ' + label);
           });
         })
         .catch((e) => {
@@ -61,9 +61,9 @@ const Photo = (props) => {
   const cancel = () => {
     setChangeTheme(false);
     setThumbnailImage('');
-    setTitle('Add a Photo');
+    setTitle('Add a ' + label);
     updateFieldsValue({rank: rank, value: ''});
-    Toast.show('Success, remove the Photo');
+    Toast.show('Successfully, remove the ' + label);
   };
 
   return (
