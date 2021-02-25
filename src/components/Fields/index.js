@@ -5,7 +5,6 @@ import ToggleButton from './ToggleButton';
 import Label from './Label';
 import Photo from './Photo';
 import QrScanner from './QrScanner';
-import Image from './Image';
 import DrawingBoard from './Drawing';
 import PhoneNumber from './PhoneNumber';
 import DatePicker from './DatePicker';
@@ -25,7 +24,7 @@ export default {
   user: Select,
   select: Select,
   label: Label,
-  image: Image,
+  image: Photo,
   drawing: DrawingBoard,
   button: Button,
   score: Text,
