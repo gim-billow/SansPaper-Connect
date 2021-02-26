@@ -1,43 +1,31 @@
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import ItemWrapper from '../ItemWrapper';
-import {ToggleButton} from 'react-native-paper';
+import CheckBox from '@react-native-community/checkbox';
 
 import styles from './styles';
 
 const Checkbox = (props) => {
-  const [tick, setTick] = useState('0');
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
   const {item, updateFieldsValue} = props;
 
-  const updateCheckboxVal = () => {
-    const checkboxVal = tick === '0' ? '1' : '0';
+  const onToggleCheckBox = (value) => {
+    const checkboxVal = value ? '1' : '0';
+    console.log('ckbox>', checkboxVal);
     updateFieldsValue({rank: item.rank, value: checkboxVal});
   };
 
   return (
     <ItemWrapper>
       <Text style={styles.text}>{item.label}</Text>
-      <ToggleButton.Row
-        style={styles.box}
-        onValueChange={(val) => {
-          if (val) {
-            setTick(val);
-            updateCheckboxVal();
-          }
-        }}
-        value={tick}>
-        <ToggleButton
-          style={[styles.toggle, tick === 1 + '' ? styles.checked : null]}
-          value="1"
+      <View style={styles.box}>
+        <CheckBox
+          disabled={false}
+          value={toggleCheckBox}
+          onValueChange={(newValue) => onToggleCheckBox(newValue)}
         />
-        <ToggleButton
-          style={[
-            styles.toggle,
-            tick === 1 + '' ? styles.checkedii : styles.unchecked,
-          ]}
-          value="0"
-        />
-      </ToggleButton.Row>
+      </View>
     </ItemWrapper>
   );
 };

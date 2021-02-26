@@ -22,7 +22,10 @@ export default StyleSheet.create({
     fontSize: regular,
   },
   box: {
-    padding: 10,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 10,
   },
   toggle: {
     flex: 1,
