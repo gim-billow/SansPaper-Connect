@@ -2,6 +2,7 @@ import {screens} from '@constant/ScreenConstants';
 import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {regular} from '@styles/font';
 
 export const setDefaultOptions = () => {
@@ -62,7 +63,10 @@ export const showLoginScreen = () => {
 
 export const showMainScreen = async () => {
   const homeIcon = await Ionicons.getImageSource('md-home', 25);
-  const formIcon = await Ionicons.getImageSource('paper-plane', 25);
+  const formIcon = await MaterialCommunityIcons.getImageSource(
+    'clipboard-outline',
+    25,
+  );
   return Navigation.setRoot({
     root: {
       bottomTabs: {

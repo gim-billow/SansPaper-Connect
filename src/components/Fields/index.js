@@ -1,6 +1,5 @@
 import Text from './Text';
 import Header from './Header';
-import User from './User';
 import Select from './Select';
 import ToggleButton from './ToggleButton';
 import Label from './Label';
@@ -15,7 +14,6 @@ import DateTimePicker from './DateTimePicker';
 import Duration from './Duration';
 import Signature from './Signature';
 import Checkbox from './Checkbox';
-import Contact from './Contact';
 import Currency from './Currency';
 import Button from './Button';
 
@@ -24,7 +22,7 @@ export default {
   numeric: Text,
   header: Header,
   toggle: ToggleButton,
-  user: User,
+  user: Select,
   select: Select,
   label: Label,
   image: Image,
@@ -37,7 +35,7 @@ export default {
   datetime: DateTimePicker,
   duration: Duration,
   signature: Signature,
-  contact: Contact,
+  contact: Select,
   currency: Currency,
   checkbox: Checkbox,
   selectmulti: Select,
