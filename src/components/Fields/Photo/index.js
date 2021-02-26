@@ -19,7 +19,6 @@ const Photo = (props) => {
 
   function takePicture(fromCamera) {
     if (fromCamera) {
-      setModalVisible(!modalVisible);
       ImagePicker.openCamera({
         width: 300,
         height: 400,
@@ -30,11 +29,11 @@ const Photo = (props) => {
       }).then((image) => {
         setThumbnailImage(image.path);
         updateFieldsValue({rank: rank, value: image});
+        setModalVisible(!modalVisible);
         setChangeTheme(true);
         setTitle('Retake ' + label);
       });
     } else {
-      setModalVisible(!modalVisible);
       ImagePicker.clean()
         .then(() => {
           ImagePicker.openPicker({
@@ -48,6 +47,7 @@ const Photo = (props) => {
           }).then((images) => {
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
+            setModalVisible(!modalVisible);
             setChangeTheme(true);
             setTitle('Retake ' + label);
           });
