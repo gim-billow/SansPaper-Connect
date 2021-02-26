@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {lightGrey, white, darkRed} from 'styles/colors';
 import {regular} from '@styles/font';
-import {spaceSmall} from '@styles/space';
 
 export default StyleSheet.create({
   checked: {
@@ -18,14 +17,12 @@ export default StyleSheet.create({
     borderColor: lightGrey,
   },
   text: {
-    paddingLeft: 5,
-    paddingTop: 0,
+    paddingLeft: 10,
+    paddingTop: 10,
     fontSize: regular,
   },
   box: {
     flex: 1,
-    padding: spaceSmall,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 10,
