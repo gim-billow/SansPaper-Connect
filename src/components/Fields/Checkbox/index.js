@@ -11,20 +11,20 @@ const Checkbox = (props) => {
   const {item, updateFieldsValue} = props;
 
   const onToggleCheckBox = (value) => {
+    setToggleCheckBox(value);
     const checkboxVal = value ? '1' : '0';
-    console.log('ckbox>', checkboxVal);
     updateFieldsValue({rank: item.rank, value: checkboxVal});
   };
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{item.label}</Text>
       <View style={styles.box}>
         <CheckBox
           disabled={false}
           value={toggleCheckBox}
           onValueChange={(newValue) => onToggleCheckBox(newValue)}
         />
+        <Text style={styles.text}>{item.label}</Text>
       </View>
     </ItemWrapper>
   );
