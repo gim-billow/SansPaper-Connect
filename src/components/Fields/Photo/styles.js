@@ -36,7 +36,6 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    // alignItems: 'center',
     shadowColor: '#000',
     width: 300,
     height: 255,
@@ -46,13 +45,11 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
   },
   openButton: {
     backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
   },
   textStyle: {
     color: 'white',
@@ -91,6 +88,5 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
-    elevation: 5,
   },
 });

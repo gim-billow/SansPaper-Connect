@@ -10,6 +10,7 @@ import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
+import R from 'ramda';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,11 +54,15 @@ class FormList extends React.Component {
 
   render() {
     const {formList} = this.props;
+    const filteredOptions = R.pipe(
+      R.sortBy(R.compose(R.toLower, R.prop('name'))),
+      R.filter((option) => !R.isNil(option)),
+    )(formList);
     return (
       <FlatList
         style={styles.container}
         keyExtractor={this.keyExtractor}
-        data={formList}
+        data={filteredOptions}
         renderItem={this.renderItem}
       />
     );
