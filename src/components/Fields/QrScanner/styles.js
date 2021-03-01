@@ -33,7 +33,7 @@ export default StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: darkRed,
+    // backgroundColor: darkRed,
     width: '100%',
   },
   h: {

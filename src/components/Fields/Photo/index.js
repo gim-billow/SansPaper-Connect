@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Text, View} from 'react-native';
+import {Alert, Modal, Text, View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
@@ -27,9 +27,15 @@ const Photo = (props) => {
         compressImageQuality: 0.75,
         includeBase64: true,
       }).then((image) => {
+        if (Platform.OS === 'ios') {
+          setTimeout(() => {
+            setModalVisible(!modalVisible);
+          }, 1000);
+        } else {
+          setModalVisible(!modalVisible);
+        }
         setThumbnailImage(image.path);
         updateFieldsValue({rank: rank, value: image});
-        setModalVisible(!modalVisible);
         setChangeTheme(true);
         setTitle('Retake ' + label);
       });
@@ -47,7 +53,6 @@ const Photo = (props) => {
           }).then((images) => {
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
-            setModalVisible(!modalVisible);
             setChangeTheme(true);
             setTitle('Retake ' + label);
           });

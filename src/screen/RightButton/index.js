@@ -21,12 +21,12 @@ class RightButton extends React.Component {
 
     if (isSubmitted) {
       Navigation.popTo(screens.FormScreen);
+      this.setState({submitting: false});
       Alert.alert('Alert', 'Form submitted');
     } else {
+      this.setState({submitting: false});
       Alert.alert('Alert', 'Form not submitted');
     }
-
-    this.setState({submitting: false});
   };
 
   render() {

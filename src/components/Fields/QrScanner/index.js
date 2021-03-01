@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Text, View, Linking} from 'react-native';
+import {Alert, Modal, Text, View, SafeAreaView} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple, IconButton, Colors} from 'react-native-paper';
 import styles from './styles';
@@ -76,7 +76,7 @@ const QrScanner = (props) => {
               onRead={onSuccess}
               showMarker
               topContent={
-                <View style={styles.h}>
+                <SafeAreaView style={styles.h}>
                   <View style={styles.header}>
                     <IconButton
                       style={styles.icon}
@@ -89,7 +89,7 @@ const QrScanner = (props) => {
                     />
                     <Text style={styles.modalText}>QR Scanner</Text>
                   </View>
-                </View>
+                </SafeAreaView>
               }
             />
           </View>
