@@ -51,6 +51,13 @@ const Photo = (props) => {
             compressImageQuality: 0.75,
             includeBase64: true,
           }).then((images) => {
+            if (Platform.OS === 'ios') {
+              setTimeout(() => {
+                setModalVisible(!modalVisible);
+              }, 1000);
+            } else {
+              setModalVisible(!modalVisible);
+            }
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
             setChangeTheme(true);
