@@ -70,7 +70,7 @@ const TimePicker = (props) => {
         </TouchableRipple>
         <DateTimePickerModal
           isVisible={isTimePickerVisible}
-          mode="Time"
+          mode="time"
           onConfirm={handleConfirm}
           onCancel={hideTimePicker}
         />
