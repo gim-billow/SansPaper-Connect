@@ -8,6 +8,9 @@ target 'SansPaperIntegration' do
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
   use_react_native!(:path => config["reactNativePath"])
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+
   target 'SansPaperIntegrationTests' do
     inherit! :complete
     # Pods for testing
@@ -20,14 +23,5 @@ target 'SansPaperIntegration' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'SansPaperIntegration-tvOS' do
-  # Pods for SansPaperIntegration-tvOS
-
-  target 'SansPaperIntegration-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end

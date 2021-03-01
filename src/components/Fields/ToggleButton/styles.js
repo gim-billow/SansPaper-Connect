@@ -18,12 +18,39 @@ export default StyleSheet.create({
     color: lightGrey,
     fontSize: regular,
   },
-  button: {
+  redButton: {
     borderWidth: 1,
-    width: '50%',
+    flex: 1,
     height: 40,
     borderRadius: 5,
     borderColor: red,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  greenButton: {
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    borderRadius: 5,
+    borderColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orangeButton: {
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    borderRadius: 5,
+    borderColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blueButton: {
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    borderRadius: 5,
+    borderColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -33,10 +60,28 @@ export default StyleSheet.create({
   whiteBackground: {
     backgroundColor: 'white',
   },
+  greenBackground: {
+    backgroundColor: 'green',
+  },
+  orangeBackground: {
+    backgroundColor: 'orange',
+  },
+  blueBackground: {
+    backgroundColor: 'blue',
+  },
   redColor: {
     color: red,
   },
   whiteColor: {
     color: 'white',
+  },
+  greenColor: {
+    color: 'green',
+  },
+  orangeColor: {
+    color: 'orange',
+  },
+  blueColor: {
+    color: 'blue',
   },
 });

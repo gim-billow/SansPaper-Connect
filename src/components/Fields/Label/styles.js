@@ -1,13 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {lightGrey} from 'styles/colors';
 import {regular} from 'styles/font';
 
 export default StyleSheet.create({
-  container: {
-    borderColor: lightGrey,
-  },
   text: {
-    alignSelf: 'center',
+    paddingLeft: 10,
+    paddingTop: 10,
     fontSize: regular,
   },
 });

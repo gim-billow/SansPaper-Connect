@@ -9,6 +9,8 @@ import {selectFormList} from '@selector/form/index';
 import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
+import ItemWrapper from '../../components/Fields/ItemWrapper';
+import R from 'ramda';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,32 +33,36 @@ class FormList extends React.Component {
     if (linked_table && linked_table !== '') {
       goToLinkedItemScreen(linked_table);
     } else {
-      console.log('goToFormFieldsScreen');
       goToFormFieldsScreen({componentId: screens.FormScreen});
     }
   };
 
   renderItem = ({item}) => {
-    console.log('renderItem', item);
     const {name, linkedtable, id} = item;
     return (
-      <ListItem
-        onPress={() => this.onPress(linkedtable, id)}
-        title={name}
-        leftIcon={<Icon name="file-text-o" />}
-        bottomDivider
-        chevron
-      />
+      <ItemWrapper>
+        <ListItem
+          onPress={() => this.onPress(linkedtable, id)}
+          title={name}
+          leftIcon={<Icon name="file-text-o" />}
+          bottomDivider
+          chevron
+        />
+      </ItemWrapper>
     );
   };
 
   render() {
     const {formList} = this.props;
+    const filteredOptions = R.pipe(
+      R.sortBy(R.compose(R.toLower, R.prop('name'))),
+      R.filter((option) => !R.isNil(option)),
+    )(formList);
     return (
       <FlatList
         style={styles.container}
         keyExtractor={this.keyExtractor}
-        data={formList}
+        data={filteredOptions}
         renderItem={this.renderItem}
       />
     );

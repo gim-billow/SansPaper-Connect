@@ -6,6 +6,7 @@ import FormScreen from './FormScreen';
 import FormFieldsScreen from './FormFieldsScreen';
 import LinkedItems from './LinkedItems';
 import ActivityIndicatorOverlay from './ActivityIndicatorOverlay';
+import RightButton from './RightButton';
 
 const appScreens = new Map();
 
@@ -16,5 +17,6 @@ appScreens.set(screens.FormScreen, FormScreen);
 appScreens.set(screens.FormFieldsScreen, FormFieldsScreen);
 appScreens.set(screens.LinkedItems, LinkedItems);
 appScreens.set(screens.ActivityIndicatorOverlay, ActivityIndicatorOverlay);
+appScreens.set(screens.RightButton, RightButton);
 
 export default appScreens;

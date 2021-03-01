@@ -42,6 +42,7 @@ function* goToLinkedItemScreen({payload}) {
       table: linkedItemName,
       organisation,
     });
+
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_LINKED_TABLE,
       payload: linkedItem.data.items,
@@ -67,7 +68,6 @@ function* goToFormFieldsScreen({payload = {}}) {
 
     const fieldsPath = `${upviseTemplatePath}/${currentFormId}/upviseFields`;
     const currentFormFields = yield getFormFields({fieldsPath});
-    console.log('currentFormFields', currentFormFields);
     let currentForm = {};
     if (linkedItemId && linkedItemId !== '') {
       const updatedFormInfo = assoc('linkedid', linkedItemId, currentFormInfo);
@@ -75,13 +75,11 @@ function* goToFormFieldsScreen({payload = {}}) {
     } else {
       currentForm = assoc('fields', currentFormFields, currentFormInfo);
     }
-    console.log('update current form', currentForm);
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM,
       payload: currentForm,
     });
 
-    console.log('push to form fields screen');
     pushToFormFieldsScreen({componentId});
   } catch (error) {
     console.log('loadFormFields error', error);

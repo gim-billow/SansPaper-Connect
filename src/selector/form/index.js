@@ -16,6 +16,11 @@ export const selectCurrentFormFields = createSelector(
   (form) => (form.fields ? form.fields : []),
 );
 
+export const selectProjectValue = createSelector(
+  selectCurrentFormFields,
+  (fields) => (fields && fields.length > 0 ? fields[0].value : ''),
+);
+
 export const selectFormByCurrentId = createSelector(
   selectFormList,
   selectCurrentFormId,
