@@ -2,27 +2,28 @@ import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {saveDefaultTime, getDefaultTime, getTime} from './helper';
+import {
+  saveDefaultTime,
+  getDefaultTime,
+  getTime,
+  setDateTimeFormatDisplay,
+  setDateTime,
+  swapDateNum,
+} from './helper';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 
 const DateTimePicker = (props) => {
   const {item, updateFieldsValue} = props;
-  let value = '0';
-
-  const currentDateFormat =
-    new Date().getDate() +
-    '/' +
-    new Date().getMonth() +
-    1 +
-    '/' +
-    new Date().getFullYear();
-
-  const [dateLabel, setDateLabel] = useState(currentDateFormat.toString());
+  const [dateLabel, setDateLabel] = useState(
+    setDateTimeFormatDisplay('date', Date.now()),
+  );
+  const [displayDate, setDisplayDate] = useState(swapDateNum(dateLabel));
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeDateTheme, setChangeDateTheme] = useState(false);
 
   const [timeLabel, setTimeLabel] = useState('Select Time');
+  const [displayTime, setDisplayTime] = useState(new Date().getTime());
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
   const [defaultTime, setDefaultTime] = useState('none');
@@ -31,6 +32,8 @@ const DateTimePicker = (props) => {
     async function DefaultTime() {
       const getDefaultTimes = await getDefaultTime();
       const getTimes = await getTime();
+
+      setDisplayTime(Number(getTimes));
 
       updateFieldsValue({rank: item.rank, value: Number(getTimes)});
 
@@ -59,48 +62,49 @@ const DateTimePicker = (props) => {
   };
 
   const dateHandleConfirm = (date) => {
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    const dateFormat = day + '/' + month + '/' + year;
+    const dateFormat = setDateTimeFormatDisplay('date', date);
+    const dateTime = setDateTime(dateFormat, timeLabel);
 
     setDateLabel(dateFormat);
+    setDisplayDate(swapDateNum(dateFormat));
     setChangeDateTheme(true);
+
+    updateFieldsValue({rank: item.rank, value: dateTime});
 
     hideDatePicker();
   };
 
-  const timeFormat = (time) => {
-    let hrs = time !== 'currentTime' ? time.getHours() : new Date().getHours();
-    let mins =
-      time !== 'currentTime' ? time.getMinutes() : new Date().getMinutes();
-    let ampm = hrs >= 12 ? 'pm' : 'am';
-    hrs = hrs % 12;
-    hrs = hrs ? hrs : 12;
-    mins = mins < 10 ? '0' + mins : mins;
-
-    const getTimeValue =
-      time !== 'currentTime' ? time.getTime() : new Date().getTime();
-
-    updateFieldsValue({rank: item.rank, value: getTimeValue});
-
-    return hrs + ':' + mins + ' ' + ampm;
-  };
-
   const timeHandleConfirm = (time) => {
-    setTimeLabel((t) => (t = timeFormat(time)));
+    const timeFormat = setDateTimeFormatDisplay('time', time);
+    const dateTime = setDateTime(dateLabel, timeFormat);
+
+    setTimeLabel(timeFormat);
+    setDisplayTime(dateTime);
     setChangeTimeTheme(true);
+
+    updateFieldsValue({rank: item.rank, value: dateTime});
+
     hideTimePicker();
   };
 
   const updateDefaultTime = async () => {
     if (changeTimeTheme) {
-      await saveDefaultTime(timeLabel, value.toString());
+      const dateTime = setDateTime(dateLabel, timeLabel);
+
+      await saveDefaultTime(timeLabel, dateTime.toString());
       setDefaultTime(timeLabel);
+
+      updateFieldsValue({rank: item.rank, value: dateTime});
     } else {
-      await saveDefaultTime(timeFormat('currentTime', value.toString()));
-      setTimeLabel((t) => (t = timeFormat('currentTime')));
-      setDefaultTime(timeFormat('currentTime'));
+      const currentTime = setDateTimeFormatDisplay('time', Date.now());
+      const currentDate = setDateTimeFormatDisplay('date', Date.now());
+      const dateTime = setDateTime(currentDate, currentTime);
+
+      await saveDefaultTime(currentTime, dateTime.toString());
+      setTimeLabel(currentTime);
+      setDefaultTime(currentTime);
+
+      updateFieldsValue({rank: item.rank, value: dateTime});
     }
 
     setChangeTimeTheme(true);
@@ -131,6 +135,7 @@ const DateTimePicker = (props) => {
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
+            date={new Date(displayDate)}
             onConfirm={dateHandleConfirm}
             onCancel={hideDatePicker}
           />
@@ -156,6 +161,7 @@ const DateTimePicker = (props) => {
           <DateTimePickerModal
             isVisible={isTimePickerVisible}
             mode="time"
+            date={new Date(displayTime)}
             headerTextIOS="Set a time"
             onConfirm={timeHandleConfirm}
             onCancel={hideTimePicker}
@@ -173,7 +179,7 @@ const DateTimePicker = (props) => {
         </View>
         <View>
           <Text style={styles.textSet}>
-            - set current {props.item.label.toLowerCase()} time as default
+            - set current {props.item.label.toLowerCase()} as default
           </Text>
           <Text style={styles.textSet}>- currently saved at {defaultTime}</Text>
         </View>
