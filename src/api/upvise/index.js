@@ -1,6 +1,7 @@
 //Library
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
+import {firebase as firebaseStorage} from '@react-native-firebase/storage';
 import {sortBy, prop} from 'ramda';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -225,7 +226,8 @@ const utilUpviseFormValueBuilder = async (formid, fields) => {
 };
 // todo continue to trace the function
 const utilUpviseUploadFileParamBuilder = async (id, content, fileName) => {
-  const user = await getSansPaperUser();
+  // const user = await getSansPaperUser();
+  const user = await fetchSansPaperUser();
   const upviseAccount = await fetchSansPaperUserOrganisation(user);
   const orgRef = await fetchSansPaperUserOrganisationPath(user);
   const formattedImage = {};
@@ -245,14 +247,14 @@ const utilUpviseUploadFileParamBuilder = async (id, content, fileName) => {
 
 const postSansPaperUpviseFormStorage = async (imageId, base64Image) => {
   try {
-    const app = firebase.app();
+    const app = firebaseStorage.app();
     const bucket = app.storage(
       'gs://billow-software-upvise-forms-submitted-images/',
     );
 
     var random = Math.random();
 
-    const task = await bucket
+    await bucket
       .ref('/' + imageId + ':' + random + '.jpg')
       .putString(base64Image, 'base64', {contentType: 'image/jpeg'});
 
