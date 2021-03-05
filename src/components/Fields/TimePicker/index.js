@@ -71,6 +71,7 @@ const TimePicker = (props) => {
         <DateTimePickerModal
           isVisible={isTimePickerVisible}
           mode="time"
+          headerTextIOS="Set a time"
           onConfirm={handleConfirm}
           onCancel={hideTimePicker}
         />
