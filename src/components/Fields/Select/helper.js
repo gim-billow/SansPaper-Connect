@@ -168,8 +168,12 @@ export const getQueryByOptions = async (
         return pipe(
           split('|'),
           map((opt, i) => {
-            const optArr = split(':', opt);
-            return {id: optArr[0], name: optArr[1] || optArr[0]};
+            const items = opt.replace('\n', '');
+            const optArr = split(':', items.replace('\n ', ''));
+            return {
+              id: optArr[0],
+              name: optArr[1] || optArr[0],
+            };
           }),
         )(seloptions);
       }
