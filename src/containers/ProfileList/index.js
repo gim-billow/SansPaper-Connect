@@ -1,6 +1,6 @@
 //library
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -19,7 +19,14 @@ import {selectUser} from 'selector/sanspaper';
 import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
-import {fieldsProps} from './helper';
+import {fieldsProps, itemMap} from './helper';
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+  },
+});
 
 class ProfileList extends React.Component {
   state = {
@@ -50,7 +57,7 @@ class ProfileList extends React.Component {
     } else {
       return (
         <ListItem
-          title={item.userEmail}
+          title={item.label}
           leftIcon={<Icon name="file-text-o" />}
           bottomDivider
           chevron
@@ -62,18 +69,11 @@ class ProfileList extends React.Component {
   render() {
     const {email, user} = this.props;
     const name = user._data.name;
-    const dataArray = [
-      {type: 'user', userName: name, iamge: 'ok'},
-      {type: 'level', points: '278'},
-      {type: 'email', email: email},
-      {type: 'password'},
-      {type: 'setting'},
-      {type: 'logout'},
-      {type: 'version'},
-    ];
+    const dataArray = itemMap(name, email);
     console.log('profiledata:', name);
     return (
       <FlatList
+        style={styles.container}
         keyExtractor={this.keyExtractor}
         data={dataArray}
         renderItem={this.renderItem}

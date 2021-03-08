@@ -6,17 +6,11 @@ export default StyleSheet.create({
   text: {
     fontSize: regular,
     color: 'gray',
-    paddingTop: spaceSmall,
-    paddingLeft: 50,
-    paddingRight: spaceMedium,
   },
   container: {
     flex: 1,
-    flexDirection: 'row',
-    paddingTop: 60,
-    paddingLeft: 40,
-  },
-  icon: {
-    color: 'gray',
+    paddingTop: spaceSmall,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

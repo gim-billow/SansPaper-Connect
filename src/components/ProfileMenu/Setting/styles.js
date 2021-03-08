@@ -7,18 +7,21 @@ export default StyleSheet.create({
   text: {
     fontSize: regular,
     color: 'gray',
-    paddingTop: spaceSmall,
-    paddingLeft: 50,
+    paddingTop: 90,
+    paddingLeft: spaceMedium,
     paddingRight: spaceMedium,
+  },
+  container: {
+    flex: 1,
+    paddingTop: spaceSmall,
+    paddingLeft: spaceMedium,
+    paddingRight: spaceMedium,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     borderWidth: 1,
     borderColor: darkRed,
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingTop: spaceMedium,
-    paddingLeft: 40,
+    width: '100%',
   },
 });
