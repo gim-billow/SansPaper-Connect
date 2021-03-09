@@ -32,20 +32,32 @@ const _mapToColour = (id) => {
       background: styles.blueBackground,
       button: styles.blueButton,
     };
+  } else {
+    return {
+      text: styles.blueColor,
+      background: styles.blueBackground,
+      button: styles.blueButton,
+    };
   }
 };
 
 const ToggleButton = (props) => {
-  console.log('toggle', props);
   const {item, id, updateFieldsValue} = props;
   const {label, seloptions, rank} = item;
 
   const options = map((option) => {
-    return split(':', option)[1];
+    return split(':', option)[1]
+      ? split(':', option)[1]
+      : split(':', option)[0];
   }, split('|', seloptions));
 
   let dataOptions = map((option) => {
-    return {id: split(':', option)[0], name: split(':', option)[1]};
+    return {
+      id: split(':', option)[0],
+      name: split(':', option)[1]
+        ? split(':', option)[1]
+        : split(':', option)[0],
+    };
   }, split('|', seloptions));
 
   const [selected, setOption] = React.useState(options[0]);

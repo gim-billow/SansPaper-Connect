@@ -180,6 +180,8 @@ export const getQueryByOptions = async (
     }
     case 'contact':
       return getContact(organization, seloptions);
+    case 'company':
+      return getWithoutStatus(organization, 'contacts.companies');
     case 'project':
       return getProject(organization);
     case 'product':

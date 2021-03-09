@@ -10,6 +10,7 @@ import {goToFormFieldsScreen} from '@store/navigate';
 import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
+import R from 'ramda';
 
 class LinkedItemsList extends React.Component {
   keyExtractor = (item, index) => index.toString();
@@ -35,13 +36,17 @@ class LinkedItemsList extends React.Component {
 
   render() {
     const {linkedItems = []} = this.props;
+    const filteredOptions = R.pipe(
+      R.sortBy(R.compose(R.toLower, R.prop('name'))),
+      R.filter((option) => !R.isNil(option)),
+    )(linkedItems);
 
-    return linkedItems.length > 0 ? (
+    return filteredOptions.length > 0 ? (
       <ItemWrapper>
         <FlatList
           style={styles.container}
           keyExtractor={this.keyExtractor}
-          data={linkedItems}
+          data={filteredOptions}
           renderItem={this.renderItem}
         />
       </ItemWrapper>

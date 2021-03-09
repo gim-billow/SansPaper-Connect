@@ -5,10 +5,9 @@ import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 
 const SPText = (props) => {
-  const [text, setText] = React.useState('');
-  const {type, label, rank} = props.item;
+  const {type, label, rank, value} = props.item;
   const {updateFieldsValue} = props;
-  const keyboardType = props.keyboardType ? props.keyboardType : 'default';
+  const [text, setText] = React.useState(value ? value : '');
 
   const onChangeText = (updatedText) => {
     setText(updatedText);
