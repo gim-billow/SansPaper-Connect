@@ -51,4 +51,5 @@ export default {
   decimal: Text,
   email: Text,
   link: Text,
+  company: Select,
 };

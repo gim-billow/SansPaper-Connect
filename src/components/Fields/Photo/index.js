@@ -15,7 +15,7 @@ const Photo = (props) => {
   const [changeTheme, setChangeTheme] = useState(false);
 
   const [thumbnailImage, setThumbnailImage] = useState('');
-  const [title, setTitle] = useState('Add a ' + label);
+  const [title, setTitle] = useState('Add a Photo');
 
   function takePicture(fromCamera) {
     if (fromCamera) {
@@ -37,7 +37,7 @@ const Photo = (props) => {
         setThumbnailImage(image.path);
         updateFieldsValue({rank: rank, value: image});
         setChangeTheme(true);
-        setTitle('Retake ' + label);
+        setTitle('Retake Photo');
       });
     } else {
       ImagePicker.clean()

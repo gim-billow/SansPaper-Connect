@@ -10,7 +10,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   text: {
-    fontSize: medium,
+    fontSize: regular,
   },
   label: {
     paddingLeft: spaceSmall,
