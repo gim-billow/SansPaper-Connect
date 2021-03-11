@@ -35,7 +35,7 @@ const Photo = (props) => {
           setModalVisible(!modalVisible);
         }
         setThumbnailImage(image.path);
-        updateFieldsValue({rank: rank, value: image});
+        updateFieldsValue({rank: rank, value: [image]});
         setChangeTheme(true);
         setTitle('Retake Photo');
       });
