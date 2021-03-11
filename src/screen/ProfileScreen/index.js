@@ -2,7 +2,6 @@
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import styles from './styles';
-import ProfileList from '@containers/ProfileList/index';
 import Profile from '../../components/Profile';
 
 class ProfileScreen extends React.Component {
