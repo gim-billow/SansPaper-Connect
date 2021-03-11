@@ -1,7 +1,7 @@
 //Library
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
-import {firebase as firebaseStorage} from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import {sortBy, prop} from 'ramda';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -247,7 +247,7 @@ const utilUpviseUploadFileParamBuilder = async (id, content, fileName) => {
 
 const postSansPaperUpviseFormStorage = async (imageId, base64Image) => {
   try {
-    const app = firebaseStorage.app();
+    const app = firebase.app();
     const bucket = app.storage(
       'gs://billow-software-upvise-forms-submitted-images/',
     );

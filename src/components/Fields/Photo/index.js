@@ -5,10 +5,11 @@ import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const Photo = (props) => {
-  const {label, rank} = props.item;
+  const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -35,7 +36,7 @@ const Photo = (props) => {
           setModalVisible(!modalVisible);
         }
         setThumbnailImage(image.path);
-        updateFieldsValue({rank: rank, value: image});
+        updateFieldsValue({rank: rank, value: [image]});
         setChangeTheme(true);
         setTitle('Retake Photo');
       });
@@ -81,6 +82,7 @@ const Photo = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.text}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       {thumbnailImage === '' ? null : (
         <View style={styles.Thumbnail}>
           <Thumbnail

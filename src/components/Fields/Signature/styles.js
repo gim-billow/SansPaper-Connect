@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium} from 'styles/space';
+import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
 import {regular} from 'styles/font';
 import {lightRed, darkRed, white} from '@styles/colors';
 
@@ -28,6 +28,7 @@ export default StyleSheet.create({
   container: {
     width: 400,
     height: 260,
+    marginTop: spaceRegular,
   },
   signature: {
     paddingLeft: spaceSmall,
