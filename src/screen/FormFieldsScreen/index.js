@@ -6,6 +6,9 @@ import FormFieldsList from '@containers/FormFieldsList';
 import {screens} from '@constant/ScreenConstants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+/**
+ * This is used in the form lists
+ */
 class FormFieldsScreen extends React.Component {
   static options = () => {
     const option = {

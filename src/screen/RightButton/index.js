@@ -1,4 +1,5 @@
 import React from 'react';
+import {filter, has} from 'ramda';
 import {TouchableOpacity, Alert} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Navigation} from 'react-native-navigation';
@@ -17,6 +18,26 @@ class RightButton extends React.Component {
   };
 
   submit = async (form) => {
+    const requiredFields = filter(
+      (field) => field.mandatory === 1,
+      form.fields,
+    );
+    // check if there is an empty value in a mandatory field
+    const proceed = requiredFields.map((field) => {
+      if (!field.value) {
+        return false;
+      }
+
+      return true;
+    });
+
+    if (proceed.includes(false)) {
+      this.renderMandatoryAlert();
+      return;
+    }
+
+    console.log('form', form);
+
     let isSubmitted = await submitUpviseForm(form);
 
     if (isSubmitted) {
@@ -28,6 +49,22 @@ class RightButton extends React.Component {
       Alert.alert('Alert', 'Form not submitted');
     }
   };
+
+  renderMandatoryAlert = () =>
+    Alert.alert(
+      'Alert',
+      'Please complete all mandatory forms before submitting',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            this.setState({submitting: false});
+          },
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
 
   render() {
     const {currentForm} = this.props;
