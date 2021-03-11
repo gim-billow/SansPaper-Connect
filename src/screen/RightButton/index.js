@@ -36,8 +36,6 @@ class RightButton extends React.Component {
       return;
     }
 
-    console.log('form', form);
-
     let isSubmitted = await submitUpviseForm(form);
 
     if (isSubmitted) {

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {TextInput} from 'react-native-paper';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
 
 const SPText = (props) => {
-  const {type, label, rank, value} = props.item;
+  const {type, label, rank, value, mandatory} = props.item;
   const {updateFieldsValue} = props;
   const [text, setText] = React.useState(value ? value : '');
 
@@ -30,6 +31,7 @@ const SPText = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.text}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       <TextInput
         style={styles.textInput}
         value={text}

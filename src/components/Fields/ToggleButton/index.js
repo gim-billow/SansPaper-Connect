@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
+import MandatoryField from '../MandatoryField';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {map, split} from 'ramda';
 
@@ -43,7 +44,7 @@ const _mapToColour = (id) => {
 
 const ToggleButton = (props) => {
   const {item, id, updateFieldsValue} = props;
-  const {label, seloptions, rank} = item;
+  const {label, seloptions, rank, mandatory} = item;
 
   const options = map((option) => {
     return split(':', option)[1]
@@ -79,6 +80,7 @@ const ToggleButton = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.label}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       <View style={styles.container}>
         {map((option) => {
           let colorControl = _mapToColour(option.id);
