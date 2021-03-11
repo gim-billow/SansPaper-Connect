@@ -7,10 +7,14 @@ export default StyleSheet.create({
     fontSize: regular,
     color: 'gray',
   },
+  textView: {
+    paddingLeft: spaceRegular,
+  },
   container: {
     flex: 1,
+    flexDirection: 'row',
     paddingTop: spaceMedium,
-    justifyContent: 'center',
+    paddingLeft: spaceMedium,
     alignItems: 'center',
   },
 });

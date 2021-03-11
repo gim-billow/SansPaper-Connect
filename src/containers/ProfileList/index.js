@@ -68,9 +68,10 @@ class ProfileList extends React.Component {
 
   render() {
     const {email, user} = this.props;
+    console.log('profiles', this.props);
     const name = user._data.name;
     const dataArray = itemMap(name, email);
-    console.log('profiledata:', name);
+    // console.log('profiledata:', name);
     return (
       <FlatList
         style={styles.container}

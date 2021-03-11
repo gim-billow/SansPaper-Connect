@@ -6832,6 +6832,11 @@ react-native-country-picker-modal@^2.0.0:
     prop-types "15.7.2"
     react-async-hook "3.6.1"
 
+react-native-device-info@^8.0.5:
+  version "8.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.0.5.tgz#9b7e576533c4117af39581bfe75c9d81aab274a9"
+  integrity sha512-yVQMu5xW9lmQGl7iyT/lrn6wddbDypQ/bjJHWClY4Ic/AS0CitQUV8RGUzJG+SG+5VGwf96Y50fUzYBALok2FQ==
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"

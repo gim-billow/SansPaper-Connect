@@ -3,6 +3,7 @@ import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import styles from './styles';
 import ProfileList from '@containers/ProfileList/index';
+import Profile from '../../components/Profile';
 
 class ProfileScreen extends React.Component {
   static options = () => {
@@ -20,7 +21,7 @@ class ProfileScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ProfileList />
+        <Profile />
       </View>
     );
   }

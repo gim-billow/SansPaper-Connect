@@ -5,23 +5,23 @@ import {lightRed, darkRed, white} from '@styles/colors';
 
 export default StyleSheet.create({
   text: {
+    paddingLeft: spaceMedium,
     fontSize: regular,
     color: 'gray',
-    paddingTop: 90,
-    paddingLeft: spaceMedium,
-    paddingRight: spaceMedium,
   },
   container: {
     flex: 1,
-    paddingTop: spaceSmall,
+    flexDirection: 'row',
+    paddingTop: spaceMedium,
     paddingLeft: spaceMedium,
-    paddingRight: spaceMedium,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
     borderWidth: 1,
     borderColor: darkRed,
     width: '100%',
+  },
+  icon: {
+    color: 'green',
   },
 });

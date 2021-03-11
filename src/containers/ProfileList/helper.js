@@ -21,6 +21,7 @@ export const itemMap = (name, email) => {
     {type: 'email', email: email, label: 'Email'},
     {type: 'password', label: 'Password'},
     {type: 'setting', label: 'Setting'},
+    {type: 'update', label: 'update'},
     {type: 'logout', label: 'Logout'},
     {type: 'version', label: 'Current version', version: '3.61.281'},
   ];

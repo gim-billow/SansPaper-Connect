@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import styles from './styles';
 import ItemWrapper from '../../Fields/ItemWrapper';
+import LogoutIcon from '../SvgIcon/LogoutIcon';
 
 const Logout = (props) => {
   const {item} = props;
@@ -10,7 +11,8 @@ const Logout = (props) => {
   return (
     <ItemWrapper>
       <View style={styles.container}>
-        <Button style={styles.button}>Log out</Button>
+        <LogoutIcon width={30} height={40} color="red" />
+        <Text style={styles.text}>Log out</Text>
       </View>
     </ItemWrapper>
   );

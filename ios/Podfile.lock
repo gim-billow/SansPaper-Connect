@@ -650,6 +650,8 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.0.9):
     - React-Core
+  - RNDeviceInfo (8.0.5):
+    - React-Core
   - RNFBApp (8.4.6):
     - Firebase/CoreOnly (~> 6.34.0)
     - React-Core
@@ -746,6 +748,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
@@ -868,6 +871,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/checkbox"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
@@ -956,6 +961,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCCheckbox: d1749e6a92178ce5dbc31e63becd1f34f0c76bbd
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
+  RNDeviceInfo: 7828eb110e3146324c0583c134e59db5d39f7e8b
   RNFBApp: 7eacc7da7ab19f96c05e434017d44a9f09410da8
   RNFBAuth: 552aa1fe908c433e12a59ed167a7c2695efa19e7
   RNFBFirestore: 09a65d56413b9e11ab550f5f7e27106312c5fb7e
