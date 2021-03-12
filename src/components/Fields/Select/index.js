@@ -64,9 +64,11 @@ class Select extends Component {
     });
 
     this.setState({options: [...selectedItems]});
+
+    // TODO: check if value should be string or number
     updateFieldsValue({
       rank: item.rank,
-      value: item.type === 'selectmulti' ? value : selectedItems[0],
+      value: item.type === 'selectmulti' ? value : selectedItems[0] + '',
     });
   };
 
@@ -77,8 +79,8 @@ class Select extends Component {
     return (
       <ItemWrapper>
         <Text style={styles.text}>{item.label}</Text>
+        {item.mandatory === 1 ? <MandatoryField /> : null}
         <View>
-          {item.mandatory === 1 ? <MandatoryField /> : null}
           <SectionedMultiSelect
             styles={{
               container,

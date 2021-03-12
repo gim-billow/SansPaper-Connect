@@ -3,10 +3,11 @@ import {View, Text} from 'react-native';
 import SignaturePad from 'react-native-signature-pad';
 import {Button} from 'react-native-paper';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
 import styles from './styles';
 
 const Signature = (props) => {
-  const {label, rank} = props.item;
+  const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
   const [signature, setSignature] = useState('');
   const [show, setShow] = useState(true);
@@ -37,6 +38,7 @@ const Signature = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.label}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       <View style={styles.container}>
         <View style={styles.signature}>
           {show ? (

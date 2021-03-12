@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
+import MandatoryField from '../MandatoryField';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {map, split} from 'ramda';
 
@@ -32,20 +33,32 @@ const _mapToColour = (id) => {
       background: styles.blueBackground,
       button: styles.blueButton,
     };
+  } else {
+    return {
+      text: styles.blueColor,
+      background: styles.blueBackground,
+      button: styles.blueButton,
+    };
   }
 };
 
 const ToggleButton = (props) => {
-  console.log('toggle', props);
   const {item, id, updateFieldsValue} = props;
-  const {label, seloptions, rank} = item;
+  const {label, seloptions, rank, mandatory} = item;
 
   const options = map((option) => {
-    return split(':', option)[1];
+    return split(':', option)[1]
+      ? split(':', option)[1]
+      : split(':', option)[0];
   }, split('|', seloptions));
 
   let dataOptions = map((option) => {
-    return {id: split(':', option)[0], name: split(':', option)[1]};
+    return {
+      id: split(':', option)[0],
+      name: split(':', option)[1]
+        ? split(':', option)[1]
+        : split(':', option)[0],
+    };
   }, split('|', seloptions));
 
   const [selected, setOption] = React.useState(options[0]);
@@ -67,6 +80,7 @@ const ToggleButton = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.label}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       <View style={styles.container}>
         {map((option) => {
           let colorControl = _mapToColour(option.id);

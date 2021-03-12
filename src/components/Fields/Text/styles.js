@@ -11,6 +11,7 @@ export default StyleSheet.create({
   },
   textInput: {
     backgroundColor: 'white',
-    margin: spaceRegular,
+    marginHorizontal: spaceRegular,
+    marginBottom: spaceRegular,
   },
 });

@@ -5,17 +5,18 @@ import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const Photo = (props) => {
-  const {label, rank} = props.item;
+  const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
   const [thumbnailImage, setThumbnailImage] = useState('');
-  const [title, setTitle] = useState('Add a ' + label);
+  const [title, setTitle] = useState('Add a Photo');
 
   function takePicture(fromCamera) {
     if (fromCamera) {
@@ -35,9 +36,9 @@ const Photo = (props) => {
           setModalVisible(!modalVisible);
         }
         setThumbnailImage(image.path);
-        updateFieldsValue({rank: rank, value: image});
+        updateFieldsValue({rank: rank, value: [image]});
         setChangeTheme(true);
-        setTitle('Retake ' + label);
+        setTitle('Retake Photo');
       });
     } else {
       ImagePicker.clean()
@@ -51,6 +52,13 @@ const Photo = (props) => {
             compressImageQuality: 0.75,
             includeBase64: true,
           }).then((images) => {
+            if (Platform.OS === 'ios') {
+              setTimeout(() => {
+                setModalVisible(!modalVisible);
+              }, 1000);
+            } else {
+              setModalVisible(!modalVisible);
+            }
             setThumbnailImage(images[0].path);
             updateFieldsValue({rank: rank, value: images});
             setChangeTheme(true);
@@ -74,6 +82,7 @@ const Photo = (props) => {
   return (
     <ItemWrapper>
       <Text style={styles.text}>{label}</Text>
+      {mandatory === 1 ? <MandatoryField /> : null}
       {thumbnailImage === '' ? null : (
         <View style={styles.Thumbnail}>
           <Thumbnail

@@ -168,14 +168,20 @@ export const getQueryByOptions = async (
         return pipe(
           split('|'),
           map((opt, i) => {
-            const optArr = split(':', opt);
-            return {id: optArr[0], name: optArr[1] || optArr[0]};
+            const items = opt.replace('\n', '');
+            const optArr = split(':', items.replace('\n ', ''));
+            return {
+              id: optArr[0],
+              name: optArr[1] || optArr[0],
+            };
           }),
         )(seloptions);
       }
     }
     case 'contact':
       return getContact(organization, seloptions);
+    case 'company':
+      return getWithoutStatus(organization, 'contacts.companies');
     case 'project':
       return getProject(organization);
     case 'product':
