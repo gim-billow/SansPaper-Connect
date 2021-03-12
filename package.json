@@ -31,7 +31,7 @@
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-camera": "^3.42.0",
-    "react-native-device-info": "^8.0.5",
+    "react-native-device-info": "^6.0.2",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-image-base64": "^0.1.4",
     "react-native-image-crop-picker": "^0.35.2",
