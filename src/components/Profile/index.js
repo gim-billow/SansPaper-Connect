@@ -4,6 +4,9 @@ import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
 
+// api
+import {clearStorageUserId} from '@api/upvise';
+
 import {getReadableVersion} from 'react-native-device-info';
 
 // downdown
@@ -27,6 +30,7 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 
 //redux, selector
+import {logoutUser} from '@store/user';
 import {selectEmail} from 'selector/user';
 import {selectUser} from 'selector/sanspaper';
 
@@ -71,6 +75,8 @@ class Profile extends Component {
           text: 'Yes',
           onPress: async () => {
             await auth().signOut();
+            await clearStorageUserId();
+            this.props.logoutUser();
           },
         },
       ],
@@ -206,4 +212,4 @@ const mapState = createStructuredSelector({
   user: selectUser,
 });
 
-export default connect(mapState)(Profile);
+export default connect(mapState, {logoutUser})(Profile);

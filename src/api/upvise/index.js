@@ -43,6 +43,10 @@ export const getStorageUserId = async () => {
   }
 };
 
+export const clearStorageUserId = async () => {
+  await AsyncStorage.setItem('@userid', '');
+};
+
 export const getUser = () => {
   try {
     const user = firebase.auth().currentUser
