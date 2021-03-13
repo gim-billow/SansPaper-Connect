@@ -1,85 +1,65 @@
-import React, {useState} from 'react';
-import {View, Text} from 'react-native';
-import SignaturePad from 'react-native-signature-pad';
-import {Button} from 'react-native-paper';
+import React, {useState, createRef} from 'react';
+import {ScrollView, SafeAreaView, View, Text} from 'react-native';
+import SignatureScreen from 'react-native-signature-canvas';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 
 const Signature = (props) => {
   const {label, rank, mandatory} = props.item;
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const ref = createRef();
   const {updateFieldsValue} = props;
-  const [signature, setSignature] = useState('');
-  const [show, setShow] = useState(true);
-  const [changeTheme, setChangeTheme] = useState(false);
 
-  const signaturePadError = (error) => {
-    console.error(error);
+  const handleSignature = (signature) => {
+    const base64url = signature.replace('data:image/png;base64,', '');
+    updateFieldsValue({rank: rank, value: base64url});
+    console.log(signature);
   };
 
-  const signaturePadClear = () => {
-    setChangeTheme(false);
-    setShow(false);
-    setTimeout(() => {
-      setShow(true);
-    }, 0);
+  const handleEmpty = () => {
+    console.log('Empty');
+  };
+
+  const handleClear = () => {
     updateFieldsValue({rank: rank, value: ''});
+    console.log('clear success!');
   };
 
-  const signaturePadChange = ({base64DataUrl}) => {
-    setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
-  };
-
-  const signaturePadSave = () => {
-    setChangeTheme(true);
-    updateFieldsValue({rank: rank, value: signature});
+  const handleEnd = () => {
+    ref.current.readSignature();
   };
 
   return (
-    <ItemWrapper>
-      <Text style={styles.label}>{label}</Text>
-      {mandatory === 1 ? <MandatoryField /> : null}
-      <View style={styles.container}>
-        <View style={styles.signature}>
-          {show ? (
-            <SignaturePad
-              onError={signaturePadError}
-              onChange={signaturePadChange}
-              style={styles.signatureColor}
-              resizeHeight={200}
-              resizeWidth={300}
-            />
-          ) : null}
-        </View>
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button
-              mode="contained"
-              style={styles.buttonColor}
-              onPress={signaturePadClear}>
-              <Text style={styles.text}>Clear Signature</Text>
-            </Button>
+    <SafeAreaView>
+      <ScrollView scrollEnabled={scrollEnabled}>
+        <ItemWrapper>
+          <Text style={styles.label}>{label}</Text>
+          <View style={styles.container}>
+            <View style={styles.signature}>
+              <SignatureScreen
+                ref={ref}
+                onOK={handleSignature}
+                onEmpty={handleEmpty}
+                onClear={handleClear}
+                onBegin={() => setScrollEnabled(false)}
+                onEnd={() => setScrollEnabled(true)}
+                minWidth={5}
+                trimWhitespace={true}
+                backgroundColor="rgb(255,255,255)"
+                penColor={'rgba(255,117,2,1)'}
+                webStyle={`.m-signature-pad--footer
+                .button.save {
+                  background-color: red;
+                  color: #FFF;
+                }`}
+                // descriptionText={'text'}
+              />
+            </View>
           </View>
-          <View style={styles.button}>
-            <Button
-              mode="contained"
-              style={
-                changeTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }
-              onPress={signaturePadSave}>
-              <Text
-                style={
-                  changeTheme === true ? styles.ChangeTextColor : styles.text
-                }>
-                {changeTheme === true ? 'Signature Saved' : 'Save Signature'}
-              </Text>
-            </Button>
-          </View>
-        </View>
-      </View>
-    </ItemWrapper>
+        </ItemWrapper>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
