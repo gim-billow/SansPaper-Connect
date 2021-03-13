@@ -27,14 +27,14 @@ export default StyleSheet.create({
   },
   container: {
     width: 400,
-    height: 300,
+    height: 260,
+    marginTop: spaceRegular,
   },
   signature: {
-    paddingLeft: 3,
-    paddingRight: spaceMedium,
-    paddingBottom: spaceSmall,
-    width: '100%',
-    height: '100%',
+    paddingLeft: spaceSmall,
+    paddingRight: spaceSmall,
+    width: '92%',
+    height: 200,
   },
   buttonContainer: {
     flex: 1,

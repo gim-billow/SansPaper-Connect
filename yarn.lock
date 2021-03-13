@@ -6718,7 +6718,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@15.7.2, prop-types@15.x.x, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@15.7.2, prop-types@15.x.x, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6982,10 +6982,12 @@ react-native-sectioned-multi-select@^0.8.1:
   resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.8.1.tgz#5ec8e4fe4136c36dc5df1222b288896760e43c86"
   integrity sha512-iH/5PHBo64yFhKzjd+6sCG0aEvgDnUwpn3I7R0ohcGo/+gJdw47mYmJMTwJTmR9JqBFXHx+2bkQi4ij2ghfqRQ==
 
-react-native-signature-canvas@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/react-native-signature-canvas/-/react-native-signature-canvas-3.5.2.tgz#b58866d60c087b4599b04f7726d573b017b7122f"
-  integrity sha512-B8A9b1CS3RJEkH23UbjOTT23T5ImkktC5OUeg9sspWMZjROmUJWDItSj3wahoR2A/T01f0l9ntnuuPdtHcrR+Q==
+react-native-signature-pad@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-signature-pad/-/react-native-signature-pad-0.1.0.tgz#b921c290f06cce99664b5bff23aa3ec30f482c63"
+  integrity sha512-OFcvfdmrB+UdvHIyFYGtBpoDc0hR56T/9/s5+vpkqMJxqOWCSuCNIzzKKT8lWzsMB/KYhojs+dTfH8cIhTA+OA==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-simple-toast@^1.1.3:
   version "1.1.3"
