@@ -54,6 +54,7 @@ class FormList extends React.Component {
 
   render() {
     const {formList} = this.props;
+    // console.log('profileForm', formList);
     const filteredOptions = R.pipe(
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
