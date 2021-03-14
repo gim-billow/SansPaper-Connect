@@ -1,5 +1,6 @@
 export const USER_ACTIONS = {
   LOGIN: 'userActions/LOGIN',
+  LOGOUT: 'userActions/LOGOUT',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -15,4 +16,9 @@ export const USER_REDUCER_ACTIONS = {
 export const loginUser = (payload) => ({
   type: USER_ACTIONS.LOGIN,
   payload,
+});
+
+export const logoutUser = () => ({
+  type: USER_ACTIONS.LOGOUT,
+  payload: {status: false, email: '', uid: ''},
 });
