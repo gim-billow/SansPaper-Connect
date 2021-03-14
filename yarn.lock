@@ -6982,6 +6982,13 @@ react-native-sectioned-multi-select@^0.8.1:
   resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.8.1.tgz#5ec8e4fe4136c36dc5df1222b288896760e43c86"
   integrity sha512-iH/5PHBo64yFhKzjd+6sCG0aEvgDnUwpn3I7R0ohcGo/+gJdw47mYmJMTwJTmR9JqBFXHx+2bkQi4ij2ghfqRQ==
 
+react-native-signature-capture@^0.4.10:
+  version "0.4.11"
+  resolved "https://registry.yarnpkg.com/react-native-signature-capture/-/react-native-signature-capture-0.4.11.tgz#131e50bab96701611e314f70892bd80f21ec9202"
+  integrity sha512-vDyTso6zAbSaGXxgethR3vE6d14ehpt6C4Q3GWkcobMI27jYESbrL7QuGjiyFSGIeDnkLNNB9fAky9Jcw+MzsA==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-signature-pad@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-native-signature-pad/-/react-native-signature-pad-0.1.0.tgz#b921c290f06cce99664b5bff23aa3ec30f482c63"

@@ -11,6 +11,7 @@ import {setCurrentForm} from 'store/forms';
 import {selectCurrentForm} from 'selector/form';
 // upvise api
 import {submitUpviseForm} from '../../api/upvise';
+import {Platform} from 'react-native';
 
 class RightButton extends React.Component {
   state = {
@@ -74,7 +75,14 @@ class RightButton extends React.Component {
             this.setState({submitting: true});
           }
         }}>
-        <Ionicons name="paper-plane" size={25} color="white" />
+        <Ionicons
+          style={{
+            marginRight: Platform.OS === 'android' ? 20 : 0,
+          }}
+          name="paper-plane"
+          size={25}
+          color="white"
+        />
       </TouchableOpacity>
     );
   }
