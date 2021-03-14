@@ -1,4 +1,3 @@
-
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
@@ -290,10 +289,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = FJM48A99P4;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = Y3SWCJ96MW;
+						DevelopmentTeam = FJM48A99P4;
 						LastSwiftMigration = 1150;
 					};
 				};
@@ -592,6 +592,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = FJM48A99P4;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -617,6 +618,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = FJM48A99P4;
 				INFOPLIST_FILE = SansPaperIntegrationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -638,7 +640,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = Y3SWCJ96MW;
+				DEVELOPMENT_TEAM = FJM48A99P4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SansPaperIntegration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -669,7 +671,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = Y3SWCJ96MW;
+				DEVELOPMENT_TEAM = FJM48A99P4;
 				INFOPLIST_FILE = SansPaperIntegration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
