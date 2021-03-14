@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
 import ItemWrapper from '../ItemWrapper';
@@ -54,6 +54,14 @@ class DrawingBoard extends React.Component {
       .then(() => console.log('Image deleted'))
       .catch((err) => console.log(err));
   };
+
+  handleOnStrokeStart = (status) => {
+    const {updateScrollEnabled} = this.props;
+    if (Platform.OS === 'ios') {
+      updateScrollEnabled(status);
+    }
+  };
+
   render() {
     const {label} = this.props.item;
     const {changeTheme} = this.state;
@@ -70,6 +78,8 @@ class DrawingBoard extends React.Component {
               filename: this.state.path,
               mode: 'ScaleToFill',
             }}
+            onStrokeStart={() => this.handleOnStrokeStart(false)}
+            onStrokeEnd={() => this.handleOnStrokeStart(true)}
             containerStyle={styles.containerStyle}
             canvasStyle={styles.canvasStyle}
             style={styles.sketch}
