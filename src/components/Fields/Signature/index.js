@@ -12,6 +12,7 @@ const Signature = (props) => {
   const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
   const [signature, setSignature] = useState('');
+  const [signatureSaved, setSignaturesSaved] = useState(false);
   const [show, setShow] = useState(true);
   const [changeTheme, setChangeTheme] = useState(false);
 
@@ -30,10 +31,12 @@ const Signature = (props) => {
       setShow(true);
     }, 0);
     updateFieldsValue({rank: rank, value: ''});
+
+    setSignaturesSaved(false);
   };
 
   const signaturePadChange = ({base64DataUrl}) => {
-    setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
+    // setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
   };
 
   const signaturePadSave = () => {
@@ -43,6 +46,7 @@ const Signature = (props) => {
     } else {
       updateFieldsValue({rank: rank, value: signature});
     }
+    setSignaturesSaved(true);
   };
 
   const _onSaveEvent = (result) => {
@@ -59,17 +63,20 @@ const Signature = (props) => {
       {mandatory === 1 ? <MandatoryField /> : null}
       <View style={styles.container}>
         {Platform.OS === 'android' ? (
-          <SignatureCapture
-            ref={(sign) => (refInput = sign)}
-            style={styles.signature}
-            onSaveEvent={_onSaveEvent}
-            onDragEvent={_onDragEvent}
-            saveImageFileInExtStorage={false}
-            showNativeButtons={false}
-            showTitleLabel={false}
-            backgroundColor="#ffb3b3"
-            viewMode={'portrait'}
-          />
+          <View>
+            <SignatureCapture
+              ref={(sign) => (refInput = sign)}
+              style={styles.signature}
+              onSaveEvent={_onSaveEvent}
+              onDragEvent={_onDragEvent}
+              saveImageFileInExtStorage={false}
+              showNativeButtons={false}
+              showTitleLabel={false}
+              backgroundColor="#ffb3b3"
+              viewMode={'portrait'}
+            />
+            {signatureSaved && <View style={styles.dimmedSingature} />}
+          </View>
         ) : (
           <View style={styles.signature}>
             {show ? (
@@ -81,6 +88,7 @@ const Signature = (props) => {
                 resizeWidth={300}
               />
             ) : null}
+            {signatureSaved && <View style={styles.dimmedSingature} />}
           </View>
         )}
 
