@@ -11,7 +11,7 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS: {
       return produce(state, (draftState) => {
-        draftState.loginStatus = true;
+        draftState.loginStatus = action.payload;
       });
     }
     case USER_REDUCER_ACTIONS.UPDATE_USER_EMAIL: {
