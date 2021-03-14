@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
 import {regular} from 'styles/font';
 import {lightRed, darkRed, white} from '@styles/colors';
@@ -9,6 +9,13 @@ export default StyleSheet.create({
     backgroundColor: '#ffb3b3',
     borderWidth: 1,
     borderColor: lightRed,
+  },
+  dimmedSingature: {
+    position: 'absolute',
+    backgroundColor: 'rgba(200, 200, 200, 0.8)',
+    width: '100%',
+    height: '100%',
+    marginLeft: Platform.OS === 'android' ? 0 : 10,
   },
   label: {
     fontSize: regular,
