@@ -11,6 +11,7 @@ import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import R from 'ramda';
+import {Spinner} from 'native-base';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,18 +55,20 @@ class FormList extends React.Component {
 
   render() {
     const {formList} = this.props;
-    // console.log('profileForm', formList);
+
     const filteredOptions = R.pipe(
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
     )(formList);
-    return (
+    return filteredOptions && filteredOptions.length > 0 ? (
       <FlatList
         style={styles.container}
         keyExtractor={this.keyExtractor}
         data={filteredOptions}
         renderItem={this.renderItem}
       />
+    ) : (
+      <Spinner color="grey" />
     );
   }
 }
