@@ -1,10 +1,10 @@
 //library
 import React from 'react';
 import {View} from 'react-native';
+
 import styles from './styles';
 import FormFieldsList from '@containers/FormFieldsList';
 import {screens} from '@constant/ScreenConstants';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 /**
  * This is used in the form lists
@@ -32,6 +32,7 @@ class FormFieldsScreen extends React.Component {
     };
     return option;
   };
+
   render() {
     return (
       <View style={styles.container}>
@@ -40,4 +41,5 @@ class FormFieldsScreen extends React.Component {
     );
   }
 }
+
 export default FormFieldsScreen;

@@ -1,8 +1,8 @@
 //library
 import React from 'react';
 import {FlatList} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {ListItem} from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {has} from 'ramda';
@@ -57,12 +57,13 @@ class FormFieldsList extends React.Component {
       return FieldElement;
     } else {
       return (
-        <ListItem
-          title={item.label}
-          leftIcon={<Icon name="file-text-o" />}
-          bottomDivider
-          chevron
-        />
+        <ListItem key={item.id} bottomDivider>
+          <Icon name="file-text-o" type="font-awesome" />
+          <ListItem.Content>
+            <ListItem.Title>{item.label}</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       );
     }
   };

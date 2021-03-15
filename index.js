@@ -4,6 +4,7 @@
 
 import {Navigation} from 'react-native-navigation';
 import React from 'react';
+// import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';

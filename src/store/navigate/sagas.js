@@ -34,13 +34,27 @@ function* goToMainScreen() {
   }
 }
 
-function* goToLinkedItemScreen({payload}) {
+function* goToLinkedItemScreen({payload = {}}) {
   try {
+    const {linkedTable} = payload;
+    const currentFormId = yield select(selectCurrentFormId);
+    const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
-    const linkedItemName = UpviseTablesMap[payload.toLowerCase()];
+    const currentFormInfo = yield select(selectFormByCurrentId);
+
+    const fieldsPath = `${upviseTemplatePath}/${currentFormId}/upviseFields`;
+    const currentFormFields = yield getFormFields({fieldsPath});
+    const currentForm = assoc('fields', currentFormFields, currentFormInfo);
+
+    const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
     const linkedItem = yield queryUpviseTable({
       table: linkedItemName,
       organisation,
+    });
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM,
+      payload: currentForm,
     });
 
     yield put({
