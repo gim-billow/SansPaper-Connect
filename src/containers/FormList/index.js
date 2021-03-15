@@ -3,8 +3,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {FlatList, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {ListItem} from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import {ListItem, Icon} from 'react-native-elements';
 import {selectFormList} from '@selector/form/index';
 import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
@@ -32,7 +32,7 @@ class FormList extends React.Component {
 
     updateCurrentFormId(form_id);
     if (linked_table && linked_table !== '') {
-      goToLinkedItemScreen(linked_table);
+      goToLinkedItemScreen({linkedTable: linked_table});
     } else {
       goToFormFieldsScreen({componentId: screens.FormScreen});
     }
@@ -43,12 +43,15 @@ class FormList extends React.Component {
     return (
       <ItemWrapper>
         <ListItem
-          onPress={() => this.onPress(linkedtable, id)}
-          title={name}
-          leftIcon={<Icon name="file-text-o" />}
+          key={id}
           bottomDivider
-          chevron
-        />
+          onPress={() => this.onPress(linkedtable, id)}>
+          <Icon name="file-text-o" type="font-awesome" />
+          <ListItem.Content>
+            <ListItem.Title>{name}</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       </ItemWrapper>
     );
   };

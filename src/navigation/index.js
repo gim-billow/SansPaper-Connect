@@ -63,12 +63,10 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const homeIcon = await Ionicons.getImageSource('md-home', 25);
-  const formIcon = await MaterialCommunityIcons.getImageSource(
-    'clipboard-outline',
-    25,
-  );
   const userIcon = await FontAwesome5.getImageSource('user', 25);
+  const clipboardIcon = await FontAwesome5.getImageSource('clipboard', 25);
+  const homeIcon = await FontAwesome5.getImageSource('home', 25);
+
   return Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -117,7 +115,7 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'Form',
-                  icon: formIcon,
+                  icon: clipboardIcon,
                 },
               },
             },

@@ -10,7 +10,7 @@ class FormScreen extends React.Component {
       topBar: {
         visible: false,
         title: {
-          text: 'Form',
+          text: 'Forms',
         },
       },
     };
