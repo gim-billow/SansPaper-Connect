@@ -5,7 +5,7 @@ import styles from './styles';
 const MandatoryField = () => {
   return (
     <View>
-      <Text style={styles.text}>* This is a Mandatory Field</Text>
+      <Text style={styles.text}>* This is a mandatory field</Text>
     </View>
   );
 };

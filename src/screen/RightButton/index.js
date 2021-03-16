@@ -2,6 +2,7 @@ import React from 'react';
 import {filter, has} from 'ramda';
 import {TouchableOpacity, Alert} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Icon} from 'react-native-elements';
 import {Navigation} from 'react-native-navigation';
 import {screens} from '@constant/ScreenConstants';
 import {connect} from 'react-redux';
@@ -11,6 +12,7 @@ import {setCurrentForm} from 'store/forms';
 import {selectCurrentForm} from 'selector/form';
 // upvise api
 import {submitUpviseForm} from '../../api/upvise';
+import {Platform} from 'react-native';
 
 class RightButton extends React.Component {
   state = {
@@ -74,7 +76,14 @@ class RightButton extends React.Component {
             this.setState({submitting: true});
           }
         }}>
-        <Ionicons name="paper-plane" size={25} color="white" />
+        <Icon
+          style={{
+            marginRight: Platform.OS === 'android' ? 20 : 0,
+          }}
+          name="paper-plane"
+          type="font-awesome"
+          color="#fff"
+        />
       </TouchableOpacity>
     );
   }

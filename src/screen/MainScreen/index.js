@@ -24,12 +24,12 @@ class MainScreen extends React.Component {
 
   render() {
     const {htmlContent} = this.props;
-    console.log('htmlContent', htmlContent);
+
     return (
       <View style={styles.container}>
         {map(
           (content) => (
-            <HTML html={content} />
+            <HTML key={content} html={content} />
           ),
           htmlContent,
         )}

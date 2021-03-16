@@ -21,6 +21,7 @@ import {fieldsProps} from './helper';
 class FormFieldsList extends React.Component {
   state = {
     expanded: false,
+    scrollEnabled: true,
     fieldsValue: {},
   };
 
@@ -29,6 +30,10 @@ class FormFieldsList extends React.Component {
   onPress = () => {
     const {expanded} = this.state;
     this.setState({expanded: !expanded});
+  };
+
+  updateScrollEnabled = (status) => {
+    this.setState({scrollEnabled: status});
   };
 
   renderItem = (props) => {
@@ -46,17 +51,19 @@ class FormFieldsList extends React.Component {
         updateFieldsValue: updatedFormFieldProps,
         organization,
         currentFormFields,
+        updateScrollEnabled: this.updateScrollEnabled,
         ...fieldsProps[item.type],
       });
       return FieldElement;
     } else {
       return (
-        <ListItem
-          title={item.label}
-          leftIcon={<Icon name="file-text-o" />}
-          bottomDivider
-          chevron
-        />
+        <ListItem key={item.id} bottomDivider>
+          <Icon name="file-text-o" type="font-awesome" />
+          <ListItem.Content>
+            <ListItem.Title>{item.label}</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       );
     }
   };

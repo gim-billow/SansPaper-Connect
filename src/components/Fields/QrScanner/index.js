@@ -1,14 +1,25 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Text, View, SafeAreaView} from 'react-native';
+import {
+  Alert,
+  Modal,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple, IconButton, Colors} from 'react-native-paper';
-import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
+import {Button, Divider} from 'react-native-paper';
+import {Icon} from 'react-native-elements';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import QRCode from 'react-native-qrcode-svg';
 
+import styles from './styles';
+import ItemWrapper from '../ItemWrapper';
+import {commonStyles} from '../../../styles/common';
+import MandatoryField from '../MandatoryField';
+
 const QrScanner = (props) => {
-  const {label, rank} = props.item;
+  const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
   const [changeTheme, setChangeTheme] = useState(false);
   const [title, setTitle] = useState('QR Scan');
@@ -35,20 +46,27 @@ const QrScanner = (props) => {
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{label}</Text>
-      {QrDetails === '' ? null : (
-        <View style={styles.QrResult}>
-          <QRCode value={QrDetails} />
-          <Text>{QrDetails}</Text>
-        </View>
-      )}
-      <View style={styles.button}>
-        <TouchableRipple
-          onLongPress={cancel}
-          onPress={() => {
-            setModalVisible(true);
-          }}>
+      <View style={styles.container}>
+        <Text style={commonStyles.text}>{label}</Text>
+        {mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        {QrDetails === '' ? null : (
+          <View style={styles.QrResult}>
+            <QRCode value={QrDetails} />
+            <Text style={[commonStyles.text, styles.qrResultText]}>
+              {QrDetails}
+            </Text>
+          </View>
+        )}
+        <View style={styles.button}>
           <Button
+            onLongPress={cancel}
+            onPress={() => {
+              setModalVisible(true);
+            }}
             mode="contained"
             style={
               changeTheme === true
@@ -62,39 +80,43 @@ const QrScanner = (props) => {
               {title.toString()}
             </Text>
           </Button>
-        </TouchableRipple>
-      </View>
-      <Modal
-        animationType="fade"
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.qrArea}>
-            <QRCodeScanner
-              onRead={onSuccess}
-              showMarker
-              topContent={
-                <SafeAreaView style={styles.h}>
-                  <View style={styles.header}>
-                    <IconButton
-                      style={styles.icon}
-                      icon="arrow-left"
-                      color={Colors.white}
-                      size={23}
-                      onPress={() => {
-                        setModalVisible(!modalVisible);
-                      }}
-                    />
-                    <Text style={styles.modalText}>QR Scanner</Text>
-                  </View>
-                </SafeAreaView>
-              }
-            />
-          </View>
         </View>
-      </Modal>
+        <Modal
+          animationType="fade"
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.qrArea}>
+              <QRCodeScanner
+                onRead={onSuccess}
+                showMarker
+                topContent={
+                  <SafeAreaView style={styles.h}>
+                    <View style={styles.header}>
+                      <TouchableOpacity
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <View style={styles.qrBackBtn}>
+                          <Icon
+                            containerStyle={styles.icon}
+                            name="chevron-left"
+                            type="font-awesome"
+                            color="#fff"
+                            onPress={() => {}}
+                          />
+                          <Text style={styles.modalText}>Back</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </SafeAreaView>
+                }
+              />
+            </View>
+          </View>
+        </Modal>
+      </View>
+      <Divider />
     </ItemWrapper>
   );
 };

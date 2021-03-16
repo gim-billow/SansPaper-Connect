@@ -1,14 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
+import {spaceSmall, spaceMedium, spaceRegular, superSmall} from 'styles/space';
+import {regular, medium} from 'styles/font';
 import {lightRed, darkRed} from '@styles/colors';
 
 export default StyleSheet.create({
-  text: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
+  topContainer: {
+    marginVertical: spaceMedium,
   },
   buttonColor: {
     backgroundColor: 'white',
@@ -51,23 +48,17 @@ export default StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   modalText: {
-    marginBottom: 20,
+    marginBottom: spaceSmall,
     textAlign: 'left',
-    fontSize: 24,
+    fontSize: medium + 4,
   },
   button: {
     fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '100%',
+    // padding: spaceSmall,
+    // paddingTop: spaceSmall,
+    // width: '100%',
+    marginHorizontal: spaceRegular,
   },
   Thumbnail: {
     flex: 1,
@@ -75,11 +66,10 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   thumbnailStyle: {
-    margin: 20,
+    marginVertical: spaceRegular,
     backgroundColor: 'white',
-    padding: 35,
-    height: 150,
-    width: 150,
+    height: 200,
+    width: '90%',
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -88,5 +78,8 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+  },
+  noThumbNailSpace: {
+    paddingVertical: superSmall,
   },
 });

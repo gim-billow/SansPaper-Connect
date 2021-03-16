@@ -1,12 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {darkRed} from '@styles/colors';
+
+import {red} from '@styles/colors';
+import {spaceRegular, superSmall} from 'styles/space';
+import {small} from '@styles/font';
 
 export default StyleSheet.create({
   text: {
-    paddingTop: 4,
-    paddingLeft: 10,
-    fontSize: 12,
+    paddingVertical: superSmall,
+    paddingLeft: spaceRegular,
+    fontSize: small,
     textAlign: 'left',
-    color: darkRed,
+    color: red,
   },
 });

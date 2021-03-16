@@ -43,6 +43,7 @@ export default StyleSheet.create({
   },
   sketch: {
     flex: 1,
+    position: 'absolute',
     backgroundColor: '#ffb3b3',
     borderWidth: 1,
     borderColor: lightRed,

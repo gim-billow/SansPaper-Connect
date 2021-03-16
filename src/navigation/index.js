@@ -3,6 +3,7 @@ import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {regular} from '@styles/font';
 
 export const setDefaultOptions = () => {
@@ -62,11 +63,10 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const homeIcon = await Ionicons.getImageSource('md-home', 25);
-  const formIcon = await MaterialCommunityIcons.getImageSource(
-    'clipboard-outline',
-    25,
-  );
+  const userIcon = await FontAwesome5.getImageSource('user', 25);
+  const clipboardIcon = await FontAwesome5.getImageSource('clipboard', 25);
+  const homeIcon = await FontAwesome5.getImageSource('home', 25);
+
   return Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -115,7 +115,31 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'Form',
-                  icon: formIcon,
+                  icon: clipboardIcon,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'PROFILE_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.ProfileScreen,
+                    name: screens.ProfileScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Profile',
+                  icon: userIcon,
                 },
               },
             },

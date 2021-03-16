@@ -7,4 +7,5 @@ export const screens = {
   FormFieldsScreen: 'FormFieldsScreen',
   ActivityIndicatorOverlay: 'ActivityIndicatorOverlay',
   RightButton: 'RightButton',
+  ProfileScreen: 'ProfileScreen',
 };

@@ -1,33 +1,27 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium} from 'styles/space';
+import {superSmall, spaceMedium, spaceRegular} from 'styles/space';
 import {regular} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {white, darkRed, lightRed} from 'styles/colors';
 
 export default StyleSheet.create({
-  text: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
+  topContainer: {
+    marginVertical: spaceMedium,
   },
   date: {
     fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '100%',
+    marginTop: superSmall,
+    marginHorizontal: spaceRegular,
   },
-  buttonColor: {
-    backgroundColor: 'white',
+  defaultBtnStyle: {
+    backgroundColor: white,
   },
-  ChangeButtonColor: {
+  btnTxt: {
+    color: white,
+  },
+  alternativeBtnStyle: {
     backgroundColor: darkRed,
   },
-  TextColor: {
+  alterBtnText: {
     color: lightRed,
-  },
-  ChangeTextColor: {
-    color: 'white',
   },
 });

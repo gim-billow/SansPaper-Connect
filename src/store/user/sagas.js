@@ -26,7 +26,22 @@ function* updateUserDetails({payload}) {
   }
 }
 
+function* logoutUser({payload}) {
+  try {
+    const {email, uid, status} = payload;
+    yield put({
+      type: USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS,
+      payload: status,
+    });
+    yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_EMAIL, payload: email});
+    yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
+  } catch (error) {
+    console.log('userlogout saga error: ', error);
+  }
+}
+
 export default all([
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
   takeLatest(USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, updateUserDetails),
+  takeLatest(USER_ACTIONS.LOGOUT, logoutUser),
 ]);

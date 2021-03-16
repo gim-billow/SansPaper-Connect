@@ -1,6 +1,13 @@
-import {StyleSheet} from 'react-native';
-import {red, darkRed} from './colors';
-import {small} from './font';
+import {StyleSheet, Dimensions} from 'react-native';
+
+import {red, darkRed, darkGrey} from './colors';
+import {small, regular} from './font';
+import {spaceRegular} from 'styles/space';
+
+const {height} = Dimensions.get('screen');
+export const customHeight = height / 1.5;
+const h = height / 2;
+export const centerPos = h / 2;
 
 //Error style
 export const errorStyle = StyleSheet.create({
@@ -22,5 +29,15 @@ export const colorStyle = StyleSheet.create({
   },
   darkRed: {
     color: darkRed,
+  },
+});
+
+export const commonStyles = StyleSheet.create({
+  spacing: {
+    paddingVertical: 2,
+  },
+  text: {
+    fontSize: regular,
+    paddingHorizontal: spaceRegular,
   },
 });
