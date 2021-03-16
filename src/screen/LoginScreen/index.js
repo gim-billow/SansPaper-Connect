@@ -125,10 +125,13 @@ class LoginScreen extends React.Component {
     const {mainLogo, horizontalLogo} = CommonImages;
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={behavior}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={behavior}
+        keyboardVerticalOffset="150">
         <Image
           style={styles.logo}
-          source={changeLogo ? horizontalLogo : mainLogo}
+          source={mainLogo}
           resizeMode="contain"
           resizeMethod="scale"
         />

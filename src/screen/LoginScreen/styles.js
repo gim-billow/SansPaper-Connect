@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {backgroundColor, lightGrey, lightRed, darkRed} from '@styles/colors';
+import {lightGrey, lightRed, darkRed} from '@styles/colors';
 import {medium} from '@styles/font';
 
 export default StyleSheet.create({
@@ -7,7 +7,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: backgroundColor,
+    marginBottom: 10,
   },
   box: {
     width: '100%',
@@ -16,7 +16,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   logo: {
-    width: '60%',
+    width: 300,
+    height: 200,
   },
   text: {
     marginTop: '10%',
