@@ -1,6 +1,6 @@
 //library
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, KeyboardAvoidingView, Platform} from 'react-native';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -71,13 +71,19 @@ class FormFieldsList extends React.Component {
   render() {
     const {currentFormFields} = this.props;
     const {scrollEnabled} = this.state;
+
     return (
-      <FlatList
-        keyExtractor={this.keyExtractor}
-        data={currentFormFields}
-        renderItem={this.renderItem}
-        scrollEnabled={scrollEnabled}
-      />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}
+        keyboardVerticalOffset={120}>
+        <FlatList
+          keyExtractor={this.keyExtractor}
+          data={currentFormFields}
+          renderItem={this.renderItem}
+          // scrollEnabled={scrollEnabled}
+        />
+      </KeyboardAvoidingView>
     );
   }
 }
