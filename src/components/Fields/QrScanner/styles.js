@@ -1,14 +1,18 @@
 import {StyleSheet} from 'react-native';
 import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {regular, medium} from 'styles/font';
+import {lightRed, darkRed, white} from '@styles/colors';
+import {superSmall} from '../../../styles/space';
 
 export default StyleSheet.create({
-  text: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
+  // text: {
+  //   fontSize: regular,
+  //   paddingTop: spaceSmall,
+  //   paddingLeft: spaceSmall,
+  //   paddingRight: spaceMedium,
+  // },
+  container: {
+    marginVertical: spaceMedium,
   },
   buttonColor: {
     backgroundColor: 'white',
@@ -16,83 +20,94 @@ export default StyleSheet.create({
   ChangeButtonColor: {
     backgroundColor: darkRed,
   },
-  buttonMargin: {
-    // paddingBottom: 10,
-  },
+  // buttonMargin: {
+  //   paddingBottom: 10,
+  // },
   TextColor: {
     color: lightRed,
   },
   ChangeTextColor: {
-    color: 'white',
+    color: white,
   },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    flex: 1,
-    flexDirection: 'row',
-    // backgroundColor: darkRed,
-    width: '100%',
-  },
   h: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: 100,
+    alignItems: 'flex-start',
+  },
+  header: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   qrArea: {
     backgroundColor: 'black',
   },
-  modalView: {
-    backgroundColor: 'white',
-    height: '100%',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  // modalView: {
+  //   backgroundColor: 'white',
+  //   height: '100%',
+  // },
+  // textStyle: {
+  //   color: 'white',
+  //   fontWeight: 'bold',
+  //   textAlign: 'center',
+  // },
   modalText: {
     marginTop: 15,
-    marginLeft: 20,
+    marginLeft: spaceRegular,
     textAlign: 'left',
-    fontSize: 20,
-    color: 'white',
+    fontSize: medium,
+    color: white,
   },
   icon: {
     marginTop: 12,
     marginLeft: 10,
   },
   button: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '100%',
+    // padding: spaceRegular,
+    paddingHorizontal: spaceRegular,
+    marginTop: spaceSmall,
+    // backgroundColor: 'red',
+    // fontSize: regular,
+    // paddingTop: spaceSmall,
+    // paddingLeft: spaceSmall,
+    // paddingRight: spaceSmall,
+    // paddingBottom: spaceSmall,
+    // width: '100%',
+  },
+  qrBackBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   QrResult: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    // padding: 10,
+    marginTop: spaceSmall,
   },
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777',
+  qrResultText: {
+    marginTop: superSmall,
   },
-  textBold: {
-    fontWeight: '500',
-    color: '#000',
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)',
-  },
-  buttonTouchable: {
-    padding: 16,
-  },
+  // centerText: {
+  //   flex: 1,
+  //   fontSize: 18,
+  //   padding: 32,
+  //   color: '#777',
+  // },
+  // textBold: {
+  //   fontWeight: '500',
+  //   color: '#000',
+  // },
+  // buttonText: {
+  //   fontSize: 21,
+  //   color: 'rgb(0,122,255)',
+  // },
+  // buttonTouchable: {
+  //   padding: 16,
+  // },
 });

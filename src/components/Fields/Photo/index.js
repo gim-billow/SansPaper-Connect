@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {Alert, Modal, Text, View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple} from 'react-native-paper';
+import {Button, TouchableRipple, Divider} from 'react-native-paper';
+import ImagePicker from 'react-native-image-crop-picker';
+
 import styles from './styles';
+import {commonStyles} from '@styles/common';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
-import ImagePicker from 'react-native-image-crop-picker';
 
 const Photo = (props) => {
   const {label, rank, mandatory} = props.item;
@@ -31,7 +33,7 @@ const Photo = (props) => {
         if (Platform.OS === 'ios') {
           setTimeout(() => {
             setModalVisible(!modalVisible);
-          }, 1000);
+          }, 500);
         } else {
           setModalVisible(!modalVisible);
         }
@@ -55,7 +57,7 @@ const Photo = (props) => {
             if (Platform.OS === 'ios') {
               setTimeout(() => {
                 setModalVisible(!modalVisible);
-              }, 1000);
+              }, 500);
             } else {
               setModalVisible(!modalVisible);
             }
@@ -81,84 +83,107 @@ const Photo = (props) => {
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{label}</Text>
-      {mandatory === 1 ? <MandatoryField /> : null}
-      {thumbnailImage === '' ? null : (
-        <View style={styles.Thumbnail}>
-          <Thumbnail
-            square
-            style={styles.thumbnailStyle}
-            source={{uri: thumbnailImage}}
-          />
-        </View>
-      )}
-      <View style={styles.button}>
-        <TouchableRipple
-          onLongPress={cancel}
-          onPress={() => {
-            setModalVisible(true);
-          }}>
-          <Button
-            mode="contained"
-            style={
-              changeTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }>
-            <Text
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.text}>{label}</Text>
+        {mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        {thumbnailImage === '' ? (
+          <View style={styles.noThumbNailSpace} />
+        ) : (
+          <View style={styles.Thumbnail}>
+            <Thumbnail
+              square
+              style={styles.thumbnailStyle}
+              source={{uri: thumbnailImage}}
+            />
+          </View>
+        )}
+        <View style={styles.button}>
+          <TouchableRipple
+            onLongPress={cancel}
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            <Button
+              mode="contained"
               style={
-                changeTheme === true ? styles.ChangeTextColor : styles.TextColor
+                changeTheme === true
+                  ? styles.ChangeButtonColor
+                  : styles.buttonColor
               }>
-              {title.toString()}
-            </Text>
-          </Button>
-        </TouchableRipple>
-      </View>
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Sans Paper</Text>
+              <Text
+                style={
+                  changeTheme === true
+                    ? styles.ChangeTextColor
+                    : styles.TextColor
+                }>
+                {title.toString()}
+              </Text>
+            </Button>
+          </TouchableRipple>
+        </View>
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Sans Paper</Text>
 
-              <View style={styles.buttonMargin}>
-                <Button
-                  mode="contained"
-                  onPress={() => {
-                    takePicture(true);
-                  }}>
-                  <Text>FROM CAMERA</Text>
-                </Button>
-              </View>
-              <View style={styles.buttonMargin}>
-                <Button
-                  mode="contained"
-                  onPress={() => {
-                    takePicture(false);
-                  }}>
-                  <Text>FROM GALLERY</Text>
-                </Button>
-              </View>
-              <View style={styles.buttonMargin}>
-                <Button
-                  mode="contained"
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <Text>CANCEL</Text>
-                </Button>
+                <View style={styles.buttonMargin}>
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      takePicture(true);
+                    }}>
+                    <Text>FROM CAMERA</Text>
+                  </Button>
+                </View>
+                <View style={styles.buttonMargin}>
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      takePicture(false);
+                    }}>
+                    <Text>FROM GALLERY</Text>
+                  </Button>
+                </View>
+                <View style={styles.buttonMargin}>
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                    }}>
+                    <Text>CANCEL</Text>
+                  </Button>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </View>
       </View>
+      <Divider />
     </ItemWrapper>
   );
 };
 
-export default Photo;
+const areEqual = (prevProps, nextProps) => {
+  if (
+    (prevProps.item.value
+      ? prevProps.item.value[0].path
+      : prevProps.item.value) ===
+    (nextProps.item.value ? nextProps.item.value[0].path : nextProps.item.value)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export default memo(Photo, areEqual);

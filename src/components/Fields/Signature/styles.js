@@ -1,58 +1,53 @@
 import {StyleSheet, Platform} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
-import {lightRed, darkRed, white} from '@styles/colors';
+import {spaceSmall, superSmall, spaceMedium, spaceRegular} from 'styles/space';
+import {regular, small} from 'styles/font';
+import {lightRed, darkRed, white, superLightRed} from '@styles/colors';
+import {} from '../../../styles/space';
 
 export default StyleSheet.create({
   signatureColor: {
-    flex: 1,
-    backgroundColor: '#ffb3b3',
-    borderWidth: 1,
-    borderColor: lightRed,
+    backgroundColor: superLightRed,
   },
   dimmedSingature: {
-    position: 'absolute',
-    backgroundColor: 'rgba(200, 200, 200, 0.8)',
-    width: '100%',
-    height: '100%',
-    marginLeft: Platform.OS === 'android' ? 0 : 10,
-  },
-  label: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
-    paddingBottom: spaceSmall,
+    // position: 'absolute',
+    // backgroundColor: 'rgba(200, 200, 200, 0.8)',
+    // width: '100%',
+    // height: '100%',
+    // marginLeft: Platform.OS === 'android' ? 0 : 10,
   },
   text: {
     color: lightRed,
-    fontSize: 13,
+    fontSize: small,
   },
   ChangeTextColor: {
     color: white,
-    fontSize: 13,
+    fontSize: small,
   },
   container: {
-    width: 400,
-    height: 260,
-    marginTop: spaceRegular,
+    marginVertical: spaceRegular,
+    paddingVertical: spaceRegular,
+  },
+  droidSignature: {
+    marginHorizontal: spaceRegular,
+    height: 200,
   },
   signature: {
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    width: '92%',
+    paddingHorizontal: spaceRegular,
     height: 200,
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
+    marginTop: spaceSmall,
+    marginHorizontal: spaceRegular,
   },
-  button: {
-    paddingTop: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '46%',
+  leftButton: {
+    flex: 1,
+    marginRight: superSmall,
+  },
+  rightButton: {
+    flex: 1,
+    marginLeft: superSmall,
   },
   buttonColor: {
     backgroundColor: white,
