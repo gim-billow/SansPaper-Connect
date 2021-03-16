@@ -1,22 +1,16 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium} from 'styles/space';
+import {spaceMedium, spaceRegular} from 'styles/space';
 import {regular} from 'styles/font';
 import {lightRed, white} from '@styles/colors';
 
 export default StyleSheet.create({
+  container: {
+    marginVertical: spaceMedium,
+  },
   button: {
     fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-  },
-  label: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
-    paddingBottom: spaceSmall,
+    paddingHorizontal: spaceRegular,
+    paddingTop: spaceRegular,
   },
   text: {
     color: lightRed,

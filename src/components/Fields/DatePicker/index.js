@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple} from 'react-native-paper';
+import {Button, Divider} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import {commonStyles} from '@styles/common';
+import MandatoryField from '../MandatoryField';
 
 const DatePicker = (props) => {
   const {item, updateFieldsValue} = props;
@@ -35,7 +38,7 @@ const DatePicker = (props) => {
 
   const cancel = () => {
     if (label !== 'Select Date') {
-      Toast.show('Success, remove the date ' + label.toString());
+      Toast.show('date cleared');
       setLabel('Select Date');
       setChangeTheme(false);
       updateFieldsValue({rank: item.rank, value: ''});
@@ -44,33 +47,49 @@ const DatePicker = (props) => {
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{item.label}</Text>
-      <View style={styles.date}>
-        <TouchableRipple onLongPress={cancel} onPress={showDatePicker}>
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.text}>{item.label}</Text>
+        {item.mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        <View style={styles.date}>
           <Button
+            onLongPress={cancel}
+            onPress={showDatePicker}
             mode="contained"
-            style={
+            style={[
+              styles.button,
               changeTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }>
+                ? styles.alternativeBtnStyle
+                : styles.defaultBtnStyle,
+            ]}>
             <Text
               style={
-                changeTheme === true ? styles.ChangeTextColor : styles.TextColor
+                changeTheme === true ? styles.btnTxt : styles.alterBtnText
               }>
               {label.toString()}
             </Text>
           </Button>
-        </TouchableRipple>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-        />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
       </View>
+      <Divider />
     </ItemWrapper>
   );
 };
 
-export default DatePicker;
+const areEqual = (prevProps, nextProps) => {
+  if (prevProps.item.value === nextProps.item.value) {
+    return true;
+  }
+  return false;
+};
+
+export default memo(DatePicker, areEqual);

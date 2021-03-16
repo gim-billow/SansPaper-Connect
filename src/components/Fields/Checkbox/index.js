@@ -1,33 +1,60 @@
-import React, {useState} from 'react';
-import {Text, View} from 'react-native';
-import ItemWrapper from '../ItemWrapper';
+import React, {useState, memo, useEffect, useCallback} from 'react';
+import {Text, View, TouchableOpacity} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import {Divider} from 'react-native-paper';
 
+import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
+import {darkRed, white} from 'styles/colors';
+import {commonStyles} from '@styles/common';
+import {limitText} from '@util/string';
 
 const Checkbox = (props) => {
+  const {item, updateFieldsValue} = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
-  const {item, updateFieldsValue} = props;
+  useEffect(() => {
+    onToggleCheckBox(toggleCheckBox);
+  }, [onToggleCheckBox, toggleCheckBox]);
 
-  const onToggleCheckBox = (value) => {
-    setToggleCheckBox(value);
-    const checkboxVal = value ? '1' : '0';
-    updateFieldsValue({rank: item.rank, value: checkboxVal});
-  };
+  const onToggleCheckBox = useCallback(
+    (value) => {
+      const checkboxVal = value ? '1' : '0';
+      updateFieldsValue({rank: item.rank, value: checkboxVal});
+    },
+    [item.rank, updateFieldsValue],
+  );
 
   return (
     <ItemWrapper>
-      <View style={styles.box}>
-        <CheckBox
-          disabled={false}
-          value={toggleCheckBox}
-          onValueChange={(newValue) => onToggleCheckBox(newValue)}
-        />
-        <Text style={styles.text}>{item.label}</Text>
+      <View style={styles.topContainer}>
+        <TouchableOpacity onPress={() => setToggleCheckBox(!toggleCheckBox)}>
+          <View style={styles.box} pointerEvents="none">
+            <CheckBox
+              disabled={false}
+              onTintColor="transparent"
+              value={toggleCheckBox}
+              tintColors={{
+                true: darkRed,
+              }}
+              onCheckColor={white}
+              onFillColor={darkRed}
+              onValueChange={() => {}}
+            />
+            <Text style={commonStyles.text}>{limitText(item.label, 25)}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
+      <Divider />
     </ItemWrapper>
   );
 };
 
-export default Checkbox;
+const areEqual = (prevProps, nextProps) => {
+  if (prevProps.item.value === nextProps.item.value) {
+    return true;
+  }
+  return false;
+};
+
+export default memo(Checkbox, areEqual);

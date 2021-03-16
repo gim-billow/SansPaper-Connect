@@ -1,9 +1,12 @@
 import {StyleSheet} from 'react-native';
 import {lightGrey, white, darkRed} from 'styles/colors';
-import {regular} from '@styles/font';
-import {spaceSmall} from '@styles/space';
+// import {regular} from '@styles/font';
+import {spaceMedium, spaceRegular} from '@styles/space';
 
 export default StyleSheet.create({
+  topContainer: {
+    marginVertical: spaceMedium,
+  },
   checked: {
     backgroundColor: white,
     borderColor: darkRed,
@@ -17,18 +20,10 @@ export default StyleSheet.create({
     backgroundColor: white,
     borderColor: lightGrey,
   },
-  text: {
-    paddingLeft: 5,
-    paddingTop: 0,
-    fontSize: regular,
-  },
   box: {
-    flex: 1,
-    padding: spaceSmall,
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 10,
+    marginLeft: spaceRegular,
   },
   toggle: {
     flex: 1,

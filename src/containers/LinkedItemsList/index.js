@@ -1,21 +1,33 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  Alert,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {ListItem, Icon} from 'react-native-elements';
+import {Button as RNButton} from 'react-native-paper';
 import {connect} from 'react-redux';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import QRCode from 'react-native-qrcode-svg';
 
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentLinkedItems, selectCurrentForm} from '@selector/form';
 import {goToFormFieldsScreen} from '@store/navigate';
 import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
-import ItemWrapper from '../../components/Fields/ItemWrapper';
+import ItemWrapper from '@components/Fields/ItemWrapper';
 import R from 'ramda';
+import {commonStyles} from '@styles/common';
 
 class LinkedItemsList extends React.Component {
   state = {
     options: [],
     selOptions: [],
+    showModal: false,
   };
 
   async componentDidMount() {
@@ -52,32 +64,90 @@ class LinkedItemsList extends React.Component {
     goToFormFieldsScreen({linkedItemId: id, componentId: screens.LinkedItems});
   };
 
+  onSuccess = (e) => {
+    // TODO:
+    console.log('on success', e);
+  };
+
   render() {
-    const {name} = this.props.currentForm;
-    const {container, selectToggle, button, itemText, text} = styles;
+    const {name, linkedtable} = this.props.currentForm;
+    const {container, selectToggle, button, itemText} = styles;
 
     return this.state.selOptions.length > 0 ? (
       <ItemWrapper>
-        <Text
-          style={
-            text
-          }>{`Please select the item you are completing "${name}" for:`}</Text>
-        <View>
-          <SectionedMultiSelect
-            styles={{
-              container,
-              selectToggle,
-              button,
-              itemText,
-            }}
-            items={this.state.selOptions}
-            IconRenderer={Icon}
-            uniqueKey="id"
-            single={true}
-            selectText="Select from options"
-            onSelectedItemsChange={this.onSelectedItemsChange}
-            selectedItems={this.state.options}
-          />
+        <View style={styles.topContainer}>
+          <Text
+            style={[
+              commonStyles.text,
+              commonStyles.spacing,
+            ]}>{`Please select the item you are completing "${name}" for:`}</Text>
+          <View>
+            <SectionedMultiSelect
+              styles={{
+                container,
+                selectToggle,
+                button,
+                itemText,
+              }}
+              items={this.state.selOptions}
+              IconRenderer={Icon}
+              showCancelButton
+              uniqueKey="id"
+              single={true}
+              selectText="Select from options"
+              onSelectedItemsChange={this.onSelectedItemsChange}
+              selectedItems={this.state.options}
+            />
+          </View>
+
+          {linkedtable.toLowerCase() === 'tools.tools' ? (
+            <View style={styles.qrButton}>
+              <RNButton
+                mode="contained"
+                onPress={() => this.setState({showModal: true})}>
+                <Text style={commonStyles.text}>Scan serial number</Text>
+              </RNButton>
+            </View>
+          ) : null}
+
+          <Modal
+            animationType="fade"
+            visible={this.state.showModal}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.qrArea}>
+                <QRCodeScanner
+                  onRead={this.onSuccess}
+                  showMarker
+                  topContent={
+                    <SafeAreaView style={styles.h}>
+                      <View style={styles.header}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.setState({
+                              showModal: !this.state.showModal,
+                            })
+                          }>
+                          <View style={styles.qrBackBtn}>
+                            <Icon
+                              containerStyle={styles.icon}
+                              name="chevron-left"
+                              type="font-awesome"
+                              color="#fff"
+                              onPress={() => {}}
+                            />
+                            <Text style={styles.modalText}>Back</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </SafeAreaView>
+                  }
+                />
+              </View>
+            </View>
+          </Modal>
         </View>
       </ItemWrapper>
     ) : (
