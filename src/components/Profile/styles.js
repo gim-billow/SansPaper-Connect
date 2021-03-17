@@ -49,7 +49,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 0.4,
     borderColor: 'gray',
-    height: 180,
+    paddingTop: 20,
+    paddingBottom: 30,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -64,6 +65,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 40,
     height: 90,
+    borderBottomWidth: 0.4,
+    borderColor: 'gray',
   },
   centeredView: {
     flex: 1,
