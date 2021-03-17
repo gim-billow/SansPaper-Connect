@@ -24,8 +24,7 @@ export default StyleSheet.create({
     fontSize: small,
   },
   container: {
-    marginVertical: spaceRegular,
-    paddingVertical: spaceRegular,
+    marginVertical: spaceMedium,
   },
   droidSignature: {
     marginHorizontal: spaceRegular,

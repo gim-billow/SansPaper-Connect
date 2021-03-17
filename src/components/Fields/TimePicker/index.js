@@ -2,9 +2,13 @@ import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
+import {commonStyles} from '@styles/common';
 
 const TimePicker = (props) => {
   const {item, updateFieldsValue} = props;
@@ -50,32 +54,42 @@ const TimePicker = (props) => {
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{item.label}</Text>
-      <View style={styles.date}>
-        <TouchableRipple onLongPress={cancel} onPress={showTimePicker}>
-          <Button
-            mode="contained"
-            style={
-              changeTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }>
-            <Text
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.text}>{item.label}</Text>
+        {item.mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        <View style={styles.date}>
+          <TouchableRipple onLongPress={cancel} onPress={showTimePicker}>
+            <Button
+              mode="contained"
               style={
-                changeTheme === true ? styles.ChangeTextColor : styles.TextColor
+                changeTheme === true
+                  ? styles.ChangeButtonColor
+                  : styles.buttonColor
               }>
-              {label.toString()}
-            </Text>
-          </Button>
-        </TouchableRipple>
-        <DateTimePickerModal
-          isVisible={isTimePickerVisible}
-          mode="time"
-          headerTextIOS="Set a time"
-          onConfirm={handleConfirm}
-          onCancel={hideTimePicker}
-        />
+              <Text
+                style={
+                  changeTheme === true
+                    ? styles.ChangeTextColor
+                    : styles.TextColor
+                }>
+                {label.toString()}
+              </Text>
+            </Button>
+          </TouchableRipple>
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            headerTextIOS="Set a time"
+            onConfirm={handleConfirm}
+            onCancel={hideTimePicker}
+          />
+        </View>
       </View>
+      <Divider />
     </ItemWrapper>
   );
 };

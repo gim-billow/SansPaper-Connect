@@ -1,6 +1,6 @@
 import React, {useState, createRef} from 'react';
 import {View, Text, Platform} from 'react-native';
-import {Divider} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import SignaturePad from 'react-native-signature-pad'; // ios
 import SignatureCapture from 'react-native-signature-capture'; // android
 import {Button} from 'react-native-paper';

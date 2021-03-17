@@ -45,16 +45,18 @@ class FormFieldsList extends React.Component {
     } = this.props;
 
     if (has(item.type, Fields)) {
-      const FormFields = Fields[item.type];
-      const FieldElement = React.createElement(FormFields, {
-        item: item,
-        updateFieldsValue: updatedFormFieldProps,
-        organization,
-        currentFormFields,
-        updateScrollEnabled: this.updateScrollEnabled,
-        ...fieldsProps[item.type],
-      });
-      return FieldElement;
+      if (!item.hidden) {
+        const FormFields = Fields[item.type];
+        const FieldElement = React.createElement(FormFields, {
+          item: item,
+          updateFieldsValue: updatedFormFieldProps,
+          organization,
+          currentFormFields,
+          updateScrollEnabled: this.updateScrollEnabled,
+          ...fieldsProps[item.type],
+        });
+        return FieldElement;
+      }
     } else {
       return (
         <ListItem key={item.id} bottomDivider>
@@ -73,17 +75,19 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{flex: 1}}
-        keyboardVerticalOffset={120}>
-        <FlatList
-          keyExtractor={this.keyExtractor}
-          data={currentFormFields}
-          renderItem={this.renderItem}
-          // scrollEnabled={scrollEnabled}
-        />
-      </KeyboardAvoidingView>
+      // <KeyboardAvoidingView
+      //   behavior={Platform.OS === 'ios' ? 'padding' : null}
+      //   keyboardVerticalOffset={120}
+      // >
+      // <View>
+      <FlatList
+        keyExtractor={this.keyExtractor}
+        data={currentFormFields}
+        renderItem={this.renderItem}
+        scrollEnabled={scrollEnabled}
+      />
+      // </View>
+      // </KeyboardAvoidingView>
     );
   }
 }

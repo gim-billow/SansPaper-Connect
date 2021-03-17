@@ -1,39 +1,38 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall} from 'styles/space';
-import {regular} from 'styles/font';
+import {spaceSmall, spaceRegular, spaceMedium} from 'styles/space';
+import {regular, small} from 'styles/font';
 import {lightRed, darkRed} from '@styles/colors';
 
 export default StyleSheet.create({
+  topContainer: {
+    marginVertical: spaceMedium,
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
+    marginHorizontal: spaceRegular,
   },
-  text: {
-    paddingLeft: 10,
-    paddingTop: 10,
-    fontSize: regular,
+  textSetWrapper: {
+    flex: 1,
+    paddingTop: spaceRegular,
   },
   textSet: {
-    paddingLeft: 5,
-    paddingTop: 10,
-    fontSize: 11,
+    paddingLeft: spaceRegular,
+    fontSize: 12,
     color: 'grey',
   },
+  left: {
+    marginRight: spaceSmall,
+  },
+  right: {
+    marginLeft: spaceSmall,
+  },
   button: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '50%',
+    flex: 1,
   },
   SetDefault: {
     fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '40%',
+    paddingTop: spaceRegular,
   },
   buttonColor: {
     backgroundColor: 'white',
