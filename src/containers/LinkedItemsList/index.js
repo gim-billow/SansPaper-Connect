@@ -7,8 +7,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {ListItem} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {ListItem, Icon} from 'react-native-elements';
+import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button as RNButton} from 'react-native-paper';
 import {connect} from 'react-redux';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -51,7 +51,7 @@ class LinkedItemsList extends React.Component {
     const {name, id} = item;
     return (
       <ListItem key={id} bottomDivider onPress={() => this.onPress(id)}>
-        <Icon name="file-text-o" type="font-awesome" />
+        <MIcon name="file-text-o" type="font-awesome" />
         <ListItem.Content>
           <ListItem.Title>{name}</ListItem.Title>
         </ListItem.Content>
@@ -98,7 +98,7 @@ class LinkedItemsList extends React.Component {
                 itemText,
               }}
               items={this.state.selOptions}
-              IconRenderer={Icon}
+              IconRenderer={MIcon}
               showCancelButton
               uniqueKey="id"
               single={true}
