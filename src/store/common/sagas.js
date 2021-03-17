@@ -16,7 +16,6 @@ function* init({payload}) {
   try {
     //getting user info
     const {uid} = payload._user;
-
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});
 
     const spUser = yield getSansPaperUser({userId: uid});
