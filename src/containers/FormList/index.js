@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
 // import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,7 +13,7 @@ import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
-import R from 'ramda';
+import {filter, includes} from 'ramda';
 import {Spinner} from 'native-base';
 
 const styles = StyleSheet.create({
@@ -51,11 +51,16 @@ class FormList extends React.Component {
     }
   };
 
-  getFilteredFormlist = memoize(() => {
-    const {formList} = this.props;
-    
-    return formList;
+  getFilteredFormlist = memoize((formList, searchKeyword) => {
+    return filter(
+      (form) => includes(searchKeyword.toLowerCase(), form.name.toLowerCase()),
+      formList,
+    );
   });
+
+  handleOnChangeText = (text) => {
+    this.setState({searchKeyword: text});
+  };
 
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
@@ -76,20 +81,30 @@ class FormList extends React.Component {
   };
 
   render() {
-    const filteredFromList = this.getFilteredFormlist();
+    const {searchKeyword} = this.state;
+    const {formList} = this.props;
+    const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
 
-    return filteredFromList && filteredFromList.length > 0 ? (
+    return (
       <View style={styles.flex1}>
-        <Searchbar placeholder="Search" style={styles.searchbar} />
-        <FlatList
-          style={styles.container}
-          keyExtractor={this.keyExtractor}
-          data={filteredFromList}
-          renderItem={this.renderItem}
+        <Searchbar
+          placeholder="Search"
+          style={styles.searchbar}
+          onChangeText={this.handleOnChangeText}
         />
+        {filteredFromList && filteredFromList.length > 0 ? (
+          <FlatList
+            style={styles.container}
+            keyExtractor={this.keyExtractor}
+            data={filteredFromList}
+            renderItem={this.renderItem}
+          />
+        ) : searchKeyword === '' ? (
+          <Spinner color="grey" />
+        ) : (
+          <Text>No results match your search criteria </Text>
+        )}
       </View>
-    ) : (
-      <Spinner color="grey" />
     );
   }
 }
