@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'SansPaperConnect' do
+target 'SansPaperIntegration' do
   config = use_native_modules!
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
   use_react_native!(:path => config["reactNativePath"])
@@ -13,7 +13,7 @@ target 'SansPaperConnect' do
 
   pod 'react-native-signature-capture', :path => '../node_modules/react-native-signature-capture'
 
-  target 'SansPaperConnectTests' do
+  target 'SansPaperIntegrationTests' do
     inherit! :complete
     # Pods for testing
   end

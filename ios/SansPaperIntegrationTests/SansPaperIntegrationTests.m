@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface SansPaperConnectTests : XCTestCase
+@interface SansPaperIntegrationTests : XCTestCase
 
 @end
 
-@implementation SansPaperConnectTests
+@implementation SansPaperIntegrationTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
