@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {Button} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
-import {Icon} from 'react-native-elements';
+import {Divider, Icon} from 'react-native-elements';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import QRCode from 'react-native-qrcode-svg';
 
