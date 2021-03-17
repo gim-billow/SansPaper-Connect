@@ -53,7 +53,7 @@ class RightButton extends React.Component {
   renderMandatoryAlert = () =>
     Alert.alert(
       'Alert',
-      'Please complete all mandatory forms before submitting',
+      'Please complete all mandatory *fields* before submitting.',
       [
         {
           text: 'OK',

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {regular, medium} from 'styles/font';
-import {red, veryLightGrey, white} from '@styles/colors';
+import {red, veryLightGrey, white, darkRed} from '@styles/colors';
 import {spaceSmall} from 'styles/space';
 import {spaceRegular, superSmall} from '@styles/space';
 
@@ -70,5 +70,8 @@ export default StyleSheet.create({
     textAlign: 'left',
     fontSize: medium,
     color: white,
+  },
+  qrBorderColor: {
+    borderColor: darkRed,
   },
 });

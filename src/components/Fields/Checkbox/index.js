@@ -1,7 +1,7 @@
 import React, {useState, memo, useEffect, useCallback} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {Divider} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 
 import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
@@ -41,7 +41,7 @@ const Checkbox = (props) => {
               onFillColor={darkRed}
               onValueChange={() => {}}
             />
-            <Text style={commonStyles.text}>{limitText(item.label, 25)}</Text>
+            <Text style={commonStyles.text}>{item.label}</Text>
           </View>
         </TouchableOpacity>
       </View>

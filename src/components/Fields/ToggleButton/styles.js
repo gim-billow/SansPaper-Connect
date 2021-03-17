@@ -1,87 +1,96 @@
 import {StyleSheet} from 'react-native';
-import {medium, regular} from '@styles/font';
-import {spaceSmall} from '@styles/space';
-import {lightGrey, red} from '@styles/colors';
+import {regular} from '@styles/font';
+import {spaceSmall, superSmall, spaceMedium} from '@styles/space';
+import {red, darkGrey, white} from '@styles/colors';
 
 export default StyleSheet.create({
+  topContainer: {
+    marginVertical: spaceMedium,
+  },
   container: {
-    padding: spaceSmall,
+    marginHorizontal: spaceSmall + 4,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   text: {
     fontSize: regular,
-  },
-  label: {
-    paddingLeft: spaceSmall,
-    paddingTop: spaceSmall,
-    color: lightGrey,
-    fontSize: regular,
+    padding: spaceSmall,
   },
   redButton: {
     borderWidth: 1,
-    flex: 1,
-    height: 40,
+    flexBasis: 150,
     borderRadius: 5,
     borderColor: red,
     justifyContent: 'center',
     alignItems: 'center',
+    margin: superSmall,
   },
   greenButton: {
     borderWidth: 1,
-    flex: 1,
-    height: 40,
+    flexBasis: 150,
     borderRadius: 5,
     borderColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: superSmall,
   },
   orangeButton: {
     borderWidth: 1,
-    flex: 1,
-    height: 40,
+    flexBasis: 150,
     borderRadius: 5,
     borderColor: 'orange',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: superSmall,
   },
   blueButton: {
     borderWidth: 1,
-    flex: 1,
-    height: 40,
+    flexBasis: 150,
     borderRadius: 5,
     borderColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: superSmall,
   },
   redBackground: {
     backgroundColor: red,
+    borderColor: red,
+    borderWidth: 1,
   },
   whiteBackground: {
-    backgroundColor: 'white',
+    backgroundColor: white,
+    borderColor: darkGrey,
+    borderWidth: 1,
   },
   greenBackground: {
     backgroundColor: 'green',
+    borderColor: 'green',
+    borderWidth: 1,
   },
   orangeBackground: {
     backgroundColor: 'orange',
+    borderColor: 'orange',
+    borderWidth: 1,
   },
   blueBackground: {
     backgroundColor: 'blue',
+    borderColor: 'blue',
+    borderWidth: 1,
   },
   redColor: {
-    color: red,
+    color: darkGrey,
   },
   whiteColor: {
     color: 'white',
   },
   greenColor: {
-    color: 'green',
+    color: darkGrey,
   },
   orangeColor: {
-    color: 'orange',
+    color: darkGrey,
   },
   blueColor: {
-    color: 'blue',
+    color: darkGrey,
   },
 });

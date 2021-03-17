@@ -1,13 +1,14 @@
 import {firebase} from '@react-native-firebase/firestore';
 
-export const getOrgNews = async () => {
+export const getOrgNews = async (organizationPath) => {
   try {
     const news = [];
     const listNews = await firebase
       .firestore()
-      .collection('announcements')
-      .orderBy('date_added')
+      .collection(organizationPath)
+      .orderBy('date')
       .get();
+
     for (let item of listNews.docs) {
       news.push(item.data());
     }

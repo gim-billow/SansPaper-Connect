@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button, Divider} from 'react-native-paper';
+import {Button} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import QRCode from 'react-native-qrcode-svg';
@@ -92,6 +93,7 @@ const QrScanner = (props) => {
               <QRCodeScanner
                 onRead={onSuccess}
                 showMarker
+                markerStyle={styles.qrBorderColor}
                 topContent={
                   <SafeAreaView style={styles.h}>
                     <View style={styles.header}>
