@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* SansPaperConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SansPaperConnectTests.m */; };
+		00E356F31AD99517003FC87E /* SansPaperIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SansPaperIntegrationTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		3084B7BD0D5E8434B610D291 /* libPods-SansPaperConnect-SansPaperConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8040B4F9086657EFE754EDA /* libPods-SansPaperConnect-SansPaperConnectTests.a */; };
+		3084B7BD0D5E8434B610D291 /* libPods-SansPaperIntegration-SansPaperIntegrationTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8040B4F9086657EFE754EDA /* libPods-SansPaperIntegration-SansPaperIntegrationTests.a */; };
 		74CF52E3253DCA5F00A31EE6 /* emptyfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CF52E2253DCA5F00A31EE6 /* emptyfile.swift */; };
 		74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */; };
 		74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */; };
-		758F1412BA298B6A881847ED /* libPods-SansPaperConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperConnect.a */; };
+		758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,7 +25,7 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = SansPaperConnect;
+			remoteInfo = SansPaperIntegration;
 		};
 		74CF52E8253DCB4400A31EE6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -38,19 +38,19 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* SansPaperConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SansPaperConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* SansPaperIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SansPaperIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* SansPaperConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SansPaperConnectTests.m; sourceTree = "<group>"; };
-		0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperConnect-SansPaperConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-SansPaperConnectTests.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-SansPaperConnectTests/Pods-SansPaperConnect-SansPaperConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* SansPaperConnect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SansPaperConnect.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SansPaperConnect/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SansPaperConnect/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SansPaperConnect/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SansPaperConnect/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SansPaperConnect/main.m; sourceTree = "<group>"; };
-		31770C6C3123646585A7F3FE /* Pods-SansPaperConnect-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-tvOSTests/Pods-SansPaperConnect-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperConnect-SansPaperConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-SansPaperConnectTests.release.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-SansPaperConnectTests/Pods-SansPaperConnect-SansPaperConnectTests.release.xcconfig"; sourceTree = "<group>"; };
-		74CF52E1253DCA5E00A31EE6 /* SansPaperConnect-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SansPaperConnect-Bridging-Header.h"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* SansPaperIntegrationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SansPaperIntegrationTests.m; sourceTree = "<group>"; };
+		0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-SansPaperIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* SansPaperIntegration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SansPaperIntegration.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SansPaperIntegration/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SansPaperIntegration/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SansPaperIntegration/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SansPaperIntegration/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SansPaperIntegration/main.m; sourceTree = "<group>"; };
+		31770C6C3123646585A7F3FE /* Pods-SansPaperIntegration-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOSTests/Pods-SansPaperIntegration-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-SansPaperIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
+		74CF52E1253DCA5E00A31EE6 /* SansPaperIntegration-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SansPaperIntegration-Bridging-Header.h"; sourceTree = "<group>"; };
 		74CF52E2253DCA5F00A31EE6 /* emptyfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = emptyfile.swift; sourceTree = "<group>"; };
 		74CF52E4253DCB4400A31EE6 /* WatermelonDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WatermelonDB.xcodeproj; path = "../../node_modules/@nozbe/watermelondb/native/ios/WatermelonDB.xcodeproj"; sourceTree = "<group>"; };
 		74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -72,18 +72,18 @@
 		74CFDE65253DE1EF00A31EE6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		74CFDE66253DE1EF00A31EE6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
-		76042502B7FE2D2FA1EEC4EB /* Pods-SansPaperConnect-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-tvOSTests/Pods-SansPaperConnect-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		76D7B9B07746C0C331746E62 /* libPods-SansPaperConnect-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperConnect-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SansPaperConnect/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		AA4EAC70A38844539DC97431 /* Pods-SansPaperConnect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect.release.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect/Pods-SansPaperConnect.release.xcconfig"; sourceTree = "<group>"; };
-		BB7EB4D89CF41EA9EE936B84 /* libPods-SansPaperConnect-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperConnect-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C8040B4F9086657EFE754EDA /* libPods-SansPaperConnect-SansPaperConnectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperConnect-SansPaperConnectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CEDC2AB41BCB704063337202 /* libPods-SansPaperConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperConnect.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		76042502B7FE2D2FA1EEC4EB /* Pods-SansPaperIntegration-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOSTests/Pods-SansPaperIntegration-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		76D7B9B07746C0C331746E62 /* libPods-SansPaperIntegration-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SansPaperIntegration/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AA4EAC70A38844539DC97431 /* Pods-SansPaperIntegration.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration.release.xcconfig"; sourceTree = "<group>"; };
+		BB7EB4D89CF41EA9EE936B84 /* libPods-SansPaperIntegration-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8040B4F9086657EFE754EDA /* libPods-SansPaperIntegration-SansPaperIntegrationTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration-SansPaperIntegrationTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperConnect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect/Pods-SansPaperConnect.debug.xcconfig"; sourceTree = "<group>"; };
-		FDC51EA6F3513144A79130D2 /* Pods-SansPaperConnect-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-tvOS/Pods-SansPaperConnect-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		FFF3525F26F59A41639DEBD1 /* Pods-SansPaperConnect-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperConnect-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperConnect-tvOS/Pods-SansPaperConnect-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperIntegration.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration.debug.xcconfig"; sourceTree = "<group>"; };
+		FDC51EA6F3513144A79130D2 /* Pods-SansPaperIntegration-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		FFF3525F26F59A41639DEBD1 /* Pods-SansPaperIntegration-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3084B7BD0D5E8434B610D291 /* libPods-SansPaperConnect-SansPaperConnectTests.a in Frameworks */,
+				3084B7BD0D5E8434B610D291 /* libPods-SansPaperIntegration-SansPaperIntegrationTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,21 +99,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				758F1412BA298B6A881847ED /* libPods-SansPaperConnect.a in Frameworks */,
+				758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* SansPaperConnectTests */ = {
+		00E356EF1AD99517003FC87E /* SansPaperIntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
 				74CF52E4253DCB4400A31EE6 /* WatermelonDB.xcodeproj */,
-				00E356F21AD99517003FC87E /* SansPaperConnectTests.m */,
+				00E356F21AD99517003FC87E /* SansPaperIntegrationTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = SansPaperConnectTests;
+			path = SansPaperIntegrationTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -124,7 +124,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* SansPaperConnect */ = {
+		13B07FAE1A68108700A75B9A /* SansPaperIntegration */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -135,7 +135,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = SansPaperConnect;
+			name = SansPaperIntegration;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -144,10 +144,10 @@
 				74CFDE54253DE13A00A31EE6 /* libWatermelonDB.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				CEDC2AB41BCB704063337202 /* libPods-SansPaperConnect.a */,
-				C8040B4F9086657EFE754EDA /* libPods-SansPaperConnect-SansPaperConnectTests.a */,
-				BB7EB4D89CF41EA9EE936B84 /* libPods-SansPaperConnect-tvOS.a */,
-				76D7B9B07746C0C331746E62 /* libPods-SansPaperConnect-tvOSTests.a */,
+				CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */,
+				C8040B4F9086657EFE754EDA /* libPods-SansPaperIntegration-SansPaperIntegrationTests.a */,
+				BB7EB4D89CF41EA9EE936B84 /* libPods-SansPaperIntegration-tvOS.a */,
+				76D7B9B07746C0C331746E62 /* libPods-SansPaperIntegration-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,13 +197,13 @@
 				74CFDE56253DE1EF00A31EE6 /* Fonts */,
 				74CFDE2A253DDC3500A31EE6 /* GoogleService-Info.plist */,
 				74CF52E2253DCA5F00A31EE6 /* emptyfile.swift */,
-				13B07FAE1A68108700A75B9A /* SansPaperConnect */,
+				13B07FAE1A68108700A75B9A /* SansPaperIntegration */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* SansPaperConnectTests */,
+				00E356EF1AD99517003FC87E /* SansPaperIntegrationTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				A93114E22655E9B4E75692BD /* Pods */,
-				74CF52E1253DCA5E00A31EE6 /* SansPaperConnect-Bridging-Header.h */,
+				74CF52E1253DCA5E00A31EE6 /* SansPaperIntegration-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -213,8 +213,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* SansPaperConnect.app */,
-				00E356EE1AD99517003FC87E /* SansPaperConnectTests.xctest */,
+				13B07F961A680F5B00A75B9A /* SansPaperIntegration.app */,
+				00E356EE1AD99517003FC87E /* SansPaperIntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -222,14 +222,14 @@
 		A93114E22655E9B4E75692BD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperConnect.debug.xcconfig */,
-				AA4EAC70A38844539DC97431 /* Pods-SansPaperConnect.release.xcconfig */,
-				0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperConnect-SansPaperConnectTests.debug.xcconfig */,
-				5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperConnect-SansPaperConnectTests.release.xcconfig */,
-				FFF3525F26F59A41639DEBD1 /* Pods-SansPaperConnect-tvOS.debug.xcconfig */,
-				FDC51EA6F3513144A79130D2 /* Pods-SansPaperConnect-tvOS.release.xcconfig */,
-				31770C6C3123646585A7F3FE /* Pods-SansPaperConnect-tvOSTests.debug.xcconfig */,
-				76042502B7FE2D2FA1EEC4EB /* Pods-SansPaperConnect-tvOSTests.release.xcconfig */,
+				F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperIntegration.debug.xcconfig */,
+				AA4EAC70A38844539DC97431 /* Pods-SansPaperIntegration.release.xcconfig */,
+				0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.debug.xcconfig */,
+				5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.release.xcconfig */,
+				FFF3525F26F59A41639DEBD1 /* Pods-SansPaperIntegration-tvOS.debug.xcconfig */,
+				FDC51EA6F3513144A79130D2 /* Pods-SansPaperIntegration-tvOS.release.xcconfig */,
+				31770C6C3123646585A7F3FE /* Pods-SansPaperIntegration-tvOSTests.debug.xcconfig */,
+				76042502B7FE2D2FA1EEC4EB /* Pods-SansPaperIntegration-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -237,9 +237,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* SansPaperConnectTests */ = {
+		00E356ED1AD99517003FC87E /* SansPaperIntegrationTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SansPaperConnectTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SansPaperIntegrationTests" */;
 			buildPhases = (
 				588DA1A20C76CC3FC80D9AAB /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -252,14 +252,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = SansPaperConnectTests;
-			productName = SansPaperConnectTests;
-			productReference = 00E356EE1AD99517003FC87E /* SansPaperConnectTests.xctest */;
+			name = SansPaperIntegrationTests;
+			productName = SansPaperIntegrationTests;
+			productReference = 00E356EE1AD99517003FC87E /* SansPaperIntegrationTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* SansPaperConnect */ = {
+		13B07F861A680F5B00A75B9A /* SansPaperIntegration */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SansPaperConnect" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SansPaperIntegration" */;
 			buildPhases = (
 				D9106665AB2A87BE116AF259 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -274,9 +274,9 @@
 			);
 			dependencies = (
 			);
-			name = SansPaperConnect;
-			productName = SansPaperConnect;
-			productReference = 13B07F961A680F5B00A75B9A /* SansPaperConnect.app */;
+			name = SansPaperIntegration;
+			productName = SansPaperIntegration;
+			productReference = 13B07F961A680F5B00A75B9A /* SansPaperIntegration.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -298,7 +298,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SansPaperConnect" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SansPaperIntegration" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -317,8 +317,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* SansPaperConnect */,
-				00E356ED1AD99517003FC87E /* SansPaperConnectTests */,
+				13B07F861A680F5B00A75B9A /* SansPaperIntegration */,
+				00E356ED1AD99517003FC87E /* SansPaperIntegrationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -369,13 +369,53 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+<<<<<<< HEAD:ios/SansPaperConnect.xcodeproj/project.pbxproj
+=======
+		0BCE965583124A116764450A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		13A9E409611241132AB6F0E9 /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-artifacts.sh",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenterAnalytics.xcframework",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenter.xcframework",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenterCrashes.xcframework",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+>>>>>>> a02235978f60bdc59166050a9a76b4f7c5536581:ios/SansPaperIntegration.xcodeproj/project.pbxproj
 		4A5BFB5BBAECEA312CFC1D10 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SansPaperConnect/Pods-SansPaperConnect-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -422,7 +462,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperConnect/Pods-SansPaperConnect-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4EACD777A711CEF05BB9201E /* [CP] Copy Pods Resources */ = {
@@ -431,7 +471,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SansPaperConnect-SansPaperConnectTests/Pods-SansPaperConnect-SansPaperConnectTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -478,7 +518,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperConnect-SansPaperConnectTests/Pods-SansPaperConnect-SansPaperConnectTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		588DA1A20C76CC3FC80D9AAB /* [CP] Check Pods Manifest.lock */ = {
@@ -496,7 +536,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SansPaperConnect-SansPaperConnectTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SansPaperIntegration-SansPaperIntegrationTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -513,6 +553,29 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    _JSON_OUTPUT_BASE64=$(python -c 'import json,sys,base64;print(base64.b64encode(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"').read())['${_JSON_ROOT}'])))' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\n\n  # config.admob_delay_app_measurement_init\n  _ADMOB_DELAY_APP_MEASUREMENT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"admob_delay_app_measurement_init\")\n  if [[ $_ADMOB_DELAY_APP_MEASUREMENT == \"true\" ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GADDelayAppMeasurementInit\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"YES\")\n  fi\n\n  # config.admob_ios_app_id\n  _ADMOB_IOS_APP_ID=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"admob_ios_app_id\")\n  if [[ $_ADMOB_IOS_APP_ID ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GADApplicationIdentifier\")\n    _PLIST_ENTRY_TYPES+=(\"string\")\n    _PLIST_ENTRY_VALUES+=(\"$_ADMOB_IOS_APP_ID\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
 		};
+<<<<<<< HEAD:ios/SansPaperConnect.xcodeproj/project.pbxproj
+=======
+		B7F55D4D6BB752E6F6ACE675 /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-artifacts.sh",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenterAnalytics.xcframework",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenter.xcframework",
+				"${PODS_ROOT}/AppCenter/AppCenter-SDK-Apple/AppCenterCrashes.xcframework",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration-SansPaperIntegrationTests/Pods-SansPaperIntegration-SansPaperIntegrationTests-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+>>>>>>> a02235978f60bdc59166050a9a76b4f7c5536581:ios/SansPaperIntegration.xcodeproj/project.pbxproj
 		D9106665AB2A87BE116AF259 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -528,13 +591,33 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SansPaperConnect-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SansPaperIntegration-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD:ios/SansPaperConnect.xcodeproj/project.pbxproj
+=======
+		DFC86CB51B0B586A250B6116 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+>>>>>>> a02235978f60bdc59166050a9a76b4f7c5536581:ios/SansPaperIntegration.xcodeproj/project.pbxproj
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -561,7 +644,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* SansPaperConnectTests.m in Sources */,
+				00E356F31AD99517003FC87E /* SansPaperIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,7 +663,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* SansPaperConnect */;
+			target = 13B07F861A680F5B00A75B9A /* SansPaperIntegration */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -588,7 +671,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperConnect-SansPaperConnectTests.debug.xcconfig */;
+			baseConfigurationReference = 0EF165B24F4F9ECDB1C95B59 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -597,7 +680,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = SansPaperConnectTests/Info.plist;
+				INFOPLIST_FILE = SansPaperIntegrationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -607,19 +690,19 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SansPaperConnect.app/SansPaperConnect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SansPaperIntegration.app/SansPaperIntegration";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperConnect-SansPaperConnectTests.release.xcconfig */;
+			baseConfigurationReference = 5E95CE41AB4BBC5FFC5F1FE4 /* Pods-SansPaperIntegration-SansPaperIntegrationTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = FJM48A99P4;
-				INFOPLIST_FILE = SansPaperConnectTests/Info.plist;
+				INFOPLIST_FILE = SansPaperIntegrationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -629,20 +712,20 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SansPaperConnect.app/SansPaperConnect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SansPaperIntegration.app/SansPaperIntegration";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperConnect.debug.xcconfig */;
+			baseConfigurationReference = F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperIntegration.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FJM48A99P4;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = SansPaperConnect/Info.plist;
+				INFOPLIST_FILE = SansPaperIntegration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -656,8 +739,8 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.billowsoftware.com.au.sanspaperconnect;
-				PRODUCT_NAME = SansPaperConnect;
-				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperConnect-Bridging-Header.h";
+				PRODUCT_NAME = SansPaperIntegration;
+				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperIntegration-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -666,13 +749,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA4EAC70A38844539DC97431 /* Pods-SansPaperConnect.release.xcconfig */;
+			baseConfigurationReference = AA4EAC70A38844539DC97431 /* Pods-SansPaperIntegration.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FJM48A99P4;
-				INFOPLIST_FILE = SansPaperConnect/Info.plist;
+				INFOPLIST_FILE = SansPaperIntegration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -686,8 +769,8 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.billowsoftware.com.au.sanspaperconnect;
-				PRODUCT_NAME = SansPaperConnect;
-				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperConnect-Bridging-Header.h";
+				PRODUCT_NAME = SansPaperIntegration;
+				SWIFT_OBJC_BRIDGING_HEADER = "SansPaperIntegration-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -809,7 +892,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SansPaperConnectTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SansPaperIntegrationTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -818,7 +901,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SansPaperConnect" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SansPaperIntegration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -827,7 +910,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SansPaperConnect" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SansPaperIntegration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
