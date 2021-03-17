@@ -2,15 +2,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet, Text} from 'react-native';
+import {Searchbar} from 'react-native-paper';
+
 // import Icon from 'react-native-vector-icons/FontAwesome';
+import memoize from 'memoize-one';
 import {ListItem, Icon} from 'react-native-elements';
-import {selectFormList} from '@selector/form/index';
+import {selectSortedFormList} from '@selector/form/index';
 import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
-import R from 'ramda';
+import {filter, includes} from 'ramda';
 import {Spinner} from 'native-base';
 
 const styles = StyleSheet.create({
@@ -18,10 +21,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
   },
+  flex1: {
+    flex: 1,
+  },
+  searchbar: {
+    marginBottom: 10,
+  },
 });
 
 class FormList extends React.Component {
   keyExtractor = (item, index) => index.toString();
+
+  state = {
+    searchKeyword: '',
+  };
 
   onPress = (linked_table, form_id) => {
     const {
@@ -36,6 +49,17 @@ class FormList extends React.Component {
     } else {
       goToFormFieldsScreen({componentId: screens.FormScreen});
     }
+  };
+
+  getFilteredFormlist = memoize((formList, searchKeyword) => {
+    return filter(
+      (form) => includes(searchKeyword.toLowerCase(), form.name.toLowerCase()),
+      formList,
+    );
+  });
+
+  handleOnChangeText = (text) => {
+    this.setState({searchKeyword: text});
   };
 
   renderItem = ({item}) => {
@@ -57,27 +81,36 @@ class FormList extends React.Component {
   };
 
   render() {
+    const {searchKeyword} = this.state;
     const {formList} = this.props;
+    const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
 
-    const filteredOptions = R.pipe(
-      R.sortBy(R.compose(R.toLower, R.prop('name'))),
-      R.filter((option) => !R.isNil(option)),
-    )(formList);
-    return filteredOptions && filteredOptions.length > 0 ? (
-      <FlatList
-        style={styles.container}
-        keyExtractor={this.keyExtractor}
-        data={filteredOptions}
-        renderItem={this.renderItem}
-      />
-    ) : (
-      <Spinner color="grey" />
+    return (
+      <View style={styles.flex1}>
+        <Searchbar
+          placeholder="Search"
+          style={styles.searchbar}
+          onChangeText={this.handleOnChangeText}
+        />
+        {filteredFromList && filteredFromList.length > 0 ? (
+          <FlatList
+            style={styles.container}
+            keyExtractor={this.keyExtractor}
+            data={filteredFromList}
+            renderItem={this.renderItem}
+          />
+        ) : searchKeyword === '' ? (
+          <Spinner color="grey" />
+        ) : (
+          <Text>No results match your search criteria </Text>
+        )}
+      </View>
     );
   }
 }
 
 const mapState = createStructuredSelector({
-  formList: selectFormList,
+  formList: selectSortedFormList,
 });
 
 export default connect(mapState, {

@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
+import auth from '@react-native-firebase/auth';
 import * as yup from 'yup';
 
 //styles
@@ -31,6 +32,7 @@ import {capitalize} from '@util/string';
 //redux
 import {loginUser} from '@store/user';
 import {selectUserStatus} from '@selector/user';
+import {init} from '@store/common';
 
 const loginSchema = yup.object().shape({
   username: yup.string().required().email(),
@@ -73,12 +75,24 @@ class LoginScreen extends React.Component {
       'keyboardDidHide',
       this._keyboardDidHide,
     );
+
+    this.authListener = auth().onAuthStateChanged(this._onAuthStateChanged);
   }
 
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
+    this.authListener = null;
   }
+
+  _onAuthStateChanged = (user) => {
+    if (user) {
+      if (!this.state.sync) {
+        this.setState({sync: true});
+        this.props.init(user);
+      }
+    }
+  };
 
   _keyboardDidShow = () => {
     const height = Dimensions.get('window').height;
@@ -169,4 +183,4 @@ const mapState = createStructuredSelector({
   isUserLogin: selectUserStatus,
 });
 
-export default connect(mapState, {loginUser})(LoginScreen);
+export default connect(mapState, {loginUser, init})(LoginScreen);

@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {Text, View, Alert, Modal, TextInput, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Alert,
+  Modal,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
@@ -85,12 +93,13 @@ class Profile extends Component {
   };
   render() {
     const {email, user} = this.props;
-    const name = user._data.name;
+    const name = user?._data?.name;
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.userContainer}>
             <Text style={styles.nametext}>{name}</Text>
+            {/*
             <EvilIcons5 name="user" size={60} style={styles.userIcon} />
             <View style={{flexDirection: 'row', paddingBottom: 2}}>
               <MaterialCommunityIcons
@@ -109,6 +118,7 @@ class Profile extends Component {
               <Text style={styles.laveltext}>LEVEL 2</Text>
               <Text style={styles.pointstext}>15,000 POINTS</Text>
             </View>
+            */}
           </View>
           <View style={styles.rowContainer}>
             <MailIcon width={30} height={40} color="green" />
@@ -117,15 +127,15 @@ class Profile extends Component {
               <Text style={styles.text}>{email}</Text>
             </View>
           </View>
-          <View style={styles.rowContainer}>
-            <TouchableRipple onPress={this.showModal} rippleColor="green">
+          <TouchableOpacity onPress={this.showModal} rippleColor="green">
+            <View style={styles.rowContainer}>
               <MaterialIcons name="lock" size={30} color="green" />
-            </TouchableRipple>
-            <View style={styles.textView}>
-              <Text style={styles.labeltext}>Change Password</Text>
-              <Text style={styles.text}>********</Text>
+              <View style={styles.textView}>
+                <Text style={styles.labeltext}>Change Password</Text>
+                <Text style={styles.text}>********</Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.rowContainer}>
             <MaterialIcons name="settings" size={30} color="green" />
             <Picker
@@ -160,14 +170,12 @@ class Profile extends Component {
               </Text>
             </View>
           </View>
-          <View style={styles.logoutContainer}>
-            <TouchableRipple
-              onPress={this.onPressLogoutHandler}
-              rippleColor="green">
+          <TouchableOpacity onPress={this.onPressLogoutHandler}>
+            <View style={styles.logoutContainer}>
               <LogoutIcon width={30} height={40} color="red" />
-            </TouchableRipple>
-            <Text style={[styles.textView, styles.labeltext]}>Log out</Text>
-          </View>
+              <Text style={[styles.textView, styles.labeltext]}>Log out</Text>
+            </View>
+          </TouchableOpacity>
           <Modal
             animationType="fade"
             transparent={true}

@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed, darkGrey} from './colors';
+import {red, darkRed} from './colors';
 import {small, regular} from './font';
 import {spaceRegular} from 'styles/space';
 
