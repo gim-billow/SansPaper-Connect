@@ -19,6 +19,8 @@ function* init({payload}) {
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});
 
     const spUser = yield getSansPaperUser({userId: uid});
+    //define organisation path
+    const organisationPath = yield spUser.data().organisations.path || '';
 
     yield put({
       type: SANSPAPER_REDUCER_ACTIONS.UPDATE_SANSPAPER_USER,
@@ -26,16 +28,15 @@ function* init({payload}) {
     });
 
     //get latest news from db
-    const newsList = yield getOrgNews();
-    const htmlNews = map(
-      (newsItem) => '<h3>' + newsItem.title + '</h3>' + newsItem.news,
-      newsList,
-    );
-    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: htmlNews});
+    const newsList = yield getOrgNews(`${organisationPath}/announcements`);
+    // FIXME:
+    // const htmlNews = map(
+    //   (newsItem) => '<h3>' + newsItem.title + '</h3>' + newsItem.news,
+    //   newsList,
+    // );
+    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: newsList});
     showMainScreen();
 
-    //define organisation path
-    const organisationPath = yield spUser.data().organisations.path || '';
     yield put({
       type: SANSPAPER_REDUCER_ACTIONS.UPDATE_SANSPAPER_ORGANISATION_PATH,
       payload: organisationPath,
