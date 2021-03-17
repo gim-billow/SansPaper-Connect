@@ -25,6 +25,7 @@
     "axios": "^0.21.1",
     "babel-preset-react-native": "^4.0.1",
     "immer": "^8.0.1",
+    "memoize-one": "^5.1.1",
     "moment": "^2.29.1",
     "native-base": "2.13.8",
     "ramda": "^0.27.1",

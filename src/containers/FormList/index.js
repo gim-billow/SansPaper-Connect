@@ -2,10 +2,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
+import {Searchbar} from 'react-native-paper';
+
 // import Icon from 'react-native-vector-icons/FontAwesome';
+import memoize from 'memoize-one';
 import {ListItem, Icon} from 'react-native-elements';
-import {selectFormList} from '@selector/form/index';
+import {selectSortedFormList} from '@selector/form/index';
 import {updateCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
@@ -18,10 +21,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
   },
+  flex1: {
+    flex: 1,
+  },
+  searchbar: {
+    marginBottom: 10,
+  },
 });
 
 class FormList extends React.Component {
   keyExtractor = (item, index) => index.toString();
+
+  state = {
+    searchKeyword: '',
+  };
 
   onPress = (linked_table, form_id) => {
     const {
@@ -37,6 +50,12 @@ class FormList extends React.Component {
       goToFormFieldsScreen({componentId: screens.FormScreen});
     }
   };
+
+  getFilteredFormlist = memoize(() => {
+    const {formList} = this.props;
+    
+    return formList;
+  });
 
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
@@ -57,19 +76,18 @@ class FormList extends React.Component {
   };
 
   render() {
-    const {formList} = this.props;
+    const filteredFromList = this.getFilteredFormlist();
 
-    const filteredOptions = R.pipe(
-      R.sortBy(R.compose(R.toLower, R.prop('name'))),
-      R.filter((option) => !R.isNil(option)),
-    )(formList);
-    return filteredOptions && filteredOptions.length > 0 ? (
-      <FlatList
-        style={styles.container}
-        keyExtractor={this.keyExtractor}
-        data={filteredOptions}
-        renderItem={this.renderItem}
-      />
+    return filteredFromList && filteredFromList.length > 0 ? (
+      <View style={styles.flex1}>
+        <Searchbar placeholder="Search" style={styles.searchbar} />
+        <FlatList
+          style={styles.container}
+          keyExtractor={this.keyExtractor}
+          data={filteredFromList}
+          renderItem={this.renderItem}
+        />
+      </View>
     ) : (
       <Spinner color="grey" />
     );
@@ -77,7 +95,7 @@ class FormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  formList: selectFormList,
+  formList: selectSortedFormList,
 });
 
 export default connect(mapState, {
