@@ -5,6 +5,7 @@ import {Divider} from 'react-native-elements';
 import {map, split} from 'ramda';
 
 import {commonStyles} from '@styles/common';
+import {uniqueKey} from '@util/general';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
@@ -92,9 +93,10 @@ const ToggleButton = (props) => {
           {map((option) => {
             let colorControl = _mapToColour(option.id);
             const isSelectedOption = isSelected(option.name);
+
             return (
               <TouchableOpacity
-                key={id}
+                key={uniqueKey()}
                 style={[
                   colorControl.button,
                   isSelectedOption
