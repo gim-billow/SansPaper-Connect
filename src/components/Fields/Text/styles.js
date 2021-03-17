@@ -5,6 +5,7 @@ export default StyleSheet.create({
   textInput: {
     backgroundColor: 'white',
     marginHorizontal: spaceRegular,
+    textAlign: 'auto',
   },
   textContainer: {
     marginVertical: spaceMedium,

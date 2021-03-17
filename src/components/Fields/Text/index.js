@@ -7,11 +7,15 @@ import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
+import {Platform} from 'react-native';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;
   const {updateFieldsValue} = props;
   const [text, setText] = useState('');
+  const [selection, setSelection] = useState(
+    Platform.OS === 'android' ? {start: 0} : null,
+  );
 
   useEffect(() => {
     setText(value);
@@ -20,6 +24,18 @@ const SPText = (props) => {
   const onChangeText = (updatedText) => {
     setText(updatedText);
     updateFieldsValue({rank, value: updatedText});
+  };
+
+  const onInputFocus = () => {
+    if (Platform.OS === 'android') {
+      setSelection(null);
+    }
+  };
+
+  const onBlurInput = () => {
+    if (Platform.OS === 'android') {
+      setSelection({start: 0});
+    }
   };
 
   const keyboard = (types) => {
@@ -45,12 +61,15 @@ const SPText = (props) => {
           <View style={commonStyles.spacing} />
         )}
         <TextInput
+          onFocus={onInputFocus}
+          onBlur={onBlurInput}
           style={styles.textInput}
           value={text}
           label="Insert here"
           mode="outlined"
+          selection={selection}
           keyboardType={keyboard(type)}
-          multiline={type !== 'text' ? true : false}
+          multiline={type === 'textarea' ? true : false}
           onChangeText={(updatedText) => onChangeText(updatedText)}
         />
       </View>
