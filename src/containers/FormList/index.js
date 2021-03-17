@@ -5,7 +5,7 @@ import {createStructuredSelector} from 'reselect';
 import {View, FlatList, StyleSheet, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
-// import Icon from 'react-native-vector-icons/FontAwesome';
+// import MIcon from 'react-native-vector-icons/MaterialIcons';
 import memoize from 'memoize-one';
 import {ListItem, Icon} from 'react-native-elements';
 import {selectSortedFormList} from '@selector/form/index';
@@ -88,9 +88,10 @@ class FormList extends React.Component {
     return (
       <View style={styles.flex1}>
         <Searchbar
-          placeholder="Search"
+          placeholder="Search form"
           style={styles.searchbar}
           onChangeText={this.handleOnChangeText}
+          icon="search"
         />
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList

@@ -13,6 +13,8 @@ target 'SansPaperIntegration' do
 
   pod 'react-native-signature-capture', :path => '../node_modules/react-native-signature-capture'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'SansPaperIntegrationTests' do
     inherit! :complete
     # Pods for testing
