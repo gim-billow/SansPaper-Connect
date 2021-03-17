@@ -1,13 +1,14 @@
 //library
 import React from 'react';
 import {connect} from 'react-redux';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {createStructuredSelector} from 'reselect';
 import HTML from 'react-native-render-html';
 import {map} from 'ramda';
 
 import styles from './styles';
-import {selectNews} from '../../selector/common';
+import {commonStyles} from '@styles/common';
+import {selectNews} from '@selector/common';
 
 class MainScreen extends React.Component {
   static options = () => {
@@ -23,15 +24,18 @@ class MainScreen extends React.Component {
   };
 
   render() {
-    const {htmlContent} = this.props;
+    const {updatedNews} = this.props;
+    const news = updatedNews.length ? updatedNews[0] : '';
 
     return (
       <View style={styles.container}>
-        {map(
-          (content) => (
-            <HTML key={content} html={content} />
-          ),
-          htmlContent,
+        {/<\/?[a-z][\s\S]*>/i.test(news.announcement) ? (
+          map(
+            (content) => <HTML key={content} html={content} />,
+            news.announcement,
+          )
+        ) : (
+          <Text style={commonStyles.text}>{news.announcement}</Text>
         )}
       </View>
     );
@@ -39,7 +43,7 @@ class MainScreen extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  htmlContent: selectNews,
+  updatedNews: selectNews,
 });
 
 export default connect(mapState, {})(MainScreen);
