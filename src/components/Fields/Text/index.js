@@ -1,13 +1,12 @@
 import React, {useEffect, useState, memo} from 'react';
 import {TextInput} from 'react-native-paper';
 import {Divider} from 'react-native-elements';
-import {Text, View} from 'react-native';
+import {Text, View, Platform} from 'react-native';
 
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
-import {Platform} from 'react-native';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;

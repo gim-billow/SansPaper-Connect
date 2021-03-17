@@ -33,7 +33,7 @@ const DateTimePicker = (props) => {
   const [defaultTime, setDefaultTime] = useState('none');
 
   useEffect(() => {
-    async function DefaultTime() {
+    (async () => {
       const getDefaultTimes = await getDefaultTime();
       const getTimes = await getTime();
 
@@ -44,9 +44,7 @@ const DateTimePicker = (props) => {
       setDefaultTime(getDefaultTimes);
       getDefaultTimes !== 'none' ? setTimeLabel(getDefaultTimes) : '';
       getDefaultTimes !== 'none' ? setChangeTimeTheme(true) : '';
-    }
-
-    DefaultTime();
+    })();
   }, [item.rank, setDefaultTime, updateFieldsValue]);
 
   const showDatePicker = () => {
@@ -66,6 +64,7 @@ const DateTimePicker = (props) => {
   };
 
   const dateHandleConfirm = (date) => {
+    hideDatePicker();
     const dateFormat = setDateTimeFormatDisplay('date', date);
     const dateTime = setDateTime(dateFormat, timeLabel);
 
@@ -74,11 +73,10 @@ const DateTimePicker = (props) => {
     setChangeDateTheme(true);
 
     updateFieldsValue({rank: item.rank, value: dateTime});
-
-    hideDatePicker();
   };
 
   const timeHandleConfirm = (time) => {
+    hideTimePicker();
     const timeFormat = setDateTimeFormatDisplay('time', time);
     const dateTime = setDateTime(dateLabel, timeFormat);
 
@@ -87,8 +85,6 @@ const DateTimePicker = (props) => {
     setChangeTimeTheme(true);
 
     updateFieldsValue({rank: item.rank, value: dateTime});
-
-    hideTimePicker();
   };
 
   const updateDefaultTime = async () => {

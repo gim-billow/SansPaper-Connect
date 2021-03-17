@@ -12,12 +12,16 @@ export const pushToLinkedItem = (props) => {
 };
 
 export const pushToFormFieldsScreen = (props) => {
-  const {componentId, passProps} = props;
+  const {componentId, currentForm, currentLinkedItems, passProps} = props;
   Navigation.push(componentId, {
     component: {
       id: 'FormFieldsScreen',
       name: 'FormFieldsScreen',
-      passProps,
+      passProps: {
+        ...passProps,
+        form: {...currentForm},
+        items: [...currentLinkedItems],
+      },
     },
   });
 };

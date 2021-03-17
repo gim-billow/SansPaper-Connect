@@ -19,13 +19,13 @@ import {Spinner} from 'native-base';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   flex1: {
     flex: 1,
   },
   searchbar: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
 });
 

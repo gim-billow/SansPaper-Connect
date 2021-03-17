@@ -22,6 +22,7 @@ class DrawingBoard extends React.Component {
       '/new_image_' +
       Math.round(new Date().getTime() / 1000) +
       '.jpg',
+    signatureSaved: false,
   };
 
   componentDidMount() {
@@ -41,14 +42,14 @@ class DrawingBoard extends React.Component {
 
   onClear = () => {
     const {item, updateFieldsValue} = this.props;
-    this.setState({changeTheme: false});
+    this.setState({changeTheme: false, signatureSaved: false});
     updateFieldsValue({rank: item.rank, value: ''});
     this.canvas.clear();
   };
 
   onSave = (success, path) => {
     const {item, updateFieldsValue} = this.props;
-    this.setState({changeTheme: true});
+    this.setState({changeTheme: true, signatureSaved: true});
 
     RNFetchBlob.fs
       .readFile(path, 'base64')
@@ -173,6 +174,7 @@ class DrawingBoard extends React.Component {
               onClearPressed={() => this.onClear()}
             />
           </View>
+          {this.state.signatureSaved && <View style={styles.dimmedSingature} />}
         </View>
         <Divider />
       </ItemWrapper>
