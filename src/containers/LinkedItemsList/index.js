@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {ListItem, Icon} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button as RNButton} from 'react-native-paper';
 import {connect} from 'react-redux';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -144,7 +145,6 @@ class LinkedItemsList extends React.Component {
                               name="chevron-left"
                               type="font-awesome"
                               color="#fff"
-                              onPress={() => {}}
                             />
                             <Text style={styles.modalText}>Back</Text>
                           </View>
