@@ -52,4 +52,5 @@ export default {
   email: Text,
   link: Text,
   company: Select,
+  risk: Text,
 };

@@ -12,7 +12,7 @@ import {Button as RNButton} from 'react-native-paper';
 import {connect} from 'react-redux';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import QRCode from 'react-native-qrcode-svg';
+import {find, propEq} from 'ramda';
 
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentLinkedItems, selectCurrentForm} from '@selector/form';
@@ -65,8 +65,15 @@ class LinkedItemsList extends React.Component {
   };
 
   onSuccess = (e) => {
-    // TODO:
-    console.log('on success', e);
+    const {linkedItems = [], goToFormFieldsScreen} = this.props;
+    const serial = e.data;
+    this.setState({showModal: false});
+
+    const found = find(propEq('serialnumber', serial))(linkedItems);
+    goToFormFieldsScreen({
+      linkedItemId: found.id,
+      componentId: screens.LinkedItems,
+    });
   };
 
   render() {
@@ -121,6 +128,7 @@ class LinkedItemsList extends React.Component {
                 <QRCodeScanner
                   onRead={this.onSuccess}
                   showMarker
+                  markerStyle={styles.qrBorderColor}
                   topContent={
                     <SafeAreaView style={styles.h}>
                       <View style={styles.header}>

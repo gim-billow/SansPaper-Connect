@@ -1,6 +1,7 @@
 import React, {memo} from 'react';
 import {Text, View} from 'react-native';
-import {Button as RNButton, Divider} from 'react-native-paper';
+import {Button as RNButton} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import {commonStyles} from '@styles/common';
 import ItemWrapper from '../ItemWrapper';
 import styles from './styles';

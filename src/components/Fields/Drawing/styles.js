@@ -1,17 +1,17 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium} from 'styles/space';
-import {regular} from 'styles/font';
-import {lightRed, darkRed, white} from '@styles/colors';
+import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
+import {lightRed, darkRed, white, superLightRed} from '@styles/colors';
 
 export default StyleSheet.create({
+  topContainer: {
+    marginVertical: spaceMedium,
+  },
   strokeColorButton: {
     marginHorizontal: 2.5,
     marginVertical: 8,
     width: 30,
     height: 30,
     borderRadius: 15,
-    borderWidth: 1,
-    borderColor: lightRed,
   },
   strokeWidthButton: {
     marginHorizontal: 2.5,
@@ -38,22 +38,15 @@ export default StyleSheet.create({
   canvasStyle: {
     backgroundColor: 'transparent',
     flex: 1,
-    borderWidth: 1,
-    borderColor: lightRed,
+    // borderWidth: 1,
+    // borderColor: lightRed,
   },
   sketch: {
     flex: 1,
     position: 'absolute',
-    backgroundColor: '#ffb3b3',
+    backgroundColor: superLightRed,
     borderWidth: 1,
     borderColor: lightRed,
-  },
-  label: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
-    paddingBottom: spaceSmall,
   },
   text: {
     color: lightRed,
@@ -63,21 +56,14 @@ export default StyleSheet.create({
     color: white,
     fontSize: 13,
   },
-  container: {
-    width: 400,
-    height: 260,
-  },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
+    paddingHorizontal: spaceSmall,
   },
   button: {
-    paddingTop: spaceSmall,
+    paddingVertical: spaceSmall,
     paddingLeft: spaceSmall,
-    paddingBottom: spaceSmall,
-    width: '100%',
   },
   buttonColor: {
     backgroundColor: 'white',
@@ -86,10 +72,7 @@ export default StyleSheet.create({
     backgroundColor: darkRed,
   },
   box: {
-    flex: 1,
-    flexDirection: 'row',
     height: 500,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
+    marginHorizontal: spaceRegular,
   },
 });

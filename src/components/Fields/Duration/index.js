@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import {TextInput} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import {Text, View} from 'react-native';
+
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
 import styles from './styles';
+import {commonStyles} from '@styles/common';
 
 class Duration extends Component {
   state = {
@@ -29,38 +33,45 @@ class Duration extends Component {
   render() {
     const {item} = this.props;
     const {hours, minutes} = this.state;
-    const keyboardType = this.props.keyboardType
-      ? this.props.keyboardType
-      : 'default';
-    const {container, text, content} = styles;
+    // const keyboardType = this.props.keyboardType
+    //   ? this.props.keyboardType
+    //   : 'default';
 
     return (
       <ItemWrapper>
-        <Text style={text}>{item.label}</Text>
-        <View style={container}>
-          <View style={content}>
-            <TextInput
-              style={styles.textInput}
-              value={hours}
-              label="Hours"
-              mode="outlined"
-              keyboardType={'numeric'}
-              multiline={false}
-              onChangeText={(number) => this.hoursChangeHandler(number)}
-            />
-          </View>
-          <View style={styles.content}>
-            <TextInput
-              style={styles.textInput}
-              value={minutes}
-              label="Minutes"
-              mode="outlined"
-              keyboardType={'numeric'}
-              multiline={false}
-              onChangeText={(number) => this.minutesChangeHandler(number)}
-            />
+        <View style={styles.topContainer}>
+          <Text style={commonStyles.text}>{item.label}</Text>
+          {item.mandatory === 1 ? (
+            <MandatoryField />
+          ) : (
+            <View style={commonStyles.spacing} />
+          )}
+          <View style={styles.container}>
+            <View style={styles.content}>
+              <TextInput
+                style={[styles.textInput, styles.left]}
+                value={hours}
+                label="Hours"
+                mode="outlined"
+                keyboardType={'numeric'}
+                multiline={false}
+                onChangeText={(number) => this.hoursChangeHandler(number)}
+              />
+            </View>
+            <View style={[styles.content, styles.right]}>
+              <TextInput
+                style={styles.textInput}
+                value={minutes}
+                label="Minutes"
+                mode="outlined"
+                keyboardType={'numeric'}
+                multiline={false}
+                onChangeText={(number) => this.minutesChangeHandler(number)}
+              />
+            </View>
           </View>
         </View>
+        <Divider />
       </ItemWrapper>
     );
   }

@@ -23,7 +23,7 @@ export default StyleSheet.create({
   box: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: spaceRegular,
+    marginHorizontal: spaceRegular,
   },
   toggle: {
     flex: 1,

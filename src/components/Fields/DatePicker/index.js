@@ -1,7 +1,8 @@
 import React, {useState, memo} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button, Divider} from 'react-native-paper';
+import {Button} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';

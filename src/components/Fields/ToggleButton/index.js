@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
-import MandatoryField from '../MandatoryField';
 import {Text, View, TouchableOpacity} from 'react-native';
+import {Divider} from 'react-native-elements';
 import {map, split} from 'ramda';
 
-//styles
+import {commonStyles} from '@styles/common';
+import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 
@@ -77,35 +78,45 @@ const ToggleButton = (props) => {
     setOption(option);
     updateFieldsValue({rank: rank, value: value[0].id});
   };
+
   return (
     <ItemWrapper>
-      <Text style={styles.label}>{label}</Text>
-      {mandatory === 1 ? <MandatoryField /> : null}
-      <View style={styles.container}>
-        {map((option) => {
-          let colorControl = _mapToColour(option.id);
-          const isSelectedOption = isSelected(option.name);
-          return (
-            <TouchableOpacity
-              key={id}
-              style={[
-                colorControl.button,
-                isSelectedOption
-                  ? colorControl.background
-                  : styles.whiteBackground,
-              ]}
-              onPress={() => onPress(option.name)}>
-              <Text
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.text}>{label}</Text>
+        {mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        <View style={styles.container}>
+          {map((option) => {
+            let colorControl = _mapToColour(option.id);
+            const isSelectedOption = isSelected(option.name);
+            return (
+              <TouchableOpacity
+                key={id}
                 style={[
-                  styles.text,
-                  isSelectedOption ? styles.whiteColor : colorControl.text,
-                ]}>
-                {option.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        }, dataOptions)}
+                  colorControl.button,
+                  isSelectedOption
+                    ? colorControl.background
+                    : styles.whiteBackground,
+                ]}
+                onPress={() => onPress(option.name)}>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={[
+                    styles.text,
+                    isSelectedOption ? styles.whiteColor : colorControl.text,
+                  ]}>
+                  {option.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          }, dataOptions)}
+        </View>
       </View>
+      <Divider />
     </ItemWrapper>
   );
 };

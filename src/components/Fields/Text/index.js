@@ -1,5 +1,6 @@
 import React, {useEffect, useState, memo} from 'react';
-import {TextInput, Divider} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import {Text, View} from 'react-native';
 
 import styles from './styles';

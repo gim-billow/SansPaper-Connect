@@ -2,7 +2,8 @@ import React, {useState, memo} from 'react';
 import {Alert, Modal, Text, View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple, Divider} from 'react-native-paper';
+import {Button, TouchableRipple} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './styles';

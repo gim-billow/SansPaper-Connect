@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {Divider} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import {connect} from 'react-redux';
@@ -12,7 +12,7 @@ import MandatoryField from '../MandatoryField';
 import {getQueryByOptions} from './helper';
 import {selectProjectValue} from 'selector/form';
 import R from 'ramda';
-import {commonStyles} from '../../../styles/common';
+import {commonStyles} from '@styles/common';
 
 class Select extends Component {
   state = {

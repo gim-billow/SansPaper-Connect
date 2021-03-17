@@ -1,30 +1,20 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
+import {superSmall, spaceMedium} from 'styles/space';
+import {lightGrey} from 'styles/colors';
 
 export default StyleSheet.create({
-  text: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
+  topContainer: {
+    marginVertical: spaceMedium,
   },
   container: {
-    alignItems: 'center',
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceSmall,
-    paddingBottom: spaceSmall,
   },
   content: {
-    flex: 0.5,
     borderWidth: 1,
-    borderColor: 'grey',
-    borderTopLeftRadius: 2,
-    borderTopRightRadius: 2,
-    borderBottomLeftRadius: 2,
-    borderBottomRightRadius: 2,
+    borderColor: lightGrey,
+    borderRadius: 2,
+    marginTop: superSmall,
   },
 });

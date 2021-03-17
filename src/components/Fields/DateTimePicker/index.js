@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Divider} from 'react-native-elements';
+
 import {
   saveDefaultTime,
   getDefaultTime,
@@ -12,6 +14,8 @@ import {
 } from './helper';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import MandatoryField from '../MandatoryField';
+import {commonStyles} from '@styles/common';
 
 const DateTimePicker = (props) => {
   const {item, updateFieldsValue} = props;
@@ -112,78 +116,88 @@ const DateTimePicker = (props) => {
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{item.label}</Text>
-      <View style={styles.container}>
-        <View style={styles.button}>
-          <Button
-            mode="contained"
-            style={
-              changeDateTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }
-            onPress={showDatePicker}>
-            <Text
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.text}>{item.label}</Text>
+        {item.mandatory === 1 ? (
+          <MandatoryField />
+        ) : (
+          <View style={commonStyles.spacing} />
+        )}
+        <View style={styles.container}>
+          <View style={[styles.button, styles.left]}>
+            <Button
+              mode="contained"
               style={
                 changeDateTheme === true
-                  ? styles.ChangeTextColor
-                  : styles.TextColor
-              }>
-              {dateLabel.toString()}
-            </Text>
-          </Button>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            date={new Date(displayDate)}
-            onConfirm={dateHandleConfirm}
-            onCancel={hideDatePicker}
-          />
-        </View>
-        <View style={styles.button}>
-          <Button
-            mode="contained"
-            style={
-              changeTimeTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }
-            onPress={showTimePicker}>
-            <Text
+                  ? styles.ChangeButtonColor
+                  : styles.buttonColor
+              }
+              onPress={showDatePicker}>
+              <Text
+                style={
+                  changeDateTheme === true
+                    ? styles.ChangeTextColor
+                    : styles.TextColor
+                }>
+                {dateLabel.toString()}
+              </Text>
+            </Button>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              date={new Date(displayDate)}
+              onConfirm={dateHandleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </View>
+          <View style={[styles.button, styles.right]}>
+            <Button
+              mode="contained"
               style={
                 changeTimeTheme === true
-                  ? styles.ChangeTextColor
-                  : styles.TextColor
-              }>
-              {timeLabel.toString()}
+                  ? styles.ChangeButtonColor
+                  : styles.buttonColor
+              }
+              onPress={showTimePicker}>
+              <Text
+                style={
+                  changeTimeTheme === true
+                    ? styles.ChangeTextColor
+                    : styles.TextColor
+                }>
+                {timeLabel.toString()}
+              </Text>
+            </Button>
+            <DateTimePickerModal
+              isVisible={isTimePickerVisible}
+              mode="time"
+              date={new Date(displayTime)}
+              headerTextIOS="Set a time"
+              onConfirm={timeHandleConfirm}
+              onCancel={hideTimePicker}
+            />
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.SetDefault}>
+            <Button
+              mode="contained"
+              style={styles.buttonColor}
+              onPress={updateDefaultTime}>
+              <Text style={styles.textSet}>set default</Text>
+            </Button>
+          </View>
+          <View style={styles.textSetWrapper}>
+            <Text style={styles.textSet}>
+              - set current {props.item.label.toLowerCase()} as default
             </Text>
-          </Button>
-          <DateTimePickerModal
-            isVisible={isTimePickerVisible}
-            mode="time"
-            date={new Date(displayTime)}
-            headerTextIOS="Set a time"
-            onConfirm={timeHandleConfirm}
-            onCancel={hideTimePicker}
-          />
+            <Text style={styles.textSet}>
+              - currently saved at {defaultTime}
+            </Text>
+          </View>
         </View>
       </View>
-      <View style={styles.container}>
-        <View style={styles.SetDefault}>
-          <Button
-            mode="contained"
-            style={styles.buttonColor}
-            onPress={updateDefaultTime}>
-            <Text style={styles.textSet}>set default</Text>
-          </Button>
-        </View>
-        <View>
-          <Text style={styles.textSet}>
-            - set current {props.item.label.toLowerCase()} as default
-          </Text>
-          <Text style={styles.textSet}>- currently saved at {defaultTime}</Text>
-        </View>
-      </View>
+      <Divider />
     </ItemWrapper>
   );
 };
