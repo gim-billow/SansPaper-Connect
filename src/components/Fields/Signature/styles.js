@@ -1,19 +1,31 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {spaceSmall, superSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular, small} from 'styles/font';
-import {lightRed, darkRed, white, superLightRed} from '@styles/colors';
-import {} from '../../../styles/space';
+import {small} from 'styles/font';
+import {
+  lightRed,
+  darkRed,
+  white,
+  superLightRed,
+  darkGrey,
+  lightGrey,
+} from '@styles/colors';
 
 export default StyleSheet.create({
   signatureColor: {
-    backgroundColor: superLightRed,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderStyle: 'dashed',
+    borderRadius: 5,
+    borderColor: lightGrey,
   },
   dimmedSingature: {
-    // position: 'absolute',
-    // backgroundColor: 'rgba(200, 200, 200, 0.8)',
-    // width: '100%',
-    // height: '100%',
-    // marginLeft: Platform.OS === 'android' ? 0 : 10,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    marginHorizontal: spaceRegular,
   },
   text: {
     color: lightRed,
@@ -25,9 +37,17 @@ export default StyleSheet.create({
   },
   container: {
     marginVertical: spaceMedium,
+    paddingVertical: spaceSmall,
+  },
+  signView: {
+    borderWidth: 1.5,
+    borderRadius: 5,
+    borderColor: lightGrey,
+    borderStyle: 'dashed',
+    marginHorizontal: spaceRegular,
   },
   droidSignature: {
-    marginHorizontal: spaceRegular,
+    flex: 1,
     height: 200,
   },
   signature: {

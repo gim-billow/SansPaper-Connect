@@ -12,7 +12,11 @@ import {
   selectOrganistation,
   selectUpviseTemplatePath,
 } from '@selector/sanspaper';
-import {selectFormByCurrentId, selectCurrentFormId} from '@selector/form';
+import {
+  selectFormByCurrentId,
+  selectCurrentFormId,
+  selectCurrentLinkedItems,
+} from '@selector/form';
 import {
   pushToLinkedItem,
   pushToFormFieldsScreen,
@@ -79,6 +83,7 @@ function* goToFormFieldsScreen({payload = {}}) {
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const currentFormInfo = yield select(selectFormByCurrentId);
+    const currentLinkedItems = yield select(selectCurrentLinkedItems);
 
     const fieldsPath = `${upviseTemplatePath}/${currentFormId}/upviseFields`;
     const currentFormFields = yield getFormFields({fieldsPath});
@@ -94,7 +99,7 @@ function* goToFormFieldsScreen({payload = {}}) {
       payload: currentForm,
     });
 
-    pushToFormFieldsScreen({componentId});
+    pushToFormFieldsScreen({componentId, currentForm, currentLinkedItems});
   } catch (error) {
     console.log('loadFormFields error', error);
   }

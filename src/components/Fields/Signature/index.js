@@ -71,7 +71,7 @@ const Signature = (props) => {
         )}
         <View>
           {Platform.OS === 'android' ? (
-            <View>
+            <View style={styles.signView}>
               <SignatureCapture
                 ref={(sign) => (refInput = sign)}
                 style={styles.droidSignature}
@@ -80,7 +80,6 @@ const Signature = (props) => {
                 saveImageFileInExtStorage={false}
                 showNativeButtons={false}
                 showTitleLabel={false}
-                backgroundColor="#ffb3b3"
                 viewMode={'portrait'}
               />
               {signatureSaved && <View style={styles.dimmedSingature} />}

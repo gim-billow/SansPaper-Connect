@@ -75,4 +75,13 @@ export default StyleSheet.create({
     height: 500,
     marginHorizontal: spaceRegular,
   },
+  dimmedSingature: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 80,
+    bottom: 60,
+    backgroundColor: 'transparent',
+    marginHorizontal: spaceRegular,
+  },
 });

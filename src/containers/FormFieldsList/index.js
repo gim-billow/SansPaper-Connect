@@ -75,19 +75,12 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      // <KeyboardAvoidingView
-      //   behavior={Platform.OS === 'ios' ? 'padding' : null}
-      //   keyboardVerticalOffset={120}
-      // >
-      // <View>
       <FlatList
         keyExtractor={this.keyExtractor}
         data={currentFormFields}
         renderItem={this.renderItem}
         scrollEnabled={scrollEnabled}
       />
-      // </View>
-      // </KeyboardAvoidingView>
     );
   }
 }
