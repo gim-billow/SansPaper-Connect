@@ -1,7 +1,9 @@
 //library
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
+
 import styles from './styles';
+import {red} from '@styles/colors';
 import FormList from '@containers/FormList/index';
 
 class FormScreen extends React.Component {
@@ -12,6 +14,11 @@ class FormScreen extends React.Component {
         title: {
           text: 'Forms',
         },
+      },
+      statusBar: {
+        visible: true,
+        backgroundColor: red,
+        styles: 'light',
       },
     };
     return option;

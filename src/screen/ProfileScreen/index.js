@@ -1,8 +1,9 @@
 //library
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import styles from './styles';
 import Profile from '../../components/Profile';
+import {red} from '@styles/colors';
 
 class ProfileScreen extends React.Component {
   static options = () => {
@@ -12,6 +13,11 @@ class ProfileScreen extends React.Component {
         title: {
           text: 'Profile',
         },
+      },
+      statusBar: {
+        visible: true,
+        backgroundColor: red,
+        styles: 'light',
       },
     };
     return option;

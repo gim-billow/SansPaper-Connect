@@ -2,39 +2,40 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, StyleSheet, Text} from 'react-native';
+import {View, FlatList, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
-
-// import MIcon from 'react-native-vector-icons/MaterialIcons';
 import memoize from 'memoize-one';
+
 import {ListItem, Icon} from 'react-native-elements';
+import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedFormList} from '@selector/form/index';
-import {updateCurrentFormId} from '@store/forms';
+import {updateCurrentFormId, updateFormList} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
+import {getUpviseTemplateForms} from './helper';
 import {Spinner} from 'native-base';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    // borderRadius: 20,
-  },
-  flex1: {
-    flex: 1,
-  },
-  searchbar: {
-    marginBottom: 20,
-  },
-});
+import styles from './styles';
 
 class FormList extends React.Component {
-  keyExtractor = (item, index) => index.toString();
-
   state = {
     searchKeyword: '',
+    refresh: false,
   };
+
+  wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  fetchUpdatedTemplates = async () => {
+    const {updateFormList} = this.props;
+    const forms = await getUpviseTemplateForms(this.props.orgPath);
+
+    updateFormList(forms);
+  };
+
+  keyExtractor = (item, index) => index.toString();
 
   onPress = (linked_table, form_id) => {
     const {
@@ -60,6 +61,15 @@ class FormList extends React.Component {
 
   handleOnChangeText = (text) => {
     this.setState({searchKeyword: text});
+  };
+
+  onRefresh = () => {
+    this.setState({refresh: true});
+
+    // get updated template forms
+    this.fetchUpdatedTemplates();
+
+    this.wait(2000).then(() => this.setState({refresh: false}));
   };
 
   renderItem = ({item}) => {
@@ -99,6 +109,8 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
           <Spinner color="grey" />
@@ -112,10 +124,12 @@ class FormList extends React.Component {
 
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,
+  orgPath: selectOrganistationPath,
 });
 
 export default connect(mapState, {
   goToLinkedItemScreen,
   updateCurrentFormId,
   goToFormFieldsScreen,
+  updateFormList,
 })(FormList);

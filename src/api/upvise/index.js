@@ -65,6 +65,17 @@ export const getUser = () => {
   }
 };
 
+export const fetchUserEmail = () => {
+  try {
+    const user = firebase.auth().currentUser;
+
+    return user.email.toString();
+  } catch (error) {
+    console.warn('Error getting user email', error);
+    return null;
+  }
+};
+
 const fetchSansPaperUser = async () => {
   try {
     const userid = getUser();

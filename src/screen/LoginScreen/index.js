@@ -18,6 +18,7 @@ import * as yup from 'yup';
 //styles
 import styles, {iconProps} from './styles';
 import {errorStyle} from 'styles/common';
+import {red} from 'styles/colors';
 
 //constants
 import {CommonImages} from 'constant/Images';
@@ -46,6 +47,11 @@ class LoginScreen extends React.Component {
         title: {
           text: 'Login',
         },
+      },
+      statusBar: {
+        visible: true,
+        backgroundColor: red,
+        styles: 'light',
       },
     };
     return option;

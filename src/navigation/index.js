@@ -1,8 +1,6 @@
 import {screens} from '@constant/ScreenConstants';
 import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {regular} from '@styles/font';
 

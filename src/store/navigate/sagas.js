@@ -21,6 +21,7 @@ import {
   pushToLinkedItem,
   pushToFormFieldsScreen,
 } from '@navigation/componentNavigation';
+import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 
 function* goToLogin() {
   try {
@@ -40,6 +41,7 @@ function* goToMainScreen() {
 
 function* goToLinkedItemScreen({payload = {}}) {
   try {
+    showActivityIndicator();
     const {linkedTable} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -71,6 +73,8 @@ function* goToLinkedItemScreen({payload = {}}) {
         linkedItemName,
       },
     };
+
+    dismissActivityIndicator();
     pushToLinkedItem(linkedItemPayload);
   } catch (error) {
     console.log('getAllLinkedItems error', error);
@@ -79,6 +83,7 @@ function* goToLinkedItemScreen({payload = {}}) {
 
 function* goToFormFieldsScreen({payload = {}}) {
   try {
+    showActivityIndicator();
     const {linkedItemId, componentId} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -99,6 +104,7 @@ function* goToFormFieldsScreen({payload = {}}) {
       payload: currentForm,
     });
 
+    dismissActivityIndicator();
     pushToFormFieldsScreen({componentId, currentForm, currentLinkedItems});
   } catch (error) {
     console.log('loadFormFields error', error);

@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 
 import LinkedItemsList from '@containers/LinkedItemsList';
 import styles from './styles';
+import {red} from '@styles/colors';
 
 class LinkedItems extends React.Component {
   static options = () => {
@@ -14,6 +15,11 @@ class LinkedItems extends React.Component {
         backButton: {
           showTitle: false,
         },
+      },
+      statusBar: {
+        visible: true,
+        backgroundColor: red,
+        styles: 'light',
       },
     };
     return option;
