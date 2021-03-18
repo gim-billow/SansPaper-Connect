@@ -31,3 +31,8 @@ export const updateFormFieldValue = (payload) => ({
   type: FORM_ACTION.UPDATE_FORM_FIELD_VALUE,
   payload,
 });
+
+export const updateFormList = (payload) => ({
+  type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST,
+  payload,
+});

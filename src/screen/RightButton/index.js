@@ -1,13 +1,13 @@
 import React from 'react';
-import {filter, has} from 'ramda';
+import {filter} from 'ramda';
 import {TouchableOpacity, Alert} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Icon} from 'react-native-elements';
 import {Navigation} from 'react-native-navigation';
 import {screens} from '@constant/ScreenConstants';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 //redux,selector
+import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {setCurrentForm} from 'store/forms';
 import {selectCurrentForm} from 'selector/form';
 // upvise api
@@ -20,6 +20,12 @@ class RightButton extends React.Component {
   };
 
   submit = async (form) => {
+    console.log('forms here', form.fields);
+
+    let startDateTime = null;
+    let finishDateTime = null;
+
+    showActivityIndicator();
     const requiredFields = filter(
       (field) => field.mandatory === 1,
       form.fields,
@@ -34,26 +40,59 @@ class RightButton extends React.Component {
     });
 
     if (proceed.includes(false)) {
-      this.renderMandatoryAlert();
+      dismissActivityIndicator();
+      this.renderAlert();
+      return;
+    }
+
+    // check start/finish date time
+    for (let item of form.fields) {
+      if (item.type === 'datetime') {
+        if (item.label.toLowerCase().includes('start')) {
+          startDateTime = item.value;
+        }
+
+        if (item.label.toLowerCase().includes('finish')) {
+          finishDateTime = item.value;
+        }
+      }
+    }
+
+    // alert if finish date time is greater than start date time
+    if (
+      startDateTime &&
+      finishDateTime &&
+      finishDateTime - startDateTime <= 0
+    ) {
+      dismissActivityIndicator();
+      this.renderAlert('datetimeError');
       return;
     }
 
     let isSubmitted = await submitUpviseForm(form);
 
     if (isSubmitted) {
-      Navigation.popTo(screens.FormScreen);
+      dismissActivityIndicator();
+      Navigation.popToRoot(screens.FormScreen);
       this.setState({submitting: false});
       Alert.alert('Alert', 'Form submitted');
     } else {
+      dismissActivityIndicator();
       this.setState({submitting: false});
       Alert.alert('Alert', 'Form not submitted');
     }
   };
 
-  renderMandatoryAlert = () =>
-    Alert.alert(
+  renderAlert = (type = 'mandatoryError') => {
+    let message = 'Please complete all mandatory fields before submitting.';
+
+    if (type === 'datetimeError') {
+      message = 'Finish date and time has to be after Start date and time.';
+    }
+
+    return Alert.alert(
       'Alert',
-      'Please complete all mandatory fields before submitting.',
+      message,
       [
         {
           text: 'OK',
@@ -65,6 +104,7 @@ class RightButton extends React.Component {
       ],
       {cancelable: false},
     );
+  };
 
   render() {
     const {currentForm} = this.props;

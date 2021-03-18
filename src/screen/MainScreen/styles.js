@@ -11,4 +11,7 @@ export default StyleSheet.create({
     width: '60%',
     marginBottom: 20,
   },
+  scrollView: {
+    flex: 1,
+  },
 });

@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {find, propEq} from 'ramda';
 
 import styles from './styles';
-import {white} from '@styles/colors';
+import {white, red} from '@styles/colors';
 import FormFieldsList from '@containers/FormFieldsList';
 import {screens} from '@constant/ScreenConstants';
 
@@ -22,9 +22,21 @@ class FormFieldsScreen extends React.Component {
 }
 
 FormFieldsScreen.options = (props) => {
+  let subForm = {};
   const {name, linkedid} = props.form;
-  const items = props.items;
-  const subForm = find(propEq('id', linkedid[0]))(items);
+
+  if (linkedid) {
+    const items = props.items;
+    let linkedId = null;
+
+    if (Array.isArray(linkedid)) {
+      linkedId = linkedid[0];
+    } else {
+      linkedId = linkedid;
+    }
+
+    subForm = find(propEq('id', linkedId))(items);
+  }
 
   return {
     topBar: {
@@ -33,7 +45,7 @@ FormFieldsScreen.options = (props) => {
         text: name,
       },
       subtitle: {
-        text: subForm.name,
+        text: subForm.hasOwnProperty('name') ? subForm.name : '',
         fontSize: 13,
         color: white,
       },
@@ -48,6 +60,11 @@ FormFieldsScreen.options = (props) => {
           },
         },
       ],
+    },
+    statusBar: {
+      visible: true,
+      backgroundColor: red,
+      styles: 'light',
     },
   };
 };
