@@ -31,9 +31,10 @@ import IconTextInput from '@components/IconTextInput';
 import {capitalize} from '@util/string';
 
 //redux
-import {loginUser} from '@store/user';
-import {selectUserStatus} from '@selector/user';
+import {loginUser, resetLoginCode} from '@store/user';
+import {selectUserStatus, selectLoginCode} from '@selector/user';
 import {init} from '@store/common';
+import {Alert} from 'react-native';
 
 const loginSchema = yup.object().shape({
   username: yup.string().required().email(),
@@ -140,53 +141,76 @@ class LoginScreen extends React.Component {
     }
   };
 
+  alertLogin = () =>
+    Alert.alert(
+      'Login Error',
+      'Username or Password incorrect',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            this.props.resetLoginCode();
+          },
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+
   render() {
     const {error, changeLogo} = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
+    const {loginCode} = this.props;
 
     return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={behavior}
-        keyboardVerticalOffset="150">
-        <Image
-          style={styles.logo}
-          source={mainLogo}
-          resizeMode="contain"
-          resizeMethod="scale"
-        />
-        <View style={styles.errorBox}>
-          {error !== '' ? (
-            <Text style={errorStyle.text}>{error}</Text>
-          ) : (
-            <View />
-          )}
-        </View>
-        <View style={styles.box}>
-          <IconTextInput
-            onChangeText={this.onUserNameChange}
-            iconProps={{...iconProps, name: 'user'}}
-            placeHolder="E-Mail Address"
+      <>
+        {loginCode && loginCode !== 'success' ? this.alertLogin() : null}
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={behavior}
+          keyboardVerticalOffset="150">
+          <Image
+            style={styles.logo}
+            source={mainLogo}
+            resizeMode="contain"
+            resizeMethod="scale"
           />
-          <IconTextInput
-            onChangeText={this.onPasswordChange}
-            iconProps={{...iconProps, name: 'lock'}}
-            iconEyeProps={{...iconProps, name: this.state.icon}}
-            placeHolder="Password"
-            secureTextEntry={this.state.securePassword}
-            onPressIcon={this.onChangeIcon}
-          />
-        </View>
-        <TouchableOpacity style={styles.button} onPress={this.onLoginPress}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+          <View style={styles.errorBox}>
+            {error !== '' ? (
+              <Text style={errorStyle.text}>{error}</Text>
+            ) : (
+              <View />
+            )}
+          </View>
+          <View style={styles.box}>
+            <IconTextInput
+              onChangeText={this.onUserNameChange}
+              iconProps={{...iconProps, name: 'user'}}
+              placeHolder="E-Mail Address"
+            />
+            <IconTextInput
+              onChangeText={this.onPasswordChange}
+              iconProps={{...iconProps, name: 'lock'}}
+              iconEyeProps={{...iconProps, name: this.state.icon}}
+              placeHolder="Password"
+              secureTextEntry={this.state.securePassword}
+              onPressIcon={this.onChangeIcon}
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={this.onLoginPress}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </>
     );
   }
 }
 
 const mapState = createStructuredSelector({
   isUserLogin: selectUserStatus,
+  loginCode: selectLoginCode,
 });
 
-export default connect(mapState, {loginUser, init})(LoginScreen);
+export default connect(mapState, {loginUser, init, resetLoginCode})(
+  LoginScreen,
+);

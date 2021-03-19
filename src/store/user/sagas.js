@@ -9,7 +9,9 @@ function* loginUser({payload}) {
     // login the user
     yield login(payload);
     dismissActivityIndicator();
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
   } catch (error) {
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
     console.log('loginUser error', error.code);
     dismissActivityIndicator();
   }

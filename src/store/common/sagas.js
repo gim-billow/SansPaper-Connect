@@ -1,5 +1,5 @@
 import {all, takeLatest, put} from 'redux-saga/effects';
-import {map} from 'ramda';
+import R from 'ramda';
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
 import {showMainScreen} from '@navigation';
@@ -29,12 +29,17 @@ function* init({payload}) {
 
     //get latest news from db
     const newsList = yield getOrgNews(`${organisationPath}/announcements`);
+    const diff = function (a, b) {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    };
+
+    const sortedDate = R.sort(diff, newsList);
     // FIXME:
     // const htmlNews = map(
     //   (newsItem) => '<h3>' + newsItem.title + '</h3>' + newsItem.news,
     //   newsList,
     // );
-    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: newsList});
+    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: sortedDate});
     showMainScreen();
 
     yield put({
