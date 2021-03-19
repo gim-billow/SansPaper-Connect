@@ -171,7 +171,7 @@ class DrawingBoard extends React.Component {
                 };
               }}
               onSketchSaved={(success, path) => this.onSave(success, path)}
-              onClearPressed={() => this.onClear()}
+              // onClearPressed={() => this.onClear()}
             />
           </View>
           {this.state.signatureSaved && <View style={styles.dimmedSingature} />}

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as React from 'react';
+import React, {useState} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-elements';
-import {map, split} from 'ramda';
+import {map, split, find, propEq, prop} from 'ramda';
 
 import {commonStyles} from '@styles/common';
 import {uniqueKey} from '@util/general';
@@ -45,6 +45,7 @@ const _mapToColour = (id) => {
 };
 
 const ToggleButton = (props) => {
+  const [selected, setOption] = useState();
   const {item, id, updateFieldsValue} = props;
   const {label, seloptions, rank, mandatory} = item;
 
@@ -63,13 +64,21 @@ const ToggleButton = (props) => {
     };
   }, split('|', seloptions));
 
-  const [selected, setOption] = React.useState(options[0]);
   const isSelected = (option) => {
     return option === selected;
   };
 
   React.useEffect(() => {
-    updateFieldsValue({rank: rank, value: dataOptions[0].id});
+    const {value} = props.item;
+
+    if (value !== '') {
+      const defaultVal = find(propEq('id', value))(dataOptions);
+      setOption(defaultVal.name);
+      updateFieldsValue({rank: rank, value: value});
+      return;
+    }
+
+    updateFieldsValue({rank: rank, value: ''});
   }, []);
 
   const onPress = (option) => {

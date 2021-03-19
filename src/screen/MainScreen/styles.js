@@ -1,6 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 import {backgroundColor, white, darkGrey, red, lightGrey} from '@styles/colors';
-import {spaceRegular, spaceSmall, spaceMedium} from '@styles/space';
+import {spaceRegular, spaceSmall, spaceMedium, superSmall} from '@styles/space';
 import {regular, medium, small, large} from '@styles/font';
 
 export default StyleSheet.create({
@@ -18,10 +18,16 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
   latestNews: {
+    alignSelf: 'flex-start',
     marginHorizontal: spaceRegular,
     marginTop: spaceRegular,
     backgroundColor: red,
     borderRadius: 5,
+  },
+  newsText: {
+    color: white,
+    padding: superSmall,
+    fontSize: small,
   },
   header: {
     flexDirection: 'row',
@@ -33,11 +39,6 @@ export default StyleSheet.create({
     fontSize: medium,
     fontWeight: 'bold',
     color: darkGrey,
-  },
-  newsText: {
-    padding: spaceSmall,
-    color: white,
-    fontSize: regular,
   },
   divider: {
     marginBottom: spaceSmall,

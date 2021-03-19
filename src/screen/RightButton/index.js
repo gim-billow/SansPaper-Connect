@@ -20,8 +20,6 @@ class RightButton extends React.Component {
   };
 
   submit = async (form) => {
-    console.log('forms here', form.fields);
-
     let startDateTime = null;
     let finishDateTime = null;
 
@@ -69,6 +67,69 @@ class RightButton extends React.Component {
       return;
     }
 
+    // if more than 20 hours
+    if ((finishDateTime - startDateTime) / 60 / 60 / 1000 >= 20) {
+      dismissActivityIndicator();
+      this.renderAlert('hoursExceededError', form);
+      return;
+    }
+
+    this.onSubmit(form);
+  };
+
+  renderAlert = (type = 'mandatoryError', form = null) => {
+    let message = '';
+
+    switch (type) {
+      case 'mandatoryError':
+        message = 'Please complete all mandatory fields before submitting.';
+        break;
+      case 'datetimeError':
+        message = 'Finish date and time has to be after Start date and time.';
+        break;
+      case 'hoursExceededError':
+        message =
+          'Total time is more than 20 hrs, do you still wish to submit?';
+        break;
+      default:
+        message = 'Something went wrong with submission';
+        break;
+    }
+
+    return Alert.alert(
+      'Alert',
+      message,
+      type === 'hoursExceededError'
+        ? [
+            {
+              text: 'No',
+              onPress: () => {
+                this.setState({submitting: false});
+              },
+              style: 'cancel',
+            },
+            {
+              text: 'Yes',
+              onPress: () => {
+                showActivityIndicator();
+                this.onSubmit(form);
+              },
+            },
+          ]
+        : [
+            {
+              text: 'Ok',
+              onPress: () => {
+                this.setState({submitting: false});
+              },
+              style: 'cancel',
+            },
+          ],
+      {cancelable: false},
+    );
+  };
+
+  onSubmit = async (form) => {
     let isSubmitted = await submitUpviseForm(form);
 
     if (isSubmitted) {
@@ -81,29 +142,6 @@ class RightButton extends React.Component {
       this.setState({submitting: false});
       Alert.alert('Alert', 'Form not submitted');
     }
-  };
-
-  renderAlert = (type = 'mandatoryError') => {
-    let message = 'Please complete all mandatory fields before submitting.';
-
-    if (type === 'datetimeError') {
-      message = 'Finish date and time has to be after Start date and time.';
-    }
-
-    return Alert.alert(
-      'Alert',
-      message,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.setState({submitting: false});
-          },
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
   };
 
   render() {

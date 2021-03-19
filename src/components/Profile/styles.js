@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
+import {StyleSheet, Platform} from 'react-native';
+import {spaceMedium, spaceRegular} from 'styles/space';
 import {regular} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {darkGrey} from '@styles/colors';
 
 export default StyleSheet.create({
   userIcon: {
@@ -11,6 +11,12 @@ export default StyleSheet.create({
   text: {
     fontSize: regular,
     color: 'gray',
+  },
+  subText: {
+    textAlign: 'center',
+    color: darkGrey,
+    fontSize: regular,
+    marginHorizontal: spaceMedium,
   },
   nametext: {
     fontSize: 25,
@@ -56,16 +62,19 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 40,
+    paddingVertical: 20,
     borderBottomWidth: 0.4,
     borderColor: 'gray',
-    height: 90,
+  },
+  pickerMargin: {
+    marginLeft: Platform.OS === 'ios' ? 5 : 15,
   },
   logoutContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 40,
-    height: 90,
-    borderBottomWidth: 0.4,
+    paddingVertical: 10,
+    borderTopWidth: 0.4,
     borderColor: 'gray',
   },
   centeredView: {
