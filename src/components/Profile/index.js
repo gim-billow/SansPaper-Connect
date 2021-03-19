@@ -40,7 +40,7 @@ import {createStructuredSelector} from 'reselect';
 //redux, selector
 import {logoutUser} from '@store/user';
 import {selectEmail} from 'selector/user';
-import {selectUser} from 'selector/sanspaper';
+import {selectUser, selectOrganistation} from 'selector/sanspaper';
 
 class Profile extends Component {
   state = {
@@ -92,13 +92,18 @@ class Profile extends Component {
     );
   };
   render() {
-    const {email, user} = this.props;
+    const {email, user, organization} = this.props;
     const name = user?._data?.name;
     return (
       <View style={styles.container}>
-        <ScrollView>
+        {/* <ScrollView> */}
+        <View
+          style={{
+            flex: 1,
+          }}>
           <View style={styles.userContainer}>
             <Text style={styles.nametext}>{name}</Text>
+            <Text style={styles.subText}>{organization.name}</Text>
             {/*
             <EvilIcons5 name="user" size={60} style={styles.userIcon} />
             <View style={{flexDirection: 'row', paddingBottom: 2}}>
@@ -139,6 +144,7 @@ class Profile extends Component {
           <View style={styles.rowContainer}>
             <MaterialIcons name="settings" size={30} color="green" />
             <Picker
+              style={styles.pickerMargin}
               note
               mode="dropdown"
               placeholder="Font size"
@@ -170,46 +176,50 @@ class Profile extends Component {
               </Text>
             </View>
           </View>
-          <TouchableOpacity onPress={this.onPressLogoutHandler}>
-            <View style={styles.logoutContainer}>
-              <LogoutIcon width={30} height={40} color="red" />
-              <Text style={[styles.textView, styles.labeltext]}>Log out</Text>
-            </View>
-          </TouchableOpacity>
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={this.state.visible}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text
-                  style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 30}}>
-                  Change Password
-                </Text>
-                <Text style={styles.passwordTextStyle}>Old Password</Text>
-                <TextInput style={styles.textInput} />
-                <Text style={styles.passwordTextStyle}>New Password</Text>
-                <TextInput style={styles.textInput} />
-                <Text style={styles.passwordTextStyle}>Retype Password</Text>
-                <TextInput style={styles.textInput} />
-                <View style={{flexDirection: 'row', paddingTop: 20}}>
-                  <Button
-                    style={{marginLeft: 70}}
-                    mode="contained"
-                    onPress={this.hideModal}>
-                    <Text>Cancel</Text>
-                  </Button>
-                  <Button
-                    style={{marginLeft: 20}}
-                    mode="contained"
-                    onPress={() => {}}>
-                    <Text>Confirm</Text>
-                  </Button>
-                </View>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+            <TouchableOpacity onPress={this.onPressLogoutHandler}>
+              <View style={styles.logoutContainer}>
+                <LogoutIcon width={30} height={40} color="red" />
+                <Text style={[styles.textView, styles.labeltext]}>Log out</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.visible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text
+                style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 30}}>
+                Change Password
+              </Text>
+              <Text style={styles.passwordTextStyle}>Old Password</Text>
+              <TextInput style={styles.textInput} />
+              <Text style={styles.passwordTextStyle}>New Password</Text>
+              <TextInput style={styles.textInput} />
+              <Text style={styles.passwordTextStyle}>Retype Password</Text>
+              <TextInput style={styles.textInput} />
+              <View style={{flexDirection: 'row', paddingTop: 20}}>
+                <Button
+                  style={{marginLeft: 70}}
+                  mode="contained"
+                  onPress={this.hideModal}>
+                  <Text>Cancel</Text>
+                </Button>
+                <Button
+                  style={{marginLeft: 20}}
+                  mode="contained"
+                  onPress={() => {}}>
+                  <Text>Confirm</Text>
+                </Button>
               </View>
             </View>
-          </Modal>
-        </ScrollView>
+          </View>
+        </Modal>
+        {/* </ScrollView> */}
       </View>
     );
   }
@@ -218,6 +228,7 @@ class Profile extends Component {
 const mapState = createStructuredSelector({
   email: selectEmail,
   user: selectUser,
+  organization: selectOrganistation,
 });
 
 export default connect(mapState, {logoutUser})(Profile);

@@ -87,6 +87,11 @@ class MainScreen extends React.Component {
     return (
       <>
         <View style={styles.newsContainer}>
+          {/* {index === 0 ? (
+            <View style={styles.latestNews}>
+              <Text style={styles.newsText}>Latest announcement</Text>
+            </View>
+          ) : null} */}
           <Markdown style={styles}>
             {!this.state.showMore[index]
               ? limitText(item.announcement, 170)
@@ -113,7 +118,8 @@ class MainScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Top News for Today</Text>
-          <Icon name="search" type="font-awesome" />
+          {/* TODO: add search functionality
+          <Icon name="search" type="font-awesome" /> */}
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}

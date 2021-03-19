@@ -34,6 +34,7 @@ class Select extends Component {
       organization,
       projectValue,
     );
+
     this.updateSetOptions(options, [item.value]);
   }
 

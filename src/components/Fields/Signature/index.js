@@ -1,7 +1,8 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, createRef, useRef} from 'react';
 import {View, Text, Platform} from 'react-native';
 import {Divider} from 'react-native-elements';
-import SignaturePad from 'react-native-signature-pad'; // ios
+// import SignaturePad from 'react-native-signature-pad'; // ios
+import SignatureScreen from 'react-native-signature-canvas'; // ios
 import SignatureCapture from 'react-native-signature-capture'; // android
 import {Button} from 'react-native-paper';
 
@@ -12,23 +13,24 @@ import {commonStyles} from '@styles/common';
 
 const Signature = (props) => {
   let refInput = createRef();
+  const refInputIOS = useRef();
   const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
-  const [signature, setSignature] = useState('');
+  // const [signature, setSignature] = useState('');
   const [signatureSaved, setSignaturesSaved] = useState(false);
   const [show, setShow] = useState(true);
   const [changeTheme, setChangeTheme] = useState(false);
 
-  const signaturePadError = (error) => {
-    console.error(error);
-  };
+  // const signaturePadError = (error) => {
+  //   console.error(error);
+  // };
 
   const signaturePadClear = () => {
-    // if (Platform.OS === 'android') {
-    //   refInput.resetImage();
-    // }
-
-    refInput.resetImage();
+    if (Platform.OS === 'android') {
+      refInput.resetImage();
+    } else {
+      refInputIOS.current.clearSignature();
+    }
 
     setChangeTheme(false);
     setShow(false);
@@ -40,28 +42,60 @@ const Signature = (props) => {
     setSignaturesSaved(false);
   };
 
-  const signaturePadChange = ({base64DataUrl}) => {
-    setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
-  };
+  // const signaturePadChange = ({base64DataUrl}) => {
+  //   setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
+  // };
 
   const signaturePadSave = () => {
     setChangeTheme(true);
-    // if (Platform.OS === 'android') {
-    //   refInput.saveImage();
-    // } else {
+    if (Platform.OS === 'android') {
+      refInput.saveImage();
+    } else if (Platform.OS === 'ios') {
+      refInputIOS.current.readSignature();
+    }
+    // else {
     //   updateFieldsValue({rank: rank, value: signature});
     // }
-    // setSignaturesSaved(true);
-    refInput.saveImage();
+    setSignaturesSaved(true);
   };
 
   const _onSaveEvent = (result) => {
-    updateFieldsValue({rank: rank, value: result.encoded});
+    if (Platform.OS === 'android') {
+      updateFieldsValue({rank: rank, value: result.encoded});
+    } else {
+      const base64Img = result.replace('data:image/png;base64,', '');
+      updateFieldsValue({rank: rank, value: base64Img});
+    }
+  };
+
+  const onBeginSign = () => {
+    props.updateScrollEnabled(false);
+  };
+
+  const onEndSign = () => {
+    props.updateScrollEnabled(true);
   };
 
   const _onDragEvent = (data) => {
     // console.log(data);
   };
+
+  const iosStyle = `
+    .m-signature-pad {
+      position: absolute;
+      border: none;
+      box-shadow: none;
+    }
+
+    .m-signature-pad--body {
+      border: none;
+    }
+
+    .m-signature-pad--body canvas {
+      border: 1.5px dashed #bfbfbf;
+      box-shadow: none;
+    }
+  `;
 
   return (
     <ItemWrapper>
@@ -88,29 +122,32 @@ const Signature = (props) => {
               {signatureSaved && <View style={styles.dimmedSingature} />}
             </View>
           ) : (
-            /* <View style={styles.signature}>
-              {show ? (
-                <SignaturePad
+            <View style={styles.signature}>
+              <SignatureScreen
+                ref={refInputIOS}
+                onBegin={onBeginSign}
+                onEnd={onEndSign}
+                backgroundColor="#ffffff"
+                onOK={_onSaveEvent}
+                webStyle={iosStyle}
+              />
+              {/* {show ? (
+                <SignatureScreen
+                  ref={refInputIOS}
+                  onBegin={onBeginSign}
+                  onEnd={onEndSign}
+                  backgroundColor="#ffffff"
+                  onOK={_onSaveEvent}
+                  webStyle={iosStyle}
+                />
+              ) : <SignaturePad
                   onError={signaturePadError}
                   onChange={signaturePadChange}
                   style={styles.signatureColor}
                   resizeHeight={200}
                   resizeWidth={300}
                 />
-              ) : null}
-              {signatureSaved && <View style={styles.dimmedSingature} />}
-            </View> */
-            <View style={styles.signView}>
-              <SignatureCapture
-                ref={(sign) => (refInput = sign)}
-                style={styles.droidSignature}
-                onSaveEvent={_onSaveEvent}
-                onDragEvent={_onDragEvent}
-                saveImageFileInExtStorage={false}
-                showNativeButtons={false}
-                showTitleLabel={false}
-                viewMode={'portrait'}
-              />
+              null} */}
               {signatureSaved && <View style={styles.dimmedSingature} />}
             </View>
           )}
