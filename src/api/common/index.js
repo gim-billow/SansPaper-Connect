@@ -6,7 +6,6 @@ export const getOrgNews = async (organizationPath) => {
     const listNews = await firebase
       .firestore()
       .collection(organizationPath)
-      .orderBy('date')
       .get();
 
     for (let item of listNews.docs) {

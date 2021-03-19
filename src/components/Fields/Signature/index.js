@@ -24,9 +24,11 @@ const Signature = (props) => {
   };
 
   const signaturePadClear = () => {
-    if (Platform.OS === 'android') {
-      refInput.resetImage();
-    }
+    // if (Platform.OS === 'android') {
+    //   refInput.resetImage();
+    // }
+
+    refInput.resetImage();
 
     setChangeTheme(false);
     setShow(false);
@@ -44,12 +46,13 @@ const Signature = (props) => {
 
   const signaturePadSave = () => {
     setChangeTheme(true);
-    if (Platform.OS === 'android') {
-      refInput.saveImage();
-    } else {
-      updateFieldsValue({rank: rank, value: signature});
-    }
-    setSignaturesSaved(true);
+    // if (Platform.OS === 'android') {
+    //   refInput.saveImage();
+    // } else {
+    //   updateFieldsValue({rank: rank, value: signature});
+    // }
+    // setSignaturesSaved(true);
+    refInput.saveImage();
   };
 
   const _onSaveEvent = (result) => {
@@ -85,7 +88,7 @@ const Signature = (props) => {
               {signatureSaved && <View style={styles.dimmedSingature} />}
             </View>
           ) : (
-            <View style={styles.signature}>
+            /* <View style={styles.signature}>
               {show ? (
                 <SignaturePad
                   onError={signaturePadError}
@@ -95,6 +98,19 @@ const Signature = (props) => {
                   resizeWidth={300}
                 />
               ) : null}
+              {signatureSaved && <View style={styles.dimmedSingature} />}
+            </View> */
+            <View style={styles.signView}>
+              <SignatureCapture
+                ref={(sign) => (refInput = sign)}
+                style={styles.droidSignature}
+                onSaveEvent={_onSaveEvent}
+                onDragEvent={_onDragEvent}
+                saveImageFileInExtStorage={false}
+                showNativeButtons={false}
+                showTitleLabel={false}
+                viewMode={'portrait'}
+              />
               {signatureSaved && <View style={styles.dimmedSingature} />}
             </View>
           )}

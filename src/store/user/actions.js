@@ -1,6 +1,7 @@
 export const USER_ACTIONS = {
   LOGIN: 'userActions/LOGIN',
   LOGOUT: 'userActions/LOGOUT',
+  LOGIN_CODE: 'userActions/LOGIN_CODE',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -21,4 +22,9 @@ export const loginUser = (payload) => ({
 export const logoutUser = () => ({
   type: USER_ACTIONS.LOGOUT,
   payload: {status: false, email: '', uid: ''},
+});
+
+export const resetLoginCode = () => ({
+  type: USER_ACTIONS.LOGIN_CODE,
+  payload: null,
 });
