@@ -15,6 +15,9 @@ export const selectCurrentForm = (state) => state.formReducer.currentForm;
 export const selectScrollToMandatory = (state) =>
   state.formReducer.scrollToMandatory;
 
+export const selectSubmitTriggered = (state) =>
+  state.formReducer.submitTriggered;
+
 export const selectSortedFormList = createSelector(selectFormList, (formList) =>
   R.pipe(
     R.sortBy(R.compose(R.toLower, R.prop('name'))),
@@ -36,6 +39,27 @@ export const selectCurrentFormUnfillMandatoryFields = createSelector(
 export const selectProjectValue = createSelector(
   selectCurrentFormFields,
   (fields) => (fields && fields.length > 0 ? fields[0].value : ''),
+);
+
+export const selectStartAndFinishDate = createSelector(
+  selectCurrentFormFields,
+  (fields) => {
+    // check start/finish date time
+    let startDateTime = '';
+    let finishDateTime = '';
+    for (let item of fields) {
+      if (item.type === 'datetime') {
+        if (item.label.toLowerCase().includes('start')) {
+          startDateTime = item.value;
+        }
+
+        if (item.label.toLowerCase().includes('finish')) {
+          finishDateTime = item.value;
+        }
+      }
+    }
+    return {startDateTime, finishDateTime};
+  },
 );
 
 export const selectFormByCurrentId = createSelector(

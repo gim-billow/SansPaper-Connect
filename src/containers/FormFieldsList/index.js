@@ -16,6 +16,7 @@ import {
   selectCurrentFormId,
   selectCurrentFormFields,
   selectScrollToMandatory,
+  selectSubmitTriggered,
 } from 'selector/form';
 
 //constants
@@ -31,7 +32,8 @@ class FormFieldsList extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.scrollToMandatory !== this.props.scrollToMandatory) {
+    const {submitTriggered, scrollToMandatory} = this.props;
+    if (prevProps.submitTriggered !== submitTriggered && scrollToMandatory) {
       this.scrollToIndex(this.props.scrollToMandatory);
     }
   }
@@ -112,6 +114,7 @@ const mapState = createStructuredSelector({
   currentFormId: selectCurrentFormId,
   currentFormFields: selectCurrentFormFields,
   scrollToMandatory: selectScrollToMandatory,
+  submitTriggered: selectSubmitTriggered,
 });
 
 export default connect(mapState, {setCurrentForm, updateFormFieldValue})(

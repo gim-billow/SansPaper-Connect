@@ -7,6 +7,7 @@ const INIT_STATE = {
     fields: [],
   },
   scrollToMandatory: null,
+  submitTriggered: 0,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -42,6 +43,11 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_SCROLL_TO_MANDATORY: {
       return produce(state, (draftState) => {
         draftState.scrollToMandatory = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_SUBMIT_TRIGGERED: {
+      return produce(state, (draftState) => {
+        draftState.submitTriggered = state.submitTriggered + 1;
       });
     }
     default:

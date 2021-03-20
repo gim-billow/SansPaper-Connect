@@ -11,12 +11,17 @@ import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {setCurrentForm} from 'store/forms';
 import {
   selectCurrentForm,
+  selectStartAndFinishDate,
   selectCurrentFormUnfillMandatoryFields,
 } from 'selector/form';
 // upvise api
 import {submitUpviseForm} from '../../api/upvise';
-import {Platform} from 'react-native';
-import {updateScrollToMandatory} from '../../store/forms/actions';
+import {
+  updateScrollToMandatory,
+  updateSubmitTriggered,
+} from '../../store/forms/actions';
+import AlertMessages from './constant';
+import styles from './styles';
 
 class RightButton extends React.Component {
   state = {
@@ -24,31 +29,22 @@ class RightButton extends React.Component {
   };
 
   submit = async (form) => {
-    let startDateTime = null;
-    let finishDateTime = null;
-
-    const {unfilledMandatoryFields, updateScrollToMandatory} = this.props;
+    const {
+      unfilledMandatoryFields,
+      updateScrollToMandatory,
+      startAndFinishDateTime,
+      updateSubmitTriggered,
+    } = this.props;
+    const {startDateTime, finishDateTime} = startAndFinishDateTime;
     showActivityIndicator();
 
     // check if there is an empty value in a mandatory field
     if (unfilledMandatoryFields.length > 0) {
       dismissActivityIndicator();
+      updateSubmitTriggered();
       updateScrollToMandatory(unfilledMandatoryFields[0].rank);
-      this.renderAlert();
+      this.renderAlert('mandatoryError');
       return;
-    }
-
-    // check start/finish date time
-    for (let item of form.fields) {
-      if (item.type === 'datetime') {
-        if (item.label.toLowerCase().includes('start')) {
-          startDateTime = item.value;
-        }
-
-        if (item.label.toLowerCase().includes('finish')) {
-          finishDateTime = item.value;
-        }
-      }
     }
 
     // alert if finish date time is greater than start date time
@@ -72,24 +68,8 @@ class RightButton extends React.Component {
     this.onSubmit(form);
   };
 
-  renderAlert = (type = 'mandatoryError', form = null) => {
-    let message = '';
-
-    switch (type) {
-      case 'mandatoryError':
-        message = 'Please complete all mandatory fields before submitting.';
-        break;
-      case 'datetimeError':
-        message = 'Finish date and time has to be after Start date and time.';
-        break;
-      case 'hoursExceededError':
-        message =
-          'Total time is more than 20 hrs, do you still wish to submit?';
-        break;
-      default:
-        message = 'Something went wrong with submission';
-        break;
-    }
+  renderAlert = (type = 'default', form = null) => {
+    let message = AlertMessages[type];
 
     return Alert.alert(
       'Alert',
@@ -151,9 +131,7 @@ class RightButton extends React.Component {
           }
         }}>
         <Icon
-          style={{
-            marginRight: Platform.OS === 'android' ? 20 : 0,
-          }}
+          style={styles.icon}
           name="paper-plane"
           type="font-awesome"
           color="#fff"
@@ -165,7 +143,12 @@ class RightButton extends React.Component {
 
 const mapState = createStructuredSelector({
   currentForm: selectCurrentForm,
+  startAndFinishDateTime: selectStartAndFinishDate,
   unfilledMandatoryFields: selectCurrentFormUnfillMandatoryFields,
 });
 
-export default connect(mapState, {setCurrentForm, updateScrollToMandatory})(RightButton);
+export default connect(mapState, {
+  setCurrentForm,
+  updateScrollToMandatory,
+  updateSubmitTriggered,
+})(RightButton);
