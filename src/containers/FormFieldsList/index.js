@@ -12,12 +12,17 @@ import Fields from 'components/Fields';
 
 //redux,selector
 import {setCurrentForm, updateFormFieldValue} from 'store/forms';
-import {selectCurrentFormId, selectCurrentFormFields} from 'selector/form';
-import {selectOrganistation} from 'selector/sanspaper';
+import {
+  selectCurrentFormId,
+  selectCurrentFormFields,
+  selectScrollToMandatory,
+  selectSubmitTriggered,
+} from 'selector/form';
 
 //constants
 import {fieldsProps} from './helper';
 import {behavior} from '@constant/KeyboardAvoiding';
+import styles from '../../components/Fields/ItemWrapper/styles';
 
 class FormFieldsList extends React.Component {
   state = {
@@ -25,6 +30,13 @@ class FormFieldsList extends React.Component {
     scrollEnabled: true,
     fieldsValue: {},
   };
+
+  componentDidUpdate(prevProps) {
+    const {submitTriggered, scrollToMandatory} = this.props;
+    if (prevProps.submitTriggered !== submitTriggered && scrollToMandatory) {
+      this.scrollToIndex(this.props.scrollToMandatory);
+    }
+  }
 
   keyExtractor = (item, index) => index.toString();
 
@@ -71,14 +83,21 @@ class FormFieldsList extends React.Component {
     }
   };
 
+  scrollToIndex = (index) => {
+    this.flatListRef.scrollToIndex({animated: true, index});
+  };
+
   render() {
     const {currentFormFields} = this.props;
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.flex1}>
         <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset="120">
           <FlatList
+            ref={(ref) => {
+              this.flatListRef = ref;
+            }}
             keyExtractor={this.keyExtractor}
             data={currentFormFields}
             renderItem={this.renderItem}
@@ -94,7 +113,8 @@ class FormFieldsList extends React.Component {
 const mapState = createStructuredSelector({
   currentFormId: selectCurrentFormId,
   currentFormFields: selectCurrentFormFields,
-  organization: selectOrganistation,
+  scrollToMandatory: selectScrollToMandatory,
+  submitTriggered: selectSubmitTriggered,
 });
 
 export default connect(mapState, {setCurrentForm, updateFormFieldValue})(
