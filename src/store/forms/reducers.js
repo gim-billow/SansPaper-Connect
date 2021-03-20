@@ -6,6 +6,7 @@ const INIT_STATE = {
   currentForm: {
     fields: [],
   },
+  scrollToMandatory: null,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -36,6 +37,11 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS: {
       return produce(state, (draftState) => {
         draftState.currentForm.fields = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_SCROLL_TO_MANDATORY: {
+      return produce(state, (draftState) => {
+        draftState.scrollToMandatory = action.payload;
       });
     }
     default:

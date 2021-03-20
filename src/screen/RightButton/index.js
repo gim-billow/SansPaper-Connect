@@ -9,10 +9,14 @@ import {createStructuredSelector} from 'reselect';
 //redux,selector
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {setCurrentForm} from 'store/forms';
-import {selectCurrentForm} from 'selector/form';
+import {
+  selectCurrentForm,
+  selectCurrentFormUnfillMandatoryFields,
+} from 'selector/form';
 // upvise api
 import {submitUpviseForm} from '../../api/upvise';
 import {Platform} from 'react-native';
+import {updateScrollToMandatory} from '../../store/forms/actions';
 
 class RightButton extends React.Component {
   state = {
@@ -23,22 +27,13 @@ class RightButton extends React.Component {
     let startDateTime = null;
     let finishDateTime = null;
 
+    const {unfilledMandatoryFields, updateScrollToMandatory} = this.props;
     showActivityIndicator();
-    const requiredFields = filter(
-      (field) => field.mandatory === 1,
-      form.fields,
-    );
+
     // check if there is an empty value in a mandatory field
-    const proceed = requiredFields.map((field) => {
-      if (!field.value) {
-        return false;
-      }
-
-      return true;
-    });
-
-    if (proceed.includes(false)) {
+    if (unfilledMandatoryFields.length > 0) {
       dismissActivityIndicator();
+      updateScrollToMandatory(unfilledMandatoryFields[0].rank);
       this.renderAlert();
       return;
     }
@@ -146,6 +141,7 @@ class RightButton extends React.Component {
 
   render() {
     const {currentForm} = this.props;
+
     return (
       <TouchableOpacity
         onPress={() => {
@@ -169,6 +165,7 @@ class RightButton extends React.Component {
 
 const mapState = createStructuredSelector({
   currentForm: selectCurrentForm,
+  unfilledMandatoryFields: selectCurrentFormUnfillMandatoryFields,
 });
 
-export default connect(mapState, {setCurrentForm})(RightButton);
+export default connect(mapState, {setCurrentForm, updateScrollToMandatory})(RightButton);

@@ -10,6 +10,7 @@ export const FORM_SAGA_ACTIONS = {
 
 export const FORM_REDUCER_ACTIONS = {
   UPDATE_CURRENT_FORM_FIELDS: 'formAction/UPDATE_CURRENT_FORM_FIELDS',
+  UPDATE_SCROLL_TO_MANDATORY: 'formAction/UPDATE_SCROLL_TO_MANDATORY',
   UPDATE_ORGANISATION_PATH: 'formAcions/UPDATE_ORGANISATION_PATH',
   UPDATE_CURRENT_LINKED_TABLE: 'formActions/UPDATE_CURRENT_LINKED_TABLE',
   UPDATE_CURRENT_FORM_ID: 'formAcions/UPDATE_CURRENT_FORM_ID',
@@ -34,5 +35,10 @@ export const updateFormFieldValue = (payload) => ({
 
 export const updateFormList = (payload) => ({
   type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST,
+  payload,
+});
+
+export const updateScrollToMandatory = (payload) => ({
+  type: FORM_REDUCER_ACTIONS.UPDATE_SCROLL_TO_MANDATORY,
   payload,
 });

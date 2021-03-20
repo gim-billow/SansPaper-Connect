@@ -1,6 +1,6 @@
 // import {createSelector} from 'reselect';
 import {createSelector} from 'reselect';
-import {find, propEq} from 'ramda';
+import {find, propEq, filter} from 'ramda';
 import * as R from 'ramda';
 
 export const selectCurrentFormId = (state) => state.formReducer.currentFormId;
@@ -12,6 +12,9 @@ export const selectFormList = (state) => state.formReducer.forms;
 
 export const selectCurrentForm = (state) => state.formReducer.currentForm;
 
+export const selectScrollToMandatory = (state) =>
+  state.formReducer.scrollToMandatory;
+
 export const selectSortedFormList = createSelector(selectFormList, (formList) =>
   R.pipe(
     R.sortBy(R.compose(R.toLower, R.prop('name'))),
@@ -22,6 +25,12 @@ export const selectSortedFormList = createSelector(selectFormList, (formList) =>
 export const selectCurrentFormFields = createSelector(
   selectCurrentForm,
   (form) => (form.fields ? form.fields : []),
+);
+
+export const selectCurrentFormUnfillMandatoryFields = createSelector(
+  selectCurrentFormFields,
+  (formFields) =>
+    filter((field) => field.mandatory === 1 && field.value === '', formFields),
 );
 
 export const selectProjectValue = createSelector(
