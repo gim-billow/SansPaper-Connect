@@ -146,6 +146,7 @@ export const getQueryByOptions = async (
   organization,
   projectValue,
 ) => {
+  console.log('organisation', organization);
   switch (type) {
     case 'selectmulti':
     case 'select': {

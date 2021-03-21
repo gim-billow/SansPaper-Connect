@@ -18,6 +18,7 @@ import {
   selectScrollToMandatory,
   selectSubmitTriggered,
 } from 'selector/form';
+import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
 import {fieldsProps} from './helper';
@@ -115,6 +116,7 @@ const mapState = createStructuredSelector({
   currentFormFields: selectCurrentFormFields,
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,
+  organization: selectOrganistation,
 });
 
 export default connect(mapState, {setCurrentForm, updateFormFieldValue})(
