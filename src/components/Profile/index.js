@@ -142,31 +142,6 @@ class Profile extends Component {
             </View>
           </TouchableOpacity>
           <View style={styles.rowContainer}>
-            <MaterialIcons name="settings" size={30} color="green" />
-            <Picker
-              style={styles.pickerMargin}
-              note
-              mode="dropdown"
-              placeholder="Font size"
-              placeholderStyle={{color: '#000000', fontWeight: 'bold'}}
-              iosIcon={
-                <AntDesign
-                  name="caretdown"
-                  size={1}
-                  style={{paddingLeft: 100}}
-                />
-              }
-              textStyle={{color: '#000000', fontWeight: 'bold', width: 130}}
-              selectedValue={this.state.selected}
-              onValueChange={this.onDropItemChange.bind(this)}>
-              <Picker.Item label="Extra Small" value="Extra Small" />
-              <Picker.Item label="Small" value="Small" />
-              <Picker.Item label="Default" value="Default" />
-              <Picker.Item label="Large" value="Large" />
-              <Picker.Item label="Extra Large" value="Extra Large" />
-            </Picker>
-          </View>
-          <View style={styles.rowContainer}>
             <UpdatedIcon width={30} height={40} color="green" />
             <View style={styles.textView}>
               <Text style={styles.labeltext}>Update</Text>
