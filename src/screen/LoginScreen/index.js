@@ -161,7 +161,7 @@ class LoginScreen extends React.Component {
     const {error, changeLogo} = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
     const {loginCode} = this.props;
-
+    console.log('changelogo', changeLogo)
     return (
       <>
         {loginCode && loginCode !== 'success' ? this.alertLogin() : null}
@@ -170,8 +170,8 @@ class LoginScreen extends React.Component {
           behavior={behavior}
           keyboardVerticalOffset="150">
           <Image
-            style={styles.logo}
-            source={mainLogo}
+            style={changeLogo ? styles.logoHorizontal : styles.logo}
+            source={changeLogo ? horizontalLogo : mainLogo}
             resizeMode="contain"
             resizeMethod="scale"
           />

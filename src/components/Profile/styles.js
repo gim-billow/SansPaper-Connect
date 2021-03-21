@@ -73,8 +73,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 40,
-    paddingVertical: 10,
-    borderTopWidth: 0.4,
+    paddingVertical: 20,
+    borderBottomWidth: 0.4,
     borderColor: 'gray',
   },
   centeredView: {
@@ -112,4 +112,15 @@ export default StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
   },
+  flex1: {
+    flex: 1,
+  },
+  changePasswordText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingBottom: 30,
+  },
+  marginLeftRegular: {marginLeft: 70},
+  marginLeftSmall: {marginLeft: 20},
+  changePasswordSubContainer: {flexDirection: 'row', paddingTop: 20},
 });
