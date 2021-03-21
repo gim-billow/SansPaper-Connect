@@ -7,7 +7,6 @@ import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import {darkRed, white} from 'styles/colors';
 import {commonStyles} from '@styles/common';
-import {limitText} from '@util/string';
 
 const Checkbox = (props) => {
   const {item, updateFieldsValue} = props;
