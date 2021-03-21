@@ -1,5 +1,5 @@
 import React from 'react';
-import {filter} from 'ramda';
+import {filter, forEach} from 'ramda';
 import {TouchableOpacity, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {Navigation} from 'react-native-navigation';
@@ -35,7 +35,9 @@ class RightButton extends React.Component {
       startAndFinishDateTime,
       updateSubmitTriggered,
     } = this.props;
-    const {startDateTime, finishDateTime} = startAndFinishDateTime;
+
+    let dateTimeError = '';
+
     showActivityIndicator();
 
     // check if there is an empty value in a mandatory field
@@ -47,25 +49,30 @@ class RightButton extends React.Component {
       return;
     }
 
-    // alert if finish date time is greater than start date time
-    if (
-      startDateTime &&
-      finishDateTime &&
-      finishDateTime - startDateTime <= 0
-    ) {
+    forEach(({startDateTime, finishDateTime}) => {
+      // alert if finish date time is greater than start date time
+      if (
+        startDateTime &&
+        finishDateTime &&
+        finishDateTime - startDateTime <= 0
+      ) {
+        dateTimeError = 'datetimeError';
+      } else if ((finishDateTime - startDateTime) / 60 / 60 / 1000 >= 20) {
+        dateTimeError = 'hoursExceededError';
+      }
+    }, startAndFinishDateTime);
+
+    if (dateTimeError === 'datetimeError') {
       dismissActivityIndicator();
       this.renderAlert('datetimeError');
       return;
-    }
-
-    // if more than 20 hours
-    if ((finishDateTime - startDateTime) / 60 / 60 / 1000 >= 20) {
+    } else if (dateTimeError === 'hoursExceededError') {
       dismissActivityIndicator();
       this.renderAlert('hoursExceededError', form);
       return;
+    } else {
+      this.onSubmit(form);
     }
-
-    this.onSubmit(form);
   };
 
   renderAlert = (type = 'default', form = null) => {
