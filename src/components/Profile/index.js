@@ -97,10 +97,7 @@ class Profile extends Component {
     return (
       <View style={styles.container}>
         {/* <ScrollView> */}
-        <View
-          style={{
-            flex: 1,
-          }}>
+        <View style={styles.flex1}>
           <View style={styles.userContainer}>
             <Text style={styles.nametext}>{name}</Text>
             <Text style={styles.subText}>{organization.name}</Text>
@@ -151,7 +148,7 @@ class Profile extends Component {
               </Text>
             </View>
           </View>
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <View style={styles.flex1}>
             <TouchableOpacity onPress={this.onPressLogoutHandler}>
               <View style={styles.logoutContainer}>
                 <LogoutIcon width={30} height={40} color="red" />
@@ -167,25 +164,22 @@ class Profile extends Component {
           visible={this.state.visible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text
-                style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 30}}>
-                Change Password
-              </Text>
+              <Text style={styles.changePasswordText}>Change Password</Text>
               <Text style={styles.passwordTextStyle}>Old Password</Text>
               <TextInput style={styles.textInput} />
               <Text style={styles.passwordTextStyle}>New Password</Text>
               <TextInput style={styles.textInput} />
               <Text style={styles.passwordTextStyle}>Retype Password</Text>
               <TextInput style={styles.textInput} />
-              <View style={{flexDirection: 'row', paddingTop: 20}}>
+              <View style={styles.changePasswordSubContainer}>
                 <Button
-                  style={{marginLeft: 70}}
+                  style={styles.marginLeftRegular}
                   mode="contained"
                   onPress={this.hideModal}>
                   <Text>Cancel</Text>
                 </Button>
                 <Button
-                  style={{marginLeft: 20}}
+                  style={styles.marginLeftSmall}
                   mode="contained"
                   onPress={() => {}}>
                   <Text>Confirm</Text>

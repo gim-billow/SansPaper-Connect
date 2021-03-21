@@ -19,6 +19,10 @@ export default StyleSheet.create({
     width: 300,
     height: 200,
   },
+  logoHorizontal: {
+    width: 300,
+    height: 100,
+  },
   text: {
     marginTop: '10%',
     fontSize: medium,
