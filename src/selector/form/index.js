@@ -47,6 +47,7 @@ export const selectStartAndFinishDate = createSelector(
     // check start/finish date time
     let startDateTime = '';
     let finishDateTime = '';
+    let dateTimelist = [];
     for (let item of fields) {
       if (item.type === 'datetime') {
         if (item.label.toLowerCase().includes('start')) {
@@ -55,10 +56,11 @@ export const selectStartAndFinishDate = createSelector(
 
         if (item.label.toLowerCase().includes('finish')) {
           finishDateTime = item.value;
+          dateTimelist.push({startDateTime, finishDateTime});
         }
       }
     }
-    return {startDateTime, finishDateTime};
+    return dateTimelist;
   },
 );
 
