@@ -42,9 +42,11 @@ class RightButton extends React.Component {
 
     // check if there is an empty value in a mandatory field
     if (unfilledMandatoryFields.length > 0) {
+      const {rank} = unfilledMandatoryFields[0];
+      const scrollToIndex = rank === 1 ? rank : rank - 1;
       dismissActivityIndicator();
       updateSubmitTriggered();
-      updateScrollToMandatory(unfilledMandatoryFields[0].rank);
+      updateScrollToMandatory(scrollToIndex);
       this.renderAlert('mandatoryError');
       return;
     }
