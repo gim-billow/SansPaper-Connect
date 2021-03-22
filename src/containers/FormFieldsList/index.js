@@ -1,6 +1,7 @@
 //library
 import React from 'react';
 import {FlatList, KeyboardAvoidingView, View} from 'react-native';
+import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -93,19 +94,20 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={styles.flex1}>
-        <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset="120">
-          <FlatList
-            ref={(ref) => {
-              this.flatListRef = ref;
-            }}
-            keyExtractor={this.keyExtractor}
-            data={currentFormFields}
-            renderItem={this.renderItem}
-            scrollEnabled={scrollEnabled}
-            removeClippedSubviews={false}
-          />
-        </KeyboardAvoidingView>
+      <View style={{flex: 1}}>
+        <KeyboardAwareFlatList
+          innerRef={(ref) => {
+            this.flatListRef = ref;
+          }}
+          keyExtractor={this.keyExtractor}
+          data={currentFormFields}
+          renderItem={this.renderItem}
+          scrollEnabled={scrollEnabled}
+          removeClippedSubviews={false}
+          extraScrollHeight={50}
+          enableOnAndroid={true}
+          enableResetScrollToCoords={false}
+        />
       </View>
     );
   }
