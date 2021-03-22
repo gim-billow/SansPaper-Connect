@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {FORM_REDUCER_ACTIONS} from './actions';
+import {FORM_REDUCER_ACTIONS, FORM_ACTION} from './actions';
 
 const INIT_STATE = {
   currentFormId: '',
@@ -8,6 +8,7 @@ const INIT_STATE = {
   },
   scrollToMandatory: null,
   submitTriggered: 0,
+  projectId: null,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -48,6 +49,11 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_SUBMIT_TRIGGERED: {
       return produce(state, (draftState) => {
         draftState.submitTriggered = state.submitTriggered + 1;
+      });
+    }
+    case FORM_ACTION.GET_PROJECT_VALUE: {
+      return produce(state, (draftState) => {
+        draftState.projectId = action.payload;
       });
     }
     default:

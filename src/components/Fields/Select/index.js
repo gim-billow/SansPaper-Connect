@@ -13,6 +13,7 @@ import {getQueryByOptions} from './helper';
 import {selectProjectValue} from 'selector/form';
 import R from 'ramda';
 import {commonStyles} from '@styles/common';
+import {getProjectValInForm} from '@store/forms';
 
 class Select extends Component {
   state = {
@@ -57,14 +58,14 @@ class Select extends Component {
   }
 
   updateSetOptions = (options, value) => {
-    const {type} = this.props.item;
+    const {item} = this.props;
     const filteredOptions = R.pipe(
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
     )(options);
     this.setState((prevState) => ({
       selOptions:
-        type === 'selectmulti'
+        item.type === 'selectmulti'
           ? [...filteredOptions]
           : [...prevState.selOptions, ...filteredOptions],
       options: value[0] ? value : [], // if 1st value is empty string, set to empty string
@@ -72,7 +73,7 @@ class Select extends Component {
   };
 
   onSelectedItemsChange = (selectedItems) => {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, getProjectValInForm} = this.props;
     let value = '';
 
     selectedItems.map((items) => {
@@ -85,6 +86,11 @@ class Select extends Component {
       rank: item.rank,
       value: item.type === 'selectmulti' ? value : selectedItems[0] + '',
     });
+
+    // if type === project
+    if (item.type === 'project') {
+      getProjectValInForm(selectedItems[0] + '');
+    }
   };
 
   render() {
@@ -134,4 +140,4 @@ const mapState = createStructuredSelector({
   projectValue: selectProjectValue,
 });
 
-export default connect(mapState, null)(Select);
+export default connect(mapState, {getProjectValInForm})(Select);
