@@ -71,7 +71,7 @@ const ToggleButton = (props) => {
   React.useEffect(() => {
     const {value} = props.item;
 
-    if (value !== '') {
+    if (value !== '' && value !== '-1') {
       const defaultVal = find(propEq('id', value))(dataOptions);
       setOption(defaultVal.name);
       updateFieldsValue({rank: rank, value: value});
@@ -108,9 +108,7 @@ const ToggleButton = (props) => {
                 key={uniqueKey()}
                 style={[
                   colorControl.button,
-                  isSelectedOption
-                    ? colorControl.background
-                    : styles.whiteBackground,
+                  isSelectedOption ? colorControl.background : null,
                 ]}
                 onPress={() => onPress(option.name)}>
                 <Text

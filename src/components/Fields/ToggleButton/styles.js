@@ -59,9 +59,9 @@ export default StyleSheet.create({
     borderWidth: 1,
   },
   whiteBackground: {
-    backgroundColor: white,
-    borderColor: darkGrey,
-    borderWidth: 1,
+    // backgroundColor: white,
+    // borderColor: darkGrey,
+    // borderWidth: 1,
   },
   greenBackground: {
     backgroundColor: 'green',
@@ -79,18 +79,18 @@ export default StyleSheet.create({
     borderWidth: 1,
   },
   redColor: {
-    color: darkGrey,
+    color: red,
   },
   whiteColor: {
     color: 'white',
   },
   greenColor: {
-    color: darkGrey,
+    color: 'green',
   },
   orangeColor: {
-    color: darkGrey,
+    color: 'orange',
   },
   blueColor: {
-    color: darkGrey,
+    color: 'blue',
   },
 });

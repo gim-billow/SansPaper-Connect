@@ -142,7 +142,7 @@ const mapState = createStructuredSelector({
 
 MainScreen.options = {
   topBar: {
-    visible: true,
+    visible: false,
     title: {
       text: 'News',
     },
