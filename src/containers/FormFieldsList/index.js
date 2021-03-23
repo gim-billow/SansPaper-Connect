@@ -36,7 +36,9 @@ class FormFieldsList extends React.Component {
   componentDidUpdate(prevProps) {
     const {submitTriggered, scrollToMandatory} = this.props;
     if (prevProps.submitTriggered !== submitTriggered && scrollToMandatory) {
-      this.scrollToIndex(this.props.scrollToMandatory);
+      const index =
+        scrollToMandatory === 1 ? scrollToMandatory - 1 : scrollToMandatory;
+      this.scrollToIndex(index);
     }
   }
 

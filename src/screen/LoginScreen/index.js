@@ -161,7 +161,7 @@ class LoginScreen extends React.Component {
     const {error, changeLogo} = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
     const {loginCode} = this.props;
-    console.log('changelogo', changeLogo)
+
     return (
       <>
         {loginCode && loginCode !== 'success' ? this.alertLogin() : null}
