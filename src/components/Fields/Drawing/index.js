@@ -1,36 +1,61 @@
 import React from 'react';
 import {View, Text, Platform} from 'react-native';
-import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
+import {SketchCanvas} from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Divider} from 'react-native-elements';
 import {Button} from 'react-native-paper';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
 
 import ItemWrapper from '../ItemWrapper';
+import Stroke from './Stroke';
+import {selectOrganistation} from '@selector/sanspaper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 import styles from './styles';
+import {syncImageInUpvise} from './helper';
 
 const dirs = RNFetchBlob.fs.dirs;
-const deleteImage = RNFetchBlob.fs.unlink;
 class DrawingBoard extends React.Component {
   state = {
     changeTheme: false,
     imageDownloaded: false,
     base64: '',
+    fileStat: {},
     path:
       dirs.DocumentDir +
       '/new_image_' +
       Math.round(new Date().getTime() / 1000) +
       '.jpg',
     signatureSaved: false,
+    color: '#000000',
+    colorBtns: [
+      {color: '#000000', active: true},
+      {color: '#FF0000', active: false},
+      {color: '#57fdfe', active: false},
+      {color: '#2333ff', active: false},
+      {color: '#121ba1', active: false},
+      {color: '#add9e6', active: false},
+      {color: '#801b7f', active: false},
+      {color: '#fdfb00', active: false},
+      {color: '#51f900', active: false},
+      {color: '#f63fff', active: false},
+      {color: '#ffffff', active: false},
+      {color: '#c0c0c0', active: false},
+      {color: '#808080', active: false},
+      {color: '#f8a501', active: false},
+      {color: '#a5292a', active: false},
+      {color: '#810c00', active: false},
+      {color: '#237f01', active: false},
+      {color: '#808000', active: false},
+    ],
   };
 
   componentDidMount() {
     const {value} = this.props.item;
 
     const imageUrl = `https://www.upvise.com/uws/downloadfile/?id=${
-      // value ? value : '6A4A9F42DDFBDE79D92681F6BCD54B'
-      !value ? value : '0E3A1C785BB0652CAAC8E3121023DB'
+      value ? value : '6A4A9F42DDFBDE79D92681F6BCD54B'
     }&auth=iqb4EdxZxm8%2BwWBg50ImWk4sta3MT4IB`;
 
     RNFetchBlob.fetch('GET', imageUrl).then((res) => {
@@ -41,40 +66,50 @@ class DrawingBoard extends React.Component {
   }
 
   onClear = () => {
-    const {item, updateFieldsValue} = this.props;
     this.setState({changeTheme: false, signatureSaved: false});
-    updateFieldsValue({rank: item.rank, value: ''});
     this.canvas.clear();
   };
 
-  onSave = (success, path) => {
-    const {item, updateFieldsValue} = this.props;
-    this.setState({changeTheme: true, signatureSaved: true});
+  onSave = async () => {
+    const {item, updateFieldsValue, organization} = this.props;
+    const {fileStat, base64} = this.state;
 
-    RNFetchBlob.fs
-      .readFile(path, 'base64')
-      .then((base64String) => {
-        updateFieldsValue({
-          rank: item.rank,
-          value: base64String,
+    const response = await syncImageInUpvise({
+      imgId: item.value,
+      base64,
+      fileStat,
+      fieldId: item.id,
+      token: organization.upviseToken,
+    });
+
+    if (response.status === 200) {
+      this.setState({changeTheme: true, signatureSaved: true});
+      updateFieldsValue({rank: item.rank, value: response.valueImgId});
+
+      await RNFetchBlob.fs.unlink(this.state.path);
+    }
+  };
+
+  saveBase64Img = () => {
+    this.canvas.getBase64('jpg', false, true, false, false, (err, result) => {
+      if (err) {
+        return console.log('error', err);
+      }
+
+      result = result.toString().replace(/[\r\n]/g, '');
+
+      RNFetchBlob.fs
+        .writeFile(this.state.path, result, 'base64')
+        .then(() => {
+          return RNFetchBlob.fs.stat(this.state.path);
+        })
+        .then((stat) => {
+          this.setState({
+            base64: result,
+            fileStat: stat,
+          });
         });
-      })
-      .then(() => {
-        return deleteImage(path);
-      })
-      .finally(() => {
-        console.log('Image deleted');
-      });
-
-    // ImgToBase64.getBase64String('file://' + path)
-    //   .then((base64String) => {
-    //     updateFieldsValue({rank: item.rank, value: base64String});
-    //   })
-    //   .catch((err) => console.log(err));
-
-    // deleteImage(path)
-    //   .then(() => console.log('Image deleted'))
-    //   .catch((err) => console.log(err));
+    });
   };
 
   handleOnStrokeStart = (status) => {
@@ -101,78 +136,73 @@ class DrawingBoard extends React.Component {
             <View style={commonStyles.spacing} />
           )}
           <View style={styles.box}>
-            <RNSketchCanvas
+            <View style={styles.button}>
+              <View style={{paddingRight: 10}}>
+                <Button
+                  mode="contained"
+                  style={styles.buttonColor}
+                  onPress={() => {
+                    this.onClear();
+                  }}>
+                  <Text style={styles.text}>Clear</Text>
+                </Button>
+              </View>
+              <View>
+                <Button
+                  mode="contained"
+                  style={
+                    changeTheme === true
+                      ? styles.ChangeButtonColor
+                      : styles.buttonColor
+                  }
+                  onPress={() => {
+                    this.onSave();
+                  }}>
+                  <Text
+                    style={
+                      changeTheme === true
+                        ? styles.ChangeTextColor
+                        : styles.text
+                    }>
+                    {changeTheme === true ? 'Saved' : 'Save'}
+                  </Text>
+                </Button>
+              </View>
+            </View>
+            <SketchCanvas
+              style={styles.sketch}
+              strokeColor={this.state.color}
+              strokeWidth={5}
+              onStrokeStart={() => this.handleOnStrokeStart(false)}
               localSourceImage={{
                 filename: this.state.path,
                 mode: 'ScaleToFill',
               }}
-              onStrokeStart={() => this.handleOnStrokeStart(false)}
-              onStrokeEnd={() => this.handleOnStrokeStart(true)}
-              containerStyle={styles.containerStyle}
-              canvasStyle={styles.canvasStyle}
-              style={styles.sketch}
-              strokeComponent={(color) => (
-                <View
-                  style={[{backgroundColor: color}, styles.strokeColorButton]}
-                />
-              )}
-              strokeSelectedComponent={(color, index, changed) => {
-                return (
-                  <View
-                    style={[
-                      {backgroundColor: color, borderWidth: 2},
-                      styles.strokeWidthButton,
-                    ]}
-                  />
-                );
-              }}
-              strokeWidth={10}
               ref={(ref) => (this.canvas = ref)}
-              clearComponent={
-                <View style={styles.button}>
-                  <Button
-                    mode="contained"
-                    style={styles.buttonColor}
-                    onPress={() => {
-                      this.onClear();
-                    }}>
-                    <Text style={styles.text}>Clear</Text>
-                  </Button>
-                </View>
-              }
-              saveComponent={
-                <View style={styles.button}>
-                  <Button
-                    mode="contained"
-                    style={
-                      changeTheme === true
-                        ? styles.ChangeButtonColor
-                        : styles.buttonColor
-                    }>
-                    <Text
-                      style={
-                        changeTheme === true
-                          ? styles.ChangeTextColor
-                          : styles.text
-                      }>
-                      {changeTheme === true ? 'Saved' : 'Save'}
-                    </Text>
-                  </Button>
-                </View>
-              }
-              savePreference={() => {
-                return {
-                  folder: 'RNSketchCanvas',
-                  filename: String(Math.ceil(Math.random() * 100000000)),
-                  transparent: true,
-                  imageType: 'jpg',
-                  includeImage: true,
-                  includeText: false,
-                };
+              onStrokeEnd={() => {
+                this.handleOnStrokeStart(true);
+                this.saveBase64Img();
               }}
-              onSketchSaved={(success, path) => this.onSave(success, path)}
-              // onClearPressed={() => this.onClear()}
             />
+            <View style={styles.canvasContainer}>
+              <View style={styles.canvasWrapper}>
+                <Stroke
+                  colors={this.state.colorBtns}
+                  setActiveColor={(selected) => {
+                    this.setState((prevState) => {
+                      const colors = prevState.colorBtns.map((color) => ({
+                        ...color,
+                        active: false,
+                      }));
+                      colors[selected].active = true;
+
+                      return {colorBtns: colors};
+                    });
+                  }}
+                  changeColor={(color) => this.setState({color})}
+                />
+              </View>
+            </View>
           </View>
           {this.state.signatureSaved && <View style={styles.dimmedSingature} />}
         </View>
@@ -182,4 +212,8 @@ class DrawingBoard extends React.Component {
   }
 }
 
-export default DrawingBoard;
+const mapState = createStructuredSelector({
+  organization: selectOrganistation,
+});
+
+export default connect(mapState, null)(DrawingBoard);

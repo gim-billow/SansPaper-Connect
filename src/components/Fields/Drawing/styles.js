@@ -1,52 +1,20 @@
 import {StyleSheet} from 'react-native';
 import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {lightRed, darkRed, white, superLightRed} from '@styles/colors';
+import {lightRed, darkRed, white} from '@styles/colors';
 
 export default StyleSheet.create({
   topContainer: {
     marginVertical: spaceMedium,
   },
-  strokeColorButton: {
-    marginHorizontal: 2.5,
-    marginVertical: 8,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-  },
-  strokeWidthButton: {
-    marginHorizontal: 2.5,
-    marginVertical: 8,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
+  canvasContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  functionButton: {
-    marginHorizontal: 2.5,
-    marginVertical: 8,
-    height: 30,
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  containerStyle: {
-    backgroundColor: 'transparent',
-    flex: 1,
-  },
-  canvasStyle: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    // borderWidth: 1,
-    // borderColor: lightRed,
   },
   sketch: {
     flex: 1,
-    position: 'absolute',
-    backgroundColor: superLightRed,
-    borderWidth: 1,
-    borderColor: lightRed,
+    flexDirection: 'row',
+    height: 500,
   },
   text: {
     color: lightRed,
@@ -56,14 +24,11 @@ export default StyleSheet.create({
     color: white,
     fontSize: 13,
   },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingHorizontal: spaceSmall,
-  },
   button: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     paddingVertical: spaceSmall,
-    paddingLeft: spaceSmall,
+    // paddingLeft: spaceSmall,
   },
   buttonColor: {
     backgroundColor: 'white',
@@ -83,5 +48,8 @@ export default StyleSheet.create({
     bottom: 60,
     backgroundColor: 'transparent',
     marginHorizontal: spaceRegular,
+  },
+  canvasWrapper: {
+    flexDirection: 'row',
   },
 });

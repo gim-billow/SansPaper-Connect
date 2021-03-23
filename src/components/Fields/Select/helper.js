@@ -1,7 +1,7 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
 import {getUpviseUserList} from '@api/upvise';
 import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
-import {pipe, split, map, pick} from 'ramda';
+import {pipe, split, map, pick, compose} from 'ramda';
 
 const getQueryOptions = async (seloptions, organization) => {
   const queryArr = seloptions.split(',');
@@ -15,7 +15,24 @@ const getQueryOptions = async (seloptions, organization) => {
   );
 };
 
+// TODO:
 const getProjectMilestonesOptions = async (organization, project) => {
+  // const startOfQuery = project.indexOf('Query.options');
+  const startOfQuery = (x) => {
+    const index = x.indexOf('Query.options');
+    return x.substring(index, x.length - 1);
+  };
+  const endOfQuery = (y) => {
+    const idx = y.indexOf(';');
+    return y.substring(0, idx);
+  };
+
+  const getQueryForMilestone = pipe(startOfQuery, endOfQuery)(project);
+  const getMilestoneTable = getQueryForMilestone
+    .replace('Query.options(', '')
+    .replace(/'/g, '');
+  const finalTable = getMilestoneTable.split(',')[0];
+
   const queryHandle = project.split(',');
 
   const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
@@ -24,6 +41,8 @@ const getProjectMilestonesOptions = async (organization, project) => {
     .replace(/"/g, '')
     .replace(/'/g, '"')
     .trim();
+
+  // console.log(query);
 
   const queriedOptions = await getOptions(table, query, organization);
   return map(
@@ -146,7 +165,6 @@ export const getQueryByOptions = async (
   organization,
   projectValue,
 ) => {
-  console.log('organisation', organization);
   switch (type) {
     case 'selectmulti':
     case 'select': {
