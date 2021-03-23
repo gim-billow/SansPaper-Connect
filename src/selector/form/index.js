@@ -64,6 +64,29 @@ export const selectStartAndFinishDate = createSelector(
   },
 );
 
+export const selectIfStartAndFinishDateCompleted = createSelector(
+  selectCurrentFormFields,
+  (fields) => {
+    // check start/finish date time
+    let startDateTime = '';
+    let finishDateTime = '';
+    let dateTimelist = [];
+    for (let item of fields) {
+      if (item.type === 'datetime') {
+        if (item.label.toLowerCase().includes('start')) {
+          startDateTime = item.value;
+        }
+
+        if (item.label.toLowerCase().includes('finish')) {
+          finishDateTime = item.value;
+          dateTimelist.push({startDateTime, finishDateTime});
+        }
+      }
+    }
+    return dateTimelist;
+  },
+);
+
 export const selectFormByCurrentId = createSelector(
   selectFormList,
   selectCurrentFormId,
