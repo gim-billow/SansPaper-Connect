@@ -15,6 +15,7 @@ import Signature from './Signature';
 import Checkbox from './Checkbox';
 import Currency from './Currency';
 import Button from './Button';
+import Image from './Image';
 
 export default {
   text: Text,
@@ -24,7 +25,7 @@ export default {
   user: Select,
   select: Select,
   label: Label,
-  image: Photo,
+  image: Image,
   drawing: DrawingBoard,
   button: Button,
   score: Text,
