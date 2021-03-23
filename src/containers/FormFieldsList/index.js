@@ -94,7 +94,7 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.flex1}>
         <KeyboardAwareFlatList
           innerRef={(ref) => {
             this.flatListRef = ref;
@@ -104,9 +104,9 @@ class FormFieldsList extends React.Component {
           renderItem={this.renderItem}
           scrollEnabled={scrollEnabled}
           removeClippedSubviews={false}
-          extraScrollHeight={50}
+          extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
           enableOnAndroid={true}
-          enableResetScrollToCoords={false}
+          enableResetScrollToCoords={true}
         />
       </View>
     );
