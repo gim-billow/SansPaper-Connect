@@ -1,16 +1,13 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
+import {spaceMedium} from 'styles/space';
 
 export default StyleSheet.create({
-  text: {
-    fontSize: regular,
-    paddingTop: spaceSmall,
-    paddingLeft: spaceSmall,
-    paddingRight: spaceMedium,
+  container: {
+    marginTop: spaceMedium,
   },
-  textInput: {
-    backgroundColor: 'white',
-    margin: spaceRegular,
+  image: {
+    height: 400,
+    width: 150,
+    alignSelf: 'center',
   },
 });

@@ -1,31 +1,40 @@
-import * as React from 'react';
-import {TextInput} from 'react-native-paper';
-import {Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Divider} from 'react-native-elements';
+import {Text, View, Image as RNImage} from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
+
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
+import {commonStyles} from '@styles/common';
 
 const Image = (props) => {
-  const [text, setText] = React.useState('');
-  const {label, rank} = props.item;
-  const {updateFieldsValue} = props;
-  const keyboardType = props.keyboardType ? props.keyboardType : 'default';
+  const [imgData, setImgData] = useState(null);
+  const {label} = props.item;
 
-  const onChangeText = (updatedText) => {
-    setText(updatedText);
-    updateFieldsValue({rank: rank, value: updatedText});
-  };
+  useEffect(() => {
+    const {value} = props.item;
+
+    const imageUrl = `https://www.upvise.com/uws/downloadfile/?id=${
+      value ? value : '6A4A9F42DDFBDE79D92681F6BCD54B'
+    }&auth=iqb4EdxZxm8%2BwWBg50ImWk4sta3MT4IB`;
+
+    RNFetchBlob.fetch('GET', imageUrl).then((res) => {
+      setImgData(`data:image/jpeg;base64,${res.data}`);
+    });
+  }, [props.item]);
 
   return (
     <ItemWrapper>
-      <Text style={styles.text}>{label}</Text>
-      <TextInput
-        style={styles.textInput}
-        value={text}
-        label="Insert here"
-        mode="outlined"
-        keyboardType={keyboardType}
-        onChangeText={(updatedText) => onChangeText(updatedText)}
-      />
+      <View style={styles.container}>
+        <Text style={commonStyles.text}>{label}</Text>
+        <RNImage
+          source={{uri: imgData}}
+          resizeMode="center"
+          resizeMethod="scale"
+          style={styles.image}
+        />
+      </View>
+      <Divider />
     </ItemWrapper>
   );
 };
