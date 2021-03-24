@@ -1,7 +1,6 @@
 export const FORM_ACTION = {
   LOAD_FORM_FIELDS: 'formActions/LOAD_FORM_FIELDS',
   UPDATE_FORM_FIELD_VALUE: 'formActions/UPDATE_FORM_FIELD_VALUE',
-  GET_PROJECT_VALUE: 'formAction/GET_PROJECT_VALUE',
 };
 
 export const FORM_SAGA_ACTIONS = {
@@ -19,11 +18,6 @@ export const FORM_REDUCER_ACTIONS = {
   UPDATE_CURRENT_FORM: 'formAcions/UPDATE_CURRENT_FORM',
   UPDATE_FORM_LIST: 'formAcions/UPDATE_FORM_LIST',
 };
-
-export const getProjectValInForm = (payload) => ({
-  type: FORM_ACTION.GET_PROJECT_VALUE,
-  payload,
-});
 
 export const loadFormFields = (payload) => ({
   type: FORM_ACTION.LOAD_FORM_FIELDS,

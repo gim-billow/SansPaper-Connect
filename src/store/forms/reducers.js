@@ -8,7 +8,6 @@ const INIT_STATE = {
   },
   scrollToMandatory: null,
   submitTriggered: 0,
-  projectId: null,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -49,11 +48,6 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_SUBMIT_TRIGGERED: {
       return produce(state, (draftState) => {
         draftState.submitTriggered = state.submitTriggered + 1;
-      });
-    }
-    case FORM_ACTION.GET_PROJECT_VALUE: {
-      return produce(state, (draftState) => {
-        draftState.projectId = action.payload;
       });
     }
     default:

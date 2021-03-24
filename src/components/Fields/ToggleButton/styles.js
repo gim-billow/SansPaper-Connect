@@ -1,9 +1,24 @@
 import {StyleSheet} from 'react-native';
 import {regular} from '@styles/font';
 import {spaceSmall, superSmall, spaceMedium} from '@styles/space';
-import {red, darkGrey, white} from '@styles/colors';
+import {
+  red,
+  white,
+  veryLightRed,
+  lightGrey,
+  orange,
+  lightGreen,
+  lightOrange,
+  darkGrey,
+} from '@styles/colors';
 
 export default StyleSheet.create({
+  btn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   topContainer: {
     marginVertical: spaceMedium,
   },
@@ -15,13 +30,18 @@ export default StyleSheet.create({
   },
   text: {
     fontSize: regular,
-    padding: spaceSmall,
+    paddingVertical: spaceSmall,
+    paddingLeft: superSmall,
+  },
+  selectedText: {
+    fontSize: regular,
+    paddingVertical: spaceSmall,
   },
   redButton: {
     borderWidth: 1,
     flexBasis: 150,
     borderRadius: 5,
-    borderColor: red,
+    borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
     margin: superSmall,
@@ -30,7 +50,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     flexBasis: 150,
     borderRadius: 5,
-    borderColor: 'green',
+    borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
     margin: superSmall,
@@ -39,7 +59,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     flexBasis: 150,
     borderRadius: 5,
-    borderColor: 'orange',
+    borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
     margin: superSmall,
@@ -48,7 +68,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     flexBasis: 150,
     borderRadius: 5,
-    borderColor: 'blue',
+    borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
     margin: superSmall,
@@ -79,18 +99,18 @@ export default StyleSheet.create({
     borderWidth: 1,
   },
   redColor: {
-    color: red,
+    color: darkGrey,
   },
   whiteColor: {
-    color: 'white',
+    color: white,
   },
   greenColor: {
-    color: 'green',
+    color: darkGrey,
   },
   orangeColor: {
-    color: 'orange',
+    color: darkGrey,
   },
   blueColor: {
-    color: 'blue',
+    color: darkGrey,
   },
 });

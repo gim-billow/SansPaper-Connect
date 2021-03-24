@@ -2,9 +2,11 @@
 import React, {useState} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-elements';
-import {map, split, find, propEq, prop} from 'ramda';
+import {Icon} from 'react-native-elements';
+import {map, split, find, propEq} from 'ramda';
 
 import {commonStyles} from '@styles/common';
+import {red} from '@styles/colors';
 import {uniqueKey} from '@util/general';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
@@ -111,15 +113,54 @@ const ToggleButton = (props) => {
                   isSelectedOption ? colorControl.background : null,
                 ]}
                 onPress={() => onPress(option.name)}>
-                <Text
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                  style={[
-                    styles.text,
-                    isSelectedOption ? styles.whiteColor : colorControl.text,
-                  ]}>
-                  {option.name}
-                </Text>
+                {colorControl.background.backgroundColor === red ? (
+                  !isSelectedOption ? (
+                    <View style={styles.btn}>
+                      <Icon
+                        name="exclamation-circle"
+                        type="font-awesome"
+                        color={red}
+                        size={15}
+                      />
+                      <Text
+                        ellipsizeMode="tail"
+                        numberOfLines={1}
+                        style={
+                          isSelectedOption
+                            ? [styles.whiteColor, styles.selectedText]
+                            : [styles.text, colorControl.text]
+                        }>
+                        {option.name}
+                      </Text>
+                    </View>
+                  ) : (
+                    <View style={styles.btn}>
+                      <Text
+                        ellipsizeMode="tail"
+                        numberOfLines={1}
+                        style={
+                          isSelectedOption
+                            ? [styles.whiteColor, styles.selectedText]
+                            : [styles.text, colorControl.text]
+                        }>
+                        {option.name}
+                      </Text>
+                    </View>
+                  )
+                ) : (
+                  <View style={styles.btn}>
+                    <Text
+                      ellipsizeMode="tail"
+                      numberOfLines={1}
+                      style={
+                        isSelectedOption
+                          ? [styles.whiteColor, styles.selectedText]
+                          : [styles.text, colorControl.text]
+                      }>
+                      {option.name}
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
             );
           }, dataOptions)}

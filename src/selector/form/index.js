@@ -92,3 +92,5 @@ export const selectFormByCurrentId = createSelector(
   selectCurrentFormId,
   (formList, formId) => find(propEq('id', formId))(formList),
 );
+
+export const selectProjectMilestone = (state) => state.formReducer.projectId;

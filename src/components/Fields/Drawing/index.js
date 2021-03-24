@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, ActivityIndicator} from 'react-native';
 import {SketchCanvas} from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Divider} from 'react-native-elements';
@@ -28,6 +28,7 @@ class DrawingBoard extends React.Component {
       Math.round(new Date().getTime() / 1000) +
       '.jpg',
     signatureSaved: false,
+    saving: false,
     color: '#000000',
     colorBtns: [
       {color: '#000000', active: true},
@@ -71,6 +72,7 @@ class DrawingBoard extends React.Component {
   };
 
   onSave = async () => {
+    this.setState({saving: true});
     const {item, updateFieldsValue, organization} = this.props;
     const {fileStat, base64} = this.state;
 
@@ -83,7 +85,7 @@ class DrawingBoard extends React.Component {
     });
 
     if (response.status === 200) {
-      this.setState({changeTheme: true, signatureSaved: true});
+      this.setState({changeTheme: true, signatureSaved: true, saving: false});
       updateFieldsValue({rank: item.rank, value: response.valueImgId});
 
       await RNFetchBlob.fs.unlink(this.state.path);
@@ -99,7 +101,7 @@ class DrawingBoard extends React.Component {
       result = result.toString().replace(/[\r\n]/g, '');
 
       RNFetchBlob.fs
-        .writeFile(this.state.path, result, 'base64')
+        .appendFile(this.state.path, result, 'base64')
         .then(() => {
           return RNFetchBlob.fs.stat(this.state.path);
         })
@@ -121,7 +123,7 @@ class DrawingBoard extends React.Component {
 
   render() {
     const {label, mandatory} = this.props.item;
-    const {changeTheme} = this.state;
+    const {changeTheme, saving, signatureSaved} = this.state;
 
     if (!this.state.imageDownloaded) {
       return <View />;
@@ -164,26 +166,32 @@ class DrawingBoard extends React.Component {
                         ? styles.ChangeTextColor
                         : styles.text
                     }>
-                    {changeTheme === true ? 'Saved' : 'Save'}
+                    {changeTheme === true
+                      ? 'Saved'
+                      : saving
+                      ? 'Saving...'
+                      : 'Save'}
                   </Text>
                 </Button>
               </View>
             </View>
-            <SketchCanvas
-              style={styles.sketch}
-              strokeColor={this.state.color}
-              strokeWidth={5}
-              onStrokeStart={() => this.handleOnStrokeStart(false)}
-              localSourceImage={{
-                filename: this.state.path,
-                mode: 'ScaleToFill',
-              }}
-              ref={(ref) => (this.canvas = ref)}
-              onStrokeEnd={() => {
-                this.handleOnStrokeStart(true);
-                this.saveBase64Img();
-              }}
-            />
+            <View style={{flex: 1}}>
+              <SketchCanvas
+                style={styles.sketch}
+                strokeColor={this.state.color}
+                strokeWidth={5}
+                onStrokeStart={() => this.handleOnStrokeStart(false)}
+                localSourceImage={{
+                  filename: this.state.path,
+                }}
+                ref={(ref) => (this.canvas = ref)}
+                onStrokeEnd={() => {
+                  this.handleOnStrokeStart(true);
+                  this.saveBase64Img();
+                }}
+                touchEnabled={!signatureSaved && !saving}
+              />
+            </View>
             <View style={styles.canvasContainer}>
               <View style={styles.canvasWrapper}>
                 <Stroke
@@ -204,7 +212,7 @@ class DrawingBoard extends React.Component {
               </View>
             </View>
           </View>
-          {this.state.signatureSaved && <View style={styles.dimmedSingature} />}
+          {/* {this.state.signatureSaved && <View style={styles.dimmedSingature} />} */}
         </View>
         <Divider />
       </ItemWrapper>

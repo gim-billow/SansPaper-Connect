@@ -2,6 +2,6 @@ import {StyleSheet, Platform} from 'react-native';
 
 export default StyleSheet.create({
   icon: {
-    marginRight: Platform.OS === 'android' ? 20 : 0,
+    paddingRight: Platform.OS === 'android' ? 20 : 0,
   },
 });
