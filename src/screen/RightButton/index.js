@@ -1,6 +1,6 @@
 import React from 'react';
 import {filter, forEach} from 'ramda';
-import {TouchableOpacity, Alert} from 'react-native';
+import {TouchableOpacity, Alert, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {Navigation} from 'react-native-navigation';
 import {screens} from '@constant/ScreenConstants';

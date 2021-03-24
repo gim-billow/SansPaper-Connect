@@ -1,7 +1,8 @@
 import {screens} from '@constant/ScreenConstants';
 import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
+import Feather from 'react-native-vector-icons/Feather';
 import {regular} from '@styles/font';
 
 export const setDefaultOptions = () => {
@@ -62,8 +63,21 @@ export const showLoginScreen = () => {
 
 export const showMainScreen = async () => {
   const userIcon = await FontAwesome5.getImageSource('user', 25);
-  const clipboardIcon = await FontAwesome5.getImageSource('clipboard', 25);
-  const homeIcon = await FontAwesome5.getImageSource('home', 25);
+  const userIconSelect = await FontAwesome5.getImageSource(
+    'user',
+    25,
+    red,
+    FA5Style.solid,
+  );
+  const clipboardIcon = await Feather.getImageSource('clipboard', 25);
+  const clipboardIconSelect = await FontAwesome5.getImageSource(
+    'clipboard',
+    25,
+    red,
+    FA5Style.solid,
+  );
+  const bookOpenIcon = await Feather.getImageSource('book-open', 25);
+  const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
 
   return Navigation.setRoot({
     root: {
@@ -88,8 +102,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Main',
-                  icon: homeIcon,
+                  text: 'BoK',
+                  icon: bookOpenIcon,
+                  selectedIcon: bookOpenIconSelect,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
                 },
               },
             },
@@ -114,6 +131,9 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'Form',
                   icon: clipboardIcon,
+                  selectedIcon: clipboardIconSelect,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
                 },
               },
             },
@@ -138,6 +158,9 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'Profile',
                   icon: userIcon,
+                  selectedIcon: userIconSelect,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
                 },
               },
             },

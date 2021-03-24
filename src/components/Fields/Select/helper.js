@@ -1,7 +1,7 @@
 import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
 import {getUpviseUserList} from '@api/upvise';
 import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
-import {pipe, split, map, pick, compose} from 'ramda';
+import {pipe, split, map, pick} from 'ramda';
 
 const getQueryOptions = async (seloptions, organization) => {
   const queryArr = seloptions.split(',');
@@ -18,20 +18,20 @@ const getQueryOptions = async (seloptions, organization) => {
 // TODO:
 const getProjectMilestonesOptions = async (organization, project) => {
   // const startOfQuery = project.indexOf('Query.options');
-  const startOfQuery = (x) => {
-    const index = x.indexOf('Query.options');
-    return x.substring(index, x.length - 1);
-  };
-  const endOfQuery = (y) => {
-    const idx = y.indexOf(';');
-    return y.substring(0, idx);
-  };
+  // const startOfQuery = (x) => {
+  //   const index = x.indexOf('Query.options');
+  //   return x.substring(index, x.length - 1);
+  // };
+  // const endOfQuery = (y) => {
+  //   const idx = y.indexOf(';');
+  //   return y.substring(0, idx);
+  // };
 
-  const getQueryForMilestone = pipe(startOfQuery, endOfQuery)(project);
-  const getMilestoneTable = getQueryForMilestone
-    .replace('Query.options(', '')
-    .replace(/'/g, '');
-  const finalTable = getMilestoneTable.split(',')[0];
+  // const getQueryForMilestone = pipe(startOfQuery, endOfQuery)(project);
+  // const getMilestoneTable = getQueryForMilestone
+  //   .replace('Query.options(', '')
+  //   .replace(/'/g, '');
+  // const finalTable = getMilestoneTable.split(',')[0];
 
   const queryHandle = project.split(',');
 
@@ -41,8 +41,6 @@ const getProjectMilestonesOptions = async (organization, project) => {
     .replace(/"/g, '')
     .replace(/'/g, '"')
     .trim();
-
-  // console.log(query);
 
   const queriedOptions = await getOptions(table, query, organization);
   return map(
@@ -126,6 +124,7 @@ const getCategoriesOptions = async (organization, project) => {
 const getMilestoneOptions = async (organization, project) => {
   const table = 'projects.milestones'; //we're getting the milestones.
   const query = 'projectid="' + project + '"';
+
   const queriedOptions = await getOptions(table, query, organization);
   return map(
     (options) => pick(['id', 'name'], options),
@@ -174,7 +173,8 @@ export const getQueryByOptions = async (
       } else if (seloptions.includes('tools.tools')) {
         return getToolsOptions(organization, seloptions);
       } else if (seloptions.includes('projects.milestones')) {
-        return getProjectMilestonesOptions(organization, seloptions);
+        // return getProjectMilestonesOptions(organization, seloptions);
+        return getMilestoneOptions(organization, projectValue);
       } else if (seloptions.includes('projects.projects')) {
         return getProjectOptions(organization, seloptions);
       } else if (seloptions.includes('categorizedTools')) {

@@ -13,7 +13,6 @@ import {getQueryByOptions} from './helper';
 import {selectProjectValue} from 'selector/form';
 import R from 'ramda';
 import {commonStyles} from '@styles/common';
-import {getProjectValInForm} from '@store/forms';
 
 class Select extends Component {
   state = {
@@ -39,23 +38,56 @@ class Select extends Component {
     this.updateSetOptions(options, [item.value]);
   }
 
-  // async componentDidUpdate(prevProps) {
-  //   const {projectValue} = prevProps;
-  //   if (projectValue !== this.props.projectValue) {
-  //     const {item} = this.props;
-  //     const options = await getQueryByOptions(this.props);
-  //     this.updateSetOptions(options, [item.value]);
+  async componentDidUpdate(prevProps) {
+    const {item, organization, projectValue} = this.props;
+    if (prevProps.projectValue !== projectValue) {
+      if (item.seloptions.includes('projects.milestones')) {
+        this.resetSelOptions();
+        const option = `=Query.options('projects.milestones', "projectid='${projectValue}'")`;
+
+        const options = await getQueryByOptions(
+          option,
+          item.type,
+          organization,
+          projectValue,
+        );
+
+        this.updateSetOptions(options, [item.value]);
+        return;
+      }
+
+      const options = await getQueryByOptions(this.props);
+      this.updateSetOptions(options, [item.value]);
+    }
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this.props.item.seloptions.includes('projects.milestones')) {
+  //     if (this.props.projectValue !== nextProps.projectValue) {
+  //       return true;
+  //     }
+  //     return false;
+  //   }
+
+  //   if (this.props.item.value !== nextProps.item.value) {
+  //     return true;
+  //   } else if (this.state.selOptions.length === 1) {
+  //     return true;
+  //   } else {
+  //     return false;
   //   }
   // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.item.value !== nextProps.item.value) {
-      return true;
-    } else if (this.state.selOptions.length === 1) {
-      return true;
-    }
-    return false;
-  }
+  resetSelOptions = () => {
+    this.setState({
+      selOptions: [
+        {
+          id: '',
+          name: 'None',
+        },
+      ],
+    });
+  };
 
   updateSetOptions = (options, value) => {
     const {item} = this.props;
@@ -73,7 +105,7 @@ class Select extends Component {
   };
 
   onSelectedItemsChange = (selectedItems) => {
-    const {item, updateFieldsValue, getProjectValInForm} = this.props;
+    const {item, updateFieldsValue} = this.props;
     let value = '';
 
     selectedItems.map((items) => {
@@ -86,11 +118,6 @@ class Select extends Component {
       rank: item.rank,
       value: item.type === 'selectmulti' ? value : selectedItems[0] + '',
     });
-
-    // if type === project
-    if (item.type === 'project') {
-      getProjectValInForm(selectedItems[0] + '');
-    }
   };
 
   render() {
@@ -140,4 +167,4 @@ const mapState = createStructuredSelector({
   projectValue: selectProjectValue,
 });
 
-export default connect(mapState, {getProjectValInForm})(Select);
+export default connect(mapState)(Select);

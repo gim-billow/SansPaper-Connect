@@ -34,7 +34,7 @@ const Photo = (props) => {
         if (Platform.OS === 'ios') {
           setTimeout(() => {
             setModalVisible(!modalVisible);
-          }, 500);
+          }, 100);
         } else {
           setModalVisible(!modalVisible);
         }
@@ -58,7 +58,7 @@ const Photo = (props) => {
             if (Platform.OS === 'ios') {
               setTimeout(() => {
                 setModalVisible(!modalVisible);
-              }, 500);
+              }, 100);
             } else {
               setModalVisible(!modalVisible);
             }
