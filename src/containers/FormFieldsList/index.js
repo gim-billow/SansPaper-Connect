@@ -18,6 +18,7 @@ import {
   selectCurrentFormFields,
   selectScrollToMandatory,
   selectSubmitTriggered,
+  selectCurrentFormUnfillMandatoryFields,
 } from 'selector/form';
 import {selectOrganistation} from 'selector/sanspaper';
 
@@ -92,9 +93,9 @@ class FormFieldsList extends React.Component {
   };
 
   render() {
-    const {currentFormFields} = this.props;
+    const {currentFormFields, test} = this.props;
     const {scrollEnabled} = this.state;
-
+    console.log('test', test);
     return (
       <View style={styles.flex1}>
         <KeyboardAwareFlatList
@@ -121,6 +122,7 @@ const mapState = createStructuredSelector({
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,
   organization: selectOrganistation,
+  test: selectCurrentFormUnfillMandatoryFields,
 });
 
 export default connect(mapState, {setCurrentForm, updateFormFieldValue})(

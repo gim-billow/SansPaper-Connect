@@ -33,7 +33,14 @@ export const selectCurrentFormFields = createSelector(
 export const selectCurrentFormUnfillMandatoryFields = createSelector(
   selectCurrentFormFields,
   (formFields) =>
-    filter((field) => field.mandatory === 1 && field.value === '', formFields),
+    filter(
+      (field) =>
+        (field.mandatory === 1 && field.value === '') ||
+        (field.mandatory === 1 &&
+          field.value === 0 &&
+          field.label === 'datetime'),
+      formFields,
+    ),
 );
 
 export const selectProjectValue = createSelector(
@@ -69,17 +76,19 @@ export const selectIfStartAndFinishDateCompleted = createSelector(
   (fields) => {
     // check start/finish date time
     let startDateTime = '';
+    let rank = 0;
     let finishDateTime = '';
     let dateTimelist = [];
     for (let item of fields) {
       if (item.type === 'datetime') {
         if (item.label.toLowerCase().includes('start')) {
           startDateTime = item.value;
+          rank = item.rank;
         }
 
         if (item.label.toLowerCase().includes('finish')) {
           finishDateTime = item.value;
-          dateTimelist.push({startDateTime, finishDateTime});
+          dateTimelist.push({startDateTime, finishDateTime, rank});
         }
       }
     }

@@ -37,6 +37,7 @@ class RightButton extends React.Component {
     } = this.props;
 
     let dateTimeError = '';
+    let dateTimeErrorIndex = null;
 
     showActivityIndicator();
 
@@ -51,7 +52,7 @@ class RightButton extends React.Component {
       return;
     }
 
-    forEach(({startDateTime, finishDateTime}) => {
+    forEach(({startDateTime, finishDateTime, rank}) => {
       // alert if finish date time is greater than start date time
       if (
         startDateTime &&
@@ -59,8 +60,16 @@ class RightButton extends React.Component {
         finishDateTime - startDateTime <= 0
       ) {
         dateTimeError = 'datetimeError';
+        if (!dateTimeErrorIndex) {
+          dateTimeErrorIndex = rank === 1 ? rank : rank - 1;
+          updateScrollToMandatory(dateTimeErrorIndex);
+        }
       } else if ((finishDateTime - startDateTime) / 60 / 60 / 1000 >= 20) {
         dateTimeError = 'hoursExceededError';
+        if (!dateTimeErrorIndex) {
+          dateTimeErrorIndex = rank === 1 ? rank : rank - 1;
+          updateScrollToMandatory(dateTimeErrorIndex);
+        }
       }
     }, startAndFinishDateTime);
 
