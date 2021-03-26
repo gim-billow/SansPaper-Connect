@@ -198,6 +198,7 @@ const postSansPaperUpviseForm = async (form, orgPath) => {
       templateid: form.id,
       geo: form.geo ? form.geo : '',
       value: await utilUpviseFormValueBuilder(id, form.fields),
+      postboybypass: 1
     };
 
     const batch = firebase.firestore().batch();
