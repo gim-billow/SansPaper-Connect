@@ -8,6 +8,7 @@ const INIT_STATE = {
   },
   scrollToMandatory: null,
   submitTriggered: 0,
+  submittingFrom: false,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -48,6 +49,16 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_SUBMIT_TRIGGERED: {
       return produce(state, (draftState) => {
         draftState.submitTriggered = state.submitTriggered + 1;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_SUBMITTING_FORM: {
+      return produce(state, (draftState) => {
+        draftState.submittingFrom = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS: {
+      return produce(state, (draftState) => {
+        draftState.currentForm.fields = [];
       });
     }
     default:

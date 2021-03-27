@@ -1,4 +1,5 @@
 export const FORM_ACTION = {
+  PRE_SUBMIT_FORM: 'fromAction/PRE_SUBMIT_FORM',
   LOAD_FORM_FIELDS: 'formActions/LOAD_FORM_FIELDS',
   UPDATE_FORM_FIELD_VALUE: 'formActions/UPDATE_FORM_FIELD_VALUE',
 };
@@ -11,16 +12,23 @@ export const FORM_SAGA_ACTIONS = {
 export const FORM_REDUCER_ACTIONS = {
   UPDATE_CURRENT_FORM_FIELDS: 'formAction/UPDATE_CURRENT_FORM_FIELDS',
   UPDATE_SUBMIT_TRIGGERED: 'formAction/UPDATE_SUBMIT_TRIGGERED',
+  UPDATE_SUBMITTING_FORM: 'formAction/UPDATE_SUBMITTING_FORM',
   UPDATE_SCROLL_TO_MANDATORY: 'formAction/UPDATE_SCROLL_TO_MANDATORY',
   UPDATE_ORGANISATION_PATH: 'formAcions/UPDATE_ORGANISATION_PATH',
   UPDATE_CURRENT_LINKED_TABLE: 'formActions/UPDATE_CURRENT_LINKED_TABLE',
   UPDATE_CURRENT_FORM_ID: 'formAcions/UPDATE_CURRENT_FORM_ID',
   UPDATE_CURRENT_FORM: 'formAcions/UPDATE_CURRENT_FORM',
   UPDATE_FORM_LIST: 'formAcions/UPDATE_FORM_LIST',
+  RESET_CURRENT_FORM_DETAILS: 'formActions/RESET_CURRENT_FORM_DETAILS',
 };
 
 export const loadFormFields = (payload) => ({
   type: FORM_ACTION.LOAD_FORM_FIELDS,
+  payload,
+});
+
+export const submitForm = (payload) => ({
+  type: FORM_ACTION.PRE_SUBMIT_FORM,
   payload,
 });
 
@@ -44,6 +52,15 @@ export const updateScrollToMandatory = (payload) => ({
   payload,
 });
 
+export const updateSubmittingForm = (payload) => ({
+  type: FORM_REDUCER_ACTIONS.UPDATE_SUBMITTING_FORM,
+  payload,
+});
+
 export const updateSubmitTriggered = () => ({
   type: FORM_REDUCER_ACTIONS.UPDATE_SUBMIT_TRIGGERED,
+});
+
+export const resetCurrentFormDetails = () => ({
+  type: FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS,
 });
