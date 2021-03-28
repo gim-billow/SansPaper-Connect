@@ -1,4 +1,10 @@
-import {Alert, Platform, PermissionsAndroid} from 'react-native';
+import {
+  Alert,
+  Platform,
+  PermissionsAndroid,
+  Linking,
+  ToastAndroid,
+} from 'react-native';
 import {
   all,
   call,
@@ -35,13 +41,43 @@ import {
 } from '@selector/form';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 
+async function hasLocationPermissionIOS() {
+  const openSetting = () => {
+    Linking.openSettings().catch(() => {
+      Alert.alert('Unable to open settings');
+    });
+  };
+  const status = await Geolocation.requestAuthorization('whenInUse');
+
+  if (status === 'granted') {
+    return true;
+  }
+
+  if (status === 'denied') {
+    Alert.alert('Location permission denied');
+  }
+
+  if (status === 'disabled') {
+    Alert.alert(
+      'Turn on Location Services to allow sanspaper to determine your location.',
+      '',
+      [
+        {text: 'Go to Settings', onPress: openSetting},
+        {text: "Don't Use Location", onPress: () => {}},
+      ],
+    );
+  }
+
+  return false;
+}
+
 async function hasLocationPermission() {
-  // console.log("hasLocatoinPermission called");
-  if (
-    Platform.OS === 'ios' ||
-    (Platform.OS === 'android' && Platform.Version < 23)
-  ) {
-    // console.log("setting location permission to true");
+  if (Platform.OS === 'ios') {
+    const hasPermission = await hasLocationPermissionIOS();
+    return hasPermission;
+  }
+
+  if (Platform.OS === 'android' && Platform.Version < 23) {
     return true;
   }
 
@@ -50,7 +86,6 @@ async function hasLocationPermission() {
   );
 
   if (hasPermission) {
-    console.log('user has permission', hasPermission);
     return true;
   }
 
@@ -59,29 +94,18 @@ async function hasLocationPermission() {
   );
 
   if (status === PermissionsAndroid.RESULTS.GRANTED) {
-    console.log('checking status of permission android', status);
     return true;
   }
 
   if (status === PermissionsAndroid.RESULTS.DENIED) {
-    Alert.alert(
-      'Warning',
-      'Geo Location permission not granted, geolocation will not be attached to form',
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: false},
-    );
-
-    return false;
+    ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
   } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-    Alert.alert(
-      'Warning',
-      "Geo Location is set to 'Never Ask Again', geolocation will never be attached to forms",
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: false},
+    ToastAndroid.show(
+      'Location permission revoked by user.',
+      ToastAndroid.LONG,
     );
-
-    return false;
   }
+
   return false;
 }
 
@@ -139,14 +163,14 @@ async function submitForm(form) {
   try {
     showActivityIndicator();
     const permission = await hasLocationPermission();
-
     if (permission) {
       Geolocation.getCurrentPosition(
         async (position) => {
           // console.log("checking position", position);
-          form.geo =
+          const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
-          let isSubmitted = await submitUpviseForm(form);
+          const updatedForm = assoc('geo', geo, form);
+          let isSubmitted = await submitUpviseForm(updatedForm);
 
           if (isSubmitted) {
             dismissActivityIndicator();
