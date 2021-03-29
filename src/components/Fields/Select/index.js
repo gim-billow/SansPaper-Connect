@@ -56,8 +56,10 @@ class Select extends Component {
         return;
       }
 
-      const options = await getQueryByOptions(this.props);
-      this.updateSetOptions(options, [item.value]);
+      if (item.type !== 'selectmulti') {
+        const options = await getQueryByOptions(this.props);
+        this.updateSetOptions(options, [item.value]);
+      }
     }
   }
 
