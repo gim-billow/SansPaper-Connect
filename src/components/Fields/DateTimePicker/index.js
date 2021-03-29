@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {Button} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Divider} from 'react-native-elements';
@@ -110,6 +111,28 @@ const DateTimePicker = (props) => {
     setChangeTimeTheme(true);
   };
 
+  const cancelDate = () => {
+    const dateFormat = setDateTimeFormatDisplay('date', Date.now());
+
+    setDateLabel(dateFormat);
+    setDisplayDate(swapDateNum(dateFormat));
+
+    setChangeDateTheme(false);
+    updateFieldsValue({rank: item.rank, value: 0});
+
+    Toast.show('Date cleared.');
+  };
+
+  const cancelTime = () => {
+    setTimeLabel('Select Time');
+    setDisplayTime(new Date().getTime());
+
+    setChangeTimeTheme(false);
+    updateFieldsValue({rank: item.rank, value: 0});
+
+    Toast.show('Time cleared.');
+  };
+
   return (
     <ItemWrapper>
       <View style={styles.topContainer}>
@@ -122,6 +145,7 @@ const DateTimePicker = (props) => {
         <View style={styles.container}>
           <View style={[styles.button, styles.left]}>
             <Button
+              onLongPress={cancelDate}
               mode="contained"
               style={
                 changeDateTheme === true
@@ -148,6 +172,7 @@ const DateTimePicker = (props) => {
           </View>
           <View style={[styles.button, styles.right]}>
             <Button
+              onLongPress={cancelTime}
               mode="contained"
               style={
                 changeTimeTheme === true

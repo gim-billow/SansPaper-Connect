@@ -27,6 +27,7 @@ let middleware = [applyMiddleware(sagaMiddleware)];
 if (global.__REDUX_DEVTOOLS_EXTENSION__) {
   middleware = [...middleware, global.__REDUX_DEVTOOLS_EXTENSION__()];
 }
+
 console.disableYellowBox = true;
 const store = createStore(rootReducer, compose(...middleware));
 
