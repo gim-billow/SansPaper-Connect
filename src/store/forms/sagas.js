@@ -234,30 +234,36 @@ function* preSubmitForm({payload}) {
         cancelable: false,
       });
     } else {
-      forEach(({startDateTime, finishDateTime}) => {
+      let scrollToIndex = null;
+      forEach(({startDateTime, finishDateTime, rank}) => {
         const hours = moment
           .duration(finishDateTime - startDateTime, 'milliseconds')
           .asHours();
-        console.log('hours = ', hours);
         // alert if finish date time is greater than start date time
         if (
           startDateTime &&
           finishDateTime &&
           finishDateTime - startDateTime <= 0
         ) {
+          scrollToIndex = rank;
           dateTimeError = 'dateTimeError';
         } else if (hours >= 20) {
+          scrollToIndex = rank;
           dateTimeError = 'hoursExceededError';
         }
       }, startAndFinishDateTime);
 
       if (dateTimeError === 'dateTimeError') {
         dismissActivityIndicator();
+        yield put(updateSubmitTriggered());
+        yield put(updateScrollToMandatory(scrollToIndex));
         yield Alert.alert('Alert', dateTimeErrorMessage, alertConfig, {
           cancelable: false,
         });
       } else if (dateTimeError === 'hoursExceededError') {
         dismissActivityIndicator();
+        yield put(updateSubmitTriggered());
+        yield put(updateScrollToMandatory(scrollToIndex));
         yield Alert.alert(
           'Alert',
           hoursExceededError,
