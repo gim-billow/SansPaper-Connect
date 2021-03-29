@@ -3,8 +3,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {View, ActivityIndicator, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import RNAsyncStorageFlipper from 'rn-async-storage-flipper';
-import AsyncStorage from '@react-native-community/async-storage';
 
 //styles
 import styles from './styles';
@@ -37,7 +35,6 @@ class InitialScreen extends React.Component {
 
   componentDidMount() {
     this.authListener = auth().onAuthStateChanged(this._onAuthStateChanged);
-    RNAsyncStorageFlipper(AsyncStorage);
   }
 
   componentWillUnmount() {

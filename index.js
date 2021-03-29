@@ -20,17 +20,9 @@ import {appScreens, startApp} from './src/screen';
 // react native paper theme
 import {theme} from 'styles/papertheme';
 
-let middlewaresToApply = [];
-
-// Flipper debugger
-if (__DEV__) {
-  const createDebugger = require('redux-flipper').default;
-  middlewaresToApply.push(createDebugger({resolveCyclic: true}));
-}
-
 const sagaMiddleware = createSagaMiddleware();
 
-let middleware = [applyMiddleware(sagaMiddleware, ...middlewaresToApply)];
+let middleware = [applyMiddleware(sagaMiddleware)];
 
 if (global.__REDUX_DEVTOOLS_EXTENSION__) {
   middleware = [...middleware, global.__REDUX_DEVTOOLS_EXTENSION__()];

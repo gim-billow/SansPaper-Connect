@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {ListItem, Icon} from 'react-native-elements';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button as RNButton} from 'react-native-paper';
@@ -71,6 +72,12 @@ class LinkedItemsList extends React.Component {
     this.setState({showModal: false});
 
     const found = find(propEq('serialnumber', serial))(linkedItems);
+
+    if (!found) {
+      Toast.show('Item not found in this list.', Toast.LONG);
+      return;
+    }
+
     goToFormFieldsScreen({
       linkedItemId: found.id,
       componentId: screens.LinkedItems,
