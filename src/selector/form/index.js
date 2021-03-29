@@ -12,6 +12,8 @@ export const selectFormList = (state) => state.formReducer.forms;
 
 export const selectCurrentForm = (state) => state.formReducer.currentForm;
 
+export const selectIsSubmittingForm = (state) => state.formReducer.currentForm;
+
 export const selectScrollToMandatory = (state) =>
   state.formReducer.scrollToMandatory;
 
@@ -55,15 +57,17 @@ export const selectStartAndFinishDate = createSelector(
     let startDateTime = '';
     let finishDateTime = '';
     let dateTimelist = [];
+    let rank = null;
     for (let item of fields) {
       if (item.type === 'datetime') {
         if (item.label.toLowerCase().includes('start')) {
           startDateTime = item.value;
+          rank = item.rank;
         }
 
         if (item.label.toLowerCase().includes('finish')) {
           finishDateTime = item.value;
-          dateTimelist.push({startDateTime, finishDateTime});
+          dateTimelist.push({startDateTime, finishDateTime, rank});
         }
       }
     }

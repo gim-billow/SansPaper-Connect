@@ -32,6 +32,7 @@ const DateTimePicker = (props) => {
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
   const [defaultTime, setDefaultTime] = useState('none');
 
+  /*
   useEffect(() => {
     (async () => {
       const getDefaultTimes = await getDefaultTime();
@@ -46,7 +47,7 @@ const DateTimePicker = (props) => {
       getDefaultTimes !== 'none' ? setChangeTimeTheme(true) : '';
     })();
   }, [item.rank, setDefaultTime, updateFieldsValue]);
-
+*/
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -174,6 +175,7 @@ const DateTimePicker = (props) => {
             />
           </View>
         </View>
+        {/*
         <View style={styles.container}>
           <View style={styles.SetDefault}>
             <Button
@@ -192,6 +194,7 @@ const DateTimePicker = (props) => {
             </Text>
           </View>
         </View>
+        */}
       </View>
       <Divider />
     </ItemWrapper>

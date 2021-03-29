@@ -572,6 +572,8 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.42.0):
     - React-Core
+  - react-native-geolocation-service (5.2.0):
+    - React
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-signature-capture (0.4.11):
@@ -742,6 +744,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
   - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
@@ -850,6 +853,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-signature-capture:
@@ -963,6 +968,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-camera: cf8a153d33138dcc457172fc3c33fdf4e5d288d2
+  react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-signature-capture: 96ee159945aa595a57a5aeeb344218b342640a23
   react-native-simple-toast: bf002828cf816775a6809f7a9ec3907509bce11f
@@ -1000,4 +1006,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7763f5d66953a73f4146c664449ef4e65f98e3ed
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

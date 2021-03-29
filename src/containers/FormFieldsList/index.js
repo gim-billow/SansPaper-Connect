@@ -12,7 +12,11 @@ import {has} from 'ramda';
 import Fields from 'components/Fields';
 
 //redux,selector
-import {setCurrentForm, updateFormFieldValue} from 'store/forms';
+import {
+  setCurrentForm,
+  updateFormFieldValue,
+  resetCurrentFormDetails,
+} from 'store/forms';
 import {
   selectCurrentFormId,
   selectCurrentFormFields,
@@ -24,7 +28,6 @@ import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
 import {fieldsProps} from './helper';
-import {behavior} from '@constant/KeyboardAvoiding';
 import styles from '../../components/Fields/ItemWrapper/styles';
 
 class FormFieldsList extends React.Component {
@@ -41,6 +44,10 @@ class FormFieldsList extends React.Component {
         scrollToMandatory === 1 ? scrollToMandatory - 1 : scrollToMandatory;
       this.scrollToIndex(index);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetCurrentFormDetails();
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -125,6 +132,8 @@ const mapState = createStructuredSelector({
   test: selectCurrentFormUnfillMandatoryFields,
 });
 
-export default connect(mapState, {setCurrentForm, updateFormFieldValue})(
-  FormFieldsList,
-);
+export default connect(mapState, {
+  setCurrentForm,
+  updateFormFieldValue,
+  resetCurrentFormDetails,
+})(FormFieldsList);
