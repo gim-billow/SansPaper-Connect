@@ -3,10 +3,13 @@ import {View, Dimensions, TouchableOpacity, Text, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
+import {Navigation} from 'react-native-navigation';
+import {screens} from '@constant/ScreenConstants';
 
 import styles from './styles';
 import {red} from '@styles/colors';
 import {uniqueKey} from '@util/general';
+import {getTextInsideParens} from '@util/string';
 import {GOOGLE_API_KEY} from '@constant/Keys';
 import {hasLocationPermission} from '@store/forms';
 
@@ -31,6 +34,7 @@ class MapScreen extends React.Component {
       },
       key: '0',
     },
+    address: 'Drop a pin or search an address',
   };
 
   componentDidMount() {
@@ -39,9 +43,25 @@ class MapScreen extends React.Component {
   }
 
   async onInitCurrentLocation() {
+    const {address} = this.props;
     const permission = await hasLocationPermission();
 
     if (permission) {
+      // if address with long lat is given
+      if (address) {
+        const coordinates = getTextInsideParens(address);
+        const addr = address.split('(')[0];
+        const longLat = coordinates.split(',');
+
+        this.setCoordinates(
+          parseFloat(longLat[0]),
+          parseFloat(longLat[1]),
+          addr,
+        );
+
+        return;
+      }
+
       Geolocation.getCurrentPosition(
         (position) => {
           this.setCoordinates(
@@ -72,7 +92,7 @@ class MapScreen extends React.Component {
     });
   }
 
-  setCoordinates(latitude, longitude) {
+  setCoordinates(latitude, longitude, address) {
     let markers = {...this.state.marker};
     let regions = {...this.state.region};
 
@@ -88,11 +108,16 @@ class MapScreen extends React.Component {
     regions.latitude = latitude;
     regions.longitude = longitude;
 
-    this.setState({marker: {...markers}, region: {...regions}});
+    this.setState({
+      marker: {...markers},
+      region: {...regions},
+      address: address ? address : this.state.address,
+    });
   }
 
   render() {
-    const {marker} = this.state;
+    const {marker, address, region} = this.state;
+    const {setText} = this.props;
 
     return (
       <View style={styles.container}>
@@ -113,23 +138,36 @@ class MapScreen extends React.Component {
             onPress={(data, details = null) => {
               const {location} = details.geometry;
 
-              this.setCoordinates(location.lat, location.lng);
-
-              //   console.log('details', details);
+              this.setCoordinates(
+                location.lat,
+                location.lng,
+                details.formatted_address,
+              );
             }}
             query={{
               key: GOOGLE_API_KEY,
               language: 'en',
             }}
             fetchDetails
-            currentLocation={true}
-            currentLocationLabel="Current location"
+            debounce={500}
+            styles={{
+              poweredContainer: {
+                display: 'none',
+              },
+            }}
           />
-          {/* <TouchableOpacity
-            onPress={() => this.setState({markers: []})}
+        </View>
+        <View style={styles.bubbleContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              if (address !== 'Drop a pin or search an address') {
+                setText(`${address} (${region.latitude},${region.longitude})`);
+              }
+              Navigation.pop(screens.MapScreen);
+            }}
             style={styles.bubble}>
-            <Text>Clear marker</Text>
-          </TouchableOpacity> */}
+            <Text>{address}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

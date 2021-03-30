@@ -5,7 +5,6 @@ import {Text, View, Platform, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles';
-import {screens} from '@constant/ScreenConstants';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
@@ -84,7 +83,10 @@ const SPText = (props) => {
             <TouchableOpacity
               style={styles.iconWrapper}
               onPress={() => {
-                goToGoogleMapScreen({componentId: screens.FormFieldsScreen});
+                goToGoogleMapScreen({
+                  setText: (address) => setText(address),
+                  address: text,
+                });
               }}>
               <Icon size={40} style={styles.map} name="place" />
             </TouchableOpacity>

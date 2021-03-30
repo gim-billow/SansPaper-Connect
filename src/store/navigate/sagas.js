@@ -114,8 +114,14 @@ function* goToFormFieldsScreen({payload = {}}) {
 
 function* goToGoogleMapScreen({payload = {}}) {
   try {
-    const {componentId} = payload;
-    pushToMapScreen({componentId});
+    const {setText, address} = payload;
+    pushToMapScreen({
+      componentId: screens.FormFieldsScreen,
+      passProps: {
+        setText,
+        address,
+      },
+    });
   } catch (error) {}
 }
 

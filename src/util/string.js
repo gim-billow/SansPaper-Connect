@@ -8,3 +8,8 @@ export const limitText = (text, limit = null) => {
 
   return text.substring(0, limit || 15) + '...';
 };
+
+export const getTextInsideParens = (string) => {
+  const regExp = /\(([^)]+)\)/;
+  return regExp.exec(string)[1];
+};
