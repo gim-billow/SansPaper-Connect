@@ -71,7 +71,7 @@ async function hasLocationPermissionIOS() {
   return false;
 }
 
-async function hasLocationPermission() {
+export async function hasLocationPermission() {
   if (Platform.OS === 'ios') {
     const hasPermission = await hasLocationPermissionIOS();
     return hasPermission;

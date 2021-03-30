@@ -6,6 +6,7 @@ import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
+import {goToGoogleMapScreen} from '@store/navigate';
 import {has} from 'ramda';
 
 //component
@@ -67,6 +68,7 @@ class FormFieldsList extends React.Component {
       updateFormFieldValue: updatedFormFieldProps,
       organization,
       currentFormFields,
+      goToGoogleMapScreen,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -79,6 +81,7 @@ class FormFieldsList extends React.Component {
           currentFormFields,
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],
+          goToGoogleMapScreen,
         });
         return FieldElement;
       }
@@ -102,7 +105,7 @@ class FormFieldsList extends React.Component {
   render() {
     const {currentFormFields, test} = this.props;
     const {scrollEnabled} = this.state;
-    console.log('test', test);
+
     return (
       <View style={styles.flex1}>
         <KeyboardAwareFlatList
@@ -136,4 +139,5 @@ export default connect(mapState, {
   setCurrentForm,
   updateFormFieldValue,
   resetCurrentFormDetails,
+  goToGoogleMapScreen,
 })(FormFieldsList);

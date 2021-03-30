@@ -20,6 +20,7 @@ import {
 import {
   pushToLinkedItem,
   pushToFormFieldsScreen,
+  pushToMapScreen,
 } from '@navigation/componentNavigation';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 
@@ -111,9 +112,17 @@ function* goToFormFieldsScreen({payload = {}}) {
   }
 }
 
+function* goToGoogleMapScreen({payload = {}}) {
+  try {
+    const {componentId} = payload;
+    pushToMapScreen({componentId});
+  } catch (error) {}
+}
+
 export default all([
   takeLatest(NAVIGATE_ACTIONS.GO_TO_LOGIN, goToLogin),
   takeLatest(NAVIGATE_ACTIONS.GO_TO_LINK_ITEM_SCREEN, goToLinkedItemScreen),
   takeLatest(NAVIGATE_ACTIONS.GO_TO_FORM_FIELDS_SCREEN, goToFormFieldsScreen),
   takeLatest(NAVIGATE_ACTIONS.GO_TO_MAIN_SCREEN, goToMainScreen),
+  takeLatest(NAVIGATE_ACTIONS.GO_TO_GOOGLE_MAPS, goToGoogleMapScreen),
 ]);
