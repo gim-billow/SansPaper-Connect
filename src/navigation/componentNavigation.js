@@ -25,3 +25,14 @@ export const pushToFormFieldsScreen = (props) => {
     },
   });
 };
+
+export const pushToMapScreen = (props) => {
+  const {componentId, passProps} = props;
+  Navigation.push(componentId, {
+    component: {
+      id: 'MapScreen',
+      name: 'MapScreen',
+      passProps,
+    },
+  });
+};

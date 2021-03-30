@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {View, ActivityIndicator, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import Geocoder from 'react-native-geocoding';
 
 //styles
 import styles from './styles';
@@ -16,6 +17,7 @@ import {showLoginScreen} from '@navigation';
 
 //redux
 import {init} from '@store/common';
+import {GOOGLE_API_KEY} from '@constant/Keys';
 
 class InitialScreen extends React.Component {
   static options = () => {
@@ -34,6 +36,8 @@ class InitialScreen extends React.Component {
   authListener;
 
   componentDidMount() {
+    // initialize geocoding
+    Geocoder.init(GOOGLE_API_KEY);
     this.authListener = auth().onAuthStateChanged(this._onAuthStateChanged);
   }
 

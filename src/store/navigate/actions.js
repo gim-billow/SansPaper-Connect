@@ -3,6 +3,7 @@ export const NAVIGATE_ACTIONS = {
   GO_TO_LINK_ITEM_SCREEN: 'navigateActions/GO_TO_LINK_ITEM_SCREEN',
   GO_TO_FORM_FIELDS_SCREEN: 'navigationAction/GO_TO_FORM_FIELDS_SCREEN',
   GO_TO_MAIN_SCREEN: 'navigateActions/GO_TO_MAIN_SCREEN',
+  GO_TO_GOOGLE_MAPS: 'navigateActions/GO_TO_GOOGLE_MAPS',
 };
 
 export const goToLogin = () => ({
@@ -21,4 +22,9 @@ export const goToFormFieldsScreen = (payload) => ({
 
 export const goToMainScreen = () => ({
   type: NAVIGATE_ACTIONS.GO_TO_MAIN_SCREEN,
+});
+
+export const goToGoogleMapScreen = (payload) => ({
+  type: NAVIGATE_ACTIONS.GO_TO_GOOGLE_MAPS,
+  payload,
 });

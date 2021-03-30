@@ -8,4 +8,6 @@ export const screens = {
   ActivityIndicatorOverlay: 'ActivityIndicatorOverlay',
   RightButton: 'RightButton',
   ProfileScreen: 'ProfileScreen',
+  MapScreen: 'MapScreen',
+  SelectMap: 'SelectMap',
 };
