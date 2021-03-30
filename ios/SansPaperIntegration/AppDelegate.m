@@ -33,7 +33,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-[GMSServices provideAPIKey:@"AIzaSyBValKIxjrzAUglZgkkdFJX0q7R4KO6OsM"];
+[GMSServices provideAPIKey:@"AIzaSyA1NhnnhE7cMq8Z2nuMlVBZP1TAM_lGBpE"];
 [AppCenterReactNative register];
 [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];
 [AppCenterReactNativeCrashes registerWithAutomaticProcessing];

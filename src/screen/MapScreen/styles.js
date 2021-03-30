@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {spaceRegular} from '@styles/space';
+import {white} from '@styles/colors';
 
 export default StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ export default StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: white,
     paddingHorizontal: 18,
     paddingVertical: 12,
     marginHorizontal: 15,
