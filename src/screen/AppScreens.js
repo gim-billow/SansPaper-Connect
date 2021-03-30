@@ -9,6 +9,7 @@ import ActivityIndicatorOverlay from './ActivityIndicatorOverlay';
 import RightButton from './RightButton';
 import ProfileScreen from './ProfileScreen';
 import MapScreen from './MapScreen';
+import SelectMap from './MapScreen/SelectMap';
 
 const appScreens = new Map();
 
@@ -22,5 +23,6 @@ appScreens.set(screens.ActivityIndicatorOverlay, ActivityIndicatorOverlay);
 appScreens.set(screens.RightButton, RightButton);
 appScreens.set(screens.ProfileScreen, ProfileScreen);
 appScreens.set(screens.MapScreen, MapScreen);
+appScreens.set(screens.SelectMap, SelectMap);
 
 export default appScreens;

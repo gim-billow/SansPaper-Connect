@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Dimensions, TouchableOpacity, Text, Alert} from 'react-native';
+import {View, Dimensions, Text, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
-import {Navigation} from 'react-native-navigation';
+
 import Geocoder from 'react-native-geocoding';
+import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 
 import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
@@ -34,7 +35,7 @@ class MapScreen extends React.Component {
       },
       key: '0',
     },
-    address: 'Drop a pin or search an address',
+    address: 'Drop a pin or search a location',
   };
 
   componentDidMount() {
@@ -71,20 +72,21 @@ class MapScreen extends React.Component {
   }
 
   onMapPress(e) {
+    showActivityIndicator();
     const {longitude, latitude} = e.nativeEvent.coordinate;
-
-    this.setCoordinates(latitude, longitude);
 
     Geocoder.from([latitude, longitude])
       .then((json) => {
         const addr = json.results[0].formatted_address;
 
-        this.setState({address: addr});
+        this.setCoordinates(latitude, longitude, addr);
+        dismissActivityIndicator();
       })
       .catch((error) => {
+        dismissActivityIndicator();
         console.log('error', error);
         this.renderAlert();
-      });
+      }).ti;
   }
 
   renderAlert() {
@@ -115,6 +117,8 @@ class MapScreen extends React.Component {
       region: {...regions},
       address: address ? address : this.state.address,
     });
+
+    this.props.setText(`${address} (${latitude},${longitude})`);
   }
 
   render() {
@@ -160,16 +164,9 @@ class MapScreen extends React.Component {
           />
         </View>
         <View style={styles.bubbleContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              if (address !== 'Drop a pin or search an address') {
-                setText(`${address} (${region.latitude},${region.longitude})`);
-              }
-              Navigation.pop(screens.MapScreen);
-            }}
-            style={styles.bubble}>
+          <View style={styles.bubble}>
             <Text>{address}</Text>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -184,6 +181,14 @@ MapScreen.options = {
     backButton: {
       showTitle: false,
     },
+    rightButtons: [
+      {
+        id: screens.SelectMap,
+        component: {
+          name: screens.SelectMap,
+        },
+      },
+    ],
   },
   statusBar: {
     visible: true,

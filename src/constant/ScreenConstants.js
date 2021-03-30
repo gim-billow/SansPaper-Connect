@@ -9,4 +9,5 @@ export const screens = {
   RightButton: 'RightButton',
   ProfileScreen: 'ProfileScreen',
   MapScreen: 'MapScreen',
+  SelectMap: 'SelectMap',
 };
