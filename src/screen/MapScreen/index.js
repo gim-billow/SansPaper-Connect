@@ -4,14 +4,14 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
 import {Navigation} from 'react-native-navigation';
-import {screens} from '@constant/ScreenConstants';
+import Geocoder from 'react-native-geocoding';
 
+import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
 import {red} from '@styles/colors';
 import {uniqueKey} from '@util/general';
 import {getTextInsideParens} from '@util/string';
 import {GOOGLE_API_KEY} from '@constant/Keys';
-import {hasLocationPermission} from '@store/forms';
 
 const screen = Dimensions.get('window');
 
@@ -44,52 +44,54 @@ class MapScreen extends React.Component {
 
   async onInitCurrentLocation() {
     const {address} = this.props;
-    const permission = await hasLocationPermission();
 
-    if (permission) {
-      // if address with long lat is given
-      if (address) {
-        const coordinates = getTextInsideParens(address);
-        const addr = address.split('(')[0];
-        const longLat = coordinates.split(',');
+    // if address with long lat is given
+    if (address) {
+      const coordinates = getTextInsideParens(address);
+      const addr = address.split('(')[0];
+      const longLat = coordinates.split(',');
 
-        this.setCoordinates(
-          parseFloat(longLat[0]),
-          parseFloat(longLat[1]),
-          addr,
-        );
+      this.setCoordinates(parseFloat(longLat[0]), parseFloat(longLat[1]), addr);
 
-        return;
-      }
-
-      Geolocation.getCurrentPosition(
-        (position) => {
-          this.setCoordinates(
-            position.coords.latitude,
-            position.coords.longitude,
-          );
-        },
-        (error) => {
-          Alert.alert(
-            'Alert',
-            'Unable to retrieve your current location, please check if GPS is turn on and try again, form not submitted',
-          );
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 2000},
-      );
+      return;
     }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        this.setCoordinates(
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+      },
+      (error) => {
+        this.renderAlert();
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 2000},
+    );
   }
 
   onMapPress(e) {
     const {longitude, latitude} = e.nativeEvent.coordinate;
+
     this.setCoordinates(latitude, longitude);
 
-    this.setState({
-      marker: {
-        coordinate: e.nativeEvent.coordinate,
-        key: uniqueKey(),
-      },
-    });
+    Geocoder.from([latitude, longitude])
+      .then((json) => {
+        const addr = json.results[0].formatted_address;
+
+        this.setState({address: addr});
+      })
+      .catch((error) => {
+        console.log('error', error);
+        this.renderAlert();
+      });
+  }
+
+  renderAlert() {
+    return Alert.alert(
+      'Alert',
+      'Unable to retrieve your current location, please check if GPS is turn on and try again',
+    );
   }
 
   setCoordinates(latitude, longitude, address) {

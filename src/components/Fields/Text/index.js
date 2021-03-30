@@ -8,6 +8,7 @@ import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
+import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;
@@ -51,6 +52,17 @@ const SPText = (props) => {
     }
   };
 
+  const enableLocation = async () => {
+    const permission = await hasLocationPermission();
+
+    if (permission) {
+      goToGoogleMapScreen({
+        setText: (address) => setText(address),
+        address: text,
+      });
+    }
+  };
+
   if (
     label.includes('geo') ||
     label.includes('location') ||
@@ -82,12 +94,7 @@ const SPText = (props) => {
             </View>
             <TouchableOpacity
               style={styles.iconWrapper}
-              onPress={() => {
-                goToGoogleMapScreen({
-                  setText: (address) => setText(address),
-                  address: text,
-                });
-              }}>
+              onPress={enableLocation}>
               <Icon size={40} style={styles.map} name="place" />
             </TouchableOpacity>
           </View>
