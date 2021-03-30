@@ -124,7 +124,6 @@ class MapScreen extends React.Component {
             fetchDetails
             currentLocation={true}
             currentLocationLabel="Current location"
-            GooglePlacesSearchQuery
           />
           {/* <TouchableOpacity
             onPress={() => this.setState({markers: []})}
