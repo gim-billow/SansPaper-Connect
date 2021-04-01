@@ -119,7 +119,7 @@ class FormFieldsList extends React.Component {
           removeClippedSubviews={false}
           extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
           enableOnAndroid={true}
-          enableResetScrollToCoords={true}
+          enableResetScrollToCoords={false}
         />
       </View>
     );

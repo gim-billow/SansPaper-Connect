@@ -100,8 +100,10 @@ class FormList extends React.Component {
         <Searchbar
           placeholder="Search form"
           style={styles.searchbar}
+          value={searchKeyword}
           onChangeText={this.handleOnChangeText}
           icon="search"
+          clearIcon="clear"
         />
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList

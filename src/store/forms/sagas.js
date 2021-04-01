@@ -19,6 +19,7 @@ import {firebase} from '@react-native-firebase/firestore';
 import {assoc, adjust, forEach} from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
+import Geocoder from 'react-native-geocoding';
 import moment from 'moment';
 
 import AlertMessages from '@constant/AlertMessages';
@@ -166,10 +167,22 @@ async function submitForm(form) {
     if (permission) {
       Geolocation.getCurrentPosition(
         async (position) => {
-          // console.log("checking position", position);
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
-          const updatedForm = assoc('geo', geo, form);
+          let updatedForm = assoc('geo', geo, form);
+
+          // TODO:
+          // const addr = await Geocoder.from([
+          //   position.coords.latitude,
+          //   position.coords.longitude,
+          // ]);
+
+          // updatedForm = assoc(
+          //   'address',
+          //   addr.results[0].formatted_address,
+          //   updatedForm,
+          // );
+
           let isSubmitted = await submitUpviseForm(updatedForm);
 
           if (isSubmitted) {

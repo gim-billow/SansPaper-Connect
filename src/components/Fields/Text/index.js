@@ -27,6 +27,11 @@ const SPText = (props) => {
     updateFieldsValue({rank, value: updatedText});
   };
 
+  const onUpdateMapAddress = (address) => {
+    setText(address);
+    updateFieldsValue({rank, value: address});
+  };
+
   const onInputFocus = () => {
     if (Platform.OS === 'android') {
       setSelection(null);
@@ -57,16 +62,16 @@ const SPText = (props) => {
 
     if (permission) {
       goToGoogleMapScreen({
-        setText: (address) => setText(address),
+        setText: (address) => onUpdateMapAddress(address),
         address: text,
       });
     }
   };
 
   if (
-    label.includes('geo') ||
-    label.includes('location') ||
-    label.includes('address')
+    label.toLowerCase().includes('geo') ||
+    label.toLowerCase().includes('location') ||
+    label.toLowerCase().includes('address')
   ) {
     return (
       <ItemWrapper>

@@ -6,6 +6,7 @@ import {
   Alert,
   SafeAreaView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {ListItem, Icon} from 'react-native-elements';
@@ -73,8 +74,8 @@ class LinkedItemsList extends React.Component {
 
     const found = find(propEq('serialnumber', serial))(linkedItems);
 
-    if (!found) {
-      Toast.show('Item not found in this list.', Toast.LONG);
+    if (!found || found === null || found === '') {
+      this.showNoItemToastAlert();
       return;
     }
 
@@ -82,6 +83,21 @@ class LinkedItemsList extends React.Component {
       linkedItemId: found.id,
       componentId: screens.LinkedItems,
     });
+  };
+
+  showNoItemToastAlert = () => {
+    if (Platform.OS === 'android') {
+      Toast.show('Item not found in this list', Toast.LONG);
+      return;
+    }
+
+    setTimeout(() => {
+      Toast.showWithGravity(
+        'Item not found in this list',
+        Toast.LONG,
+        Toast.BOTTOM,
+      );
+    }, 200);
   };
 
   render() {
