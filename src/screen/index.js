@@ -1,3 +1,5 @@
+import '../../reactotron-config';
+
 import appScreens from './AppScreens';
 import * as navigation from '@navigation';
 

@@ -10,6 +10,9 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
+// reactotron
+import Reactotron from 'reactotron-react-native';
+
 import {Provider} from 'react-redux';
 import {Provider as PaperProvider} from 'react-native-paper';
 
@@ -20,7 +23,9 @@ import {appScreens, startApp} from './src/screen';
 // react native paper theme
 import {theme} from 'styles/papertheme';
 
-const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware({
+  sagaMonitor: Reactotron.createSagaMonitor(),
+});
 
 let middleware = [applyMiddleware(sagaMiddleware)];
 
@@ -29,7 +34,10 @@ if (global.__REDUX_DEVTOOLS_EXTENSION__) {
 }
 
 console.disableYellowBox = true;
-const store = createStore(rootReducer, compose(...middleware));
+const store = createStore(
+  rootReducer,
+  compose(...middleware, Reactotron.createEnhancer()),
+);
 
 sagaMiddleware.run(rootSaga);
 
@@ -55,5 +63,3 @@ appScreens.forEach((ScreenComponent, key) => {
 Navigation.events().registerAppLaunchedListener(() => {
   startApp();
 });
-
-console.disableYellowBox = true;
