@@ -170,18 +170,19 @@ async function submitForm(form) {
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
           let updatedForm = assoc('geo', geo, form);
+          updatedForm = assoc('address', 'testing address', form);
+          console.log('updatedForm', updatedForm);
 
-          // TODO:
-          // const addr = await Geocoder.from([
-          //   position.coords.latitude,
-          //   position.coords.longitude,
-          // ]);
+          const addr = await Geocoder.from([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
 
-          // updatedForm = assoc(
-          //   'address',
-          //   addr.results[0].formatted_address,
-          //   updatedForm,
-          // );
+          updatedForm = assoc(
+            'address',
+            addr.results[0].formatted_address,
+            updatedForm,
+          );
 
           let isSubmitted = await submitUpviseForm(updatedForm);
 
