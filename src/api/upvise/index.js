@@ -197,6 +197,7 @@ const postSansPaperUpviseForm = async (form, orgPath) => {
       name: form.name + '9999',
       templateid: form.id,
       geo: form.geo ? form.geo : '',
+      address: form.address,
       value: await utilUpviseFormValueBuilder(id, form.fields),
     };
 
