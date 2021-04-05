@@ -37,7 +37,7 @@ export const selectCurrentFormUnfillMandatoryFields = createSelector(
   (formFields) =>
     filter(
       (field) =>
-        (field.mandatory === 1 && field.value === '') ||
+        (field.mandatory === 1 && (field.value === '' || !field.value)) ||
         (field.mandatory === 1 &&
           field.value === 0 &&
           field.label === 'datetime'),
