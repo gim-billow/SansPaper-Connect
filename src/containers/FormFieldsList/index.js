@@ -103,7 +103,7 @@ class FormFieldsList extends React.Component {
   };
 
   render() {
-    const {currentFormFields, test} = this.props;
+    const {currentFormFields} = this.props;
     const {scrollEnabled} = this.state;
 
     return (
@@ -114,6 +114,7 @@ class FormFieldsList extends React.Component {
           }}
           keyExtractor={this.keyExtractor}
           data={currentFormFields}
+          initialNumToRender={200}
           renderItem={this.renderItem}
           scrollEnabled={scrollEnabled}
           removeClippedSubviews={false}
