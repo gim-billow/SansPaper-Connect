@@ -16,17 +16,18 @@ import {
 } from 'redux-saga/effects';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
-import {assoc, adjust, forEach} from 'ramda';
+import {assoc, adjust, forEach, includes} from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 import moment from 'moment';
 
 import AlertMessages from '@constant/AlertMessages';
-import {getUpviseTemplate} from '@api/forms';
-import {submitUpviseForm} from '@api/upvise';
-
+import {getUpviseTemplate, getFormFields} from '@api/forms';
+import {submitUpviseForm, queryUpviseTable} from '@api/upvise';
+import {UpviseTablesMap} from '@constant/UpviseTablesMap';
 import {screens} from '@constant/ScreenConstants';
+import {getQueryByOptions} from '@components/Fields/Select/helper';
 import {
   FORM_SAGA_ACTIONS,
   FORM_REDUCER_ACTIONS,
@@ -39,8 +40,15 @@ import {
   selectCurrentForm,
   selectCurrentFormUnfillMandatoryFields,
   selectStartAndFinishDate,
+  selectCurrentFormId,
+  selectFormByCurrentId,
 } from '@selector/form';
+import {
+  selectOrganistation,
+  selectUpviseTemplatePath,
+} from '@selector/sanspaper';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
+import {selectType, projectDependant} from './contants';
 
 async function hasLocationPermissionIOS() {
   const openSetting = () => {
@@ -307,8 +315,72 @@ function* preSubmitForm({payload}) {
   }
 }
 
+function* syncOfflineForm({payload = {}}) {
+  try {
+    const {linkedTable} = payload;
+    const formId = yield select(selectCurrentFormId);
+    const upviseTemplatePath = yield select(selectUpviseTemplatePath);
+    const organisation = yield select(selectOrganistation);
+    const currentFormInfo = yield select(selectFormByCurrentId);
+    const fieldsPath = `${upviseTemplatePath}/${formId}/upviseFields`;
+
+    //sync forms
+    const currentFormFields = yield getFormFields({fieldsPath});
+    const currentForm = assoc('fields', currentFormFields, currentFormInfo);
+
+    //sync linked item
+    const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
+    const linkedItem = yield queryUpviseTable({
+      table: linkedItemName,
+      organisation,
+    });
+
+    //sync forms fields
+    let projectList = [];
+    for (const field of currentFormFields) {
+      const {seloptions, type} = field;
+      if (includes(type, selectType)) {
+        let isProjectDependant = false;
+        for (const project of projectDependant) {
+          if (includes(project, seloptions)) {
+            isProjectDependant = true;
+          }
+        }
+        if (isProjectDependant) {
+          for (const project of projectList) {
+            const options = yield getQueryByOptions(
+              seloptions,
+              type,
+              organisation,
+              project.id,
+            );
+            console.log(`[Milestone/Categories] ${project}`, options);
+          }
+        } else {
+          const options = yield getQueryByOptions(
+            seloptions,
+            type,
+            organisation,
+            '',
+          );
+          //storing project list to iterate for milestone and categorytools
+          if (field.type === 'project') {
+            projectList = options;
+            console.log('projectList', projectList);
+          }
+          console.log('[Normail select option]', options);
+        }
+      }
+    }
+    //console.log('linkedItem', JSON.stringify(linkedItem));
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
   takeLatest(FORM_ACTION.UPDATE_FORM_FIELD_VALUE, updateFormFieldValue),
   takeLatest(FORM_ACTION.PRE_SUBMIT_FORM, preSubmitForm),
+  takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
 ]);

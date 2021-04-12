@@ -9,7 +9,11 @@ import memoize from 'memoize-one';
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedFormList} from '@selector/form/index';
-import {updateCurrentFormId, updateFormList} from '@store/forms';
+import {
+  updateCurrentFormId,
+  updateFormList,
+  syncOfflineForm,
+} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
@@ -42,9 +46,11 @@ class FormList extends React.Component {
       goToLinkedItemScreen,
       updateCurrentFormId,
       goToFormFieldsScreen,
+      syncOfflineForm,
     } = this.props;
 
     updateCurrentFormId(form_id);
+    syncOfflineForm({linkedTable: linked_table});
     if (linked_table && linked_table !== '') {
       goToLinkedItemScreen({linkedTable: linked_table});
     } else {
@@ -134,4 +140,5 @@ export default connect(mapState, {
   updateCurrentFormId,
   goToFormFieldsScreen,
   updateFormList,
+  syncOfflineForm,
 })(FormList);

@@ -23,19 +23,13 @@ class Select extends PureComponent {
   async componentDidMount() {
     let selected = [];
     const {seloptions, type} = this.props.item;
-    const {organization, projectValue, item} = this.props;
+    const {organization, projectValue} = this.props;
     const options = await getQueryByOptions(
       seloptions,
       type,
       organization,
       projectValue,
     );
-
-    if (item.type === 'selectmulti' && item.value) {
-      selected = item.value.split('|');
-    } else {
-      selected = [item.value];
-    }
 
     this.updateSetOptions(options, selected);
   }

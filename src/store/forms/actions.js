@@ -1,4 +1,5 @@
 export const FORM_ACTION = {
+  SYNC_OFFLINE_FORM: 'formAction/SYNC_OFFLINE_FORM',
   PRE_SUBMIT_FORM: 'fromAction/PRE_SUBMIT_FORM',
   LOAD_FORM_FIELDS: 'formActions/LOAD_FORM_FIELDS',
   UPDATE_FORM_FIELD_VALUE: 'formActions/UPDATE_FORM_FIELD_VALUE',
@@ -21,6 +22,11 @@ export const FORM_REDUCER_ACTIONS = {
   UPDATE_FORM_LIST: 'formAcions/UPDATE_FORM_LIST',
   RESET_CURRENT_FORM_DETAILS: 'formActions/RESET_CURRENT_FORM_DETAILS',
 };
+
+export const syncOfflineForm = (payload) => ({
+  type: FORM_ACTION.SYNC_OFFLINE_FORM,
+  payload,
+});
 
 export const loadFormFields = (payload) => ({
   type: FORM_ACTION.LOAD_FORM_FIELDS,
