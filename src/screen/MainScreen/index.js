@@ -1,11 +1,20 @@
 //library
 import React from 'react';
 import {connect} from 'react-redux';
-import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  Alert,
+  BackHandler,
+  Linking,
+} from 'react-native';
 import {createStructuredSelector} from 'reselect';
 // import HTML from 'react-native-render-html';
 import {Icon} from 'react-native-elements';
 import Markdown from 'react-native-markdown-display';
+import VersionCheck from 'react-native-version-check';
 
 import {selectNews} from '@selector/common';
 import {limitText} from '@util/string';
@@ -24,6 +33,37 @@ class MainScreen extends React.Component {
 
   componentDidMount() {
     this.initNews();
+    // force update if new version is available
+    this.checkVersion();
+  }
+
+  async checkVersion() {
+    try {
+      let updateNeeded = await VersionCheck.needUpdate();
+      if (updateNeeded && updateNeeded.isNeeded) {
+        this.forceUpdateAlert(updateNeeded.storeUrl);
+      }
+    } catch (error) {
+      console.tron.error('error on updating app', error);
+    }
+  }
+
+  forceUpdateAlert(url) {
+    return Alert.alert(
+      'Please Update',
+      'You need to upgrade to the latest version.',
+      [
+        {
+          text: 'Update Now',
+          onPress: () => {
+            BackHandler.exitApp();
+            Linking.openURL(url);
+          },
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
   }
 
   keyExtractor = (item, index) => index.toString();
