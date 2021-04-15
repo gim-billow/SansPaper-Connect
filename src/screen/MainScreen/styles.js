@@ -1,9 +1,15 @@
 import {StyleSheet, Platform} from 'react-native';
-import {backgroundColor, white, darkGrey, red, lightGrey} from '@styles/colors';
+import {backgroundColor, white, darkGrey, red} from '@styles/colors';
 import {spaceRegular, spaceSmall, spaceMedium, superSmall} from '@styles/space';
-import {regular, medium, small, large} from '@styles/font';
+import {regular, medium, small} from '@styles/font';
 
 export default StyleSheet.create({
+  noItemsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor,
+  },
   container: {
     flex: 1,
     padding: 20,

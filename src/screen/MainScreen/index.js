@@ -9,6 +9,8 @@ import {
   Alert,
   BackHandler,
   Linking,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 // import HTML from 'react-native-render-html';
@@ -153,6 +155,18 @@ class MainScreen extends React.Component {
 
   render() {
     const {updatedNews, refresh} = this.state;
+
+    if (!updatedNews.length) {
+      return (
+        <ScrollView
+          contentContainerStyle={styles.noItemsContainer}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={this.onRefresh} />
+          }>
+          <Text style={styles.headerText}>No official news today.</Text>
+        </ScrollView>
+      );
+    }
 
     return (
       <View style={styles.container}>
