@@ -114,7 +114,7 @@ class FormFieldsList extends React.Component {
           }}
           keyExtractor={this.keyExtractor}
           data={currentFormFields}
-          initialNumToRender={200}
+          initialNumToRender={500}
           renderItem={this.renderItem}
           scrollEnabled={scrollEnabled}
           removeClippedSubviews={false}
