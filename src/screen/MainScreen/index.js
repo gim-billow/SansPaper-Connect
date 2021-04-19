@@ -11,6 +11,8 @@ import {
   Linking,
   ScrollView,
   RefreshControl,
+  Image,
+  Dimensions,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 // import HTML from 'react-native-render-html';
@@ -26,6 +28,7 @@ import styles from './styles';
 import {red} from '@styles/colors';
 import {fetchOrgNews, fetchUserDetails, getUpviseTemplateForms} from './helper';
 
+const {width} = Dimensions.get('screen');
 class MainScreen extends React.Component {
   state = {
     refresh: false,
@@ -163,7 +166,11 @@ class MainScreen extends React.Component {
           refreshControl={
             <RefreshControl refreshing={refresh} onRefresh={this.onRefresh} />
           }>
-          <Text style={styles.headerText}>No official news today.</Text>
+          <Image
+            source={require('../../assets/no-items.jpeg')}
+            resizeMode="contain"
+            style={{width: width - 50}}
+          />
         </ScrollView>
       );
     }
