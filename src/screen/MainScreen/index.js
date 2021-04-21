@@ -49,7 +49,7 @@ class MainScreen extends React.Component {
         this.forceUpdateAlert(updateNeeded.storeUrl);
       }
     } catch (error) {
-      console.tron.error('error on updating app', error);
+      console.error('error on updating app', error);
     }
   }
 
