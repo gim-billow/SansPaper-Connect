@@ -8,7 +8,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 const uuid = require('uuid/v4');
 
 //util
-import {getUpviseTabledQueryData} from '../util';
+import {
+  // getUpviseTabledQueryData,
+  combineArr,
+} from '../util';
 
 //sanspaper api requirements
 export const getSansPaperUser = async (payload) => {
@@ -154,16 +157,47 @@ export const queryUpviseTable = async (payload) => {
   const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
   const url = where ? `${urlString}&where=${where}` : urlString;
 
-  const options = {
-    method: 'GET',
-    url,
+  // const options = {
+  //   method: 'GET',
+  //   url,
+  //   headers: {
+  //     'Content-Type': 'multipart/form-data',
+  //   },
+  // };
+
+  // const upviseTableResult = await axios(options);
+
+  const newOptions = {
+    method: 'POST',
+    url: upviseUrl + 'v2/table',
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
+    },
+    data: {
+      token: upviseToken,
+      table,
+      where: where ? where : null,
+      limit: 0,
     },
   };
 
-  const upviseTableResult = await axios(options);
-  return upviseTableResult;
+  const arrTableResult = [];
+  const newUpviseTableResult = await axios(newOptions);
+  const finalTableResultItems = {
+    data: {
+      items: [],
+    },
+  };
+  const tableKeys = newUpviseTableResult.data.cols;
+  const tableItems = newUpviseTableResult.data.items;
+
+  tableItems.map((result) =>
+    arrTableResult.push(combineArr(tableKeys, result)),
+  );
+
+  finalTableResultItems.data.items = arrTableResult;
+
+  return finalTableResultItems;
 };
 
 // for submit the form data
