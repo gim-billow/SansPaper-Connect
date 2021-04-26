@@ -1,5 +1,8 @@
-import {all, takeLatest, put} from 'redux-saga/effects';
+import {all, takeLatest, put, call, cancelled, take} from 'redux-saga/effects';
+import {eventChannel} from 'redux-saga';
 import R from 'ramda';
+import {firebase} from '@react-native-firebase/firestore';
+
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
 import {showMainScreen} from '@navigation';
@@ -11,6 +14,7 @@ import {
 import {USER_SAGA_ACTIONS} from '@store/user';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
 import {FORM_SAGA_ACTIONS} from '@store/forms';
+import {diff} from '@util/general';
 
 function* init({payload}) {
   try {
@@ -28,18 +32,10 @@ function* init({payload}) {
     });
 
     //get latest news from db
-    const newsList = yield getOrgNews(`${organisationPath}/announcements`);
-    const diff = function (a, b) {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    };
+    const newsPath = `${organisationPath}/announcements`;
+    const newsList = yield getOrgNews(newsPath);
 
-    const sortedDate = R.sort(diff, newsList);
-    // FIXME:
-    // const htmlNews = map(
-    //   (newsItem) => '<h3>' + newsItem.title + '</h3>' + newsItem.news,
-    //   newsList,
-    // );
-    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: sortedDate});
+    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: newsList});
     showMainScreen();
 
     yield put({
@@ -75,9 +71,56 @@ function* init({payload}) {
       type: FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES,
       payload: upviseTemplatesPath,
     });
+
+    yield put({
+      type: COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
+      payload: newsPath,
+    });
   } catch (error) {
     console.log('init error', error);
   }
 }
 
-export default all([takeLatest(COMMON_ACTIONS.INIT, init)]);
+function subscribeToBodyOfKnowledge(formsRef, organisationPath) {
+  return eventChannel((emmiter) => {
+    formsRef.onSnapshot(async () => {
+      const orgNews = await getOrgNews(organisationPath);
+      emmiter(orgNews);
+    });
+
+    return () => formsRef;
+  });
+}
+
+function* watchBodyOfKnowledgeUpdates({payload}) {
+  const organisationPath = payload;
+  const formsRef = yield firebase.firestore().collection(organisationPath);
+  const news = yield call(
+    subscribeToBodyOfKnowledge,
+    formsRef,
+    organisationPath,
+  );
+
+  try {
+    while (true) {
+      const newsList = yield take(news);
+
+      yield put({
+        type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS,
+        payload: newsList,
+      });
+    }
+  } finally {
+    if (yield cancelled()) {
+      news.close();
+    }
+  }
+}
+
+export default all([
+  takeLatest(COMMON_ACTIONS.INIT, init),
+  takeLatest(
+    COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
+    watchBodyOfKnowledgeUpdates,
+  ),
+]);

@@ -60,6 +60,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "25285349571-f495ls4dj13p4k3mmc7aaqgsjc5va653.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanspaper_connect",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "25285349571-vaaqgj2t0akaqkjtqccj4oogkb30setr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanspaper_connect",
+            "certificate_hash": "7c1fe104c28a3c38bb306c26330ea95385ee05c1"
+          }
+        },
+        {
           "client_id": "25285349571-mdjbp96ed1e2r37jneq04ge8lih9qn5b.apps.googleusercontent.com",
           "client_type": 3
         }

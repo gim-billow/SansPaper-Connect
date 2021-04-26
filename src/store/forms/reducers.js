@@ -8,7 +8,7 @@ const INIT_STATE = {
   },
   scrollToMandatory: null,
   submitTriggered: 0,
-  submittingFrom: false,
+  submittingForm: false,
   currentLinkedItems: [{}],
   forms: {},
 };
@@ -16,7 +16,6 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID: {
-      console.log('FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID', action);
       return produce(state, (draftState) => {
         draftState.currentFormId = action.payload;
       });
@@ -53,7 +52,7 @@ export default (state = INIT_STATE, action) => {
     }
     case FORM_REDUCER_ACTIONS.UPDATE_SUBMITTING_FORM: {
       return produce(state, (draftState) => {
-        draftState.submittingFrom = action.payload;
+        draftState.submittingForm = action.payload;
       });
     }
     case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS: {

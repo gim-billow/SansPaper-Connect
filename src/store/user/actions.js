@@ -2,6 +2,8 @@ export const USER_ACTIONS = {
   LOGIN: 'userActions/LOGIN',
   LOGOUT: 'userActions/LOGOUT',
   LOGIN_CODE: 'userActions/LOGIN_CODE',
+  GOOGLE_LOGIN: 'userActions/GOOGLE_LOGIN',
+  APPLE_LOGIN: 'userActions/APPLE_LOGIN',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -17,6 +19,14 @@ export const USER_REDUCER_ACTIONS = {
 export const loginUser = (payload) => ({
   type: USER_ACTIONS.LOGIN,
   payload,
+});
+
+export const loginWithGoogle = () => ({
+  type: USER_ACTIONS.GOOGLE_LOGIN,
+});
+
+export const loginWithApple = () => ({
+  type: USER_ACTIONS.APPLE_LOGIN,
 });
 
 export const logoutUser = () => ({

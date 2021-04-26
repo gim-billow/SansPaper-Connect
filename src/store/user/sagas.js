@@ -1,6 +1,7 @@
 import {put, all, takeLatest} from 'redux-saga/effects';
+
 import {USER_ACTIONS, USER_SAGA_ACTIONS, USER_REDUCER_ACTIONS} from './actions';
-import {login} from 'api/user';
+import {login, googleLogin, appleLogin} from 'api/user';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 
 function* loginUser({payload}) {
@@ -8,12 +9,37 @@ function* loginUser({payload}) {
     showActivityIndicator();
     // login the user
     yield login(payload);
+
     dismissActivityIndicator();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
   } catch (error) {
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
     console.log('loginUser error', error.code);
     dismissActivityIndicator();
+  }
+}
+
+function* loginWithGoogle() {
+  try {
+    // login using google
+    yield googleLogin();
+
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
+  } catch (error) {
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
+    console.log('loginWithGoogle error', error.code);
+  }
+}
+
+function* loginWithApple() {
+  try {
+    // login using apple
+    yield appleLogin();
+
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
+  } catch (error) {
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
+    console.log('loginWithApple error', error.code);
   }
 }
 
@@ -44,6 +70,8 @@ function* logoutUser({payload}) {
 
 export default all([
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
+  takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),
+  takeLatest(USER_ACTIONS.APPLE_LOGIN, loginWithApple),
   takeLatest(USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, updateUserDetails),
   takeLatest(USER_ACTIONS.LOGOUT, logoutUser),
 ]);

@@ -1,28 +1,33 @@
 import React from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {lightGrey, darkGrey} from 'styles/colors';
+import {lightGrey, darkGrey, red} from 'styles/colors';
+import {spaceRegular} from 'styles/space';
+import {Input} from 'react-native-elements';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    width: '60%',
-    height: 40,
+    marginHorizontal: spaceRegular,
+  },
+  inputContainer: {
     borderWidth: 1,
-    borderColor: lightGrey,
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
     borderRadius: 3,
+    borderColor: lightGrey,
+    paddingHorizontal: 10,
   },
-  icon: {
-    width: '15%',
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
-  textInput: {
+  text: {
+    paddingHorizontal: 5,
     color: darkGrey,
-    width: '70%',
-    backgroundColor: 'white',
+  },
+  error: {
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: red,
+    paddingHorizontal: 10,
+  },
+  errorView: {
+    flex: 1,
+    marginBottom: 1,
   },
 });
 
@@ -33,24 +38,29 @@ const IconTextInput = ({secureTextEntry = false, ...props}) => {
     iconProps,
     iconEyeProps,
     onPressIcon,
+    error,
+    value,
   } = props;
 
   return (
     <View style={styles.container}>
-      <Icon style={styles.icon} {...iconProps} />
-      <TextInput
-        style={styles.textInput}
+      <Input
         placeholder={placeHolder}
+        leftIcon={<Icon {...iconProps} style={{width: 20}} />}
+        rightIcon={
+          value ? (
+            <Icon {...iconEyeProps} onPress={() => onPressIcon()} />
+          ) : null
+        }
+        autoCapitalize="none"
         secureTextEntry={secureTextEntry}
-        onChangeText={(text) => onChangeText(text)}
+        inputContainerStyle={!error ? styles.inputContainer : styles.error}
+        inputStyle={styles.text}
+        errorMessage={error}
+        value={value}
+        onChangeText={onChangeText}
+        errorStyle={!error ? styles.errorView : undefined}
       />
-      {placeHolder === 'Password' ? (
-        <Icon
-          style={styles.icon}
-          {...iconEyeProps}
-          onPress={() => onPressIcon()}
-        />
-      ) : null}
     </View>
   );
 };
