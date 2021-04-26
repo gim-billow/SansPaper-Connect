@@ -14,6 +14,8 @@ export const selectCurrentForm = (state) => state.formReducer.currentForm;
 
 export const selectIsSubmittingForm = (state) => state.formReducer.currentForm;
 
+export const selectSubmittingForm = (state) => state.formReducer.submittingForm;
+
 export const selectScrollToMandatory = (state) =>
   state.formReducer.scrollToMandatory;
 

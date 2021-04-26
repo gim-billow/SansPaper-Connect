@@ -1,9 +1,10 @@
 export const COMMON_ACTIONS = {
-  INIT: 'initActions/INIT',
+  INIT: 'commonActions/INIT',
 };
 
 export const COMMON_REDUCER_ACTIONS = {
-  UPDATE_NEWS: 'initAction/UPDATE_NEWS',
+  UPDATE_NEWS: 'commonActions/UPDATE_NEWS',
+  WATCH_NEWS_UPDATES: 'commonActions/WATCH_NEWS_UPDATES',
 };
 
 export const init = (payload) => ({

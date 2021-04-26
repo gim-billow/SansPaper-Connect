@@ -21,18 +21,6 @@ import styles from './styles';
 class FormList extends React.Component {
   state = {
     searchKeyword: '',
-    refresh: false,
-  };
-
-  wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  fetchUpdatedTemplates = async () => {
-    const {updateFormList} = this.props;
-    const forms = await getUpviseTemplateForms(this.props.orgPath);
-
-    updateFormList(forms);
   };
 
   keyExtractor = (item, index) => index.toString();
@@ -61,15 +49,6 @@ class FormList extends React.Component {
 
   handleOnChangeText = (text) => {
     this.setState({searchKeyword: text});
-  };
-
-  onRefresh = () => {
-    this.setState({refresh: true});
-
-    // get updated template forms
-    this.fetchUpdatedTemplates();
-
-    this.wait(2000).then(() => this.setState({refresh: false}));
   };
 
   renderItem = ({item}) => {
@@ -111,8 +90,6 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
-            onRefresh={() => this.onRefresh()}
-            refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
           <Spinner color="grey" />

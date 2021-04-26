@@ -9,6 +9,7 @@ import {
   selectCurrentForm,
   selectIsSubmittingForm,
   selectStartAndFinishDate,
+  selectSubmittingForm,
   selectCurrentFormUnfillMandatoryFields,
 } from 'selector/form';
 
@@ -20,15 +21,13 @@ import {
 import styles from './styles';
 
 class RightButton extends React.Component {
-  state = {
-    submitting: false,
-  };
-
   render() {
-    const {currentForm, submitForm} = this.props;
+    const {currentForm, submitForm, submittingForm} = this.props;
 
     return (
-      <TouchableOpacity onPress={() => submitForm(currentForm)}>
+      <TouchableOpacity
+        disabled={submittingForm}
+        onPress={() => submitForm(currentForm)}>
         <Icon
           style={styles.icon}
           name="paper-plane"
@@ -43,6 +42,7 @@ class RightButton extends React.Component {
 const mapState = createStructuredSelector({
   currentForm: selectCurrentForm,
   isSubmittingForm: selectIsSubmittingForm,
+  submittingForm: selectSubmittingForm,
   startAndFinishDateTime: selectStartAndFinishDate,
   unfilledMandatoryFields: selectCurrentFormUnfillMandatoryFields,
 });

@@ -7,3 +7,7 @@ export const uniqueKey = () => {
 export const convertDate = (date) => {
   return moment(date).format('MM/DD/YYYY HH:mm');
 };
+
+export const diff = function (a, b) {
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
+};
