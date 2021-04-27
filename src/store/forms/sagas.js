@@ -170,7 +170,6 @@ async function submitForm(form) {
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
           let updatedForm = assoc('geo', geo, form);
-          updatedForm = assoc('address', 'testing address', form);
 
           const addr = await Geocoder.from([
             position.coords.latitude,
