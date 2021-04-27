@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {spaceSmall, spaceMedium, spaceRegular, superSmall} from 'styles/space';
 import {regular, medium} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {lightRed, darkRed, red} from '@styles/colors';
 
 export default StyleSheet.create({
   topContainer: {
@@ -13,51 +13,19 @@ export default StyleSheet.create({
   ChangeButtonColor: {
     backgroundColor: darkRed,
   },
-  buttonMargin: {
-    paddingBottom: 15,
-  },
   TextColor: {
     color: lightRed,
   },
   ChangeTextColor: {
     color: 'white',
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    shadowColor: '#000',
-    width: 300,
-    height: 255,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
   openButton: {
     backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
   },
-  modalText: {
-    marginBottom: spaceSmall,
-    textAlign: 'left',
-    fontSize: medium + 4,
-  },
   button: {
     fontSize: regular,
-    // padding: spaceSmall,
-    // paddingTop: spaceSmall,
-    // width: '100%',
     marginHorizontal: spaceRegular,
   },
   Thumbnail: {
@@ -81,5 +49,40 @@ export default StyleSheet.create({
   },
   noThumbNailSpace: {
     paddingVertical: superSmall,
+  },
+
+  /**
+   * Overlay styles
+   */
+  closeTxtOverlay: {
+    color: red,
+  },
+  closeBtnOverlay: {
+    width: 200,
+    marginTop: 20,
+    borderColor: red,
+    paddingVertical: 7,
+  },
+  overlayBtn: {
+    width: 200,
+    backgroundColor: red,
+    marginBottom: 10,
+  },
+  iconSpace: {
+    padding: 10,
+  },
+  overlayHeaderText: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  overlayHeader: {
+    alignItems: 'center',
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  overlay: {
+    borderRadius: 5,
+    padding: 30,
   },
 });

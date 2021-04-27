@@ -14,9 +14,9 @@ import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
-import {getUpviseTemplateForms} from './helper';
 import {Spinner} from 'native-base';
 import styles from './styles';
+import {darkGrey} from '@styles/colors';
 
 class FormList extends React.Component {
   state = {
@@ -59,11 +59,15 @@ class FormList extends React.Component {
           key={id}
           bottomDivider
           onPress={() => this.onPress(linkedtable, id)}>
-          <Icon name="file-text-o" type="font-awesome" />
+          <Icon
+            name="clipboard-text-outline"
+            type="material-community"
+            color={darkGrey}
+          />
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
           </ListItem.Content>
-          <ListItem.Chevron />
+          {/* <ListItem.Chevron /> */}
         </ListItem>
       </ItemWrapper>
     );
