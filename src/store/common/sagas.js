@@ -1,7 +1,8 @@
 import {all, takeLatest, put, call, cancelled, take} from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
-import R from 'ramda';
+// import R from 'ramda';
 import {firebase} from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
@@ -14,7 +15,7 @@ import {
 import {USER_SAGA_ACTIONS} from '@store/user';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
 import {FORM_SAGA_ACTIONS} from '@store/forms';
-import {diff} from '@util/general';
+import {USER_ACTIONS} from '../user';
 
 function* init({payload}) {
   try {
@@ -77,6 +78,11 @@ function* init({payload}) {
       payload: newsPath,
     });
   } catch (error) {
+    yield auth().signOut();
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+    yield put({
+      type: USER_ACTIONS.ERROR_SSO_USER,
+    });
     console.log('init error', error);
   }
 }

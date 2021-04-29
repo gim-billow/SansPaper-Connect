@@ -30,6 +30,13 @@ export default (state = INIT_STATE, action) => {
         draftState.loginCode = action.payload;
       });
     }
+    case USER_ACTIONS.ERROR_SSO_USER: {
+      return produce(state, (draftState) => {
+        draftState.loginStatus = false;
+        draftState.email = '';
+        draftState.uid = '';
+      });
+    }
     default:
       return state;
   }

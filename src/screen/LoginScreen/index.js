@@ -75,6 +75,7 @@ class LoginScreen extends React.Component {
     changeLogo: false,
     loading: false,
     icon: 'eye-slash',
+    showAlert: false,
   };
 
   keyboardDidShowListener;
@@ -161,15 +162,16 @@ class LoginScreen extends React.Component {
     }
   };
 
-  alertLogin = () =>
+  alertLogin = (message, action) =>
     Alert.alert(
       'Login Error',
-      'Username or Password incorrect',
+      message,
       [
         {
           text: 'OK',
           onPress: () => {
             this.props.resetLoginCode();
+            this.setState({showAlert: false});
           },
           style: 'cancel',
         },
@@ -178,30 +180,44 @@ class LoginScreen extends React.Component {
     );
 
   render() {
-    const {errorUser, errorPass, changeLogo, username, password} = this.state;
+    const {
+      errorUser,
+      errorPass,
+      changeLogo,
+      username,
+      password,
+      showAlert,
+    } = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
     const {
       loginCode,
+      isUserLogin,
       loginWithGoogle: googleAuthLogin,
       loginWithApple: appleLogin,
     } = this.props;
 
+    if (!isUserLogin && loginCode === 'sso/error-login' && !showAlert) {
+      this.setState({showAlert: true});
+      this.alertLogin('Register to Platform Hub and join an organisation.');
+    } else if (loginCode && loginCode !== 'success' && !showAlert) {
+      this.setState({showAlert: true});
+      this.alertLogin('Username or Password incorrect');
+    }
+
     return (
       <>
-        {loginCode && loginCode !== 'success' ? this.alertLogin() : null}
-
         <KeyboardAvoidingView
           style={styles.new_container}
           behavior={behavior}
           contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
           <View style={{alignItems: 'center'}}>
             <Image
-              // source={horizontalLogo}
+              source={mainLogo}
               // style={changeLogo ? styles.logoHorizontal : styles.logo}
-              source={changeLogo ? horizontalLogo : mainLogo}
+              // source={changeLogo ? horizontalLogo : mainLogo}
               style={styles.new_logo}
               resizeMode="center"
-              resizeMethod="scale"
+              resizeMethod="auto"
             />
           </View>
           <IconTextInput
@@ -274,7 +290,7 @@ class LoginScreen extends React.Component {
               onPress={() => {}}
             />
           </View> */}
-          {Platform.OS === 'ios' ? (
+          {/* {Platform.OS === 'ios' ? (
             <View style={styles.new_submitBtn}>
               <Button
                 title="Login with Apple"
@@ -291,7 +307,7 @@ class LoginScreen extends React.Component {
                 onPress={appleLogin}
               />
             </View>
-          ) : null}
+          ) : null} */}
         </KeyboardAvoidingView>
       </>
     );

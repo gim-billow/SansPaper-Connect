@@ -4,6 +4,7 @@ export const USER_ACTIONS = {
   LOGIN_CODE: 'userActions/LOGIN_CODE',
   GOOGLE_LOGIN: 'userActions/GOOGLE_LOGIN',
   APPLE_LOGIN: 'userActions/APPLE_LOGIN',
+  ERROR_SSO_USER: 'userActions/ERROR_SSO_USER',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -31,10 +32,14 @@ export const loginWithApple = () => ({
 
 export const logoutUser = () => ({
   type: USER_ACTIONS.LOGOUT,
-  payload: {status: false, email: '', uid: ''},
+  payload: {status: false, email: '', uid: '', loginCode: null},
 });
 
 export const resetLoginCode = () => ({
   type: USER_ACTIONS.LOGIN_CODE,
   payload: null,
+});
+
+export const errorLogin = () => ({
+  type: USER_ACTIONS.ERROR_SSO_USER,
 });

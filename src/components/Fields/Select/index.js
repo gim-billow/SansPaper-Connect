@@ -98,7 +98,7 @@ class Select extends PureComponent {
       if (index === 0) {
         addedItem = selected;
       } else {
-        addedItem = `|${selected}`;
+        addedItem = !value ? selected : `|${selected}`;
       }
       value += addedItem;
     });
