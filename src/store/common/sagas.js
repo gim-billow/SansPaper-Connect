@@ -2,6 +2,7 @@ import {all, takeLatest, put, call, cancelled, take} from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 // import R from 'ramda';
 import {firebase} from '@react-native-firebase/firestore';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
@@ -79,6 +80,8 @@ function* init({payload}) {
     });
   } catch (error) {
     yield auth().signOut();
+    yield GoogleSignin.revokeAccess();
+    yield GoogleSignin.signOut();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
     yield put({
       type: USER_ACTIONS.ERROR_SSO_USER,

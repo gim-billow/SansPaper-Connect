@@ -1,4 +1,5 @@
 import {put, all, takeLatest} from 'redux-saga/effects';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
 import {USER_ACTIONS, USER_SAGA_ACTIONS, USER_REDUCER_ACTIONS} from './actions';
@@ -58,6 +59,20 @@ function* updateUserDetails({payload}) {
 function* logoutUser({payload}) {
   try {
     const {email, uid, status, loginCode} = payload;
+
+    const isSignedIn = yield GoogleSignin.isSignedIn();
+
+    if (isSignedIn) {
+      yield GoogleSignin.revokeAccess();
+      yield GoogleSignin.signOut();
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+      yield put({
+        type: USER_ACTIONS.ERROR_SSO_USER,
+      });
+    } else {
+      yield auth().signOut();
+    }
+
     yield put({
       type: USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS,
       payload: status,
@@ -65,7 +80,6 @@ function* logoutUser({payload}) {
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_EMAIL, payload: email});
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: loginCode});
-    yield auth().signOut();
   } catch (error) {
     console.log('userlogout saga error: ', error);
   }

@@ -191,15 +191,19 @@ class LoginScreen extends React.Component {
     const {mainLogo, horizontalLogo} = CommonImages;
     const {
       loginCode,
-      isUserLogin,
       loginWithGoogle: googleAuthLogin,
       loginWithApple: appleLogin,
     } = this.props;
 
-    if (!isUserLogin && loginCode === 'sso/error-login' && !showAlert) {
+    if (loginCode && loginCode === 'sso/error-login' && !showAlert) {
       this.setState({showAlert: true});
       this.alertLogin('Register to Platform Hub and join an organisation.');
-    } else if (loginCode && loginCode !== 'success' && !showAlert) {
+    } else if (
+      loginCode &&
+      (loginCode === 'auth/wrong-password' ||
+        loginCode === 'auth/user-not-found') &&
+      !showAlert
+    ) {
       this.setState({showAlert: true});
       this.alertLogin('Username or Password incorrect');
     }
@@ -216,7 +220,7 @@ class LoginScreen extends React.Component {
               // style={changeLogo ? styles.logoHorizontal : styles.logo}
               // source={changeLogo ? horizontalLogo : mainLogo}
               style={styles.new_logo}
-              resizeMode="center"
+              resizeMode="contain"
               resizeMethod="auto"
             />
           </View>
