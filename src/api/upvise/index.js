@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import {sortBy, prop} from 'ramda';
+import {sortBy, prop, flatten, filter, pipe, uniq} from 'ramda';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const uuid = require('uuid/v4');
@@ -17,6 +17,7 @@ import {
 export const getSansPaperUser = async (payload) => {
   try {
     const {userId} = payload;
+
     const spUser = await firebase
       .firestore()
       .collection('sanspaperusers')
@@ -145,27 +146,51 @@ export const getUpviseUserList = async (upviseUrl, upviseToken) => {
   }
 };
 
+export const fetchAllUpviseUsers = async (payload) => {
+  let {table, organisation} = payload;
+  const {upviseUrl = '', upviseToken = ''} = organisation;
+
+  const newOptions = {
+    method: 'POST',
+    url: upviseUrl + 'v2/table',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      token: upviseToken,
+      table,
+      where: null,
+      columns: 'groupid',
+      limit: 0,
+    },
+  };
+
+  return await axios(newOptions);
+};
+
 export const queryUpviseTable = async (payload) => {
   let {table, organisation, where} = payload;
   if (table === 'unybiz.projects.projects' && !where) {
     where = 'status != 1';
   } else if (table === 'jobs.jobs' && !where) {
     where = 'status != 4';
+  } else if (table === 'unybiz.contacts.contacts' && where) {
+    // fetch all contacts and return all group ids
+    const upviseUsers = await fetchAllUpviseUsers(payload);
+    // flatten the array to filter users for project id
+    const usersGroupId = flatten(upviseUsers.data.items);
+    // convert into a new where clause
+    const groupIds = pipe(uniq, (data) =>
+      filter((ids) => ids.includes(where), data),
+    )(usersGroupId);
+
+    // result of where clause
+    where = `groupid IN(${groupIds.map((ids) => `'${ids}'`).join(',')})`;
   }
 
   const {upviseUrl = '', upviseToken = ''} = organisation;
-  const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
-  const url = where ? `${urlString}&where=${where}` : urlString;
-
-  // const options = {
-  //   method: 'GET',
-  //   url,
-  //   headers: {
-  //     'Content-Type': 'multipart/form-data',
-  //   },
-  // };
-
-  // const upviseTableResult = await axios(options);
+  // const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
+  // const url = where ? `${urlString}&where=${where}` : urlString;
 
   const newOptions = {
     method: 'POST',
