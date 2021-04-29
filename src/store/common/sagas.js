@@ -79,13 +79,13 @@ function* init({payload}) {
       payload: newsPath,
     });
   } catch (error) {
-    yield auth().signOut();
-    yield GoogleSignin.revokeAccess();
-    yield GoogleSignin.signOut();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
     yield put({
       type: USER_ACTIONS.ERROR_SSO_USER,
     });
+    yield auth().signOut();
+    yield GoogleSignin.revokeAccess();
+    yield GoogleSignin.signOut();
     console.log('init error', error);
   }
 }

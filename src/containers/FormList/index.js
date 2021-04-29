@@ -59,11 +59,7 @@ class FormList extends React.Component {
           key={id}
           bottomDivider
           onPress={() => this.onPress(linkedtable, id)}>
-          <Icon
-            name="clipboard-text-outline"
-            type="material-community"
-            color={darkGrey}
-          />
+          <Icon name="assignment" color={darkGrey} />
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
           </ListItem.Content>

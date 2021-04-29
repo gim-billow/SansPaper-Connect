@@ -89,7 +89,7 @@ class FormFieldsList extends React.Component {
 
       return (
         <ListItem key={item.id} bottomDivider>
-          <Icon name="text-box-remove-outline" type="material-community" />
+          <Icon name="description" />
           <ListItem.Content>
             <ListItem.Title>{item.label}</ListItem.Title>
           </ListItem.Content>
