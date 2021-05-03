@@ -7,18 +7,15 @@ import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
-import {selectOrganistationPath} from '@selector/sanspaper';
-import {selectSortedFormList} from '@selector/form/index';
-import {
-  updateCurrentFormId,
-  updateFormList,
-  syncOfflineForm,
-} from '@store/forms';
+import {selectOfflineFormList} from '@selector/form';
+import {updateOfflineCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
-import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
+import {
+  goToOfflineLinkedItemScreen,
+  goToFormFieldsScreen,
+} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
-import {getUpviseTemplateForms} from './helper';
 import {Spinner} from 'native-base';
 import styles from './styles';
 
@@ -28,31 +25,18 @@ class FormList extends React.Component {
     refresh: false,
   };
 
-  wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  fetchUpdatedTemplates = async () => {
-    const {updateFormList} = this.props;
-    const forms = await getUpviseTemplateForms(this.props.orgPath);
-
-    updateFormList(forms);
-  };
-
   keyExtractor = (item, index) => index.toString();
 
   onPress = (linked_table, form_id) => {
     const {
-      goToLinkedItemScreen,
-      updateCurrentFormId,
+      goToOfflineLinkedItemScreen,
+      updateOfflineCurrentFormId,
       goToFormFieldsScreen,
-      syncOfflineForm,
     } = this.props;
 
-    updateCurrentFormId(form_id);
-    //syncOfflineForm({linkedTable: linked_table});
+    updateOfflineCurrentFormId(form_id);
     if (linked_table && linked_table !== '') {
-      goToLinkedItemScreen({linkedTable: linked_table});
+      goToOfflineLinkedItemScreen({linkedTable: linked_table});
     } else {
       goToFormFieldsScreen({componentId: screens.FormScreen});
     }
@@ -67,15 +51,6 @@ class FormList extends React.Component {
 
   handleOnChangeText = (text) => {
     this.setState({searchKeyword: text});
-  };
-
-  onRefresh = () => {
-    this.setState({refresh: true});
-
-    // get updated template forms
-    this.fetchUpdatedTemplates();
-
-    this.wait(2000).then(() => this.setState({refresh: false}));
   };
 
   renderItem = ({item}) => {
@@ -117,7 +92,6 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
-            onRefresh={() => this.onRefresh()}
             refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
@@ -131,14 +105,11 @@ class FormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  formList: selectSortedFormList,
-  orgPath: selectOrganistationPath,
+  formList: selectOfflineFormList,
 });
 
 export default connect(mapState, {
-  goToLinkedItemScreen,
-  updateCurrentFormId,
+  goToOfflineLinkedItemScreen,
+  updateOfflineCurrentFormId,
   goToFormFieldsScreen,
-  updateFormList,
-  syncOfflineForm,
 })(FormList);

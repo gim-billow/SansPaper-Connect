@@ -16,13 +16,20 @@ import {
   selectFormByCurrentId,
   selectCurrentFormId,
   selectCurrentLinkedItems,
+  selectOfflineFormList,
+  selectOfflineCurrentForm,
+  selectOfflineCurrentFormId,
 } from '@selector/form';
 import {
   pushToLinkedItem,
   pushToFormFieldsScreen,
   pushToMapScreen,
+  pushToOfflineFormFieldsScreen,
+  pushToOfflineLinkedItem,
 } from '@navigation/componentNavigation';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
+import * as database from '@database';
+import * as R from 'ramda';
 
 function* goToLogin() {
   try {
@@ -59,6 +66,7 @@ function* goToLinkedItemScreen({payload = {}}) {
       organisation,
     });
 
+    console.log('goToLinkedItemScreen', linkedItem);
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM,
       payload: currentForm,
@@ -66,7 +74,7 @@ function* goToLinkedItemScreen({payload = {}}) {
 
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_LINKED_TABLE,
-      payload: linkedItem.data.items,
+      payload: linkedItem?.data?.items,
     });
     const linkedItemPayload = {
       componentId: screens.FormScreen,
@@ -79,6 +87,63 @@ function* goToLinkedItemScreen({payload = {}}) {
     pushToLinkedItem(linkedItemPayload);
   } catch (error) {
     console.log('getAllLinkedItems error', error);
+  }
+}
+
+function* goToOfflineLinkedItemScreen({payload = {}}) {
+  try {
+    showActivityIndicator();
+    const {linkedTable} = payload;
+    const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
+    const linkedItemsString = yield database.getLinkedItemsByid({
+      linkedItemName: linkedItemName,
+    });
+    const linkedItems = JSON.parse(linkedItemsString);
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_LINKED_TABLE,
+      payload: linkedItems,
+    });
+
+    const offlineCurrentFormId = yield select(selectOfflineCurrentFormId);
+    const offlineFormList = yield select(selectOfflineFormList);
+    const formsData = R.find(R.propEq('id', offlineCurrentFormId))(
+      offlineFormList,
+    );
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
+      payload: formsData,
+    });
+
+    const offlineLinkedItemPayload = {
+      componentId: screens.OfflineFormScreen,
+      passProps: {
+        linkedItemName,
+      },
+    };
+
+    dismissActivityIndicator();
+    pushToOfflineLinkedItem(offlineLinkedItemPayload);
+  } catch (error) {
+    console.log('getAllLinkedItems error', error);
+  }
+}
+
+function* goToOfflineFormFieldsScreen({payload = {}}) {
+  try {
+    showActivityIndicator();
+    const {componentId} = payload;
+    const offlineCurrentForm = yield select(selectOfflineCurrentForm);
+    const currentLinkedItems = yield select(selectCurrentLinkedItems);
+
+    dismissActivityIndicator();
+    console.log('goToOfflineFormFieldsScreen', offlineCurrentForm);
+    pushToOfflineFormFieldsScreen({
+      componentId,
+      offlineCurrentForm,
+      currentLinkedItems,
+    });
+  } catch (error) {
+    console.log('loadFormFields error', error);
   }
 }
 
@@ -131,4 +196,12 @@ export default all([
   takeLatest(NAVIGATE_ACTIONS.GO_TO_FORM_FIELDS_SCREEN, goToFormFieldsScreen),
   takeLatest(NAVIGATE_ACTIONS.GO_TO_MAIN_SCREEN, goToMainScreen),
   takeLatest(NAVIGATE_ACTIONS.GO_TO_GOOGLE_MAPS, goToGoogleMapScreen),
+  takeLatest(
+    NAVIGATE_ACTIONS.GO_TO_OFFLINE_LINK_ITEM_SCREEN,
+    goToOfflineLinkedItemScreen,
+  ),
+  takeLatest(
+    NAVIGATE_ACTIONS.GO_TO_OFFLINE_FORM_FIELDS_SCREEN,
+    goToOfflineFormFieldsScreen,
+  ),
 ]);

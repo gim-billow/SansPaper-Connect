@@ -11,6 +11,17 @@ export const pushToLinkedItem = (props) => {
   });
 };
 
+export const pushToOfflineLinkedItem = (props) => {
+  const {componentId, passProps} = props;
+  Navigation.push(componentId, {
+    component: {
+      id: 'OfflineLinkedItems',
+      name: 'OfflineLinkedItems',
+      passProps,
+    },
+  });
+};
+
 export const pushToFormFieldsScreen = (props) => {
   const {componentId, currentForm, currentLinkedItems, passProps} = props;
   Navigation.push(componentId, {
@@ -20,6 +31,26 @@ export const pushToFormFieldsScreen = (props) => {
       passProps: {
         ...passProps,
         form: {...currentForm},
+        items: [...currentLinkedItems],
+      },
+    },
+  });
+};
+
+export const pushToOfflineFormFieldsScreen = (props) => {
+  const {
+    componentId,
+    offlineCurrentForm,
+    currentLinkedItems,
+    passProps,
+  } = props;
+  Navigation.push(componentId, {
+    component: {
+      id: 'OfflineFormFieldsScreen',
+      name: 'OfflineFormFieldsScreen',
+      passProps: {
+        ...passProps,
+        form: {...offlineCurrentForm},
         items: [...currentLinkedItems],
       },
     },

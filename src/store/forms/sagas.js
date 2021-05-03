@@ -42,6 +42,7 @@ import {
   selectStartAndFinishDate,
   selectCurrentFormId,
   selectFormByCurrentId,
+  selectOfflineCurrentForm,
 } from '@selector/form';
 import {
   selectOrganistation,
@@ -49,6 +50,7 @@ import {
 } from '@selector/sanspaper';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectType, projectDependant} from './contants';
+import * as database from '@database';
 
 async function hasLocationPermissionIOS() {
   const openSetting = () => {
@@ -161,6 +163,24 @@ function* updateFormFieldValue({payload}) {
     );
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
+      payload: updatedForm,
+    });
+  } catch (error) {
+    console.log('loginUser error', error);
+  }
+}
+
+function* updateOfflineFormFieldValue({payload}) {
+  try {
+    const {rank, value} = payload;
+    const currentForm = yield select(selectOfflineCurrentForm);
+    const updatedForm = adjust(
+      rank - 1,
+      (i) => assoc('value', value, i),
+      currentForm.fields,
+    );
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_FIELDS,
       payload: updatedForm,
     });
   } catch (error) {
@@ -317,7 +337,7 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
-    const {linkedTable} = payload;
+    const dateNow = new Date();
     const formId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
@@ -327,13 +347,35 @@ function* syncOfflineForm({payload = {}}) {
     //sync forms
     const currentFormFields = yield getFormFields({fieldsPath});
     const currentForm = assoc('fields', currentFormFields, currentFormInfo);
-
+    const currentFormPayload = {
+      id: formId,
+      createdAt: dateNow.toISOString(),
+      updatedAt: dateNow.toISOString(),
+      value: JSON.stringify(currentForm),
+    };
+    yield database.InsertForm(currentFormPayload);
     //sync linked item
-    const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
-    const linkedItem = yield queryUpviseTable({
-      table: linkedItemName,
-      organisation,
-    });
+    console.log('payload', payload);
+    if (payload?.linkedTable && payload?.linkedTable !== '') {
+      const linkedItemName =
+        UpviseTablesMap[payload?.linkedTable.toLowerCase()];
+      const linkedItems = yield queryUpviseTable({
+        table: linkedItemName,
+        organisation,
+      });
+
+      if (linkedItems?.data) {
+        const {title, lastBuildDate, items} = linkedItems?.data;
+        console.log('items', items);
+        const payload = {
+          id: title,
+          createdAt: lastBuildDate,
+          updatedAt: lastBuildDate,
+          value: JSON.stringify(items),
+        };
+        yield database.InsertLinkedItems(payload);
+      }
+    }
 
     //sync forms fields
     let projectList = [];
@@ -354,7 +396,14 @@ function* syncOfflineForm({payload = {}}) {
               organisation,
               project.id,
             );
-            console.log(`[Milestone/Categories] ${project}`, options);
+            const selectOptionsPayload = {
+              formId,
+              seloptions,
+              projectId: project.id,
+              type,
+              value: JSON.stringify(options),
+            };
+            database.InsertSelectOptions(selectOptionsPayload);
           }
         } else {
           const options = yield getQueryByOptions(
@@ -364,17 +413,40 @@ function* syncOfflineForm({payload = {}}) {
             '',
           );
           //storing project list to iterate for milestone and categorytools
-          if (field.type === 'project') {
-            projectList = options;
-            console.log('projectList', projectList);
+          if (options) {
+            const selectOptionsPayload = {
+              formId,
+              seloptions,
+              projectId: '',
+              type,
+              value: JSON.stringify(options),
+            };
+            database.InsertSelectOptions(selectOptionsPayload);
           }
-          console.log('[Normail select option]', options);
         }
       }
     }
     //console.log('linkedItem', JSON.stringify(linkedItem));
   } catch (error) {
     console.log('error', error);
+  }
+}
+
+function* loadFormFields({payload = {}}) {
+  try {
+    const {rank, value} = payload;
+    const currentForm = yield select(selectCurrentForm);
+    const updatedForm = adjust(
+      rank - 1,
+      (i) => assoc('value', value, i),
+      currentForm.fields,
+    );
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
+      payload: updatedForm,
+    });
+  } catch (error) {
+    console.log('loginUser error', error);
   }
 }
 

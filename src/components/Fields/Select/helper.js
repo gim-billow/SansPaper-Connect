@@ -2,6 +2,7 @@ import {regExpQuote, regExpDoubleQuote} from '@util/regexp';
 import {getUpviseUserList} from '@api/upvise';
 import {getOptions, getProjects, getDataWithoutStatus} from '@api/upvise/util';
 import {pipe, split, map, pick} from 'ramda';
+import * as database from '@database';
 
 const getQueryOptions = async (seloptions, organization) => {
   const queryArr = seloptions.split(',');
@@ -223,4 +224,20 @@ export const getQueryByOptions = async (
     default:
       return '';
   }
+};
+
+export const getOptionsFromDB = async ({
+  seloptions,
+  type,
+  formId,
+  projectValue,
+}) => {
+  const options = await database.getFieldsOptions({
+    formId,
+    seloptions,
+    type,
+    projectValue,
+  });
+  console.log('getOptionsFromDB', options);
+  return options;
 };

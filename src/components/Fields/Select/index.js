@@ -10,7 +10,7 @@ import R from 'ramda';
 import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
-import {getQueryByOptions} from './helper';
+import {getQueryByOptions, getOptionsFromDB} from './helper';
 import {selectProjectValue} from 'selector/form';
 import {commonStyles} from '@styles/common';
 
@@ -23,14 +23,24 @@ class Select extends PureComponent {
   async componentDidMount() {
     let selected = [];
     const {seloptions, type} = this.props.item;
-    const {organization, projectValue} = this.props;
-    const options = await getQueryByOptions(
-      seloptions,
-      type,
-      organization,
-      projectValue,
-    );
-
+    const {organization, projectValue, offline = false, formId} = this.props;
+    let options = [];
+    if (offline) {
+      const params = {
+        formId,
+        seloptions,
+        type,
+        projectValue,
+      };
+      options = await getOptionsFromDB(params);
+    } else {
+      options = await getQueryByOptions(
+        seloptions,
+        type,
+        organization,
+        projectValue,
+      );
+    }
     this.updateSetOptions(options, selected);
   }
 

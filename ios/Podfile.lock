@@ -608,6 +608,8 @@ PODS:
   - react-native-simple-toast (1.1.3):
     - React-Core
     - Toast (~> 4.0.0)
+  - react-native-sqlite-storage (5.0.0):
+    - React
   - react-native-version-check (3.4.2):
     - React
   - react-native-webview (11.0.0):
@@ -781,6 +783,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
   - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
+  - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -901,6 +904,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-signature-capture"
   react-native-simple-toast:
     :path: "../node_modules/react-native-simple-toast"
+  react-native-sqlite-storage:
+    :path: "../node_modules/react-native-sqlite-storage"
   react-native-version-check:
     :path: "../node_modules/react-native-version-check"
   react-native-webview:
@@ -1018,6 +1023,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-signature-capture: 96ee159945aa595a57a5aeeb344218b342640a23
   react-native-simple-toast: bf002828cf816775a6809f7a9ec3907509bce11f
+  react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
   react-native-webview: 6b7950628616679d81bdd75747e50cf6de9b5a5f
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
@@ -1053,4 +1059,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c4d6186eda55806814d00bc9ebd7258ca1a6aef6
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0

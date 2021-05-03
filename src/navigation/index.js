@@ -165,6 +165,33 @@ export const showMainScreen = async () => {
               },
             },
           },
+          {
+            stack: {
+              id: 'OFFLINE_FORM_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.OfflineFormScreen,
+                    name: screens.OfflineFormScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Offline',
+                  icon: clipboardIcon,
+                  selectedIcon: clipboardIconSelect,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
+                },
+              },
+            },
+          },
         ],
       },
     },

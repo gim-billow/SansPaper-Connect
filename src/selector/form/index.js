@@ -3,6 +3,21 @@ import {createSelector} from 'reselect';
 import {find, propEq, filter} from 'ramda';
 import * as R from 'ramda';
 
+export const selectOfflineLinkedItems = (state) =>
+  state.formReducer.offlineCurrentLinkedItems;
+
+export const selectOfflineCurrentFormId = (state) =>
+  state.formReducer.offlineCurrentFormId;
+
+export const selectOfflineFormList = (state) => state.formReducer.offlineForms;
+
+export const selectOfflineCurrentForm = (state) =>
+  state.formReducer.offlineCurrentForm;
+
+export const selectOfflineCurrentFormFields = createSelector(
+  selectOfflineCurrentForm,
+  (form) => (form.fields ? form.fields : []),
+);
 export const selectCurrentFormId = (state) => state.formReducer.currentFormId;
 
 export const selectCurrentLinkedItems = (state) =>

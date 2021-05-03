@@ -10,10 +10,24 @@ import {
 } from '@api/upvise';
 import {USER_SAGA_ACTIONS} from '@store/user';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
-import {FORM_SAGA_ACTIONS} from '@store/forms';
+import {FORM_SAGA_ACTIONS, FORM_REDUCER_ACTIONS} from '@store/forms';
+import DB, * as database from '@database';
 
 function* init({payload}) {
   try {
+    //init DB
+    yield DB.openDBConnection();
+    yield database.CreateTable();
+    const offlineFormsString = yield database.getOfflineForms();
+    const offlineForms = R.map(
+      (form) => JSON.parse(form.value),
+      offlineFormsString,
+    );
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST,
+      payload: offlineForms,
+    });
+
     //getting user info
     const {uid} = payload._user;
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});

@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {FORM_REDUCER_ACTIONS, FORM_ACTION} from './actions';
+import {FORM_REDUCER_ACTIONS} from './actions';
 
 const INIT_STATE = {
   currentFormId: '',
@@ -11,12 +11,18 @@ const INIT_STATE = {
   submittingFrom: false,
   currentLinkedItems: [{}],
   forms: {},
+  offlineCurrentFormId: '',
+  offlineForms: {},
+  offlineCurrentForm: {},
+  offlineCurrentLinkedItems: [{}],
+  offlineScrollToMandatory: null,
+  offlineSubmitTriggered: 0,
+  offlineSubmittingFrom: false,
 };
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID: {
-      console.log('FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID', action);
       return produce(state, (draftState) => {
         draftState.currentFormId = action.payload;
       });
@@ -34,6 +40,31 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST: {
       return produce(state, (draftState) => {
         draftState.forms = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_ID: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentFormId = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST: {
+      return produce(state, (draftState) => {
+        draftState.offlineForms = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_LINKED_TABLE: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentLinkedItems = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_FIELDS: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm.fields = action.payload;
       });
     }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS: {
