@@ -5,6 +5,8 @@ export const USER_ACTIONS = {
   GOOGLE_LOGIN: 'userActions/GOOGLE_LOGIN',
   APPLE_LOGIN: 'userActions/APPLE_LOGIN',
   ERROR_SSO_USER: 'userActions/ERROR_SSO_USER',
+  SAVE_USER: 'userActions/SAVE_USER',
+  FORGO_PASSWORD: 'userActions/FORGOT_PASSWORD',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -19,6 +21,11 @@ export const USER_REDUCER_ACTIONS = {
 
 export const loginUser = (payload) => ({
   type: USER_ACTIONS.LOGIN,
+  payload,
+});
+
+export const forgotPasswordUser = (payload) => ({
+  type: USER_ACTIONS.FORGO_PASSWORD,
   payload,
 });
 
@@ -42,4 +49,9 @@ export const resetLoginCode = () => ({
 
 export const errorLogin = () => ({
   type: USER_ACTIONS.ERROR_SSO_USER,
+});
+
+export const saveUser = (payload) => ({
+  type: USER_ACTIONS.SAVE_USER,
+  payload,
 });

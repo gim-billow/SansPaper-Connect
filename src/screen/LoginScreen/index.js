@@ -12,7 +12,14 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import {Button, Divider} from 'react-native-elements';
+import {
+  Button,
+  Divider,
+  Input,
+  CheckBox,
+  Overlay,
+  Text as RNEText,
+} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {createStructuredSelector} from 'reselect';
 import auth from '@react-native-firebase/auth';
@@ -21,7 +28,7 @@ import * as yup from 'yup';
 //styles
 import styles, {iconProps} from './styles';
 import {errorStyle} from 'styles/common';
-import {red} from 'styles/colors';
+import {lightRed, red} from 'styles/colors';
 
 //constants
 import {CommonImages} from 'constant/Images';
@@ -39,9 +46,16 @@ import {
   loginWithGoogle,
   resetLoginCode,
   loginWithApple,
+  saveUser,
+  forgotPasswordUser,
 } from '@store/user';
 import {selectUserStatus, selectLoginCode} from '@selector/user';
 import {init} from '@store/common';
+import {readUserEmail} from '@api/user';
+
+const forgotEmailSchema = yup.object().shape({
+  forgotPassEmail: yup.string().required().email(),
+});
 
 const loginSchema = yup.object().shape({
   username: yup.string().required().email(),
@@ -68,14 +82,18 @@ class LoginScreen extends React.Component {
 
   state = {
     username: '',
+    forgotPassEmail: '',
     password: '',
     securePassword: true,
     errorPass: '',
     errorUser: '',
+    errorForgotPassEmail: '',
     changeLogo: false,
     loading: false,
     icon: 'eye-slash',
     showAlert: false,
+    remember: false,
+    forgotPassOverlay: false,
   };
 
   keyboardDidShowListener;
@@ -94,6 +112,9 @@ class LoginScreen extends React.Component {
     );
 
     this.authListener = auth().onAuthStateChanged(this._onAuthStateChanged);
+
+    // check if user email is remembered
+    this.readUserEmail();
   }
 
   componentWillUnmount() {
@@ -122,12 +143,24 @@ class LoginScreen extends React.Component {
     this.setState({changeLogo: false});
   };
 
+  readUserEmail = async () => {
+    const {username, saveUser: isSavedUser} = await readUserEmail();
+
+    if (username && isSavedUser) {
+      this.setState({username: username, remember: isSavedUser});
+    }
+  };
+
   onUserNameChange = (username) => {
     this.setState({username});
   };
 
   onPasswordChange = (password) => {
     this.setState({password});
+  };
+
+  onChangeForgotPasswordEmail = (email) => {
+    this.setState({forgotPassEmail: email});
   };
 
   onChangeIcon = (icon) => {
@@ -162,6 +195,31 @@ class LoginScreen extends React.Component {
     }
   };
 
+  onForgotPasswordPress = async () => {
+    const {forgotPassEmail, errorForgotPassEmail} = this.state;
+
+    if (errorForgotPassEmail) {
+      this.setState({errorForgotPassEmail: ''});
+    }
+
+    try {
+      await forgotEmailSchema.validate({forgotPassEmail});
+      Keyboard.dismiss();
+      this.props.forgotPasswordUser({email: forgotPassEmail});
+      this.setState({errorForgotPassEmail: '', forgotPassOverlay: false});
+    } catch (e) {
+      let errorMessage = '';
+      if (e && e.message.includes('forgotPassEmail')) {
+        if (forgotPassEmail) {
+          errorMessage = 'Input must be a valid email address';
+        } else {
+          errorMessage = 'Email address is a required field';
+        }
+        this.setState({errorForgotPassEmail: errorMessage});
+      }
+    }
+  };
+
   alertLogin = (message, action) =>
     Alert.alert(
       'Login Error',
@@ -179,14 +237,33 @@ class LoginScreen extends React.Component {
       {cancelable: false},
     );
 
+  onChangeRememberMe = (e) => {
+    const {saveUser: saveUserEmail} = this.props;
+
+    saveUserEmail(!this.state.remember);
+    this.setState({remember: !this.state.remember});
+  };
+
+  onToggleForgotPassOverlay = () => {
+    this.setState({
+      forgotPassOverlay: !this.state.forgotPassOverlay,
+      errorForgotPassEmail: '',
+      forgotPassEmail: '',
+    });
+  };
+
   render() {
     const {
       errorUser,
       errorPass,
+      errorForgotPassEmail,
       changeLogo,
       username,
       password,
       showAlert,
+      remember,
+      forgotPassOverlay,
+      forgotPassEmail,
     } = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
     const {
@@ -248,9 +325,21 @@ class LoginScreen extends React.Component {
               buttonStyle={styles.new_submitBtnStyle}
               onPress={this.onLoginPress}
             />
-            <TouchableOpacity style={styles.forgot} onPress={() => {}}>
-              <Text style={styles.forgotText}>Forgot Password?</Text>
-            </TouchableOpacity>
+            <View style={styles.helperContainer}>
+              <CheckBox
+                containerStyle={styles.checkbox}
+                title="Remember me"
+                onPress={this.onChangeRememberMe}
+                checked={remember}
+                textStyle={styles.checkboxText}
+                checkedColor={lightRed}
+              />
+              <TouchableOpacity
+                style={styles.forgot}
+                onPress={this.onToggleForgotPassOverlay}>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.connect}>
             <Divider style={{flex: 1}} />
@@ -312,6 +401,41 @@ class LoginScreen extends React.Component {
               />
             </View>
           ) : null} */}
+          <Overlay
+            animationType="fade"
+            overlayStyle={styles.overlay}
+            backdropStyle={styles.backdrop}
+            isVisible={forgotPassOverlay}
+            onBackdropPress={this.onToggleForgotPassOverlay}>
+            <View style={styles.overlayHeader}>
+              <View style={styles.overlayHeaderText}>
+                <RNEText h4>Forgot Password</RNEText>
+                <Text style={styles.overlaySubText}>
+                  Enter your email below to receive a password reset link
+                </Text>
+              </View>
+            </View>
+            <Input
+              placeholder="Enter email address"
+              leftIcon={
+                <Icon name="envelope" {...iconProps} style={{width: 20}} />
+              }
+              inputContainerStyle={
+                !errorForgotPassEmail ? styles.inputContainer : styles.error
+              }
+              autoCapitalize="none"
+              value={forgotPassEmail}
+              errorMessage={errorForgotPassEmail}
+              onChangeText={this.onChangeForgotPasswordEmail}
+              errorStyle={!errorForgotPassEmail ? styles.errorView : undefined}
+            />
+            <Button
+              title="Send Recovery Email"
+              onPress={this.onForgotPasswordPress}
+              buttonStyle={styles.closeBtnOverlay}
+              titleStyle={styles.closeTxtOverlay}
+            />
+          </Overlay>
         </KeyboardAvoidingView>
       </>
     );
@@ -329,4 +453,6 @@ export default connect(mapState, {
   resetLoginCode,
   loginWithGoogle,
   loginWithApple,
+  saveUser,
+  forgotPasswordUser,
 })(LoginScreen);
