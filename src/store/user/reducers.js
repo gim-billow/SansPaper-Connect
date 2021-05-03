@@ -6,6 +6,7 @@ const INIT_STATE = {
   email: '',
   uid: '',
   loginCode: null,
+  saveUser: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -35,6 +36,11 @@ export default (state = INIT_STATE, action) => {
         draftState.loginStatus = false;
         draftState.email = '';
         draftState.uid = '';
+      });
+    }
+    case USER_ACTIONS.SAVE_USER: {
+      return produce(state, (draftState) => {
+        draftState.saveUser = action.payload;
       });
     }
     default:
