@@ -102,7 +102,7 @@ class Profile extends Component {
           </View>
           <Divider />
           {/* change password */}
-          <View style={styles.listContainer}>
+          {/* <View style={styles.listContainer}>
             <List.Item
               onPress={this.showModal}
               style={styles.list}
@@ -116,7 +116,7 @@ class Profile extends Component {
               )}
             />
           </View>
-          <Divider />
+          <Divider /> */}
           {/* update */}
           <View style={styles.listContainer}>
             <List.Item
@@ -158,7 +158,7 @@ class Profile extends Component {
           <Divider />
         </View>
 
-        <Modal
+        {/* <Modal
           animationType="fade"
           transparent={true}
           visible={this.state.visible}>
@@ -187,7 +187,7 @@ class Profile extends Component {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
       </>
     );
   }
