@@ -402,42 +402,42 @@ class LoginScreen extends React.Component {
               />
             </View>
           ) : null} */}
-          <Overlay
-            animationType="fade"
-            overlayStyle={styles.overlay}
-            backdropStyle={styles.backdrop}
-            isVisible={forgotPassOverlay}
-            onBackdropPress={this.onToggleForgotPassOverlay}>
-            <View style={styles.overlayHeader}>
-              <View style={styles.overlayHeaderText}>
-                <RNEText h4>Forgot Password</RNEText>
-                <Text style={styles.overlaySubText}>
-                  Enter your email below to receive a password reset link
-                </Text>
-              </View>
-            </View>
-            <Input
-              placeholder="Enter email address"
-              leftIcon={
-                <Icon name="envelope" {...iconProps} style={{width: 20}} />
-              }
-              inputContainerStyle={
-                !errorForgotPassEmail ? styles.inputContainer : styles.error
-              }
-              autoCapitalize="none"
-              value={forgotPassEmail}
-              errorMessage={errorForgotPassEmail}
-              onChangeText={this.onChangeForgotPasswordEmail}
-              errorStyle={!errorForgotPassEmail ? styles.errorView : undefined}
-            />
-            <Button
-              title="Send Recovery Email"
-              onPress={this.onForgotPasswordPress}
-              buttonStyle={styles.closeBtnOverlay}
-              titleStyle={styles.closeTxtOverlay}
-            />
-          </Overlay>
         </KeyboardAvoidingView>
+        <Overlay
+          animationType="fade"
+          overlayStyle={styles.overlay}
+          backdropStyle={styles.backdrop}
+          isVisible={forgotPassOverlay}
+          onBackdropPress={this.onToggleForgotPassOverlay}>
+          <View style={styles.overlayHeader}>
+            <View style={styles.overlayHeaderText}>
+              <RNEText h4>Forgot Password</RNEText>
+              <Text style={styles.overlaySubText}>
+                Enter your email below to receive a password reset link
+              </Text>
+            </View>
+          </View>
+          <Input
+            placeholder="Enter email address"
+            leftIcon={
+              <Icon name="envelope" {...iconProps} style={{width: 20}} />
+            }
+            inputContainerStyle={
+              !errorForgotPassEmail ? styles.inputContainer : styles.error
+            }
+            autoCapitalize="none"
+            value={forgotPassEmail}
+            errorMessage={errorForgotPassEmail}
+            onChangeText={this.onChangeForgotPasswordEmail}
+            errorStyle={!errorForgotPassEmail ? styles.errorView : undefined}
+          />
+          <Button
+            title="Send Recovery Email"
+            onPress={this.onForgotPasswordPress}
+            buttonStyle={styles.closeBtnOverlay}
+            titleStyle={styles.closeTxtOverlay}
+          />
+        </Overlay>
       </>
     );
   }

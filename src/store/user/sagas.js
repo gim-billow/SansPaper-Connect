@@ -1,8 +1,22 @@
-import {put, all, takeLatest, select} from 'redux-saga/effects';
+import {
+  put,
+  all,
+  takeLatest,
+  select,
+  call,
+  take,
+  cancelled,
+} from 'redux-saga/effects';
+import {eventChannel} from 'redux-saga';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
-import {USER_ACTIONS, USER_SAGA_ACTIONS, USER_REDUCER_ACTIONS} from './actions';
+import {
+  USER_ACTIONS,
+  USER_SAGA_ACTIONS,
+  USER_REDUCER_ACTIONS,
+  logoutUser as onLogoutUser,
+} from './actions';
 import {
   login,
   googleLogin,
@@ -13,6 +27,8 @@ import {
 } from 'api/user';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectSaveUser} from '@selector/user';
+import {firebase} from '@react-native-firebase/firestore';
+import {fetchSansPaperUser, updateChangePass} from '@api/upvise';
 
 function* loginUser({payload}) {
   try {
@@ -90,6 +106,9 @@ function* logoutUser({payload}) {
   try {
     const {email, uid, status, loginCode} = payload;
 
+    // set changepass back to false
+    yield updateChangePass();
+
     yield put({
       type: USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS,
       payload: status,
@@ -115,7 +134,39 @@ function* logoutUser({payload}) {
   }
 }
 
+function subscribeOnUserChanged(formsRef) {
+  return eventChannel((emitter) => {
+    formsRef.onSnapshot(async () => {
+      const users = await fetchSansPaperUser();
+      emitter(users);
+    });
+
+    return () => formsRef;
+  });
+}
+
+function* watchUserChangeUpdate() {
+  const formsRef = yield firebase.firestore().collection('sanspaperusers');
+  const user = yield call(subscribeOnUserChanged, formsRef);
+
+  try {
+    while (true) {
+      const authUser = yield take(user);
+      const {passchange} = authUser.data();
+
+      if (passchange) {
+        yield put(onLogoutUser());
+      }
+    }
+  } finally {
+    if (yield cancelled()) {
+      user.close();
+    }
+  }
+}
+
 export default all([
+  takeLatest(USER_SAGA_ACTIONS.ON_USER_CHANGED, watchUserChangeUpdate),
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
   takeLatest(USER_ACTIONS.FORGO_PASSWORD, forgotPasswordUser),
   takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),

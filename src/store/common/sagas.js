@@ -13,10 +13,9 @@ import {
   getSansPaperUserOrganisation,
   getUpviseUserList,
 } from '@api/upvise';
-import {USER_SAGA_ACTIONS} from '@store/user';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
 import {FORM_SAGA_ACTIONS} from '@store/forms';
-import {USER_ACTIONS} from '../user';
+import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 
 function* init({payload}) {
   try {
@@ -77,6 +76,10 @@ function* init({payload}) {
     yield put({
       type: COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
       payload: newsPath,
+    });
+
+    yield put({
+      type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
     });
   } catch (error) {
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
