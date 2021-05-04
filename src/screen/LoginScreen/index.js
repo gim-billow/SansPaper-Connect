@@ -341,6 +341,7 @@ class LoginScreen extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
+          {/*
           <View style={styles.connect}>
             <Divider style={{flex: 1}} />
             <Text style={styles.connectText}>OR</Text>
