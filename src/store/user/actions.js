@@ -11,8 +11,8 @@ export const USER_ACTIONS = {
 
 export const USER_SAGA_ACTIONS = {
   UPDATE_USER_DETAILS: 'userActions/UPDATE_USER_DETAILS',
-  // ON_USER_CHANGED: 'userActions/ON_USER_CHANGED',
-  // ON_CHANGE_PASS_BOOL: 'userActions/ON_CHANGE_PASS_BOOL',
+  ON_USER_CHANGED: 'userActions/ON_USER_CHANGED',
+  ON_CHANGE_PASS_BOOL: 'userActions/ON_CHANGE_PASS_BOOL',
 };
 
 export const USER_REDUCER_ACTIONS = {

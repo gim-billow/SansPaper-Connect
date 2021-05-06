@@ -1,7 +1,7 @@
 //Library
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
-// import storage from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import {sortBy, prop, flatten, filter, pipe, uniq} from 'ramda';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -95,22 +95,22 @@ export const fetchSansPaperUser = async () => {
   }
 };
 
-// export const updateChangePass = async () => {
-//   try {
-//     const userid = getUser();
+export const updateChangePass = async () => {
+  try {
+    const userid = getUser();
 
-//     const userRef = await firebase
-//       .firestore()
-//       .collection('sanspaperusers')
-//       .doc(userid)
-//       .update({
-//         passchange: false,
-//       });
-//     return userRef;
-//   } catch (error) {
-//     console.warn('Error getting Sans Paper User', error);
-//   }
-// };
+    const userRef = await firebase
+      .firestore()
+      .collection('sanspaperusers')
+      .doc(userid)
+      .update({
+        passchange: false,
+      });
+    return userRef;
+  } catch (error) {
+    console.warn('Error getting Sans Paper User', error);
+  }
+};
 
 const fetchSansPaperUserOrganisation = async (user) => {
   try {
