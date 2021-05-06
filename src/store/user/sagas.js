@@ -27,8 +27,8 @@ import {
 } from 'api/user';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectSaveUser} from '@selector/user';
-import {firebase} from '@react-native-firebase/firestore';
-import {fetchSansPaperUser, updateChangePass} from '@api/upvise';
+// import {firebase} from '@react-native-firebase/firestore';
+// import {fetchSansPaperUser, updateChangePass} from '@api/upvise';
 
 function* loginUser({payload}) {
   try {
@@ -107,7 +107,7 @@ function* logoutUser({payload}) {
     const {email, uid, status, loginCode} = payload;
 
     // set changepass back to false
-    yield updateChangePass();
+    // yield updateChangePass();
 
     yield put({
       type: USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS,
@@ -134,39 +134,39 @@ function* logoutUser({payload}) {
   }
 }
 
-function subscribeOnUserChanged(formsRef) {
-  return eventChannel((emitter) => {
-    formsRef.onSnapshot(async () => {
-      const users = await fetchSansPaperUser();
-      emitter(users);
-    });
+// function subscribeOnUserChanged(formsRef) {
+//   return eventChannel((emitter) => {
+//     formsRef.onSnapshot(async () => {
+//       const users = await fetchSansPaperUser();
+//       emitter(users);
+//     });
 
-    return () => formsRef;
-  });
-}
+//     return () => formsRef;
+//   });
+// }
 
-function* watchUserChangeUpdate() {
-  const formsRef = yield firebase.firestore().collection('sanspaperusers');
-  const user = yield call(subscribeOnUserChanged, formsRef);
+// function* watchUserChangeUpdate() {
+//   const formsRef = yield firebase.firestore().collection('sanspaperusers');
+//   const user = yield call(subscribeOnUserChanged, formsRef);
 
-  try {
-    while (true) {
-      const authUser = yield take(user);
-      const {passchange} = authUser.data();
+//   try {
+//     while (true) {
+//       const authUser = yield take(user);
+//       const {passchange} = authUser.data();
 
-      if (passchange) {
-        yield put(onLogoutUser());
-      }
-    }
-  } finally {
-    if (yield cancelled()) {
-      user.close();
-    }
-  }
-}
+//       if (passchange) {
+//         yield put(onLogoutUser());
+//       }
+//     }
+//   } finally {
+//     if (yield cancelled()) {
+//       user.close();
+//     }
+//   }
+// }
 
 export default all([
-  takeLatest(USER_SAGA_ACTIONS.ON_USER_CHANGED, watchUserChangeUpdate),
+  // takeLatest(USER_SAGA_ACTIONS.ON_USER_CHANGED, watchUserChangeUpdate),
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
   takeLatest(USER_ACTIONS.FORGO_PASSWORD, forgotPasswordUser),
   takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),

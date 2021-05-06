@@ -78,9 +78,9 @@ function* init({payload}) {
       payload: newsPath,
     });
 
-    yield put({
-      type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
-    });
+    // yield put({
+    //   type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
+    // });
   } catch (error) {
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
     yield put({

@@ -95,22 +95,22 @@ export const fetchSansPaperUser = async () => {
   }
 };
 
-export const updateChangePass = async () => {
-  try {
-    const userid = getUser();
+// export const updateChangePass = async () => {
+//   try {
+//     const userid = getUser();
 
-    const userRef = await firebase
-      .firestore()
-      .collection('sanspaperusers')
-      .doc(userid)
-      .update({
-        passchange: false,
-      });
-    return userRef;
-  } catch (error) {
-    console.warn('Error getting Sans Paper User', error);
-  }
-};
+//     const userRef = await firebase
+//       .firestore()
+//       .collection('sanspaperusers')
+//       .doc(userid)
+//       .update({
+//         passchange: false,
+//       });
+//     return userRef;
+//   } catch (error) {
+//     console.warn('Error getting Sans Paper User', error);
+//   }
+// };
 
 const fetchSansPaperUserOrganisation = async (user) => {
   try {
