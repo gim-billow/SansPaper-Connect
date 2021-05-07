@@ -151,8 +151,10 @@ const getWithoutStatus = async (organization, table) => {
 
 const getContact = async (organization, project) => {
   const table = 'contacts.contacts';
-  const query = 'groupid="' + project + '"';
+  // const query = project ? 'groupid="' + project + '"' : null;
+  const query = project ? project : null;
   const queriedOptions = await getOptions(table, query, organization);
+
   return map(
     (options) => pick(['id', 'name'], options),
     queriedOptions?.data?.items,

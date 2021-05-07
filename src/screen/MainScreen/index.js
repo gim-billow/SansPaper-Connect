@@ -9,32 +9,27 @@ import {
   Alert,
   BackHandler,
   Linking,
-  ScrollView,
-  RefreshControl,
+  Image,
+  Dimensions,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
-// import HTML from 'react-native-render-html';
-import {Icon} from 'react-native-elements';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 
-import {selectNews} from '@selector/common';
 import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
 import {selectOrganistationPath} from '@selector/sanspaper';
+import {selectSortedNews} from '@selector/common';
 import styles from './styles';
 import {red} from '@styles/colors';
-import {fetchOrgNews, fetchUserDetails, getUpviseTemplateForms} from './helper';
 
+const {width} = Dimensions.get('screen');
 class MainScreen extends React.Component {
   state = {
-    refresh: false,
-    updatedNews: [],
     showMore: [],
   };
 
   componentDidMount() {
-    this.initNews();
     // force update if new version is available
     this.checkVersion();
   }
@@ -46,7 +41,7 @@ class MainScreen extends React.Component {
         this.forceUpdateAlert(updateNeeded.storeUrl);
       }
     } catch (error) {
-      console.tron.error('error on updating app', error);
+      console.error('error on updating app', error);
     }
   }
 
@@ -70,55 +65,6 @@ class MainScreen extends React.Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  initNews = () => {
-    const {updatedNews} = this.props;
-    const toShowMore = updatedNews.map((news) => {
-      if (news.hasOwnProperty('announcement')) {
-        return false;
-      }
-
-      return true;
-    });
-
-    this.setState({updatedNews: [...updatedNews], showMore: [...toShowMore]});
-  };
-
-  wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  fetchNews = async () => {
-    const orgNews = await fetchOrgNews(this.props.orgPath);
-    const toShowMore = orgNews.map((news) => {
-      if (news.hasOwnProperty('announcement')) {
-        return false;
-      }
-
-      return true;
-    });
-    this.setState({updatedNews: [...orgNews], showMore: [...toShowMore]});
-  };
-
-  fetchUpdatedTemplates = async () => {
-    const {updateFormList: dispatchFormList} = this.props;
-    const forms = await getUpviseTemplateForms(this.props.orgPath);
-
-    dispatchFormList(forms);
-  };
-
-  onRefresh = async () => {
-    this.setState({refresh: true});
-
-    // fetch updated org news
-    this.fetchNews();
-    // FIXME: fetched user email
-    fetchUserDetails();
-    // get updated template forms
-    this.fetchUpdatedTemplates();
-
-    this.wait(2000).then(() => this.setState({refresh: false}));
-  };
-
   runShowMore = (index) => {
     const showMore = [...this.state.showMore];
     showMore[index] = !showMore[index];
@@ -129,42 +75,39 @@ class MainScreen extends React.Component {
     return (
       <>
         <View style={styles.newsContainer}>
-          {/* {index === 0 ? (
-            <View style={styles.latestNews}>
-              <Text style={styles.newsText}>Latest announcement</Text>
-            </View>
-          ) : null} */}
           <Markdown style={styles}>
             {!this.state.showMore[index]
               ? limitText(item.announcement, 170)
               : item.announcement}
           </Markdown>
-          <TouchableOpacity
-            style={styles.showMoreBtn}
-            onPress={() => {
-              this.runShowMore(index);
-            }}>
-            <Text style={styles.showMoreText}>
-              {this.state.showMore[index] ? 'Show less' : 'Show more'}
-            </Text>
-          </TouchableOpacity>
+          {item.announcement.length > 170 ? (
+            <TouchableOpacity
+              style={styles.showMoreBtn}
+              onPress={() => {
+                this.runShowMore(index);
+              }}>
+              <Text style={styles.showMoreText}>
+                {this.state.showMore[index] ? 'Show less' : 'Show more'}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </>
     );
   };
 
   render() {
-    const {updatedNews, refresh} = this.state;
+    const {updatedNews} = this.props;
 
     if (!updatedNews.length) {
       return (
-        <ScrollView
-          contentContainerStyle={styles.noItemsContainer}
-          refreshControl={
-            <RefreshControl refreshing={refresh} onRefresh={this.onRefresh} />
-          }>
-          <Text style={styles.headerText}>No official news today.</Text>
-        </ScrollView>
+        <View style={styles.noItemsContainer}>
+          <Image
+            source={require('../../assets/no-items.jpeg')}
+            resizeMode="contain"
+            style={{width: width - 50}}
+          />
+        </View>
       );
     }
 
@@ -180,8 +123,6 @@ class MainScreen extends React.Component {
           keyExtractor={this.keyExtractor}
           data={updatedNews}
           renderItem={this.renderMarkdown}
-          onRefresh={this.onRefresh}
-          refreshing={refresh}
           extraData={this.state}
         />
       </View>
@@ -190,7 +131,7 @@ class MainScreen extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  updatedNews: selectNews,
+  updatedNews: selectSortedNews,
   orgPath: selectOrganistationPath,
 });
 

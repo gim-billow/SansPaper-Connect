@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
@@ -18,25 +18,13 @@ import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
-import {getUpviseTemplateForms} from './helper';
 import {Spinner} from 'native-base';
 import styles from './styles';
+import {darkGrey} from '@styles/colors';
 
 class FormList extends React.Component {
   state = {
     searchKeyword: '',
-    refresh: false,
-  };
-
-  wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  fetchUpdatedTemplates = async () => {
-    const {updateFormList} = this.props;
-    const forms = await getUpviseTemplateForms(this.props.orgPath);
-
-    updateFormList(forms);
   };
 
   keyExtractor = (item, index) => index.toString();
@@ -58,6 +46,10 @@ class FormList extends React.Component {
     }
   };
 
+  downloadForm = (linked_table, form_id) => {
+    this.props.syncOfflineForm({linkedTable: linked_table, formId: form_id});
+  };
+
   getFilteredFormlist = memoize((formList, searchKeyword) => {
     return filter(
       (form) => includes(searchKeyword.toLowerCase(), form.name.toLowerCase()),
@@ -69,30 +61,28 @@ class FormList extends React.Component {
     this.setState({searchKeyword: text});
   };
 
-  onRefresh = () => {
-    this.setState({refresh: true});
-
-    // get updated template forms
-    this.fetchUpdatedTemplates();
-
-    this.wait(2000).then(() => this.setState({refresh: false}));
-  };
-
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
     return (
-      <ItemWrapper>
-        <ListItem
-          key={id}
-          bottomDivider
-          onPress={() => this.onPress(linkedtable, id)}>
-          <Icon name="file-text-o" type="font-awesome" />
-          <ListItem.Content>
-            <ListItem.Title>{name}</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      </ItemWrapper>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.downloadButton}
+          onPress={() => this.downloadForm(linkedtable, id)}>
+          <Icon name="file-download" color={darkGrey} />
+        </TouchableOpacity>
+        <ItemWrapper>
+          <ListItem
+            key={id}
+            bottomDivider
+            onPress={() => this.onPress(linkedtable, id)}>
+            <Icon name="assignment" color={darkGrey} />
+            <ListItem.Content>
+              <ListItem.Title>{name}</ListItem.Title>
+            </ListItem.Content>
+            {/* <ListItem.Chevron /> */}
+          </ListItem>
+        </ItemWrapper>
+      </View>
     );
   };
 
@@ -117,8 +107,6 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
-            onRefresh={() => this.onRefresh()}
-            refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
           <Spinner color="grey" />

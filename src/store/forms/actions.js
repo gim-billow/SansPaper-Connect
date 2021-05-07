@@ -3,6 +3,8 @@ export const FORM_ACTION = {
   PRE_SUBMIT_FORM: 'fromAction/PRE_SUBMIT_FORM',
   LOAD_FORM_FIELDS: 'formActions/LOAD_FORM_FIELDS',
   UPDATE_FORM_FIELD_VALUE: 'formActions/UPDATE_FORM_FIELD_VALUE',
+  UPDATE_OFFLINE_FORM_FIELD_VALUE:
+    'formActions/UPDATE_OFFLINE_FORM_FIELD_VALUE',
 };
 
 export const FORM_SAGA_ACTIONS = {
@@ -40,7 +42,7 @@ export const updateOfflineCurrentFormId = (payload) => ({
 });
 
 export const updateOfflineFormFieldValue = (payload) => ({
-  type: FORM_ACTION.UPDATE_FORM_FIELD_VALUE,
+  type: FORM_ACTION.UPDATE_OFFLINE_FORM_FIELD_VALUE,
   payload,
 });
 

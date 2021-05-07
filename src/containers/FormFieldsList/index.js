@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {goToGoogleMapScreen} from '@store/navigate';
 import {has} from 'ramda';
+import {lightGrey} from '@styles/colors';
 
 //component
 import Fields from 'components/Fields';
@@ -71,8 +72,8 @@ class FormFieldsList extends React.Component {
       goToGoogleMapScreen,
     } = this.props;
 
-    if (has(item.type, Fields)) {
-      if (!item.hidden) {
+    if (!item.hidden) {
+      if (has(item.type, Fields)) {
         const FormFields = Fields[item.type];
         const FieldElement = React.createElement(FormFields, {
           item: item,
@@ -85,14 +86,13 @@ class FormFieldsList extends React.Component {
         });
         return FieldElement;
       }
-    } else {
+
       return (
         <ListItem key={item.id} bottomDivider>
-          <Icon name="file-text-o" type="font-awesome" />
+          <Icon name="description" />
           <ListItem.Content>
             <ListItem.Title>{item.label}</ListItem.Title>
           </ListItem.Content>
-          <ListItem.Chevron />
         </ListItem>
       );
     }

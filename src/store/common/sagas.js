@@ -1,5 +1,10 @@
-import {all, takeLatest, put} from 'redux-saga/effects';
-import R from 'ramda';
+import {all, takeLatest, put, call, cancelled, take} from 'redux-saga/effects';
+import {eventChannel} from 'redux-saga';
+// import R from 'ramda';
+import {firebase} from '@react-native-firebase/firestore';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
 import {showMainScreen} from '@navigation';
@@ -8,10 +13,11 @@ import {
   getSansPaperUserOrganisation,
   getUpviseUserList,
 } from '@api/upvise';
-import {USER_SAGA_ACTIONS} from '@store/user';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
 import {FORM_SAGA_ACTIONS, FORM_REDUCER_ACTIONS} from '@store/forms';
+import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 import DB, * as database from '@database';
+import * as R from 'ramda';
 
 function* init({payload}) {
   try {
@@ -42,18 +48,10 @@ function* init({payload}) {
     });
 
     //get latest news from db
-    const newsList = yield getOrgNews(`${organisationPath}/announcements`);
-    const diff = function (a, b) {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    };
+    const newsPath = `${organisationPath}/announcements`;
+    const newsList = yield getOrgNews(newsPath);
 
-    const sortedDate = R.sort(diff, newsList);
-    // FIXME:
-    // const htmlNews = map(
-    //   (newsItem) => '<h3>' + newsItem.title + '</h3>' + newsItem.news,
-    //   newsList,
-    // );
-    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: sortedDate});
+    yield put({type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS, payload: newsList});
     showMainScreen();
 
     yield put({
@@ -89,9 +87,67 @@ function* init({payload}) {
       type: FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES,
       payload: upviseTemplatesPath,
     });
+
+    yield put({
+      type: COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
+      payload: newsPath,
+    });
+
+    yield put({
+      type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
+    });
   } catch (error) {
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+    yield put({
+      type: USER_ACTIONS.ERROR_SSO_USER,
+    });
+    yield auth().signOut();
+    yield GoogleSignin.revokeAccess();
+    yield GoogleSignin.signOut();
     console.log('init error', error);
   }
 }
 
-export default all([takeLatest(COMMON_ACTIONS.INIT, init)]);
+function subscribeToBodyOfKnowledge(formsRef, organisationPath) {
+  return eventChannel((emmiter) => {
+    formsRef.onSnapshot(async () => {
+      const orgNews = await getOrgNews(organisationPath);
+      emmiter(orgNews);
+    });
+
+    return () => formsRef;
+  });
+}
+
+function* watchBodyOfKnowledgeUpdates({payload}) {
+  const organisationPath = payload;
+  const formsRef = yield firebase.firestore().collection(organisationPath);
+  const news = yield call(
+    subscribeToBodyOfKnowledge,
+    formsRef,
+    organisationPath,
+  );
+
+  try {
+    while (true) {
+      const newsList = yield take(news);
+
+      yield put({
+        type: COMMON_REDUCER_ACTIONS.UPDATE_NEWS,
+        payload: newsList,
+      });
+    }
+  } finally {
+    if (yield cancelled()) {
+      news.close();
+    }
+  }
+}
+
+export default all([
+  takeLatest(COMMON_ACTIONS.INIT, init),
+  takeLatest(
+    COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
+    watchBodyOfKnowledgeUpdates,
+  ),
+]);

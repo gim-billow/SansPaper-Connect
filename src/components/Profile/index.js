@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  Alert,
-  Modal,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, Alert, Modal, TextInput, ScrollView} from 'react-native';
 import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
@@ -17,16 +9,11 @@ import {clearStorageUserId} from '@api/upvise';
 
 import {getReadableVersion} from 'react-native-device-info';
 
-// downdown
-import {Picker} from 'native-base';
-
-import {ProgressBar, Colors, TouchableRipple, Button} from 'react-native-paper';
+import {Button, List} from 'react-native-paper';
+import {Divider} from 'react-native-elements';
 
 // icons
-import EvilIcons5 from 'react-native-vector-icons/EvilIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // svg icon
 import MailIcon from './SvgIcon/MailIcon';
@@ -64,11 +51,6 @@ class Profile extends Component {
     });
   };
 
-  containerStyle = {
-    backgroundColor: 'white',
-    padding: 20,
-  };
-
   onPressLogoutHandler = () => {
     Alert.alert(
       'Log out',
@@ -91,74 +73,92 @@ class Profile extends Component {
       {cancelable: false},
     );
   };
+
   render() {
     const {email, user, organization} = this.props;
     const name = user?._data?.name;
+
     return (
-      <View style={styles.container}>
-        {/* <ScrollView> */}
-        <View style={styles.flex1}>
-          <View style={styles.userContainer}>
-            <Text style={styles.nametext}>{name}</Text>
+      <>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <Text style={styles.name}>{name}</Text>
             <Text style={styles.subText}>{organization.name}</Text>
-            {/*
-            <EvilIcons5 name="user" size={60} style={styles.userIcon} />
-            <View style={{flexDirection: 'row', paddingBottom: 2}}>
-              <MaterialCommunityIcons
-                name="medal"
-                size={20}
-                style={{color: 'gray'}}
-              />
-              <MaterialCommunityIcons
-                name="medal"
-                size={20}
-                style={{color: 'orange', paddingLeft: 190}}
-              />
-            </View>
-            <ProgressBar progress={0.7} color={Colors.green400} width={230} />
-            <View style={{flex: 1, flexDirection: 'row', paddingTop: 2}}>
-              <Text style={styles.laveltext}>LEVEL 2</Text>
-              <Text style={styles.pointstext}>15,000 POINTS</Text>
-            </View>
-            */}
           </View>
-          <View style={styles.rowContainer}>
-            <MailIcon width={30} height={40} color="green" />
-            <View style={styles.textView}>
-              <Text style={styles.labeltext}>EMAIL</Text>
-              <Text style={styles.text}>{email}</Text>
-            </View>
+          <Divider />
+          {/* email */}
+          <View style={styles.listContainer}>
+            <List.Item
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Email"
+              description={email}
+              left={() => (
+                <View style={styles.listIcon}>
+                  <MailIcon width={30} height={40} color="green" />
+                </View>
+              )}
+            />
           </View>
-          <TouchableOpacity onPress={this.showModal} rippleColor="green">
-            <View style={styles.rowContainer}>
-              <MaterialIcons name="lock" size={30} color="green" />
-              <View style={styles.textView}>
-                <Text style={styles.labeltext}>Change Password</Text>
-                <Text style={styles.text}>********</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.rowContainer}>
-            <UpdatedIcon width={30} height={40} color="green" />
-            <View style={styles.textView}>
-              <Text style={styles.labeltext}>Update</Text>
-              <Text style={styles.updatedtext}>Updated</Text>
-              <Text style={styles.versiontext}>
-                Current Version : {getReadableVersion()}
-              </Text>
-            </View>
+          <Divider />
+          {/* change password */}
+          {/* <View style={styles.listContainer}>
+            <List.Item
+              onPress={this.showModal}
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Change Password"
+              description="*********"
+              left={() => (
+                <View style={styles.listIcon}>
+                  <MaterialIcons name="lock" size={30} color="green" />
+                </View>
+              )}
+            />
           </View>
-          <View style={styles.flex1}>
-            <TouchableOpacity onPress={this.onPressLogoutHandler}>
-              <View style={styles.logoutContainer}>
-                <LogoutIcon width={30} height={40} color="red" />
-                <Text style={[styles.textView, styles.labeltext]}>Log out</Text>
-              </View>
-            </TouchableOpacity>
+          <Divider /> */}
+          {/* update */}
+          <View style={styles.listContainer}>
+            <List.Item
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Update"
+              description={() => (
+                <>
+                  <Text style={styles.updateText}>Updated</Text>
+                  <Text
+                    style={
+                      styles.updateVersion
+                    }>{`Current Version : ${getReadableVersion()}`}</Text>
+                </>
+              )}
+              descriptionStyle={styles.updateText}
+              left={() => (
+                <View style={styles.listIcon}>
+                  <UpdatedIcon width={30} height={40} color="green" />
+                </View>
+              )}
+            />
           </View>
+          <Divider />
+          {/* logout */}
+          <View style={styles.listContainer}>
+            <List.Item
+              onPress={this.onPressLogoutHandler}
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Logout"
+              left={() => (
+                <View style={styles.listIcon}>
+                  <LogoutIcon width={30} height={40} color="red" />
+                </View>
+              )}
+            />
+          </View>
+          <Divider />
         </View>
 
-        <Modal
+        {/* <Modal
           animationType="fade"
           transparent={true}
           visible={this.state.visible}>
@@ -187,9 +187,8 @@ class Profile extends Component {
               </View>
             </View>
           </View>
-        </Modal>
-        {/* </ScrollView> */}
-      </View>
+        </Modal> */}
+      </>
     );
   }
 }

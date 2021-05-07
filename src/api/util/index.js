@@ -9,3 +9,10 @@ export const getUpviseTabledQueryData = (payload) => {
   }
   return data;
 };
+
+export const combineArr = (first, second) => {
+  return first.reduce((key, val, index) => {
+    key[val] = second[index];
+    return key;
+  }, {});
+};

@@ -198,8 +198,6 @@ async function submitForm(form) {
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
           let updatedForm = assoc('geo', geo, form);
-          updatedForm = assoc('address', 'testing address', form);
-          console.log('updatedForm', updatedForm);
 
           const addr = await Geocoder.from([
             position.coords.latitude,
@@ -337,8 +335,9 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
+    showActivityIndicator();
+    const {linkedTable, formId} = payload;
     const dateNow = new Date();
-    const formId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
     const currentFormInfo = yield select(selectFormByCurrentId);
@@ -356,7 +355,7 @@ function* syncOfflineForm({payload = {}}) {
     yield database.InsertForm(currentFormPayload);
     //sync linked item
     console.log('payload', payload);
-    if (payload?.linkedTable && payload?.linkedTable !== '') {
+    if (linkedTable && linkedTable !== '') {
       const linkedItemName =
         UpviseTablesMap[payload?.linkedTable.toLowerCase()];
       const linkedItems = yield queryUpviseTable({
@@ -426,8 +425,10 @@ function* syncOfflineForm({payload = {}}) {
         }
       }
     }
+    dismissActivityIndicator();
     //console.log('linkedItem', JSON.stringify(linkedItem));
   } catch (error) {
+    dismissActivityIndicator();
     console.log('error', error);
   }
 }
@@ -453,6 +454,10 @@ function* loadFormFields({payload = {}}) {
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
   takeLatest(FORM_ACTION.UPDATE_FORM_FIELD_VALUE, updateFormFieldValue),
+  takeLatest(
+    FORM_ACTION.UPDATE_OFFLINE_FORM_FIELD_VALUE,
+    updateOfflineFormFieldValue,
+  ),
   takeLatest(FORM_ACTION.PRE_SUBMIT_FORM, preSubmitForm),
   takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
 ]);

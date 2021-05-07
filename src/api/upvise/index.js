@@ -1,19 +1,23 @@
 //Library
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
-import {sortBy, prop} from 'ramda';
-import AsyncStorage from '@react-native-community/async-storage';
+// import storage from '@react-native-firebase/storage';
+import {sortBy, prop, flatten, filter, pipe, uniq} from 'ramda';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const uuid = require('uuid/v4');
 
 //util
-import {getUpviseTabledQueryData} from '../util';
+import {
+  // getUpviseTabledQueryData,
+  combineArr,
+} from '../util';
 
 //sanspaper api requirements
 export const getSansPaperUser = async (payload) => {
   try {
     const {userId} = payload;
+
     const spUser = await firebase
       .firestore()
       .collection('sanspaperusers')
@@ -76,14 +80,32 @@ export const fetchUserEmail = () => {
   }
 };
 
-const fetchSansPaperUser = async () => {
+export const fetchSansPaperUser = async () => {
   try {
     const userid = getUser();
+
     const userRef = await firebase
       .firestore()
       .collection('sanspaperusers')
       .doc(userid)
       .get();
+    return userRef;
+  } catch (error) {
+    console.warn('Error getting Sans Paper User', error);
+  }
+};
+
+export const updateChangePass = async () => {
+  try {
+    const userid = getUser();
+
+    const userRef = await firebase
+      .firestore()
+      .collection('sanspaperusers')
+      .doc(userid)
+      .update({
+        passchange: false,
+      });
     return userRef;
   } catch (error) {
     console.warn('Error getting Sans Paper User', error);
@@ -142,28 +164,83 @@ export const getUpviseUserList = async (upviseUrl, upviseToken) => {
   }
 };
 
+export const fetchAllUpviseUsers = async (payload) => {
+  let {table, organisation} = payload;
+  const {upviseUrl = '', upviseToken = ''} = organisation;
+
+  const newOptions = {
+    method: 'POST',
+    url: upviseUrl + 'v2/table',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      token: upviseToken,
+      table,
+      where: null,
+      columns: 'groupid',
+      limit: 0,
+    },
+  };
+
+  return await axios(newOptions);
+};
+
 export const queryUpviseTable = async (payload) => {
   let {table, organisation, where} = payload;
   if (table === 'unybiz.projects.projects' && !where) {
     where = 'status != 1';
   } else if (table === 'jobs.jobs' && !where) {
     where = 'status != 4';
+  } else if (table === 'unybiz.contacts.contacts' && where) {
+    // fetch all contacts and return all group ids
+    const upviseUsers = await fetchAllUpviseUsers(payload);
+    // flatten the array to filter users for project id
+    const usersGroupId = flatten(upviseUsers.data.items);
+    // convert into a new where clause
+    const groupIds = pipe(uniq, (data) =>
+      filter((ids) => ids.includes(where), data),
+    )(usersGroupId);
+
+    // result of where clause
+    where = `groupid IN(${groupIds.map((ids) => `'${ids}'`).join(',')})`;
   }
 
   const {upviseUrl = '', upviseToken = ''} = organisation;
-  const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
-  const url = where ? `${urlString}&where=${where}` : urlString;
+  // const urlString = `${upviseUrl}table?auth=${upviseToken}&table=${table}`;
+  // const url = where ? `${urlString}&where=${where}` : urlString;
 
-  const options = {
-    method: 'GET',
-    url,
+  const newOptions = {
+    method: 'POST',
+    url: upviseUrl + 'v2/table',
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
+    },
+    data: {
+      token: upviseToken,
+      table,
+      where: where ? where : null,
+      limit: 0,
     },
   };
 
-  const upviseTableResult = await axios(options);
-  return upviseTableResult;
+  const arrTableResult = [];
+  const newUpviseTableResult = await axios(newOptions);
+  const finalTableResultItems = {
+    data: {
+      items: [],
+    },
+  };
+  const tableKeys = newUpviseTableResult.data.cols;
+  const tableItems = newUpviseTableResult.data.items;
+
+  tableItems.map((result) =>
+    arrTableResult.push(combineArr(tableKeys, result)),
+  );
+
+  finalTableResultItems.data.items = arrTableResult;
+
+  return finalTableResultItems;
 };
 
 // for submit the form data

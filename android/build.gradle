@@ -10,6 +10,7 @@ buildscript {
         googlePlayServicesVisionVersion = "19.0.0"
         playServicesVersion = "17.0.0"
         androidMapsUtilsVersion = "2.0.4"
+        googlePlayServicesAuthVersion = "16.0.1"
     }
     repositories {
         google()

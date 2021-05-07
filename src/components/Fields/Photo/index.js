@@ -1,9 +1,15 @@
 import React, {useState, memo} from 'react';
-import {Alert, Modal, Text, View, Platform} from 'react-native';
+import {Text, View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {
+  Divider,
+  Overlay,
+  Button as RNEButton,
+  Text as RNEText,
+} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './styles';
@@ -126,49 +132,52 @@ const Photo = (props) => {
             </Button>
           </TouchableRipple>
         </View>
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Sans Paper</Text>
 
-                <View style={styles.buttonMargin}>
-                  <Button
-                    mode="contained"
-                    onPress={() => {
-                      takePicture(true);
-                    }}>
-                    <Text>FROM CAMERA</Text>
-                  </Button>
-                </View>
-                <View style={styles.buttonMargin}>
-                  <Button
-                    mode="contained"
-                    onPress={() => {
-                      takePicture(false);
-                    }}>
-                    <Text>FROM GALLERY</Text>
-                  </Button>
-                </View>
-                <View style={styles.buttonMargin}>
-                  <Button
-                    mode="contained"
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}>
-                    <Text>CANCEL</Text>
-                  </Button>
-                </View>
-              </View>
+        <Overlay
+          animationType="fade"
+          overlayStyle={styles.overlay}
+          backdropStyle={styles.backdrop}
+          isVisible={modalVisible}>
+          <View style={styles.overlayHeader}>
+            <View style={styles.overlayHeaderText}>
+              <RNEText h4>Add Photo</RNEText>
+              <Text>in this selected field</Text>
             </View>
-          </Modal>
-        </View>
+            <RNEButton
+              title="From Camera"
+              onPress={() => takePicture(true)}
+              icon={
+                <Icon
+                  name="camera"
+                  size={18}
+                  color="white"
+                  style={styles.iconSpace}
+                />
+              }
+              buttonStyle={styles.overlayBtn}
+            />
+            <RNEButton
+              title="From Gallery"
+              onPress={() => takePicture(false)}
+              icon={
+                <Icon
+                  name="image"
+                  size={18}
+                  color="white"
+                  style={styles.iconSpace}
+                />
+              }
+              buttonStyle={styles.overlayBtn}
+            />
+            <RNEButton
+              title="Close"
+              onPress={() => setModalVisible(!modalVisible)}
+              buttonStyle={styles.closeBtnOverlay}
+              type="outline"
+              titleStyle={styles.closeTxtOverlay}
+            />
+          </View>
+        </Overlay>
       </View>
       <Divider />
     </ItemWrapper>
