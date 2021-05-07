@@ -33,6 +33,19 @@ const DateTimePicker = (props) => {
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
   const [defaultTime, setDefaultTime] = useState('none');
 
+  useEffect(() => {
+    const value = props.item.value;
+    if (value && value.includes('Date')) {
+      const dateFormat = setDateTimeFormatDisplay('date', Date.now());
+      const timeFormat = setDateTimeFormatDisplay('time', Date.now());
+      setDateLabel(dateFormat);
+      setTimeLabel(timeFormat);
+      const dateTime = setDateTime(dateFormat, timeFormat);
+
+      updateFieldsValue({rank: props.item.rank, value: dateTime});
+    }
+  }, []);
+
   /*
   useEffect(() => {
     (async () => {
@@ -89,28 +102,28 @@ const DateTimePicker = (props) => {
     updateFieldsValue({rank: item.rank, value: dateTime});
   };
 
-  const updateDefaultTime = async () => {
-    if (changeTimeTheme) {
-      const dateTime = setDateTime(dateLabel, timeLabel);
+  // const updateDefaultTime = async () => {
+  //   if (changeTimeTheme) {
+  //     const dateTime = setDateTime(dateLabel, timeLabel);
 
-      await saveDefaultTime(timeLabel, dateTime.toString());
-      setDefaultTime(timeLabel);
+  //     await saveDefaultTime(timeLabel, dateTime.toString());
+  //     setDefaultTime(timeLabel);
 
-      updateFieldsValue({rank: item.rank, value: dateTime});
-    } else {
-      const currentTime = setDateTimeFormatDisplay('time', Date.now());
-      const currentDate = setDateTimeFormatDisplay('date', Date.now());
-      const dateTime = setDateTime(currentDate, currentTime);
+  //     updateFieldsValue({rank: item.rank, value: dateTime});
+  //   } else {
+  //     const currentTime = setDateTimeFormatDisplay('time', Date.now());
+  //     const currentDate = setDateTimeFormatDisplay('date', Date.now());
+  //     const dateTime = setDateTime(currentDate, currentTime);
 
-      await saveDefaultTime(currentTime, dateTime.toString());
-      setTimeLabel(currentTime);
-      setDefaultTime(currentTime);
+  //     await saveDefaultTime(currentTime, dateTime.toString());
+  //     setTimeLabel(currentTime);
+  //     setDefaultTime(currentTime);
 
-      updateFieldsValue({rank: item.rank, value: dateTime});
-    }
+  //     updateFieldsValue({rank: item.rank, value: dateTime});
+  //   }
 
-    setChangeTimeTheme(true);
-  };
+  //   setChangeTimeTheme(true);
+  // };
 
   const cancelDate = () => {
     const dateFormat = setDateTimeFormatDisplay('date', Date.now());

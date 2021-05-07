@@ -1,6 +1,7 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
+import moment from 'moment';
 import {Button} from 'react-native-paper';
 import {Divider} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -15,6 +16,15 @@ const DatePicker = (props) => {
   const [label, setLabel] = useState('Select Date');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
+
+  useEffect(() => {
+    const value = props.item.value;
+    if (value && value.includes('Date')) {
+      setLabel(moment().format('D/M/YYYY'));
+      setChangeTheme(true);
+      updateFieldsValue({rank: props.item.rank, value: Date.now()});
+    }
+  }, []);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
