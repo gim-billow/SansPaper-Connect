@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
+import moment from 'moment';
 import Toast from 'react-native-simple-toast';
 import {Button, TouchableRipple} from 'react-native-paper';
 import {Divider} from 'react-native-elements';
@@ -15,6 +16,15 @@ const TimePicker = (props) => {
   const [label, setLabel] = useState('Select Time');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
+
+  useEffect(() => {
+    const value = props.item.value;
+    if (value && value.includes('Date')) {
+      setLabel(moment().format('h:mm a'));
+      setChangeTheme(true);
+      updateFieldsValue({rank: props.item.rank, value: Date.now()});
+    }
+  }, []);
 
   const showTimePicker = () => {
     setTimePickerVisibility(true);
