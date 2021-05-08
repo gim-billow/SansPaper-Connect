@@ -1,7 +1,7 @@
 //Library
 import axios from 'axios';
 import {firebase} from '@react-native-firebase/firestore';
-// import storage from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import {sortBy, prop, flatten, filter, pipe, uniq} from 'ramda';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

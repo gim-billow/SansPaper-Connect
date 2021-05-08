@@ -243,7 +243,7 @@ async function submitForm(form) {
 
 function* preSubmitForm({payload}) {
   try {
-    showActivityIndicator();
+    yield showActivityIndicator();
     yield put(updateSubmittingForm(true));
     const alertConfig = [
       {
@@ -322,7 +322,10 @@ function* preSubmitForm({payload}) {
           {cancelable: false},
         );
       } else {
+        dismissActivityIndicator();
         yield submitForm(form);
+        yield put(updateSubmittingForm(false));
+        return;
       }
     }
 
