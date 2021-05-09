@@ -198,7 +198,7 @@ export const showMainScreen = async () => {
   });
 };
 
-export const showActivityIndicator = () => {
+export const showActivityIndicator = (messages = '') => {
   Navigation.showOverlay({
     component: {
       id: screens.ActivityIndicatorOverlay,
@@ -211,6 +211,9 @@ export const showActivityIndicator = () => {
           componentBackgroundColor: 'transparent',
         },
       },
+      passProps: {
+        messages,
+      }
     },
   });
 };

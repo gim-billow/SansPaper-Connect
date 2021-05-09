@@ -8,6 +8,7 @@ export const FORM_ACTION = {
 };
 
 export const FORM_SAGA_ACTIONS = {
+  LOAD_OFFLINE_FORM: 'formActions/LOAD_OFFLINE_FORM',
   WATCH_FORM_UPDATES: 'formActions/WATCH_FORM_UPDATES',
   GET_ALL_LINKED_ITEMS: 'formActions/GET_ALL_LINKED_ITEMS',
 };

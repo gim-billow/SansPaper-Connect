@@ -64,3 +64,5 @@ export const getOfflineFormsQuery = 'SELECT value FROM forms';
 
 export const getFieldsOptionsQuery =
   'SELECT options from selectOptions where formId = ? AND seloptions = ? AND type = ? AND projectId = ?';
+
+export const deleteAllFormsQuery = 'DELETE from forms';

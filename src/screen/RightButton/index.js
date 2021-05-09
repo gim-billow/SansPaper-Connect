@@ -4,30 +4,22 @@ import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 
-import {setCurrentForm} from 'store/forms';
 import {
-  selectCurrentForm,
   selectIsSubmittingForm,
-  selectStartAndFinishDate,
   selectSubmittingForm,
-  selectCurrentFormUnfillMandatoryFields,
 } from 'selector/form';
 
-import {
-  updateScrollToMandatory,
-  updateSubmitTriggered,
-  submitForm,
-} from '@store/forms/actions';
+import {submitForm} from '@store/forms';
 import styles from './styles';
 
 class RightButton extends React.Component {
   render() {
-    const {currentForm, submitForm, submittingForm} = this.props;
-
+    const {offline, submitForm, submittingForm} = this.props;
+    console.log('this.props',this.props);
     return (
       <TouchableOpacity
         disabled={submittingForm}
-        onPress={() => submitForm(currentForm)}>
+        onPress={() => submitForm(offline)}>
         <Icon
           style={styles.icon}
           name="paper-plane"
@@ -40,16 +32,10 @@ class RightButton extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  currentForm: selectCurrentForm,
   isSubmittingForm: selectIsSubmittingForm,
   submittingForm: selectSubmittingForm,
-  startAndFinishDateTime: selectStartAndFinishDate,
-  unfilledMandatoryFields: selectCurrentFormUnfillMandatoryFields,
 });
 
 export default connect(mapState, {
-  setCurrentForm,
-  updateScrollToMandatory,
-  updateSubmitTriggered,
   submitForm,
 })(RightButton);

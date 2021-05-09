@@ -12,20 +12,20 @@ import {updateOfflineCurrentFormId} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {
   goToOfflineLinkedItemScreen,
-  goToFormFieldsScreen,
+  goToOfflineFormFieldsScreen,
 } from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
 import {Spinner} from 'native-base';
 import styles from './styles';
 
-class FormList extends React.Component {
+class OfflineFormList extends React.Component {
   state = {
     searchKeyword: '',
     refresh: false,
   };
 
-  keyExtractor = (item, index) => index.toString();
+  keyExtractor = (item, index) => index?.toString();
 
   onPress = (linked_table, form_id) => {
     const {
@@ -44,7 +44,7 @@ class FormList extends React.Component {
 
   getFilteredFormlist = memoize((formList, searchKeyword) => {
     return filter(
-      (form) => includes(searchKeyword.toLowerCase(), form.name.toLowerCase()),
+      (form) => includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
       formList,
     );
   });
@@ -111,5 +111,5 @@ const mapState = createStructuredSelector({
 export default connect(mapState, {
   goToOfflineLinkedItemScreen,
   updateOfflineCurrentFormId,
-  goToFormFieldsScreen,
-})(FormList);
+  goToOfflineFormFieldsScreen,
+})(OfflineFormList);

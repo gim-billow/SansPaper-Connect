@@ -52,7 +52,7 @@ class FormList extends React.Component {
 
   getFilteredFormlist = memoize((formList, searchKeyword) => {
     return filter(
-      (form) => includes(searchKeyword.toLowerCase(), form.name.toLowerCase()),
+      (form) => includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
       formList,
     );
   });

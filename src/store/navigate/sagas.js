@@ -49,7 +49,7 @@ function* goToMainScreen() {
 
 function* goToLinkedItemScreen({payload = {}}) {
   try {
-    showActivityIndicator();
+    showActivityIndicator('Go to linked Item screen');
     const {linkedTable} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);

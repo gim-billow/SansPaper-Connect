@@ -63,7 +63,7 @@ class MainScreen extends React.Component {
     );
   }
 
-  keyExtractor = (item, index) => index.toString();
+  keyExtractor = (item, index) => index?.toString();
 
   runShowMore = (index) => {
     const showMore = [...this.state.showMore];

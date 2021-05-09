@@ -57,6 +57,9 @@ OfflineFormFieldsScreen.options = (props) => {
           id: screens.RightButton,
           component: {
             name: screens.RightButton,
+            passProps: {
+              offline: true,
+            }
           },
         },
       ],

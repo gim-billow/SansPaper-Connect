@@ -1,9 +1,11 @@
-import {all, takeLatest, put, call, cancelled, take} from 'redux-saga/effects';
+import {AppState} from 'react-native';
+import {all, takeLatest, put, call, cancelled, select, take} from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
-// import R from 'ramda';
+import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import moment from 'moment-timezone';
 
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
@@ -14,25 +16,40 @@ import {
   getUpviseUserList,
 } from '@api/upvise';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
-import {FORM_SAGA_ACTIONS, FORM_REDUCER_ACTIONS} from '@store/forms';
+import {FORM_SAGA_ACTIONS} from '@store/forms';
 import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 import DB, * as database from '@database';
-import * as R from 'ramda';
+import {selectNetworkInfo} from '@selector/common';
+
+function subscribeAppStateChannel() {
+  return eventChannel((emmiter) => {
+    AppState.addEventListener('change', (state) =>
+      emmiter(state),
+    );
+    return () => {};
+  });
+}
+
+function subscribeNetworkStateChannel() {
+  return eventChannel((emmiter) => {
+    NetInfo.addEventListener((state) => emmiter(state));
+    return () => {};
+  });
+}
 
 function* init({payload}) {
   try {
     //init DB
     yield DB.openDBConnection();
     yield database.CreateTable();
-    const offlineFormsString = yield database.getOfflineForms();
-    const offlineForms = R.map(
-      (form) => JSON.parse(form.value),
-      offlineFormsString,
-    );
-    yield put({
-      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST,
-      payload: offlineForms,
-    });
+    yield database.deleteAllForms();
+    
+    //watch network and app state
+    yield put({type: COMMON_ACTIONS.WATCH_APP_STATE});
+    yield put({type: COMMON_ACTIONS.WATCH_NETWORK_STATE});
+
+    //load Offline forms
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
 
     //getting user info
     const {uid} = payload._user;
@@ -144,8 +161,71 @@ function* watchBodyOfKnowledgeUpdates({payload}) {
   }
 }
 
+function* watchNetworkState() {
+  const channel = yield call(subscribeNetworkStateChannel);
+  try {
+    while (true) {
+      const dateNow = new Date();
+      const networkState = yield take(channel);
+      console.log('networkState',networkState);
+      const { isInternetReachable } = networkState;
+      const previousNetworkInfo = yield select(selectNetworkInfo);
+      if (!previousNetworkInfo.isInternetReachable && isInternetReachable) {
+        const difference = moment().diff(
+          moment(previousNetworkInfo.date),
+          'seconds',
+        );
+        if (difference > 5) {
+          // resend form if any
+        }
+      }
+      const payload = {
+        isInternetReachable,
+        date: dateNow.toISOString(),
+      };
+      yield put({
+        type: COMMON_REDUCER_ACTIONS.UPDATE_NETWORK_INFO,
+        payload: payload,
+      });
+    }
+  } catch (error) {
+    console.log('watchNetworkStatus error', error);
+  } finally {
+    if (yield cancelled()) {
+      channel.close();
+    }
+  }
+}
+function* watchAppState() {
+  const channel = yield call(subscribeAppStateChannel);
+  yield put({
+    type: COMMON_REDUCER_ACTIONS.UPDATE_APP_STATE,
+    payload: 'active',
+  });
+  try {
+    while (true) {
+      const appState = yield take(channel);
+      yield put({
+        type: COMMON_REDUCER_ACTIONS.UPDATE_APP_STATE,
+        payload: appState,
+      });
+      if (appState === 'active') {
+       //check whether pending form to send
+      }
+    }
+  } catch (error) {
+    console.log('watchAppState error', error);
+  } finally {
+    if (yield cancelled()) {
+      channel.close();
+    }
+  }
+}
+
 export default all([
   takeLatest(COMMON_ACTIONS.INIT, init),
+  takeLatest(COMMON_ACTIONS.WATCH_APP_STATE, watchAppState),
+  takeLatest(COMMON_ACTIONS.WATCH_NETWORK_STATE, watchNetworkState),
   takeLatest(
     COMMON_REDUCER_ACTIONS.WATCH_NEWS_UPDATES,
     watchBodyOfKnowledgeUpdates,

@@ -47,7 +47,7 @@ class LinkedItemsList extends React.Component {
     this.setState({selOptions: options});
   };
 
-  keyExtractor = (item, index) => index.toString();
+  keyExtractor = (item, index) => index?.toString();
 
   renderItem = ({item}) => {
     const {name, id} = item;

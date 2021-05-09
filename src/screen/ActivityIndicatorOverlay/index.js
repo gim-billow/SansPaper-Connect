@@ -1,6 +1,6 @@
 //library
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 //styles
@@ -31,9 +31,17 @@ class ActivityIndicatorOverlay extends React.Component {
   }
 
   render() {
+    const {messages} = this.props;
+    console.log('messages', this.props);
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="white" />
+        {
+          messages !== '' && 
+          <View style={styles.messages}>
+            <Text style={styles.text}>{messages}</Text>
+          </View>
+        }
       </View>
     );
   }

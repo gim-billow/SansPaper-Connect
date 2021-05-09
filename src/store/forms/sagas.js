@@ -16,7 +16,7 @@ import {
 } from 'redux-saga/effects';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
-import {assoc, adjust, forEach, includes} from 'ramda';
+import {assoc, map, adjust, find, propEq, forEach, includes} from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
@@ -40,8 +40,7 @@ import {
   selectCurrentForm,
   selectCurrentFormUnfillMandatoryFields,
   selectStartAndFinishDate,
-  selectCurrentFormId,
-  selectFormByCurrentId,
+  selectFormList,
   selectOfflineCurrentForm,
 } from '@selector/form';
 import {
@@ -190,7 +189,7 @@ function* updateOfflineFormFieldValue({payload}) {
 
 async function submitForm(form) {
   try {
-    showActivityIndicator();
+    await showActivityIndicator();
     const permission = await hasLocationPermission();
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -251,7 +250,14 @@ function* preSubmitForm({payload}) {
         style: 'cancel',
       },
     ];
-    const form = payload;
+    const offline = payload;
+    let form = {};
+    if(offline) {
+      form = yield select(selectOfflineCurrentForm);
+    } else {
+      form = yield select(selectCurrentForm);
+    }
+    
     const unfilledMandatoryFields = yield select(
       selectCurrentFormUnfillMandatoryFields,
     );
@@ -338,17 +344,19 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
-    showActivityIndicator();
+    console.log('payload', payload);
+    yield showActivityIndicator('Downloading....');
     const {linkedTable, formId} = payload;
     const dateNow = new Date();
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
-    const currentFormInfo = yield select(selectFormByCurrentId);
+    const forms = yield select(selectFormList);
+    const selectedForm = find(propEq('id', formId))(forms)
     const fieldsPath = `${upviseTemplatePath}/${formId}/upviseFields`;
 
     //sync forms
     const currentFormFields = yield getFormFields({fieldsPath});
-    const currentForm = assoc('fields', currentFormFields, currentFormInfo);
+    const currentForm = assoc('fields', currentFormFields, selectedForm);
     const currentFormPayload = {
       id: formId,
       createdAt: dateNow.toISOString(),
@@ -357,7 +365,6 @@ function* syncOfflineForm({payload = {}}) {
     };
     yield database.InsertForm(currentFormPayload);
     //sync linked item
-    console.log('payload', payload);
     if (linkedTable && linkedTable !== '') {
       const linkedItemName =
         UpviseTablesMap[payload?.linkedTable.toLowerCase()];
@@ -367,15 +374,16 @@ function* syncOfflineForm({payload = {}}) {
       });
 
       if (linkedItems?.data) {
-        const {title, lastBuildDate, items} = linkedItems?.data;
+        console.log('linkedItems?.data', linkedItems?.data)
+        const {lastBuildDate, items} = linkedItems?.data;
         console.log('items', items);
-        const payload = {
-          id: title,
+        const linkedItemsDBPayload = {
+          id: linkedItemName,
           createdAt: lastBuildDate,
           updatedAt: lastBuildDate,
           value: JSON.stringify(items),
         };
-        yield database.InsertLinkedItems(payload);
+        yield database.InsertLinkedItems(linkedItemsDBPayload);
       }
     }
 
@@ -383,7 +391,9 @@ function* syncOfflineForm({payload = {}}) {
     let projectList = [];
     for (const field of currentFormFields) {
       const {seloptions, type} = field;
+      
       if (includes(type, selectType)) {
+        console.log('selectType 1');
         let isProjectDependant = false;
         for (const project of projectDependant) {
           if (includes(project, seloptions)) {
@@ -391,6 +401,7 @@ function* syncOfflineForm({payload = {}}) {
           }
         }
         if (isProjectDependant) {
+          console.log('isProjectDependant 2');
           for (const project of projectList) {
             const options = yield getQueryByOptions(
               seloptions,
@@ -408,6 +419,7 @@ function* syncOfflineForm({payload = {}}) {
             database.InsertSelectOptions(selectOptionsPayload);
           }
         } else {
+          console.log('is NOT ProjectDependant 2.1');
           const options = yield getQueryByOptions(
             seloptions,
             type,
@@ -425,9 +437,12 @@ function* syncOfflineForm({payload = {}}) {
             };
             database.InsertSelectOptions(selectOptionsPayload);
           }
+          console.log('complete is NOT ProjectDependant 2.1');
         }
       }
+      console.log('completeed ......');
     }
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
     dismissActivityIndicator();
     //console.log('linkedItem', JSON.stringify(linkedItem));
   } catch (error) {
@@ -454,6 +469,20 @@ function* loadFormFields({payload = {}}) {
   }
 }
 
+function* loadOfflineForms() {
+  const offlineFormsString = yield database.getOfflineForms();
+  const offlineForms = map(
+    (form) => JSON.parse(form.value),
+    offlineFormsString,
+  );
+
+  yield put({
+    type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST,
+    payload: offlineForms,
+  });
+}
+
+
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
   takeLatest(FORM_ACTION.UPDATE_FORM_FIELD_VALUE, updateFormFieldValue),
@@ -463,4 +492,5 @@ export default all([
   ),
   takeLatest(FORM_ACTION.PRE_SUBMIT_FORM, preSubmitForm),
   takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
 ]);
