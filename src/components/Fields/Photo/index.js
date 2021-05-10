@@ -9,13 +9,17 @@ import {
   Button as RNEButton,
   Text as RNEText,
 } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './styles';
 import {commonStyles} from '@styles/common';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
+
+const imgWidth = Platform.OS === 'android' ? 500 : 300;
+const imgHeight = Platform.OS === 'android' ? 600 : 400;
+const imgQuality = Platform.OS === 'android' ? 0.9 : 0.75;
 
 const Photo = (props) => {
   const {label, rank, mandatory} = props.item;
@@ -32,9 +36,9 @@ const Photo = (props) => {
       ImagePicker.openCamera({
         width: 300,
         height: 400,
-        // compressImageMaxWidth: 300,
-        // compressImageMaxHeight: 400,
-        compressImageQuality: 0.75,
+        compressImageMaxWidth: imgWidth,
+        compressImageMaxHeight: imgHeight,
+        compressImageQuality: imgQuality,
         includeBase64: true,
       }).then((image) => {
         if (Platform.OS === 'ios') {
@@ -56,9 +60,9 @@ const Photo = (props) => {
             multiple: true,
             width: 300,
             height: 400,
-            // compressImageMaxWidth: 300,
-            // compressImageMaxHeight: 400,
-            compressImageQuality: 0.75,
+            compressImageMaxWidth: imgWidth,
+            compressImageMaxHeight: imgHeight,
+            compressImageQuality: imgQuality,
             includeBase64: true,
           }).then((images) => {
             if (Platform.OS === 'ios') {
