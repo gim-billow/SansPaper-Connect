@@ -32,8 +32,8 @@ const Photo = (props) => {
       ImagePicker.openCamera({
         width: 300,
         height: 400,
-        compressImageMaxWidth: 300,
-        compressImageMaxHeight: 400,
+        // compressImageMaxWidth: 300,
+        // compressImageMaxHeight: 400,
         compressImageQuality: 0.75,
         includeBase64: true,
       }).then((image) => {
@@ -56,8 +56,8 @@ const Photo = (props) => {
             multiple: true,
             width: 300,
             height: 400,
-            compressImageMaxWidth: 300,
-            compressImageMaxHeight: 400,
+            // compressImageMaxWidth: 300,
+            // compressImageMaxHeight: 400,
             compressImageQuality: 0.75,
             includeBase64: true,
           }).then((images) => {
