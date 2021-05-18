@@ -1,4 +1,6 @@
 export const NAVIGATE_ACTIONS = {
+  GO_TO_DRAFT_FORM_FIELDS_SCREEN:
+    'navigateActions/GO_TO_DRAFT_FORM_FIELDS_SCREEN',
   GO_TO_LOGIN: 'navigateActions/GO_TO_LOGIN',
   GO_TO_LINK_ITEM_SCREEN: 'navigateActions/GO_TO_LINK_ITEM_SCREEN',
   GO_TO_FORM_FIELDS_SCREEN: 'navigationAction/GO_TO_FORM_FIELDS_SCREEN',
@@ -9,6 +11,11 @@ export const NAVIGATE_ACTIONS = {
   GO_TO_OFFLINE_LINK_ITEM_SCREEN:
     'navigateActions/GO_TO_OFFLINE_LINK_ITEM_SCREEN',
 };
+
+export const goToDraftFormFieldsScreen = (payload) => ({
+  type: NAVIGATE_ACTIONS.GO_TO_DRAFT_FORM_FIELDS_SCREEN,
+  payload,
+});
 
 export const goToLogin = () => ({
   type: NAVIGATE_ACTIONS.GO_TO_LOGIN,

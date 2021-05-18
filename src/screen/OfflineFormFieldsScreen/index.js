@@ -1,8 +1,6 @@
 //library
 import React from 'react';
 import {View} from 'react-native';
-import {find, propEq} from 'ramda';
-
 import styles from './styles';
 import {white, red} from '@styles/colors';
 import OfflineFormFieldsList from '@containers/OfflineFormFieldsList';
@@ -22,30 +20,16 @@ class OfflineFormFieldsScreen extends React.Component {
 }
 
 OfflineFormFieldsScreen.options = (props) => {
-  let subForm = {};
-  const {name, linkedid} = props.form;
-  console.log('OfflineFormFieldsScreen', props);
-  if (linkedid) {
-    const items = props.items;
-    let linkedId = null;
-
-    if (Array.isArray(linkedid)) {
-      linkedId = linkedid[0];
-    } else {
-      linkedId = linkedid;
-    }
-
-    subForm = find(propEq('id', linkedId))(items);
-  }
+  const {title, subTitle} = props.headerData;
 
   return {
     topBar: {
       visible: true,
       title: {
-        text: name,
+        text: title,
       },
       subtitle: {
-        text: subForm.hasOwnProperty('name') ? subForm.name : '',
+        text: subTitle,
         fontSize: 13,
         color: white,
       },
@@ -59,7 +43,7 @@ OfflineFormFieldsScreen.options = (props) => {
             name: screens.RightButton,
             passProps: {
               offline: true,
-            }
+            },
           },
         },
       ],

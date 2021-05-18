@@ -7,6 +7,15 @@ export const createFormsTable = `CREATE TABLE IF NOT EXISTS forms (
   )
 `;
 
+export const createOutboxTable = `CREATE TABLE IF NOT EXISTS outbox (
+  id TEXT PRIMARY KEY NOT NULL,
+  createdAt TEXT,
+  updatedAt TEXT,
+  value TEXT,
+  status TEXT
+)
+`;
+
 export const createLinkedItemsTable = `CREATE TABLE IF NOT EXISTS linkedItems (
   id TEXT PRIMARY KEY NOT NULL,
   createdAt TEXT,
@@ -45,6 +54,19 @@ export const insertFormQuery = `INSERT INTO forms (
   value=excluded.value
 `;
 
+export const insertToOutboxQuery = `INSERT INTO outbox (
+  id,
+  createdAt,
+  updatedAt,
+  value,
+  status
+  ) VALUES ( ?, ?, ?, ?, ?)
+ON CONFLICT(id) DO UPDATE SET
+updatedAt=excluded.updatedAt,
+value=excluded.value,
+status=excluded.status
+`;
+
 export const insertLinkedItemsQuery = `INSERT INTO linkedItems (
   id,
   createdAt,
@@ -66,3 +88,8 @@ export const getFieldsOptionsQuery =
   'SELECT options from selectOptions where formId = ? AND seloptions = ? AND type = ? AND projectId = ?';
 
 export const deleteAllFormsQuery = 'DELETE from forms';
+
+export const getAllFromOutboxQuery = 'SELECT * from outbox';
+
+export const getAllPendingFromOutboxQuery =
+  'SELECT * from outbox WHERE status = draft';

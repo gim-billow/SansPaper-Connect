@@ -13,12 +13,14 @@ import {
   selectUpviseTemplatePath,
 } from '@selector/sanspaper';
 import {
+  selectOutbox,
   selectFormByCurrentId,
   selectCurrentFormId,
   selectCurrentLinkedItems,
   selectOfflineFormList,
   selectOfflineCurrentForm,
   selectOfflineCurrentFormId,
+  selectOfflineCurrentLinkedItems,
 } from '@selector/form';
 import {
   pushToLinkedItem,
@@ -133,14 +135,74 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
     showActivityIndicator();
     const {componentId} = payload;
     const offlineCurrentForm = yield select(selectOfflineCurrentForm);
-    const currentLinkedItems = yield select(selectCurrentLinkedItems);
+    const currentLinkedItems = yield select(selectOfflineCurrentLinkedItems);
+    const {name, linkedid} = offlineCurrentForm;
+    let subForm;
+    if (linkedid) {
+      let linkedId = null;
 
+      if (Array.isArray(linkedid)) {
+        linkedId = linkedid[0];
+      } else {
+        linkedId = linkedid;
+      }
+
+      subForm = R.find(R.propEq('id', linkedId))(currentLinkedItems);
+    }
+    const subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
+    const headerData = {
+      title: name,
+      subTitle,
+    };
     dismissActivityIndicator();
-    console.log('goToOfflineFormFieldsScreen', offlineCurrentForm);
     pushToOfflineFormFieldsScreen({
       componentId,
-      offlineCurrentForm,
-      currentLinkedItems,
+      headerData,
+    });
+  } catch (error) {
+    console.log('loadFormFields error', error);
+  }
+}
+
+function* goToDraftFormFieldsScreen({payload}) {
+  try {
+    showActivityIndicator();
+    const draftId = payload;
+    const outboxList = yield select(selectOutbox);
+    const formsData = R.find(R.propEq('id', draftId))(outboxList);
+    const linkedItemName =
+      UpviseTablesMap[formsData?.value?.linkedtable?.toLowerCase()];
+    const linkedItemsString = yield database.getLinkedItemsByid({
+      linkedItemName: linkedItemName,
+    });
+    const linkedItems = JSON.parse(linkedItemsString);
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
+      payload: {...formsData.value, draftId: draftId},
+    });
+    let subForm;
+    const {name, linkedid} = formsData.value;
+    if (linkedid) {
+      let linkedId = null;
+
+      if (Array.isArray(linkedid)) {
+        linkedId = linkedid[0];
+      } else {
+        linkedId = linkedid;
+      }
+
+      subForm = R.find(R.propEq('id', linkedId))(linkedItems);
+    }
+    const subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
+    const headerData = {
+      title: name,
+      subTitle,
+    };
+    console.log('headerData', headerData);
+    dismissActivityIndicator();
+    pushToOfflineFormFieldsScreen({
+      headerData,
     });
   } catch (error) {
     console.log('loadFormFields error', error);
@@ -203,5 +265,9 @@ export default all([
   takeLatest(
     NAVIGATE_ACTIONS.GO_TO_OFFLINE_FORM_FIELDS_SCREEN,
     goToOfflineFormFieldsScreen,
+  ),
+  takeLatest(
+    NAVIGATE_ACTIONS.GO_TO_DRAFT_FORM_FIELDS_SCREEN,
+    goToDraftFormFieldsScreen,
   ),
 ]);

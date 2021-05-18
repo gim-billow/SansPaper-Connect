@@ -1,5 +1,13 @@
 import {AppState} from 'react-native';
-import {all, takeLatest, put, call, cancelled, select, take} from 'redux-saga/effects';
+import {
+  all,
+  takeLatest,
+  put,
+  call,
+  cancelled,
+  select,
+  take,
+} from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
@@ -23,9 +31,7 @@ import {selectNetworkInfo} from '@selector/common';
 
 function subscribeAppStateChannel() {
   return eventChannel((emmiter) => {
-    AppState.addEventListener('change', (state) =>
-      emmiter(state),
-    );
+    AppState.addEventListener('change', (state) => emmiter(state));
     return () => {};
   });
 }
@@ -43,13 +49,14 @@ function* init({payload}) {
     yield DB.openDBConnection();
     yield database.CreateTable();
     yield database.deleteAllForms();
-    
+
     //watch network and app state
     yield put({type: COMMON_ACTIONS.WATCH_APP_STATE});
     yield put({type: COMMON_ACTIONS.WATCH_NETWORK_STATE});
 
     //load Offline forms
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
     //getting user info
     const {uid} = payload._user;
@@ -167,8 +174,8 @@ function* watchNetworkState() {
     while (true) {
       const dateNow = new Date();
       const networkState = yield take(channel);
-      console.log('networkState',networkState);
-      const { isInternetReachable } = networkState;
+      console.log('networkState', networkState);
+      const {isInternetReachable} = networkState;
       const previousNetworkInfo = yield select(selectNetworkInfo);
       if (!previousNetworkInfo.isInternetReachable && isInternetReachable) {
         const difference = moment().diff(
@@ -210,7 +217,7 @@ function* watchAppState() {
         payload: appState,
       });
       if (appState === 'active') {
-       //check whether pending form to send
+        //check whether pending form to send
       }
     }
   } catch (error) {

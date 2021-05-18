@@ -5,12 +5,23 @@ import {
   createLinkedItemsTable,
   insertLinkedItemsQuery,
   insertSelectOptionsQuery,
+  insertToOutboxQuery,
   createSelectOptionsTable,
+  createOutboxTable,
 } from './query';
 
 export const InsertForm = async (payload) => {
   try {
     await DB.ExecuteQuery(insertFormQuery, payload);
+  } catch (e) {
+    console.log('DB InsertForm Error', e);
+    return [];
+  }
+};
+
+export const InsertToOutbox = async (payload) => {
+  try {
+    await DB.ExecuteQuery(insertToOutboxQuery, payload);
   } catch (e) {
     console.log('DB InsertForm Error', e);
     return [];
@@ -40,6 +51,7 @@ export const CreateTable = async () => {
     await DB.ExecuteQuery(createFormsTable, []);
     await DB.ExecuteQuery(createLinkedItemsTable, []);
     await DB.ExecuteQuery(createSelectOptionsTable, []);
+    await DB.ExecuteQuery(createOutboxTable, []);
   } catch (e) {
     console.error('create table error ', e);
   }

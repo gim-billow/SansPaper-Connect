@@ -1,4 +1,5 @@
 export const FORM_ACTION = {
+  SAVE_AS_DRAFT: 'formAction/SAVE_AS_DRAFT',
   SYNC_OFFLINE_FORM: 'formAction/SYNC_OFFLINE_FORM',
   PRE_SUBMIT_FORM: 'fromAction/PRE_SUBMIT_FORM',
   LOAD_FORM_FIELDS: 'formActions/LOAD_FORM_FIELDS',
@@ -8,12 +9,15 @@ export const FORM_ACTION = {
 };
 
 export const FORM_SAGA_ACTIONS = {
+  LOAD_OUTBOX: 'formActions/LOAD_OUTBOX',
   LOAD_OFFLINE_FORM: 'formActions/LOAD_OFFLINE_FORM',
   WATCH_FORM_UPDATES: 'formActions/WATCH_FORM_UPDATES',
   GET_ALL_LINKED_ITEMS: 'formActions/GET_ALL_LINKED_ITEMS',
 };
 
 export const FORM_REDUCER_ACTIONS = {
+  UPDATE_SENDING_OUTBOX: 'formAction/UPDATE_SENDING_OUTBOX',
+  UPDATE_OUTBOX_LIST: 'formAction/UPDATE_OUTBOX_LIST',
   UPDATE_CURRENT_FORM_FIELDS: 'formAction/UPDATE_CURRENT_FORM_FIELDS',
   UPDATE_SUBMIT_TRIGGERED: 'formAction/UPDATE_SUBMIT_TRIGGERED',
   UPDATE_SUBMITTING_FORM: 'formAction/UPDATE_SUBMITTING_FORM',
@@ -54,6 +58,11 @@ export const loadFormFields = (payload) => ({
 
 export const submitForm = (payload) => ({
   type: FORM_ACTION.PRE_SUBMIT_FORM,
+  payload,
+});
+
+export const saveAsDraft = (payload) => ({
+  type: FORM_ACTION.SAVE_AS_DRAFT,
   payload,
 });
 

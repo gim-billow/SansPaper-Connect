@@ -213,7 +213,7 @@ export const showActivityIndicator = (messages = '') => {
       },
       passProps: {
         messages,
-      }
+      },
     },
   });
 };

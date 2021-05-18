@@ -7,19 +7,13 @@ import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
-import {selectOfflineFormList} from '@selector/form';
-import {updateOfflineCurrentFormId} from '@store/forms';
-import {screens} from '@constant/ScreenConstants';
-import {
-  goToOfflineLinkedItemScreen,
-  goToOfflineFormFieldsScreen,
-} from '@store/navigate';
+import {selectOutbox} from '@selector/form';
+import {goToDraftFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
-import {Spinner} from 'native-base';
 import styles from './styles';
 
-class OfflineFormList extends React.Component {
+class Outbox extends React.Component {
   state = {
     searchKeyword: '',
     refresh: false,
@@ -27,25 +21,14 @@ class OfflineFormList extends React.Component {
 
   keyExtractor = (item, index) => index?.toString();
 
-  onPress = (linked_table, form_id) => {
-    const {
-      goToOfflineLinkedItemScreen,
-      updateOfflineCurrentFormId,
-      goToFormFieldsScreen,
-    } = this.props;
-
-    updateOfflineCurrentFormId(form_id);
-    if (linked_table && linked_table !== '') {
-      goToOfflineLinkedItemScreen({linkedTable: linked_table});
-    } else {
-      goToFormFieldsScreen({componentId: screens.FormScreen});
-    }
-  };
-
-  getFilteredFormlist = memoize((formList, searchKeyword) => {
+  getFilteredFormlist = memoize((outbox, searchKeyword) => {
     return filter(
-      (form) => includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
-      formList,
+      (item) =>
+        includes(
+          searchKeyword?.toLowerCase(),
+          item?.value?.name?.toLowerCase(),
+        ),
+      outbox,
     );
   });
 
@@ -54,17 +37,29 @@ class OfflineFormList extends React.Component {
   };
 
   renderItem = ({item}) => {
-    const {name, linkedtable, id} = item;
+    const {id, value, status, createdAt, updatedAt} = item;
+    const {name} = value;
+    const createDate = new Date(createdAt);
+    const updateDate = new Date(updatedAt);
+    const createString = `Submit: ${createDate.toDateString()} ${createDate.toLocaleTimeString()}`;
+    const updateString = `Update: ${updateDate.toDateString()} ${updateDate.toLocaleTimeString()}`;
     return (
       <ItemWrapper>
         <ListItem
           key={id}
           bottomDivider
-          onPress={() => this.onPress(linkedtable, id)}>
+          onPress={() => this.props.goToDraftFormFieldsScreen(id)}>
           <Icon name="file-text-o" type="font-awesome" />
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
+            <ListItem.Subtitle style={{fontSize: 10}}>
+              {createString}
+            </ListItem.Subtitle>
+            <ListItem.Subtitle style={{fontSize: 10}}>
+              {updateString}
+            </ListItem.Subtitle>
           </ListItem.Content>
+          <Text>{status}</Text>
           <ListItem.Chevron />
         </ListItem>
       </ItemWrapper>
@@ -73,30 +68,30 @@ class OfflineFormList extends React.Component {
 
   render() {
     const {searchKeyword} = this.state;
-    const {formList} = this.props;
-    const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
+    const {outbox} = this.props;
+    const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
 
     return (
       <View style={styles.flex1}>
         <Searchbar
-          placeholder="Search form"
+          placeholder="Search outbox"
           style={styles.searchbar}
           value={searchKeyword}
           onChangeText={this.handleOnChangeText}
           icon="search"
           clearIcon="clear"
         />
-        {filteredFromList && filteredFromList.length > 0 ? (
+        {filteredOutbox && filteredOutbox.length > 0 ? (
           <FlatList
             style={styles.container}
             keyExtractor={this.keyExtractor}
-            data={filteredFromList}
+            data={filteredOutbox}
             renderItem={this.renderItem}
             refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
           <View style={styles.emptyContainer}>
-            <Text>No forms downloaded yet </Text>
+            <Text>No submitted form </Text>
           </View>
         ) : (
           <Text>No results match your search criteria </Text>
@@ -107,11 +102,9 @@ class OfflineFormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  formList: selectOfflineFormList,
+  outbox: selectOutbox,
 });
 
 export default connect(mapState, {
-  goToOfflineLinkedItemScreen,
-  updateOfflineCurrentFormId,
-  goToOfflineFormFieldsScreen,
-})(OfflineFormList);
+  goToDraftFormFieldsScreen,
+})(Outbox);

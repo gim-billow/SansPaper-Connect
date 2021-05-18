@@ -14,10 +14,16 @@ export const selectOfflineFormList = (state) => state.formReducer.offlineForms;
 export const selectOfflineCurrentForm = (state) =>
   state.formReducer.offlineCurrentForm;
 
+export const selectOutbox = (state) => state.formReducer.outbox;
+
 export const selectOfflineCurrentFormFields = createSelector(
   selectOfflineCurrentForm,
   (form) => (form.fields ? form.fields : []),
 );
+
+export const selectOfflineCurrentLinkedItems = (state) =>
+  state.formReducer.offlineCurrentLinkedItems;
+
 export const selectCurrentFormId = (state) => state.formReducer.currentFormId;
 
 export const selectCurrentLinkedItems = (state) =>
@@ -62,6 +68,19 @@ export const selectCurrentFormUnfillMandatoryFields = createSelector(
     ),
 );
 
+export const selectOfflineCurrentFormUnfillMandatoryFields = createSelector(
+  selectOfflineCurrentFormFields,
+  (formFields) =>
+    filter(
+      (field) =>
+        (field.mandatory === 1 && (field.value === '' || !field.value)) ||
+        (field.mandatory === 1 &&
+          field.value === 0 &&
+          field.label === 'datetime'),
+      formFields,
+    ),
+);
+
 export const selectProjectValue = createSelector(
   selectCurrentFormFields,
   (fields) => (fields && fields.length > 0 ? fields[0].value : ''),
@@ -69,6 +88,31 @@ export const selectProjectValue = createSelector(
 
 export const selectStartAndFinishDate = createSelector(
   selectCurrentFormFields,
+  (fields) => {
+    // check start/finish date time
+    let startDateTime = '';
+    let finishDateTime = '';
+    let dateTimelist = [];
+    let rank = null;
+    for (let item of fields) {
+      if (item.type === 'datetime') {
+        if (item.label.toLowerCase().includes('start')) {
+          startDateTime = item.value;
+          rank = item.rank;
+        }
+
+        if (item.label.toLowerCase().includes('finish')) {
+          finishDateTime = item.value;
+          dateTimelist.push({startDateTime, finishDateTime, rank});
+        }
+      }
+    }
+    return dateTimelist;
+  },
+);
+
+export const selectOfflineStartAndFinishDate = createSelector(
+  selectOfflineCurrentFormFields,
   (fields) => {
     // check start/finish date time
     let startDateTime = '';

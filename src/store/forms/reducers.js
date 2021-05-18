@@ -10,7 +10,9 @@ const INIT_STATE = {
   submitTriggered: 0,
   submittingForm: false,
   currentLinkedItems: [{}],
-  forms: {},
+  forms: [],
+  outbox: [],
+  sendingOutbox: false,
   offlineCurrentFormId: '',
   offlineForms: {},
   offlineCurrentForm: {},
@@ -22,6 +24,11 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
+    case FORM_REDUCER_ACTIONS.UPDATE_SENDING_OUTBOX: {
+      return produce(state, (draftState) => {
+        draftState.currentFormId = action.payload;
+      });
+    }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID: {
       return produce(state, (draftState) => {
         draftState.currentFormId = action.payload;
@@ -30,6 +37,11 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM: {
       return produce(state, (draftState) => {
         draftState.currentForm = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST: {
+      return produce(state, (draftState) => {
+        draftState.outbox = action.payload;
       });
     }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_LINKED_TABLE: {

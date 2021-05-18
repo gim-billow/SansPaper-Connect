@@ -13,7 +13,10 @@ import {has} from 'ramda';
 import Fields from 'components/Fields';
 
 //redux,selector
-import {updateFormFieldValue, resetCurrentFormDetails} from 'store/forms';
+import {
+  updateOfflineFormFieldValue,
+  resetCurrentFormDetails,
+} from 'store/forms';
 import {
   selectOfflineCurrentFormId,
   selectOfflineCurrentFormFields,
@@ -60,7 +63,7 @@ class FormFieldsList extends React.Component {
   renderItem = (props) => {
     const {item} = props;
     const {
-      updateFormFieldValue: updatedFormFieldProps,
+      updateOfflineFormFieldValue,
       organization,
       currentFormFields,
       goToGoogleMapScreen,
@@ -73,7 +76,7 @@ class FormFieldsList extends React.Component {
           offline: true,
           formId: item.formid,
           item: item,
-          updateFieldsValue: updatedFormFieldProps,
+          updateFieldsValue: updateOfflineFormFieldValue,
           organization,
           currentFormFields,
           updateScrollEnabled: this.updateScrollEnabled,
@@ -133,7 +136,7 @@ const mapState = createStructuredSelector({
 });
 
 export default connect(mapState, {
-  updateFormFieldValue,
+  updateOfflineFormFieldValue,
   resetCurrentFormDetails,
   goToGoogleMapScreen,
 })(FormFieldsList);

@@ -21,6 +21,8 @@ import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 import moment from 'moment';
+import 'react-native-get-random-values';
+import {nanoid} from 'nanoid';
 
 import AlertMessages from '@constant/AlertMessages';
 import {getUpviseTemplate, getFormFields} from '@api/forms';
@@ -39,6 +41,8 @@ import {
 import {
   selectCurrentForm,
   selectCurrentFormUnfillMandatoryFields,
+  selectOfflineCurrentFormUnfillMandatoryFields,
+  selectOfflineStartAndFinishDate,
   selectStartAndFinishDate,
   selectFormList,
   selectOfflineCurrentForm,
@@ -226,7 +230,6 @@ async function submitForm(form) {
             'Alert',
             'Unable to retrieve your current location, please check if GPS is turn on and try again, form not submitted',
           );
-          console.log('Geo Location not attached', error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 15000},
       );
@@ -241,6 +244,7 @@ async function submitForm(form) {
 }
 
 function* preSubmitForm({payload}) {
+  console.log('preSubmitForm', payload);
   try {
     yield showActivityIndicator();
     yield put(updateSubmittingForm(true));
@@ -252,16 +256,21 @@ function* preSubmitForm({payload}) {
     ];
     const offline = payload;
     let form = {};
-    if(offline) {
+    let unfilledMandatoryFields = {};
+    let startAndFinishDateTime = {};
+    if (offline) {
       form = yield select(selectOfflineCurrentForm);
+      unfilledMandatoryFields = yield select(
+        selectOfflineCurrentFormUnfillMandatoryFields,
+      );
+      startAndFinishDateTime = yield select(selectOfflineStartAndFinishDate);
     } else {
       form = yield select(selectCurrentForm);
+      unfilledMandatoryFields = yield select(
+        selectCurrentFormUnfillMandatoryFields,
+      );
+      startAndFinishDateTime = yield select(selectStartAndFinishDate);
     }
-    
-    const unfilledMandatoryFields = yield select(
-      selectCurrentFormUnfillMandatoryFields,
-    );
-    const startAndFinishDateTime = yield select(selectStartAndFinishDate);
     let dateTimeError = '';
     const {
       mandatoryError,
@@ -321,20 +330,19 @@ function* preSubmitForm({payload}) {
             {
               text: 'Yes',
               onPress: async () => {
-                await submitForm(form);
+                await showActivityIndicator();
+                submitForm(form);
+                Navigation.popToRoot(screens.FormScreen);
               },
             },
           ],
           {cancelable: false},
         );
       } else {
-        dismissActivityIndicator();
-        yield submitForm(form);
-        yield put(updateSubmittingForm(false));
-        return;
+        submitForm(form);
+        Navigation.popToRoot(screens.FormScreen);
       }
     }
-
     dismissActivityIndicator();
     yield put(updateSubmittingForm(false));
   } catch (error) {
@@ -351,7 +359,7 @@ function* syncOfflineForm({payload = {}}) {
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
     const forms = yield select(selectFormList);
-    const selectedForm = find(propEq('id', formId))(forms)
+    const selectedForm = find(propEq('id', formId))(forms);
     const fieldsPath = `${upviseTemplatePath}/${formId}/upviseFields`;
 
     //sync forms
@@ -374,7 +382,7 @@ function* syncOfflineForm({payload = {}}) {
       });
 
       if (linkedItems?.data) {
-        console.log('linkedItems?.data', linkedItems?.data)
+        console.log('linkedItems?.data', linkedItems?.data);
         const {lastBuildDate, items} = linkedItems?.data;
         console.log('items', items);
         const linkedItemsDBPayload = {
@@ -391,7 +399,7 @@ function* syncOfflineForm({payload = {}}) {
     let projectList = [];
     for (const field of currentFormFields) {
       const {seloptions, type} = field;
-      
+
       if (includes(type, selectType)) {
         console.log('selectType 1');
         let isProjectDependant = false;
@@ -482,6 +490,44 @@ function* loadOfflineForms() {
   });
 }
 
+function* loadOutbox() {
+  const outboxString = yield database.getAllFromOutbox();
+  const outboxItems = map(
+    (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+    outboxString,
+  );
+
+  yield put({
+    type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+    payload: outboxItems,
+  });
+}
+
+function* saveAsDraft({payload}) {
+  console.log('saveAsDraft', payload);
+  const dateNow = new Date();
+  const offline = payload;
+  let form = {};
+  if (offline) {
+    form = yield select(selectOfflineCurrentForm);
+  } else {
+    form = yield select(selectCurrentForm);
+    console.log('selected form', form);
+  }
+
+  const dbPayload = {
+    id: nanoid(),
+    createdAt: dateNow.toISOString(),
+    updatedAt: dateNow.toISOString(),
+    value: JSON.stringify(form),
+    status: 'draft',
+  };
+
+  console.log('saved data', dbPayload);
+  yield database.InsertToOutbox(dbPayload);
+  yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+  yield Alert.alert('Alert', 'Draft saved to outbox');
+}
 
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
@@ -493,4 +539,6 @@ export default all([
   takeLatest(FORM_ACTION.PRE_SUBMIT_FORM, preSubmitForm),
   takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX, loadOutbox),
+  takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
 ]);

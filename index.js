@@ -6,6 +6,7 @@ import {Navigation} from 'react-native-navigation';
 import React from 'react';
 // import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -47,13 +48,15 @@ appScreens.forEach((ScreenComponent, key) => {
     key,
     () => (props) => (
       <Provider store={store}>
-        <PaperProvider
-          theme={theme}
-          settings={{
-            icon: (props) => <MaterialIcon {...props} />,
-          }}>
-          <ScreenComponent {...props} style={{backgroundColor: 'white'}} />
-        </PaperProvider>
+        <ActionSheetProvider>
+          <PaperProvider
+            theme={theme}
+            settings={{
+              icon: (props) => <MaterialIcon {...props} />,
+            }}>
+            <ScreenComponent {...props} style={{backgroundColor: 'white'}} />
+          </PaperProvider>
+        </ActionSheetProvider>
       </Provider>
     ),
     () => ScreenComponent,

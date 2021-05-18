@@ -4,6 +4,8 @@ import {
   getOfflineFormsQuery,
   getLinkedItemsByIdQuery,
   getFieldsOptionsQuery,
+  getAllFromOutboxQuery,
+  getAllPendingFromOutboxQuery,
 } from './query';
 
 export const getLinkedItemsByid = async (linkedItemsId) => {
@@ -27,6 +29,28 @@ export const getOfflineForms = async () => {
     return offlineForms;
   } catch (e) {
     console.log('DB getOfflineForms Error', e);
+    return [];
+  }
+};
+
+export const getAllFromOutbox = async () => {
+  try {
+    const result = await DB.ExecuteQuery(getAllFromOutboxQuery);
+    const outbox = getItemsFromResult(result);
+    return outbox;
+  } catch (e) {
+    console.log('DB getAllFromOutbox Error', e);
+    return [];
+  }
+};
+
+export const getAllPendingFromOutbox = async () => {
+  try {
+    const result = await DB.ExecuteQuery(getAllPendingFromOutboxQuery);
+    const outbox = getItemsFromResult(result);
+    return outbox;
+  } catch (e) {
+    console.log('DB getAllFromOutbox Error', e);
     return [];
   }
 };
