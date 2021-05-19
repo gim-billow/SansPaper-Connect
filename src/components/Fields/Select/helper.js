@@ -240,6 +240,5 @@ export const getOptionsFromDB = async ({
     type,
     projectValue,
   });
-  console.log('getOptionsFromDB', options);
   return options;
 };

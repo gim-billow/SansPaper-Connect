@@ -2,16 +2,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
+import {deleteOutboxForm} from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
 import styles from './styles';
+import {darkGrey} from '@styles/colors';
 
 class Outbox extends React.Component {
   state = {
@@ -37,32 +39,40 @@ class Outbox extends React.Component {
   };
 
   renderItem = ({item}) => {
+    const {deleteOutboxForm} = this.props;
     const {id, value, status, createdAt, updatedAt} = item;
+    console.log('item', item);
     const {name} = value;
     const createDate = new Date(createdAt);
     const updateDate = new Date(updatedAt);
     const createString = `Submit: ${createDate.toDateString()} ${createDate.toLocaleTimeString()}`;
     const updateString = `Update: ${updateDate.toDateString()} ${updateDate.toLocaleTimeString()}`;
     return (
-      <ItemWrapper>
-        <ListItem
-          key={id}
-          bottomDivider
-          onPress={() => this.props.goToDraftFormFieldsScreen(id)}>
-          <Icon name="file-text-o" type="font-awesome" />
-          <ListItem.Content>
-            <ListItem.Title>{name}</ListItem.Title>
-            <ListItem.Subtitle style={{fontSize: 10}}>
-              {createString}
-            </ListItem.Subtitle>
-            <ListItem.Subtitle style={{fontSize: 10}}>
-              {updateString}
-            </ListItem.Subtitle>
-          </ListItem.Content>
-          <Text>{status}</Text>
-          <ListItem.Chevron />
-        </ListItem>
-      </ItemWrapper>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.downloadButton}
+          onPress={() => deleteOutboxForm(id)}>
+          <Icon name="delete" color={darkGrey} />
+        </TouchableOpacity>
+        <ItemWrapper>
+          <ListItem
+            key={id}
+            bottomDivider
+            onPress={() => this.props.goToDraftFormFieldsScreen(id)}>
+            <ListItem.Content>
+              <ListItem.Title>{name}</ListItem.Title>
+              <ListItem.Subtitle style={{fontSize: 10}}>
+                {createString}
+              </ListItem.Subtitle>
+              <ListItem.Subtitle style={{fontSize: 10}}>
+                {updateString}
+              </ListItem.Subtitle>
+            </ListItem.Content>
+            <Text>{status}</Text>
+            <ListItem.Chevron />
+          </ListItem>
+        </ItemWrapper>
+      </View>
     );
   };
 
@@ -107,4 +117,5 @@ const mapState = createStructuredSelector({
 
 export default connect(mapState, {
   goToDraftFormFieldsScreen,
+  deleteOutboxForm,
 })(Outbox);

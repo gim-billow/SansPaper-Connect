@@ -2,13 +2,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOfflineFormList} from '@selector/form';
-import {updateOfflineCurrentFormId} from '@store/forms';
+import {updateOfflineCurrentFormId, deleteOfflineForm} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {
   goToOfflineLinkedItemScreen,
@@ -16,8 +16,8 @@ import {
 } from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
-import {Spinner} from 'native-base';
 import styles from './styles';
+import {darkGrey} from '@styles/colors';
 
 class OfflineFormList extends React.Component {
   state = {
@@ -44,7 +44,8 @@ class OfflineFormList extends React.Component {
 
   getFilteredFormlist = memoize((formList, searchKeyword) => {
     return filter(
-      (form) => includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
+      (form) =>
+        includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
       formList,
     );
   });
@@ -54,20 +55,27 @@ class OfflineFormList extends React.Component {
   };
 
   renderItem = ({item}) => {
+    const {deleteOfflineForm} = this.props;
     const {name, linkedtable, id} = item;
     return (
-      <ItemWrapper>
-        <ListItem
-          key={id}
-          bottomDivider
-          onPress={() => this.onPress(linkedtable, id)}>
-          <Icon name="file-text-o" type="font-awesome" />
-          <ListItem.Content>
-            <ListItem.Title>{name}</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      </ItemWrapper>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.downloadButton}
+          onPress={() => deleteOfflineForm(id)}>
+          <Icon name="delete" color={darkGrey} />
+        </TouchableOpacity>
+        <ItemWrapper>
+          <ListItem
+            key={id}
+            bottomDivider
+            onPress={() => this.onPress(linkedtable, id)}>
+            <ListItem.Content>
+              <ListItem.Title>{name}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+        </ItemWrapper>
+      </View>
     );
   };
 
@@ -114,4 +122,5 @@ export default connect(mapState, {
   goToOfflineLinkedItemScreen,
   updateOfflineCurrentFormId,
   goToOfflineFormFieldsScreen,
+  deleteOfflineForm,
 })(OfflineFormList);

@@ -1,10 +1,14 @@
 //library
 import React from 'react';
 import {View} from 'react-native';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
 
 import styles from './styles';
 import {red} from '@styles/colors';
 import FormList from '@containers/FormList/index';
+import {selectNetworkInfo} from '@selector/common';
+import NoInternet from '@containers/NoInternet';
 
 class FormScreen extends React.Component {
   static options = () => {
@@ -25,12 +29,18 @@ class FormScreen extends React.Component {
   };
 
   render() {
+    const {netInfo} = this.props;
+
     return (
       <View style={styles.container}>
-        <FormList />
+        {netInfo.isInternetReachable ? <FormList /> : <NoInternet />}
       </View>
     );
   }
 }
 
-export default FormScreen;
+const mapState = createStructuredSelector({
+  netInfo: selectNetworkInfo,
+});
+
+export default connect(mapState, null)(FormScreen);

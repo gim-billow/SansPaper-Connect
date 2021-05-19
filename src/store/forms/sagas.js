@@ -352,7 +352,6 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
-    console.log('payload', payload);
     yield showActivityIndicator('Downloading....');
     const {linkedTable, formId} = payload;
     const dateNow = new Date();
@@ -382,9 +381,9 @@ function* syncOfflineForm({payload = {}}) {
       });
 
       if (linkedItems?.data) {
-        console.log('linkedItems?.data', linkedItems?.data);
+        //console.log('linkedItems?.data', linkedItems?.data);
         const {lastBuildDate, items} = linkedItems?.data;
-        console.log('items', items);
+        //console.log('items', items);
         const linkedItemsDBPayload = {
           id: linkedItemName,
           createdAt: lastBuildDate,
@@ -401,7 +400,6 @@ function* syncOfflineForm({payload = {}}) {
       const {seloptions, type} = field;
 
       if (includes(type, selectType)) {
-        console.log('selectType 1');
         let isProjectDependant = false;
         for (const project of projectDependant) {
           if (includes(project, seloptions)) {
@@ -409,7 +407,6 @@ function* syncOfflineForm({payload = {}}) {
           }
         }
         if (isProjectDependant) {
-          console.log('isProjectDependant 2');
           for (const project of projectList) {
             const options = yield getQueryByOptions(
               seloptions,
@@ -427,7 +424,6 @@ function* syncOfflineForm({payload = {}}) {
             database.InsertSelectOptions(selectOptionsPayload);
           }
         } else {
-          console.log('is NOT ProjectDependant 2.1');
           const options = yield getQueryByOptions(
             seloptions,
             type,
@@ -445,10 +441,8 @@ function* syncOfflineForm({payload = {}}) {
             };
             database.InsertSelectOptions(selectOptionsPayload);
           }
-          console.log('complete is NOT ProjectDependant 2.1');
         }
       }
-      console.log('completeed ......');
     }
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
     dismissActivityIndicator();
@@ -504,29 +498,51 @@ function* loadOutbox() {
 }
 
 function* saveAsDraft({payload}) {
-  console.log('saveAsDraft', payload);
-  const dateNow = new Date();
-  const offline = payload;
-  let form = {};
-  if (offline) {
-    form = yield select(selectOfflineCurrentForm);
-  } else {
-    form = yield select(selectCurrentForm);
-    console.log('selected form', form);
+  try {
+    const dateNow = new Date();
+    const offline = payload;
+    let form = {};
+    if (offline) {
+      form = yield select(selectOfflineCurrentForm);
+    } else {
+      form = yield select(selectCurrentForm);
+      console.log('selected form', form);
+    }
+    const {draftId = null, ...payloadForm} = form;
+    const dbPayload = {
+      id: draftId ? draftId : nanoid(),
+      createdAt: dateNow.toISOString(),
+      updatedAt: dateNow.toISOString(),
+      value: JSON.stringify(payloadForm),
+      status: 'draft',
+    };
+    console.log('saved data', dbPayload);
+    yield database.InsertToOutbox(dbPayload);
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+    yield Alert.alert('Alert', 'Draft saved to outbox');
+  } catch (error) {
+    console.log('saveAsDraft error', error);
   }
+}
 
-  const dbPayload = {
-    id: nanoid(),
-    createdAt: dateNow.toISOString(),
-    updatedAt: dateNow.toISOString(),
-    value: JSON.stringify(form),
-    status: 'draft',
-  };
+function* deleteOfflineForm({payload}) {
+  try {
+    const formId = payload;
+    yield database.deleteFormById({formId: formId});
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+  } catch (error) {
+    console.log('deleteOfflineForm error', error);
+  }
+}
 
-  console.log('saved data', dbPayload);
-  yield database.InsertToOutbox(dbPayload);
-  yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
-  yield Alert.alert('Alert', 'Draft saved to outbox');
+function* deleteOutboxForm({payload}) {
+  try {
+    const draftId = payload;
+    yield database.deleteOutboxById({draftId: draftId});
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+  } catch (error) {
+    console.log('deleteOutboxForm error', error);
+  }
 }
 
 export default all([
@@ -541,4 +557,6 @@ export default all([
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX, loadOutbox),
   takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
+  takeLatest(FORM_ACTION.DELETE_OFFLINE_FORM, deleteOfflineForm),
+  takeLatest(FORM_ACTION.DELETE_OUTBOX_FORM, deleteOutboxForm),
 ]);

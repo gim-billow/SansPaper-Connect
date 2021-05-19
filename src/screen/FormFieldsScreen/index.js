@@ -2,20 +2,24 @@
 import React from 'react';
 import {View} from 'react-native';
 import {find, propEq} from 'ramda';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
 
 import styles from './styles';
 import {white, red} from '@styles/colors';
 import FormFieldsList from '@containers/FormFieldsList';
 import {screens} from '@constant/ScreenConstants';
-
+import {selectNetworkInfo} from '@selector/common';
+import NoInternet from '@containers/NoInternet';
 /**
  * This is used in the form lists
  */
 class FormFieldsScreen extends React.Component {
   render() {
+    const {netInfo} = this.props;
     return (
       <View style={styles.container}>
-        <FormFieldsList />
+        {netInfo.isInternetReachable ? <FormFieldsList /> : <NoInternet />}
       </View>
     );
   }
@@ -59,7 +63,7 @@ FormFieldsScreen.options = (props) => {
             name: screens.RightButton,
             passProps: {
               offline: false,
-            }
+            },
           },
         },
       ],
@@ -72,4 +76,8 @@ FormFieldsScreen.options = (props) => {
   };
 };
 
-export default FormFieldsScreen;
+const mapState = createStructuredSelector({
+  netInfo: selectNetworkInfo,
+});
+
+export default connect(mapState, null)(FormFieldsScreen);

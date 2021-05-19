@@ -1,4 +1,6 @@
 export const FORM_ACTION = {
+  DELETE_OUTBOX_FORM: 'formAction/DELETE_OUTBOX_FORM',
+  DELETE_OFFLINE_FORM: 'formAction/DELETE_OFFLINE_FORM',
   SAVE_AS_DRAFT: 'formAction/SAVE_AS_DRAFT',
   SYNC_OFFLINE_FORM: 'formAction/SYNC_OFFLINE_FORM',
   PRE_SUBMIT_FORM: 'fromAction/PRE_SUBMIT_FORM',
@@ -35,6 +37,16 @@ export const FORM_REDUCER_ACTIONS = {
     'formActions/UPDATE_OFFLINE_CURRENT_FORM_FIELDS',
   RESET_CURRENT_FORM_DETAILS: 'formActions/RESET_CURRENT_FORM_DETAILS',
 };
+
+export const deleteOutboxForm = (payload) => ({
+  type: FORM_ACTION.DELETE_OUTBOX_FORM,
+  payload,
+});
+
+export const deleteOfflineForm = (payload) => ({
+  type: FORM_ACTION.DELETE_OFFLINE_FORM,
+  payload,
+});
 
 export const syncOfflineForm = (payload) => ({
   type: FORM_ACTION.SYNC_OFFLINE_FORM,

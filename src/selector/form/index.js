@@ -111,6 +111,11 @@ export const selectStartAndFinishDate = createSelector(
   },
 );
 
+export const selectIsDraftForm = createSelector(
+  selectOfflineCurrentForm,
+  (form) => form?.draftId || null,
+);
+
 export const selectOfflineStartAndFinishDate = createSelector(
   selectOfflineCurrentFormFields,
   (fields) => {

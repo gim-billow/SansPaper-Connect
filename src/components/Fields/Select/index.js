@@ -22,7 +22,10 @@ class Select extends PureComponent {
 
   async componentDidMount() {
     let selected = [];
-    const {seloptions, type} = this.props.item;
+    const {seloptions, type, value} = this.props.item;
+    if (value !== '') {
+      selected = R.split('|', value);
+    }
     const {organization, projectValue, offline = false, formId} = this.props;
     let options = [];
     if (offline) {
