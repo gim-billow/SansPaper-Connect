@@ -48,7 +48,7 @@ function* init({payload}) {
     //init DB
     yield DB.openDBConnection();
     yield database.CreateTable();
-    yield database.deleteAllForms();
+    // yield database.deleteAllForms();
 
     //watch network and app state
     yield put({type: COMMON_ACTIONS.WATCH_APP_STATE});
