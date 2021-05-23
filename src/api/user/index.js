@@ -101,3 +101,26 @@ export const forgotPassword = async (email) => {
     throw e;
   }
 };
+
+export const hasAppReview = async () => {
+  try {
+    const review = await AsyncStorage.getItem('appReview');
+    if (review) {
+      const json = JSON.parse(review);
+      return json.hasReviewed;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const setAppReview = async (value) => {
+  try {
+    return await AsyncStorage.setItem(
+      'appReview',
+      JSON.stringify({hasReviewed: value}),
+    );
+  } catch (error) {
+    throw error;
+  }
+};
