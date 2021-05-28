@@ -34,14 +34,22 @@ const DateTimePicker = (props) => {
   const [defaultTime, setDefaultTime] = useState('none');
 
   useEffect(() => {
-    const value = props.item.value;
-    if (value && value.includes('Date')) {
-      const dateFormat = setDateTimeFormatDisplay('date', Date.now());
-      const timeFormat = setDateTimeFormatDisplay('time', Date.now());
-      setDateLabel(dateFormat);
-      setTimeLabel(timeFormat);
-      const dateTime = setDateTime(dateFormat, timeFormat);
+    const value = props.item.value.toString();
+    if (value) {
+      let dateFormat, timeFormat;
+      if (value.includes('Date')) {
+        dateFormat = setDateTimeFormatDisplay('date', Date.now());
+        timeFormat = setDateTimeFormatDisplay('time', Date.now());
+        setDateLabel(dateFormat);
+        setTimeLabel(timeFormat);
+      } else {
+        dateFormat = setDateTimeFormatDisplay('date', parseInt(value, 10));
+        timeFormat = setDateTimeFormatDisplay('time', parseInt(value, 10));
+        setDateLabel(dateFormat);
+        setTimeLabel(timeFormat);
+      }
 
+      const dateTime = setDateTime(dateFormat, timeFormat);
       updateFieldsValue({rank: props.item.rank, value: dateTime});
     }
   }, []);

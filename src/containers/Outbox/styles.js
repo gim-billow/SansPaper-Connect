@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {lightGrey} from '@styles/colors';
+import {lightGrey, green, darkGrey} from '@styles/colors';
 
 export default StyleSheet.create({
   container: {
@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   emptyContainer: {
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
   },
   row: {
     flex: 1,
@@ -27,5 +27,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderBottomWidth: 0.5,
     borderColor: lightGrey,
+  },
+  draft: {
+    color: darkGrey,
+  },
+  submitted: {
+    color: green,
   },
 });

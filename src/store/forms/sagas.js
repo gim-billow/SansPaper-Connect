@@ -218,7 +218,7 @@ async function submitForm(form) {
           if (isSubmitted) {
             dismissActivityIndicator();
             Navigation.popToRoot(screens.FormScreen);
-            Alert.alert('Alert', 'Form submitted');
+            Alert.alert('Alert', 'Form submitted and saved to outbox');
           } else {
             dismissActivityIndicator();
             Alert.alert('Alert', 'Form not submitted');
@@ -343,6 +343,14 @@ function* preSubmitForm({payload}) {
         Navigation.popToRoot(screens.FormScreen);
       }
     }
+
+    yield saveAsDraft({
+      payload: {
+        offline,
+        status: 'submitted',
+      },
+    });
+
     dismissActivityIndicator();
     yield put(updateSubmittingForm(false));
   } catch (error) {
@@ -500,7 +508,9 @@ function* loadOutbox() {
 function* saveAsDraft({payload}) {
   try {
     const dateNow = new Date();
-    const offline = payload;
+
+    const {offline, status} = payload;
+
     let form = {};
     if (offline) {
       form = yield select(selectOfflineCurrentForm);
@@ -514,12 +524,15 @@ function* saveAsDraft({payload}) {
       createdAt: dateNow.toISOString(),
       updatedAt: dateNow.toISOString(),
       value: JSON.stringify(payloadForm),
-      status: 'draft',
+      status,
     };
     console.log('saved data', dbPayload);
     yield database.InsertToOutbox(dbPayload);
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
-    yield Alert.alert('Alert', 'Draft saved to outbox');
+
+    if (status === 'draft') {
+      yield Alert.alert('Alert', 'Draft saved to outbox');
+    }
   } catch (error) {
     console.log('saveAsDraft error', error);
   }

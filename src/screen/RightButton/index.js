@@ -35,7 +35,10 @@ class RightButton extends React.Component {
             submitForm(offline);
             break;
           case 1:
-            saveAsDraft(offline);
+            saveAsDraft({
+              offline,
+              status: buttonIndex === 0 ? 'submitted' : 'draft',
+            });
             break;
           default:
             break;

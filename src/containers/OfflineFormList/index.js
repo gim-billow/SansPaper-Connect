@@ -17,7 +17,7 @@ import {
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
 import styles from './styles';
-import {darkGrey} from '@styles/colors';
+import {red} from '@styles/colors';
 
 class OfflineFormList extends React.Component {
   state = {
@@ -62,7 +62,7 @@ class OfflineFormList extends React.Component {
         <TouchableOpacity
           style={styles.downloadButton}
           onPress={() => deleteOfflineForm(id)}>
-          <Icon name="delete" color={darkGrey} />
+          <Icon name="delete" color={red} />
         </TouchableOpacity>
         <ItemWrapper>
           <ListItem

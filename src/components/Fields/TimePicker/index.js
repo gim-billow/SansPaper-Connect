@@ -18,9 +18,14 @@ const TimePicker = (props) => {
   const [changeTheme, setChangeTheme] = useState(false);
 
   useEffect(() => {
-    const value = props.item.value;
-    if (value && value.includes('Date')) {
-      setLabel(moment().format('h:mm a'));
+    const value = props.item.value.toString();
+    if (value) {
+      if (value.includes('Date')) {
+        setLabel(moment().format('h:mm a'));
+      } else {
+        setLabel(moment(parseInt(value, 10)).format('h:mm a'));
+      }
+
       setChangeTheme(true);
       updateFieldsValue({rank: props.item.rank, value: Date.now()});
     }

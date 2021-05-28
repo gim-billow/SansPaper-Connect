@@ -13,7 +13,8 @@ import {goToDraftFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
 import styles from './styles';
-import {darkGrey} from '@styles/colors';
+import {red} from '@styles/colors';
+import {displayDate} from '@util/general';
 
 class Outbox extends React.Component {
   state = {
@@ -43,16 +44,15 @@ class Outbox extends React.Component {
     const {id, value, status, createdAt, updatedAt} = item;
     console.log('item', item);
     const {name} = value;
-    const createDate = new Date(createdAt);
-    const updateDate = new Date(updatedAt);
-    const createString = `Submit: ${createDate.toDateString()} ${createDate.toLocaleTimeString()}`;
-    const updateString = `Update: ${updateDate.toDateString()} ${updateDate.toLocaleTimeString()}`;
+    const createString = `Submitted on ${displayDate(createdAt)}`;
+    const updateString = `Updated on ${displayDate(updatedAt)}`;
+
     return (
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.downloadButton}
           onPress={() => deleteOutboxForm(id)}>
-          <Icon name="delete" color={darkGrey} />
+          <Icon name="delete" color={red} />
         </TouchableOpacity>
         <ItemWrapper>
           <ListItem
@@ -68,7 +68,9 @@ class Outbox extends React.Component {
                 {updateString}
               </ListItem.Subtitle>
             </ListItem.Content>
-            <Text>{status}</Text>
+            <Text style={status === 'draft' ? styles.draft : styles.submitted}>
+              {status}
+            </Text>
             <ListItem.Chevron />
           </ListItem>
         </ItemWrapper>
