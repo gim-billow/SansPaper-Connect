@@ -8,7 +8,10 @@ import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOrganistationPath} from '@selector/sanspaper';
-import {selectSortedFormList} from '@selector/form/index';
+import {
+  selectSortedFormList,
+  selectOfflineFormList,
+} from '@selector/form/index';
 import {
   updateCurrentFormId,
   updateFormList,
@@ -20,12 +23,24 @@ import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes, findIndex, propEq} from 'ramda';
 import {Spinner} from 'native-base';
 import styles from './styles';
-import {darkGrey} from '@styles/colors';
+import {darkGrey, green} from '@styles/colors';
 
 class FormList extends React.Component {
   state = {
     searchKeyword: '',
   };
+
+  // componentDidMount() {}
+
+  // shouldComponentUpdate(nextProps) {
+  //   const {formList} = this.props;
+  //   if (nextProps.offlineForms.length !== this.props.offlineForms.length) {
+  //     this.getFilteredFormlist(formList, this.state.searchKeyword);
+  //     return true;
+  //   }
+
+  //   return true;
+  // }
 
   keyExtractor = (item, index) => index.toString();
 
@@ -64,14 +79,26 @@ class FormList extends React.Component {
 
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
+    const {offlineForms} = this.props;
+
+    const index = findIndex(propEq('name', name))(offlineForms);
 
     return (
       <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.downloadButton}
-          onPress={() => this.downloadForm(linkedtable, id)}>
-          <Icon name="file-download" color={darkGrey} />
-        </TouchableOpacity>
+        {index === -1 ? (
+          <TouchableOpacity
+            style={styles.downloadButton}
+            onPress={() => this.downloadForm(linkedtable, id)}>
+            <Icon name="file-download" color={darkGrey} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            disabled
+            style={styles.downloadButton}
+            onPress={() => this.downloadForm(linkedtable, id)}>
+            <Icon name="offline-pin" color={green} />
+          </TouchableOpacity>
+        )}
         <ItemWrapper>
           <ListItem
             key={id}
@@ -90,7 +117,7 @@ class FormList extends React.Component {
 
   render() {
     const {searchKeyword} = this.state;
-    const {formList} = this.props;
+    const {formList, offlineForms} = this.props;
     const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
 
     return (
@@ -109,6 +136,7 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
+            extraData={offlineForms} // for ui rerendering
           />
         ) : searchKeyword === '' ? (
           <Spinner color="grey" />
@@ -123,6 +151,7 @@ class FormList extends React.Component {
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,
   orgPath: selectOrganistationPath,
+  offlineForms: selectOfflineFormList,
 });
 
 export default connect(mapState, {
