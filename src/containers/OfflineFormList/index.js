@@ -57,6 +57,7 @@ class OfflineFormList extends React.Component {
   renderItem = ({item}) => {
     const {deleteOfflineForm} = this.props;
     const {name, linkedtable, id} = item;
+
     return (
       <View style={styles.row}>
         <TouchableOpacity

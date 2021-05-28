@@ -354,6 +354,14 @@ function* preSubmitForm({payload}) {
     dismissActivityIndicator();
     yield put(updateSubmittingForm(false));
   } catch (error) {
+    // save to draft if submit failed
+    yield saveAsDraft({
+      payload: {
+        offline: false,
+        status: 'draft',
+      },
+    });
+
     console.log('submitForm error', error);
   }
 }
