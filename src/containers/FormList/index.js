@@ -17,7 +17,7 @@ import {
 import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
-import {filter, includes} from 'ramda';
+import {filter, includes, findIndex, propEq} from 'ramda';
 import {Spinner} from 'native-base';
 import styles from './styles';
 import {darkGrey} from '@styles/colors';
@@ -52,7 +52,8 @@ class FormList extends React.Component {
 
   getFilteredFormlist = memoize((formList, searchKeyword) => {
     return filter(
-      (form) => includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
+      (form) =>
+        includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
       formList,
     );
   });
@@ -63,6 +64,7 @@ class FormList extends React.Component {
 
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
+
     return (
       <View style={styles.row}>
         <TouchableOpacity
