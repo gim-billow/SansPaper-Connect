@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
 
@@ -54,15 +54,33 @@ class OfflineFormList extends React.Component {
     this.setState({searchKeyword: text});
   };
 
+  onDeleteAlert = (id) =>
+    Alert.alert(
+      'Remove Form',
+      'Are you sure you want to remove the downloaded form?',
+      [
+        {
+          text: 'Delete',
+          onPress: () => this.props.deleteOfflineForm(id),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+
   renderItem = ({item}) => {
-    const {deleteOfflineForm} = this.props;
     const {name, linkedtable, id} = item;
 
     return (
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.downloadButton}
-          onPress={() => deleteOfflineForm(id)}>
+          onPress={() => this.onDeleteAlert(id)}>
           <Icon name="delete" color={red} />
         </TouchableOpacity>
         <ItemWrapper>
