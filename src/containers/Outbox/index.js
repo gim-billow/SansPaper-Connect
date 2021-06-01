@@ -2,13 +2,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
-import {deleteOutboxForm} from '@store/forms';
+import {
+  deleteOutboxForm,
+  loadOutboxByStatus,
+  loadAllOutbox,
+} from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes} from 'ramda';
@@ -20,6 +25,39 @@ class Outbox extends React.Component {
   state = {
     searchKeyword: '',
     refresh: false,
+    filterLabel: 'All',
+  };
+
+  onFilterOutboxList = () => {
+    const {loadOutboxByStatus, loadAllOutbox} = this.props;
+    const options = ['Draft', 'Submitted', 'All', 'Cancel'];
+    const cancelButtonIndex = 3;
+
+    this.props.showActionSheetWithOptions(
+      {
+        title: 'Filter by',
+        options,
+        cancelButtonIndex,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            loadOutboxByStatus('draft');
+            this.setState({filterLabel: options[buttonIndex]});
+            break;
+          case 1:
+            loadOutboxByStatus('submitted');
+            this.setState({filterLabel: options[buttonIndex]});
+            break;
+          case 2:
+            loadAllOutbox();
+            this.setState({filterLabel: options[buttonIndex]});
+            break;
+          default:
+            break;
+        }
+      },
+    );
   };
 
   keyExtractor = (item, index) => index?.toString();
@@ -39,8 +77,26 @@ class Outbox extends React.Component {
     this.setState({searchKeyword: text});
   };
 
+  onDeleteAlert = (id) =>
+    Alert.alert(
+      'Delete Form',
+      'Are you sure you want to delete the form?',
+      [
+        {
+          text: 'Delete',
+          onPress: () => this.props.deleteOutboxForm(id),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+
   renderItem = ({item}) => {
-    const {deleteOutboxForm} = this.props;
     const {id, value, status, createdAt, updatedAt} = item;
     console.log('item', item);
     const {name} = value;
@@ -51,7 +107,7 @@ class Outbox extends React.Component {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.downloadButton}
-          onPress={() => deleteOutboxForm(id)}>
+          onPress={() => this.onDeleteAlert(id)}>
           <Icon name="delete" color={red} />
         </TouchableOpacity>
         <ItemWrapper>
@@ -79,36 +135,47 @@ class Outbox extends React.Component {
   };
 
   render() {
-    const {searchKeyword} = this.state;
+    const {searchKeyword, filterLabel} = this.state;
     const {outbox} = this.props;
     const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
 
     return (
-      <View style={styles.flex1}>
-        <Searchbar
-          placeholder="Search outbox"
-          style={styles.searchbar}
-          value={searchKeyword}
-          onChangeText={this.handleOnChangeText}
-          icon="search"
-          clearIcon="clear"
-        />
-        {filteredOutbox && filteredOutbox.length > 0 ? (
-          <FlatList
-            style={styles.container}
-            keyExtractor={this.keyExtractor}
-            data={filteredOutbox}
-            renderItem={this.renderItem}
-            refreshing={this.state.refresh}
+      <>
+        <View style={styles.filterView}>
+          <TouchableOpacity
+            style={styles.filterTouch}
+            onPress={() => this.onFilterOutboxList('draft')}>
+            <Icon name="filter-list" />
+            <Text style={{paddingLeft: 5}}>{filterLabel}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.flex1}>
+          <Searchbar
+            placeholder="Search outbox"
+            style={styles.searchbar}
+            value={searchKeyword}
+            onChangeText={this.handleOnChangeText}
+            icon="search"
+            clearIcon="clear"
           />
-        ) : searchKeyword === '' ? (
-          <View style={styles.emptyContainer}>
-            <Text>No submitted form </Text>
-          </View>
-        ) : (
-          <Text>No results match your search criteria </Text>
-        )}
-      </View>
+          {outbox && outbox.length > 0 ? (
+            <FlatList
+              style={styles.container}
+              keyExtractor={this.keyExtractor}
+              data={filteredOutbox}
+              renderItem={this.renderItem}
+              refreshing={this.state.refresh}
+              extraData={outbox}
+            />
+          ) : searchKeyword === '' ? (
+            <View style={styles.emptyContainer}>
+              <Text>No submitted form </Text>
+            </View>
+          ) : (
+            <Text>No results match your search criteria </Text>
+          )}
+        </View>
+      </>
     );
   }
 }
@@ -120,4 +187,6 @@ const mapState = createStructuredSelector({
 export default connect(mapState, {
   goToDraftFormFieldsScreen,
   deleteOutboxForm,
-})(Outbox);
+  loadOutboxByStatus,
+  loadAllOutbox,
+})(connectActionSheet(Outbox));

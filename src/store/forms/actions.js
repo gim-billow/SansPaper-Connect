@@ -12,6 +12,7 @@ export const FORM_ACTION = {
 
 export const FORM_SAGA_ACTIONS = {
   LOAD_OUTBOX: 'formActions/LOAD_OUTBOX',
+  LOAD_OUTBOX_BY_STATUS: 'formActions/LOAD_OUTBOX_BY_STATUS',
   LOAD_OFFLINE_FORM: 'formActions/LOAD_OFFLINE_FORM',
   WATCH_FORM_UPDATES: 'formActions/WATCH_FORM_UPDATES',
   GET_ALL_LINKED_ITEMS: 'formActions/GET_ALL_LINKED_ITEMS',
@@ -109,4 +110,13 @@ export const updateSubmitTriggered = () => ({
 
 export const resetCurrentFormDetails = () => ({
   type: FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS,
+});
+
+export const loadAllOutbox = () => ({
+  type: FORM_SAGA_ACTIONS.LOAD_OUTBOX,
+});
+
+export const loadOutboxByStatus = (payload) => ({
+  type: FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS,
+  payload,
 });

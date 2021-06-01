@@ -78,6 +78,7 @@ export const showMainScreen = async () => {
   );
   const bookOpenIcon = await Feather.getImageSource('book-open', 25);
   const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
+  const downloadIcon = await FontAwesome5.getImageSource('download', 25);
 
   return Navigation.setRoot({
     root: {
@@ -184,8 +185,8 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'Offline',
-                  icon: clipboardIcon,
-                  selectedIcon: clipboardIconSelect,
+                  icon: downloadIcon,
+                  selectedIcon: downloadIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },

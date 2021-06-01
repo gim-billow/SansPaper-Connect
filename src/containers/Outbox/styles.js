@@ -34,4 +34,12 @@ export default StyleSheet.create({
   submitted: {
     color: green,
   },
+  filterView: {
+    flexDirection: 'row',
+    marginBottom: 15,
+  },
+  filterTouch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });

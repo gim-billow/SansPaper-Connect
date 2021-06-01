@@ -6,6 +6,7 @@ import {
   getFieldsOptionsQuery,
   getAllFromOutboxQuery,
   getAllPendingFromOutboxQuery,
+  getOutboxQueryByStatus,
 } from './query';
 
 export const getLinkedItemsByid = async (linkedItemsId) => {
@@ -40,6 +41,17 @@ export const getAllFromOutbox = async () => {
     return outbox;
   } catch (e) {
     console.log('DB getAllFromOutbox Error', e);
+    return [];
+  }
+};
+
+export const getOutboxFormsByStatus = async (status) => {
+  try {
+    const result = await DB.ExecuteQuery(getOutboxQueryByStatus, status);
+    const outbox = getItemsFromResult(result);
+    return outbox;
+  } catch (e) {
+    console.log('DB getOutboxQueryByStatus Error', e);
     return [];
   }
 };

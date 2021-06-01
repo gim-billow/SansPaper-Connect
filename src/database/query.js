@@ -95,5 +95,7 @@ export const deleteOutboxByIdQuery = 'DELETE from outbox WHERE id = ?';
 
 export const getAllFromOutboxQuery = 'SELECT * from outbox';
 
+export const getOutboxQueryByStatus = 'SELECT * from outbox WHERE status = ?';
+
 export const getAllPendingFromOutboxQuery =
   'SELECT * from outbox WHERE status = draft';

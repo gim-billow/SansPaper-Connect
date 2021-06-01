@@ -513,6 +513,25 @@ function* loadOutbox() {
   });
 }
 
+function* loadOutboxByStatus({payload}) {
+  try {
+    const outboxString = yield database.getOutboxFormsByStatus({
+      status: payload,
+    });
+    const outboxItems = map(
+      (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+      outboxString,
+    );
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+      payload: outboxItems,
+    });
+  } catch (error) {
+    console.log('loadOutboxByStatus error', error);
+  }
+}
+
 function* saveAsDraft({payload}) {
   try {
     const dateNow = new Date();
@@ -577,6 +596,7 @@ export default all([
   takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX, loadOutbox),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS, loadOutboxByStatus),
   takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
   takeLatest(FORM_ACTION.DELETE_OFFLINE_FORM, deleteOfflineForm),
   takeLatest(FORM_ACTION.DELETE_OUTBOX_FORM, deleteOutboxForm),
