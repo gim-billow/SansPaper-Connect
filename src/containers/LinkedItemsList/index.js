@@ -35,6 +35,7 @@ class LinkedItemsList extends React.Component {
 
   async componentDidMount() {
     const {linkedItems = []} = this.props;
+
     const filteredOptions = R.pipe(
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
@@ -183,7 +184,7 @@ class LinkedItemsList extends React.Component {
       </ItemWrapper>
     ) : (
       <View>
-        <Text> Error: please contact support</Text>
+        <Text>Linked items are empty. Please contact support.</Text>
       </View>
     );
   }
