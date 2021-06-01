@@ -15,6 +15,7 @@ import {
 import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
+import InAppReview from 'react-native-in-app-review';
 
 import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
@@ -22,6 +23,7 @@ import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedNews} from '@selector/common';
 import styles from './styles';
 import {red} from '@styles/colors';
+import {hasAppReview, setAppReview} from '@api/user';
 
 const {width} = Dimensions.get('screen');
 class MainScreen extends React.Component {
@@ -32,6 +34,19 @@ class MainScreen extends React.Component {
   componentDidMount() {
     // force update if new version is available
     this.checkVersion();
+
+    this.appReview();
+  }
+
+  async appReview() {
+    const hasReviewed = await hasAppReview();
+    if (InAppReview.isAvailable() && !hasReviewed) {
+      const hasFlowFinishedSuccessfully = await InAppReview.RequestInAppReview();
+
+      if (hasFlowFinishedSuccessfully) {
+        setAppReview(true);
+      }
+    }
   }
 
   async checkVersion() {
