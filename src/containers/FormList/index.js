@@ -95,7 +95,7 @@ class FormList extends React.Component {
           <TouchableOpacity
             disabled
             style={styles.downloadButton}
-            onPress={() => this.downloadForm(linkedtable, id)}>
+            onPress={() => {}}>
             <Icon name="offline-pin" color={green} />
           </TouchableOpacity>
         )}
