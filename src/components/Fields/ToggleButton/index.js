@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
@@ -70,7 +70,7 @@ const ToggleButton = (props) => {
     return option === selected;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const {value} = props.item;
 
     if (value !== '' && value !== '-1') {

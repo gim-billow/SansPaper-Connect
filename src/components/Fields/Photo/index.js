@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import {Text, View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
@@ -30,6 +30,16 @@ const Photo = (props) => {
 
   const [thumbnailImage, setThumbnailImage] = useState('');
   const [title, setTitle] = useState('Add a Photo');
+
+  useEffect(() => {
+    const {value} = props.item;
+
+    if (value && value[0].path) {
+      setThumbnailImage(value[0].path);
+      setChangeTheme(true);
+      setTitle('Retake Photo');
+    }
+  }, [props.item]);
 
   function takePicture(fromCamera) {
     if (fromCamera) {

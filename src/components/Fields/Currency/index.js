@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-// import {Icon, Picker} from 'native-base';
 import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import {findIndex, propEq} from 'ramda';
 
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
@@ -12,7 +12,7 @@ import {commonStyles} from '@styles/common';
 
 class Currency extends Component {
   state = {
-    selected: [0],
+    selected: [],
     data: [
       {
         name: 'Australian Dollars',
@@ -77,6 +77,20 @@ class Currency extends Component {
     ],
   };
 
+  componentDidMount() {
+    const {value} = this.props.item;
+    const {data} = this.state;
+    const foundIndex = findIndex(propEq('value', value))(data);
+
+    if (foundIndex > -1) {
+      this.setDefaultValue(foundIndex);
+    }
+  }
+
+  setDefaultValue(index) {
+    this.setState({selected: [index]});
+  }
+
   onValueChange(value) {
     const {item, updateFieldsValue} = this.props;
     const found = this.state.data.find((cur) => cur.id === value[0]);
@@ -85,18 +99,6 @@ class Currency extends Component {
     updateFieldsValue({rank: item.rank, value: found.value});
   }
 
-  // populatePicker = (data) => {
-  //   const pickerOptions = data.sort().map((item, index) => {
-  //     return (
-  //       <Picker.Item
-  //         label={item.split(':')[1]}
-  //         value={item.split(':')[0]}
-  //         key={index.toString()}
-  //       />
-  //     );
-  //   });
-  //   return pickerOptions;
-  // };
   render() {
     const {item} = this.props;
     const {data, selected} = this.state;
