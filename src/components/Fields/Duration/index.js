@@ -14,6 +14,23 @@ class Duration extends Component {
     minutes: '',
   };
 
+  componentDidMount() {
+    const {value} = this.props.item;
+
+    if (value) {
+      this.convertWorkHours(value);
+    }
+  }
+
+  convertWorkHours(value) {
+    value = Number(value);
+    const hours = Math.floor(value / 60);
+    const minutes = value % 60;
+
+    this.hoursChangeHandler(hours + '');
+    this.minutesChangeHandler(minutes + '');
+  }
+
   hoursChangeHandler(value) {
     this.setState({hours: value});
     this.ComputeWorkHours(value, this.state.minutes);

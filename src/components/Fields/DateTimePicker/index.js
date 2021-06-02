@@ -5,14 +5,7 @@ import {Button} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Divider} from 'react-native-elements';
 
-import {
-  saveDefaultTime,
-  getDefaultTime,
-  getTime,
-  setDateTimeFormatDisplay,
-  setDateTime,
-  swapDateNum,
-} from './helper';
+import {setDateTimeFormatDisplay, setDateTime, swapDateNum} from './helper';
 import styles from './styles';
 import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
@@ -31,7 +24,6 @@ const DateTimePicker = (props) => {
   const [displayTime, setDisplayTime] = useState(new Date().getTime());
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
-  const [defaultTime, setDefaultTime] = useState('none');
 
   useEffect(() => {
     const value = props.item.value.toString();
@@ -49,27 +41,11 @@ const DateTimePicker = (props) => {
         setTimeLabel(timeFormat);
       }
 
-      const dateTime = setDateTime(dateFormat, timeFormat);
-      updateFieldsValue({rank: props.item.rank, value: dateTime});
+      setChangeDateTheme(true);
+      setChangeTimeTheme(true);
     }
   }, []);
 
-  /*
-  useEffect(() => {
-    (async () => {
-      const getDefaultTimes = await getDefaultTime();
-      const getTimes = await getTime();
-
-      setDisplayTime(Number(getTimes));
-
-      updateFieldsValue({rank: item.rank, value: Number(getTimes)});
-
-      setDefaultTime(getDefaultTimes);
-      getDefaultTimes !== 'none' ? setTimeLabel(getDefaultTimes) : '';
-      getDefaultTimes !== 'none' ? setChangeTimeTheme(true) : '';
-    })();
-  }, [item.rank, setDefaultTime, updateFieldsValue]);
-*/
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -109,29 +85,6 @@ const DateTimePicker = (props) => {
 
     updateFieldsValue({rank: item.rank, value: dateTime});
   };
-
-  // const updateDefaultTime = async () => {
-  //   if (changeTimeTheme) {
-  //     const dateTime = setDateTime(dateLabel, timeLabel);
-
-  //     await saveDefaultTime(timeLabel, dateTime.toString());
-  //     setDefaultTime(timeLabel);
-
-  //     updateFieldsValue({rank: item.rank, value: dateTime});
-  //   } else {
-  //     const currentTime = setDateTimeFormatDisplay('time', Date.now());
-  //     const currentDate = setDateTimeFormatDisplay('date', Date.now());
-  //     const dateTime = setDateTime(currentDate, currentTime);
-
-  //     await saveDefaultTime(currentTime, dateTime.toString());
-  //     setTimeLabel(currentTime);
-  //     setDefaultTime(currentTime);
-
-  //     updateFieldsValue({rank: item.rank, value: dateTime});
-  //   }
-
-  //   setChangeTimeTheme(true);
-  // };
 
   const cancelDate = () => {
     const dateFormat = setDateTimeFormatDisplay('date', Date.now());
@@ -221,26 +174,6 @@ const DateTimePicker = (props) => {
             />
           </View>
         </View>
-        {/*
-        <View style={styles.container}>
-          <View style={styles.SetDefault}>
-            <Button
-              mode="contained"
-              style={styles.buttonColor}
-              onPress={updateDefaultTime}>
-              <Text style={styles.textSet}>set default</Text>
-            </Button>
-          </View>
-          <View style={styles.textSetWrapper}>
-            <Text style={styles.textSet}>
-              - set current {props.item.label.toLowerCase()} as default
-            </Text>
-            <Text style={styles.textSet}>
-              - currently saved at {defaultTime}
-            </Text>
-          </View>
-        </View>
-        */}
       </View>
       <Divider />
     </ItemWrapper>

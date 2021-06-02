@@ -64,6 +64,10 @@ class DrawingBoard extends React.Component {
         this.setState({imageDownloaded: true});
       });
     });
+
+    if (value) {
+      this.setState({changeTheme: true, signatureSaved: true});
+    }
   }
 
   onClear = () => {

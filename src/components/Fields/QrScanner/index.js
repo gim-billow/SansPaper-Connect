@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   Modal,
@@ -19,12 +19,20 @@ import {commonStyles} from '../../../styles/common';
 import MandatoryField from '../MandatoryField';
 
 const QrScanner = (props) => {
-  const {label, rank, mandatory} = props.item;
+  const {label, rank, mandatory, value} = props.item;
   const {updateFieldsValue} = props;
   const [changeTheme, setChangeTheme] = useState(false);
   const [title, setTitle] = useState('QR Scan');
   const [modalVisible, setModalVisible] = useState(false);
   const [QrDetails, setQrDetails] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setQrDetails(value);
+      setChangeTheme(true);
+      setTitle('retake qr scan');
+    }
+  }, []);
 
   const cancel = () => {
     if (QrDetails !== '') {

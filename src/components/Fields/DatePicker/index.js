@@ -18,7 +18,7 @@ const DatePicker = (props) => {
   const [changeTheme, setChangeTheme] = useState(false);
 
   useEffect(() => {
-    const value = props.item.value.toString();
+    let value = props.item.value.toString();
     if (value) {
       if (value.includes('Date')) {
         setLabel(moment().format('D/M/YYYY'));
@@ -27,7 +27,6 @@ const DatePicker = (props) => {
       }
 
       setChangeTheme(true);
-      updateFieldsValue({rank: props.item.rank, value: Date.now()});
     }
   }, []);
 

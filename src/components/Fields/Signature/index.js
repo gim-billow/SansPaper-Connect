@@ -1,4 +1,4 @@
-import React, {useState, createRef, useRef} from 'react';
+import React, {useState, useEffect, createRef, useRef} from 'react';
 import {View, Text, Platform} from 'react-native';
 import {Divider} from 'react-native-elements';
 // import SignaturePad from 'react-native-signature-pad'; // ios
@@ -16,14 +16,23 @@ const Signature = (props) => {
   const refInputIOS = useRef();
   const {label, rank, mandatory} = props.item;
   const {updateFieldsValue} = props;
-  // const [signature, setSignature] = useState('');
+  const [iosSig, setIosSig] = useState('');
   const [signatureSaved, setSignaturesSaved] = useState(false);
-  const [show, setShow] = useState(true);
   const [changeTheme, setChangeTheme] = useState(false);
 
-  // const signaturePadError = (error) => {
-  //   console.error(error);
-  // };
+  useEffect(() => {
+    const {value} = props.item;
+
+    if (value) {
+      if (Platform.OS === 'android') {
+        // TODO: cannot test since sql storage in android has issues
+      } else if (Platform.OS === 'ios') {
+        setIosSig('data:image/png;base64,' + value);
+        setSignaturesSaved(true);
+        setChangeTheme(true);
+      }
+    }
+  }, [props.item]);
 
   const signaturePadClear = () => {
     if (Platform.OS === 'android') {
@@ -33,18 +42,10 @@ const Signature = (props) => {
     }
 
     setChangeTheme(false);
-    setShow(false);
-    setTimeout(() => {
-      setShow(true);
-    }, 0);
     updateFieldsValue({rank: rank, value: ''});
 
     setSignaturesSaved(false);
   };
-
-  // const signaturePadChange = ({base64DataUrl}) => {
-  //   setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
-  // };
 
   const signaturePadSave = () => {
     setChangeTheme(true);
@@ -125,29 +126,13 @@ const Signature = (props) => {
             <View style={styles.signature}>
               <SignatureScreen
                 ref={refInputIOS}
+                dataURL={iosSig}
                 onBegin={onBeginSign}
                 onEnd={onEndSign}
                 backgroundColor="#ffffff"
                 onOK={_onSaveEvent}
                 webStyle={iosStyle}
               />
-              {/* {show ? (
-                <SignatureScreen
-                  ref={refInputIOS}
-                  onBegin={onBeginSign}
-                  onEnd={onEndSign}
-                  backgroundColor="#ffffff"
-                  onOK={_onSaveEvent}
-                  webStyle={iosStyle}
-                />
-              ) : <SignaturePad
-                  onError={signaturePadError}
-                  onChange={signaturePadChange}
-                  style={styles.signatureColor}
-                  resizeHeight={200}
-                  resizeWidth={300}
-                />
-              null} */}
               {signatureSaved && <View style={styles.dimmedSingature} />}
             </View>
           )}
