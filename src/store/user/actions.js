@@ -7,6 +7,7 @@ export const USER_ACTIONS = {
   ERROR_SSO_USER: 'userActions/ERROR_SSO_USER',
   SAVE_USER: 'userActions/SAVE_USER',
   FORGO_PASSWORD: 'userActions/FORGOT_PASSWORD',
+  SIGN_UP_EMAIL: 'userActions/SIGN_UP_EMAIL',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -55,5 +56,10 @@ export const errorLogin = () => ({
 
 export const saveUser = (payload) => ({
   type: USER_ACTIONS.SAVE_USER,
+  payload,
+});
+
+export const signUpEmail = (payload) => ({
+  type: USER_ACTIONS.SIGN_UP_EMAIL,
   payload,
 });

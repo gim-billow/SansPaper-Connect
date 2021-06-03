@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {
   put,
   all,
@@ -24,6 +25,7 @@ import {
   saveUserEmail,
   removeUserEmail,
   forgotPassword,
+  signUpEmailUserInterest,
 } from 'api/user';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectSaveUser} from '@selector/user';
@@ -165,10 +167,28 @@ function* watchUserChangeUpdate() {
   }
 }
 
+function* signUpEmailUser({payload}) {
+  try {
+    const {email} = payload;
+
+    showActivityIndicator();
+
+    const signUpResponse = yield signUpEmailUserInterest(email);
+    if (signUpResponse.success) {
+      Alert.alert('Alert', signUpResponse.message);
+    }
+
+    dismissActivityIndicator();
+  } catch (error) {
+    dismissActivityIndicator();
+  }
+}
+
 export default all([
   takeLatest(USER_SAGA_ACTIONS.ON_USER_CHANGED, watchUserChangeUpdate),
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
   takeLatest(USER_ACTIONS.FORGO_PASSWORD, forgotPasswordUser),
+  takeLatest(USER_ACTIONS.SIGN_UP_EMAIL, signUpEmailUser),
   takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),
   takeLatest(USER_ACTIONS.APPLE_LOGIN, loginWithApple),
   takeLatest(USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, updateUserDetails),
