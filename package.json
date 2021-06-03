@@ -29,6 +29,7 @@
     "axios": "^0.21.1",
     "babel-preset-react-native": "^4.0.1",
     "immer": "^8.0.1",
+    "libphonenumber-js": "^1.9.19",
     "memoize-one": "^5.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",

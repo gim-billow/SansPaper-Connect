@@ -51,6 +51,7 @@ import {
   selectOrganistation,
   selectUpviseTemplatePath,
 } from '@selector/sanspaper';
+import {selectNetworkInfo} from '@selector/common';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectType, projectDependant} from './contants';
 import * as database from '@database';
@@ -247,6 +248,18 @@ function* preSubmitForm({payload}) {
   console.log('preSubmitForm', payload);
   try {
     yield showActivityIndicator();
+
+    // if there is no internet
+    const {isInternetReachable} = yield select(selectNetworkInfo);
+    if (!isInternetReachable) {
+      yield dismissActivityIndicator();
+      Alert.alert(
+        'Alert',
+        'Internet is not available at the moment. Please check your internet.',
+      );
+      return;
+    }
+
     yield put(updateSubmittingForm(true));
     const alertConfig = [
       {
