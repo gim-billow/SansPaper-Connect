@@ -48,6 +48,7 @@ import {
   loginWithApple,
   saveUser,
   forgotPasswordUser,
+  signUpEmail as signUpEmailUser,
 } from '@store/user';
 import {selectUserStatus, selectLoginCode} from '@selector/user';
 import {init} from '@store/common';
@@ -55,6 +56,10 @@ import {readUserEmail} from '@api/user';
 
 const forgotEmailSchema = yup.object().shape({
   forgotPassEmail: yup.string().required().email(),
+});
+
+const signUpEmailSchema = yup.object().shape({
+  signUpEmail: yup.string().required().email(),
 });
 
 const loginSchema = yup.object().shape({
@@ -94,6 +99,11 @@ class LoginScreen extends React.Component {
     showAlert: false,
     remember: false,
     forgotPassOverlay: false,
+
+    // sign up
+    signUpEmail: '',
+    signupOverlay: false,
+    errorSignUpEmail: '',
   };
 
   keyboardDidShowListener;
@@ -220,6 +230,35 @@ class LoginScreen extends React.Component {
     }
   };
 
+  onChangeSignUpEmail = (email) => {
+    this.setState({signUpEmail: email});
+  };
+
+  onSignUpEmailPress = async () => {
+    const {signUpEmail, errorSignUpEmail} = this.state;
+
+    if (errorSignUpEmail) {
+      this.setState({errorSignUpEmail: ''});
+    }
+
+    try {
+      await signUpEmailSchema.validate({signUpEmail});
+      Keyboard.dismiss();
+      this.props.signUpEmailUser({email: signUpEmail});
+      this.setState({errorSignUpEmail: '', signupOverlay: false});
+    } catch (e) {
+      let errorMessage = '';
+      if (e && e.message.includes('signUpEmail')) {
+        if (signUpEmail) {
+          errorMessage = 'Input must be a valid email address';
+        } else {
+          errorMessage = 'Email address is a required field';
+        }
+        this.setState({errorSignUpEmail: errorMessage});
+      }
+    }
+  };
+
   alertLogin = (message, action) =>
     Alert.alert(
       'Login Error',
@@ -252,6 +291,14 @@ class LoginScreen extends React.Component {
     });
   };
 
+  onToggleSignUpOverlay = () => {
+    this.setState({
+      signupOverlay: !this.state.signupOverlay,
+      signUpEmail: '',
+      errorSignUpEmail: '',
+    });
+  };
+
   render() {
     const {
       errorUser,
@@ -264,6 +311,9 @@ class LoginScreen extends React.Component {
       remember,
       forgotPassOverlay,
       forgotPassEmail,
+      signupOverlay,
+      signUpEmail,
+      errorSignUpEmail,
     } = this.state;
     const {mainLogo, horizontalLogo} = CommonImages;
     const {
@@ -341,13 +391,15 @@ class LoginScreen extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          {/*
+
           <View style={styles.connect}>
             <Divider style={{flex: 1}} />
-            <Text style={styles.connectText}>OR</Text>
+            <TouchableOpacity onPress={this.onToggleSignUpOverlay}>
+              <Text style={styles.connectText}>Interested in signing up?</Text>
+            </TouchableOpacity>
             <Divider style={{flex: 1}} />
           </View>
-          <View style={styles.new_submitBtn}>
+          {/*<View style={styles.new_submitBtn}>
             <Button
               title="Login with Google"
               raised
@@ -403,6 +455,8 @@ class LoginScreen extends React.Component {
             </View>
           ) : null} */}
         </KeyboardAvoidingView>
+
+        {/* FORGOT PASSWORD */}
         <Overlay
           animationType="fade"
           overlayStyle={styles.overlay}
@@ -438,6 +492,43 @@ class LoginScreen extends React.Component {
             titleStyle={styles.closeTxtOverlay}
           />
         </Overlay>
+
+        {/* SIGN UP */}
+        <Overlay
+          animationType="fade"
+          overlayStyle={styles.overlay}
+          backdropStyle={styles.backdrop}
+          isVisible={signupOverlay}
+          onBackdropPress={this.onToggleSignUpOverlay}>
+          <View style={styles.overlayHeader}>
+            <View style={styles.overlayHeaderText}>
+              <RNEText h4>Request Invitation</RNEText>
+              <Text style={styles.overlaySubText}>
+                Enter your email below to request invitation from the team.
+              </Text>
+            </View>
+          </View>
+          <Input
+            placeholder="Enter email address"
+            leftIcon={
+              <Icon name="envelope" {...iconProps} style={{width: 20}} />
+            }
+            inputContainerStyle={
+              !errorSignUpEmail ? styles.inputContainer : styles.error
+            }
+            autoCapitalize="none"
+            value={signUpEmail}
+            errorMessage={errorSignUpEmail}
+            onChangeText={this.onChangeSignUpEmail}
+            errorStyle={!errorSignUpEmail ? styles.errorView : undefined}
+          />
+          <Button
+            title="Send Email"
+            onPress={this.onSignUpEmailPress}
+            buttonStyle={styles.closeBtnOverlay}
+            titleStyle={styles.closeTxtOverlay}
+          />
+        </Overlay>
       </>
     );
   }
@@ -456,4 +547,5 @@ export default connect(mapState, {
   loginWithApple,
   saveUser,
   forgotPasswordUser,
+  signUpEmailUser,
 })(LoginScreen);

@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import {lightGrey, lightRed, darkGrey, red, blue} from '@styles/colors';
-import {small} from '@styles/font';
+import {regular} from '@styles/font';
 
 const {width} = Dimensions.get('screen');
 
@@ -29,7 +29,7 @@ export default StyleSheet.create({
     marginVertical: 20,
   },
   connectText: {
-    fontSize: small,
+    fontSize: regular,
     color: darkGrey,
     marginHorizontal: 10,
   },

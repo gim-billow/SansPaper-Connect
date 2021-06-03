@@ -102,6 +102,27 @@ export const forgotPassword = async (email) => {
   }
 };
 
+export const signUpEmailUserInterest = async (email) => {
+  try {
+    const newOptions = {
+      method: 'POST',
+      url:
+        'https://us-central1-billow-software.cloudfunctions.net/EmailsFunctions-sendInterestEmail',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        email,
+      },
+    };
+
+    const response = await axios(newOptions);
+    return response.data;
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const hasAppReview = async () => {
   try {
     const review = await AsyncStorage.getItem('appReview');
