@@ -10,11 +10,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  Alert,
 } from 'react-native';
 import {
   Button,
-  Divider,
   Input,
   CheckBox,
   Overlay,
@@ -27,7 +25,6 @@ import * as yup from 'yup';
 
 //styles
 import styles, {iconProps} from './styles';
-import {errorStyle} from 'styles/common';
 import {lightRed, red} from 'styles/colors';
 
 //constants
@@ -220,23 +217,6 @@ class LoginScreen extends React.Component {
     }
   };
 
-  alertLogin = (message, action) =>
-    Alert.alert(
-      'Login Error',
-      message,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.props.resetLoginCode();
-            this.setState({showAlert: false});
-          },
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-
   onChangeRememberMe = (e) => {
     const {saveUser: saveUserEmail} = this.props;
 
@@ -257,33 +237,13 @@ class LoginScreen extends React.Component {
       errorUser,
       errorPass,
       errorForgotPassEmail,
-      changeLogo,
       username,
       password,
-      showAlert,
       remember,
       forgotPassOverlay,
       forgotPassEmail,
     } = this.state;
-    const {mainLogo, horizontalLogo} = CommonImages;
-    const {
-      loginCode,
-      loginWithGoogle: googleAuthLogin,
-      loginWithApple: appleLogin,
-    } = this.props;
-
-    if (loginCode && loginCode === 'sso/error-login' && !showAlert) {
-      this.setState({showAlert: true});
-      this.alertLogin('Register to Platform Hub and join an organisation.');
-    } else if (
-      loginCode &&
-      (loginCode === 'auth/wrong-password' ||
-        loginCode === 'auth/user-not-found') &&
-      !showAlert
-    ) {
-      this.setState({showAlert: true});
-      this.alertLogin('Username or Password incorrect');
-    }
+    const {mainLogo} = CommonImages;
 
     return (
       <>
