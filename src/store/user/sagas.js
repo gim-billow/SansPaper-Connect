@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {
   put,
   all,
@@ -46,9 +47,27 @@ function* loginUser({payload}) {
 
     dismissActivityIndicator();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
-  } catch (error) {
-    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
-    console.log('loginUser error', error.code);
+  } catch (e) {
+    const saveUser = yield select(selectSaveUser);
+
+    if (saveUser) {
+      yield saveUserEmail({...payload, saveUser});
+    } else {
+      yield removeUserEmail();
+    }
+
+    if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+      Alert.alert('Login Error', 'Username or password incorrect.');
+    } else if (e.code === 'auth/too-many-requests') {
+      Alert.alert(
+        'Login Error',
+        'Login too many request. Kindly change your password or wait for some time to login again.',
+      );
+    } else {
+      Alert.alert('Error', 'Something went wrong.');
+    }
+
+    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
     dismissActivityIndicator();
   }
 }
@@ -117,18 +136,20 @@ function* logoutUser({payload}) {
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: loginCode});
 
-    const isSignedIn = yield GoogleSignin.isSignedIn();
+    // const isSignedIn = yield GoogleSignin.isSignedIn();
 
-    if (isSignedIn) {
-      yield GoogleSignin.revokeAccess();
-      yield GoogleSignin.signOut();
-      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
-      yield put({
-        type: USER_ACTIONS.ERROR_SSO_USER,
-      });
-    } else {
-      yield auth().signOut();
-    }
+    // if (isSignedIn) {
+    //   yield GoogleSignin.revokeAccess();
+    //   yield GoogleSignin.signOut();
+    //   yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+    //   yield put({
+    //     type: USER_ACTIONS.ERROR_SSO_USER,
+    //   });
+    // } else {
+    //   yield auth().signOut();
+    // }
+
+    yield auth().signOut();
   } catch (error) {
     console.log('userlogout saga error: ', error);
   }
