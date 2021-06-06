@@ -10,15 +10,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  Alert,
 } from 'react-native';
 import {
   Button,
-  Divider,
   Input,
   CheckBox,
   Overlay,
   Text as RNEText,
+  Divider,
 } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {createStructuredSelector} from 'reselect';
@@ -27,7 +26,6 @@ import * as yup from 'yup';
 
 //styles
 import styles, {iconProps} from './styles';
-import {errorStyle} from 'styles/common';
 import {lightRed, red} from 'styles/colors';
 
 //constants
@@ -44,7 +42,6 @@ import {capitalize} from '@util/string';
 import {
   loginUser,
   loginWithGoogle,
-  resetLoginCode,
   loginWithApple,
   saveUser,
   forgotPasswordUser,
@@ -207,6 +204,7 @@ class LoginScreen extends React.Component {
 
   onForgotPasswordPress = async () => {
     const {forgotPassEmail, errorForgotPassEmail} = this.state;
+    const {forgotPasswordUser} = this.props;
 
     if (errorForgotPassEmail) {
       this.setState({errorForgotPassEmail: ''});
@@ -215,7 +213,9 @@ class LoginScreen extends React.Component {
     try {
       await forgotEmailSchema.validate({forgotPassEmail});
       Keyboard.dismiss();
-      this.props.forgotPasswordUser({email: forgotPassEmail});
+
+      forgotPasswordUser({email: forgotPassEmail});
+
       this.setState({errorForgotPassEmail: '', forgotPassOverlay: false});
     } catch (e) {
       let errorMessage = '';
@@ -259,23 +259,6 @@ class LoginScreen extends React.Component {
     }
   };
 
-  alertLogin = (message, action) =>
-    Alert.alert(
-      'Login Error',
-      message,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.props.resetLoginCode();
-            this.setState({showAlert: false});
-          },
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-
   onChangeRememberMe = (e) => {
     const {saveUser: saveUserEmail} = this.props;
 
@@ -304,10 +287,8 @@ class LoginScreen extends React.Component {
       errorUser,
       errorPass,
       errorForgotPassEmail,
-      changeLogo,
       username,
       password,
-      showAlert,
       remember,
       forgotPassOverlay,
       forgotPassEmail,
@@ -315,25 +296,8 @@ class LoginScreen extends React.Component {
       signUpEmail,
       errorSignUpEmail,
     } = this.state;
-    const {mainLogo, horizontalLogo} = CommonImages;
-    const {
-      loginCode,
-      loginWithGoogle: googleAuthLogin,
-      loginWithApple: appleLogin,
-    } = this.props;
-
-    if (loginCode && loginCode === 'sso/error-login' && !showAlert) {
-      this.setState({showAlert: true});
-      this.alertLogin('Register to Platform Hub and join an organisation.');
-    } else if (
-      loginCode &&
-      (loginCode === 'auth/wrong-password' ||
-        loginCode === 'auth/user-not-found') &&
-      !showAlert
-    ) {
-      this.setState({showAlert: true});
-      this.alertLogin('Username or Password incorrect');
-    }
+    const {mainLogo} = CommonImages;
+    const {loginCode} = this.props;
 
     return (
       <>
@@ -374,6 +338,7 @@ class LoginScreen extends React.Component {
               raised
               buttonStyle={styles.new_submitBtnStyle}
               onPress={this.onLoginPress}
+              disabled={loginCode === 'locked'}
             />
             <View style={styles.helperContainer}>
               <CheckBox
@@ -542,7 +507,6 @@ const mapState = createStructuredSelector({
 export default connect(mapState, {
   loginUser,
   init,
-  resetLoginCode,
   loginWithGoogle,
   loginWithApple,
   saveUser,

@@ -17,6 +17,7 @@ import {
   USER_SAGA_ACTIONS,
   USER_REDUCER_ACTIONS,
   logoutUser as onLogoutUser,
+  resetLoginCode,
 } from './actions';
 import {
   login,
@@ -48,9 +49,29 @@ function* loginUser({payload}) {
 
     dismissActivityIndicator();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
-  } catch (error) {
-    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: error.code});
-    console.log('loginUser error', error.code);
+  } catch (e) {
+    const saveUser = yield select(selectSaveUser);
+
+    if (saveUser) {
+      yield saveUserEmail({...payload, saveUser});
+    } else {
+      yield removeUserEmail();
+    }
+
+    if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+      Alert.alert('', 'Username or password incorrect.');
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
+    } else if (e.code === 'auth/too-many-requests') {
+      Alert.alert(
+        '',
+        'Too many failed attempts. Account is locked and require to change your password.',
+      );
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'locked'});
+    } else {
+      Alert.alert('', 'Something went wrong.');
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
+    }
+
     dismissActivityIndicator();
   }
 }
@@ -119,18 +140,20 @@ function* logoutUser({payload}) {
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: loginCode});
 
-    const isSignedIn = yield GoogleSignin.isSignedIn();
+    // const isSignedIn = yield GoogleSignin.isSignedIn();
 
-    if (isSignedIn) {
-      yield GoogleSignin.revokeAccess();
-      yield GoogleSignin.signOut();
-      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
-      yield put({
-        type: USER_ACTIONS.ERROR_SSO_USER,
-      });
-    } else {
-      yield auth().signOut();
-    }
+    // if (isSignedIn) {
+    //   yield GoogleSignin.revokeAccess();
+    //   yield GoogleSignin.signOut();
+    //   yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+    //   yield put({
+    //     type: USER_ACTIONS.ERROR_SSO_USER,
+    //   });
+    // } else {
+    //   yield auth().signOut();
+    // }
+
+    yield auth().signOut();
   } catch (error) {
     console.log('userlogout saga error: ', error);
   }
@@ -158,6 +181,7 @@ function* watchUserChangeUpdate() {
 
       if (passchange) {
         yield put(onLogoutUser());
+        yield put(resetLoginCode());
       }
     }
   } finally {
