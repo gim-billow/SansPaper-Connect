@@ -17,6 +17,7 @@ import {
   USER_SAGA_ACTIONS,
   USER_REDUCER_ACTIONS,
   logoutUser as onLogoutUser,
+  resetLoginCode,
 } from './actions';
 import {
   login,
@@ -57,17 +58,19 @@ function* loginUser({payload}) {
     }
 
     if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
-      Alert.alert('Login Error', 'Username or password incorrect.');
+      Alert.alert('', 'Username or password incorrect.');
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
     } else if (e.code === 'auth/too-many-requests') {
       Alert.alert(
-        'Login Error',
-        'Login too many request. Kindly change your password or wait for some time to login again.',
+        '',
+        'Too many failed attempts. Account is locked and require to change your password.',
       );
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'locked'});
     } else {
-      Alert.alert('Error', 'Something went wrong.');
+      Alert.alert('', 'Something went wrong.');
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
     }
 
-    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
     dismissActivityIndicator();
   }
 }
@@ -177,6 +180,7 @@ function* watchUserChangeUpdate() {
 
       if (passchange) {
         yield put(onLogoutUser());
+        yield put(resetLoginCode());
       }
     }
   } finally {

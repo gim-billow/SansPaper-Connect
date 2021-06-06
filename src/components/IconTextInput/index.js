@@ -5,32 +5,6 @@ import {lightGrey, darkGrey, red} from 'styles/colors';
 import {spaceRegular} from 'styles/space';
 import {Input} from 'react-native-elements';
 
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: spaceRegular,
-  },
-  inputContainer: {
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: lightGrey,
-    paddingHorizontal: 10,
-  },
-  text: {
-    paddingHorizontal: 5,
-    color: darkGrey,
-  },
-  error: {
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: red,
-    paddingHorizontal: 10,
-  },
-  errorView: {
-    flex: 1,
-    marginBottom: 1,
-  },
-});
-
 const IconTextInput = ({secureTextEntry = false, ...props}) => {
   const {
     onChangeText,
@@ -64,5 +38,35 @@ const IconTextInput = ({secureTextEntry = false, ...props}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: spaceRegular,
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: lightGrey,
+    paddingHorizontal: 10,
+  },
+  text: {
+    paddingHorizontal: 5,
+    color: darkGrey,
+  },
+  error: {
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: red,
+    paddingHorizontal: 10,
+  },
+  errorView: {
+    flex: 1,
+    marginBottom: 1,
+  },
+  disable: {
+    backgroundColor: lightGrey,
+    borderRadius: 10,
+  },
+});
 
 export default IconTextInput;

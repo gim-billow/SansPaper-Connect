@@ -41,7 +41,6 @@ import {capitalize} from '@util/string';
 import {
   loginUser,
   loginWithGoogle,
-  resetLoginCode,
   loginWithApple,
   saveUser,
   forgotPasswordUser,
@@ -194,6 +193,7 @@ class LoginScreen extends React.Component {
 
   onForgotPasswordPress = async () => {
     const {forgotPassEmail, errorForgotPassEmail} = this.state;
+    const {forgotPasswordUser} = this.props;
 
     if (errorForgotPassEmail) {
       this.setState({errorForgotPassEmail: ''});
@@ -202,7 +202,9 @@ class LoginScreen extends React.Component {
     try {
       await forgotEmailSchema.validate({forgotPassEmail});
       Keyboard.dismiss();
-      this.props.forgotPasswordUser({email: forgotPassEmail});
+
+      forgotPasswordUser({email: forgotPassEmail});
+
       this.setState({errorForgotPassEmail: '', forgotPassOverlay: false});
     } catch (e) {
       let errorMessage = '';
@@ -244,6 +246,7 @@ class LoginScreen extends React.Component {
       forgotPassEmail,
     } = this.state;
     const {mainLogo} = CommonImages;
+    const {loginCode} = this.props;
 
     return (
       <>
@@ -284,6 +287,7 @@ class LoginScreen extends React.Component {
               raised
               buttonStyle={styles.new_submitBtnStyle}
               onPress={this.onLoginPress}
+              disabled={loginCode === 'locked'}
             />
             <View style={styles.helperContainer}>
               <CheckBox
@@ -411,7 +415,6 @@ const mapState = createStructuredSelector({
 export default connect(mapState, {
   loginUser,
   init,
-  resetLoginCode,
   loginWithGoogle,
   loginWithApple,
   saveUser,
