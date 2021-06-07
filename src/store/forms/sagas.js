@@ -382,7 +382,7 @@ function* preSubmitForm({payload}) {
 function* syncOfflineForm({payload = {}}) {
   try {
     yield showActivityIndicator('Downloading....');
-    const {linkedTable, formId} = payload;
+    const {linkedTable, formId, dlFirst = false} = payload;
     const dateNow = new Date();
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
@@ -473,6 +473,16 @@ function* syncOfflineForm({payload = {}}) {
         }
       }
     }
+
+    if (dlFirst) {
+      yield saveAsDraft({
+        payload: {
+          offline: false,
+          status: 'draft',
+        },
+      });
+    }
+
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
     dismissActivityIndicator();
     //console.log('linkedItem', JSON.stringify(linkedItem));
@@ -571,7 +581,7 @@ function* saveAsDraft({payload}) {
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
     if (status === 'draft') {
-      yield Alert.alert('Alert', 'Draft saved to outbox');
+      yield Alert.alert('', 'Form saved to outbox');
     }
   } catch (error) {
     console.log('saveAsDraft error', error);

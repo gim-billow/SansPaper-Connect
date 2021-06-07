@@ -78,7 +78,13 @@ export const showMainScreen = async () => {
   );
   const bookOpenIcon = await Feather.getImageSource('book-open', 25);
   const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
-  const downloadIcon = await FontAwesome5.getImageSource('download', 25);
+  const downloadIcon = await FontAwesome5.getImageSource('hdd', 25);
+  const downloadIconSelect = await FontAwesome5.getImageSource(
+    'hdd',
+    25,
+    red,
+    FA5Style.solid,
+  );
 
   return Navigation.setRoot({
     root: {
@@ -184,9 +190,9 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Offline',
+                  text: 'Outbox',
                   icon: downloadIcon,
-                  selectedIcon: downloadIcon,
+                  selectedIcon: downloadIconSelect,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
