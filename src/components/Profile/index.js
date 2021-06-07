@@ -19,6 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MailIcon from './SvgIcon/MailIcon';
 import LogoutIcon from './SvgIcon/LogoutIcon';
 import UpdatedIcon from './SvgIcon/UpdatedIcon';
+import PrivacyPolicyIcon from './SvgIcon/PrivacyPolicyIcon';
 
 //redux
 import {connect} from 'react-redux';
@@ -156,6 +157,21 @@ class Profile extends Component {
             />
           </View>
           <Divider />
+          {/* Privacy Policy */}
+          <View style={styles.listContainer}>
+            <List.Item
+              onPress={() => Linking.openURL('https://sanspaper.com/privacy-policy/')}
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Privacy and Policy"
+              description={privacy}
+              left={() => (
+                <View style={styles.listIcon}>
+                  <PrivacyPolicyIcon width={30} height={40} color="green" />
+                </View>
+              )}
+            />
+          </View>
         </View>
 
         {/* <Modal
