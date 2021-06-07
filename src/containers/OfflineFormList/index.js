@@ -31,14 +31,14 @@ class OfflineFormList extends React.Component {
     const {
       goToOfflineLinkedItemScreen,
       updateOfflineCurrentFormId,
-      goToFormFieldsScreen,
+      goToOfflineFormFieldsScreen,
     } = this.props;
 
     updateOfflineCurrentFormId(form_id);
     if (linked_table && linked_table !== '') {
       goToOfflineLinkedItemScreen({linkedTable: linked_table});
     } else {
-      goToFormFieldsScreen({componentId: screens.FormScreen});
+      goToOfflineFormFieldsScreen({componentId: screens.FormScreen});
     }
   };
 

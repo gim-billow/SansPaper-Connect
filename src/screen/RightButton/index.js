@@ -4,20 +4,38 @@ import {TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
+import {findIndex, propEq} from 'ramda';
 
 import {
   selectIsSubmittingForm,
   selectSubmittingForm,
   selectIsDraftForm,
+  selectOfflineFormList,
+  selectCurrentFormId,
+  selectCurrentForm,
 } from 'selector/form';
 import {selectNetworkInfo} from '@selector/common';
 
-import {submitForm, saveAsDraft} from '@store/forms';
+import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
 import styles from './styles';
 
 class RightButton extends React.Component {
   handleOnPress = () => {
-    const {offline, submitForm, saveAsDraft, isDraftForm, netInfo} = this.props;
+    const {
+      formId,
+      offline,
+      submitForm,
+      saveAsDraft,
+      isDraftForm,
+      netInfo,
+      offlineForms,
+      syncOfflineForm,
+      currentForm,
+    } = this.props;
+
+    // check if the current form is already synced offline
+    const offlineFormIndex = findIndex(propEq('id', formId))(offlineForms);
+
     const options = netInfo.isInternetReachable
       ? ['Submit', isDraftForm ? 'Update draft' : 'Save as draft', 'Cancel']
       : [isDraftForm ? 'Update draft' : 'Save as draft', 'Cancel'];
@@ -34,10 +52,20 @@ class RightButton extends React.Component {
           case 0:
             // since submit button is hidden, it will run the saveAsDraft
             if (!netInfo.isInternetReachable) {
-              saveAsDraft({
-                offline,
-                status: 'draft',
-              });
+              // download first b4 submitting the form
+              if (offlineFormIndex === -1) {
+                syncOfflineForm({
+                  linkedTable: currentForm.linkedtable,
+                  formId: currentForm.id,
+                  dlFirst: true,
+                });
+              } else {
+                saveAsDraft({
+                  offline,
+                  status: 'draft',
+                });
+              }
+
               return;
             }
 
@@ -46,6 +74,16 @@ class RightButton extends React.Component {
           case 1:
             // if not internet, just do nothing
             if (!netInfo.isInternetReachable) {
+              return;
+            }
+
+            // download first b4 submitting the form
+            if (offlineFormIndex === -1) {
+              syncOfflineForm({
+                linkedTable: currentForm.linkedtable,
+                formId: currentForm.id,
+                dlFirst: true,
+              });
               return;
             }
 
@@ -82,9 +120,13 @@ const mapState = createStructuredSelector({
   submittingForm: selectSubmittingForm,
   netInfo: selectNetworkInfo,
   isDraftForm: selectIsDraftForm,
+  offlineForms: selectOfflineFormList,
+  formId: selectCurrentFormId,
+  currentForm: selectCurrentForm,
 });
 
 export default connect(mapState, {
   submitForm,
   saveAsDraft,
+  syncOfflineForm,
 })(connectActionSheet(RightButton));

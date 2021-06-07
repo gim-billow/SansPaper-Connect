@@ -117,7 +117,8 @@ function* goToOfflineLinkedItemScreen({payload = {}}) {
     });
 
     const offlineLinkedItemPayload = {
-      componentId: screens.OfflineFormScreen,
+      // componentId: screens.OfflineFormScreen,
+      componentId: screens.FormScreen,
       passProps: {
         linkedItemName,
       },
@@ -202,6 +203,7 @@ function* goToDraftFormFieldsScreen({payload}) {
     console.log('headerData', headerData);
     dismissActivityIndicator();
     pushToOfflineFormFieldsScreen({
+      componentId: screens.OfflineFormScreen,
       headerData,
     });
   } catch (error) {

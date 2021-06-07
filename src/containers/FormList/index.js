@@ -62,7 +62,10 @@ class FormList extends React.Component {
   };
 
   downloadForm = (linked_table, form_id) => {
-    this.props.syncOfflineForm({linkedTable: linked_table, formId: form_id});
+    this.props.syncOfflineForm({
+      linkedTable: linked_table,
+      formId: form_id,
+    });
   };
 
   getFilteredFormlist = memoize((formList, searchKeyword) => {
