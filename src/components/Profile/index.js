@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {Text, View, Alert, Modal, TextInput, ScrollView, Linking} from 'react-native';
+import {
+  Text,
+  View,
+  Alert,
+  Modal,
+  TextInput,
+  ScrollView,
+  Linking,
+} from 'react-native';
 import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
@@ -142,6 +150,23 @@ class Profile extends Component {
             />
           </View>
           <Divider />
+          {/* Privacy Policy */}
+          <View style={styles.listContainer}>
+            <List.Item
+              onPress={() =>
+                Linking.openURL('https://sanspaper.com/privacy-policy/')
+              }
+              style={styles.list}
+              titleStyle={styles.title}
+              title="Privacy and Policy"
+              left={() => (
+                <View style={styles.listIcon}>
+                  <PrivacyPolicyIcon width={30} height={40} color="green" />
+                </View>
+              )}
+            />
+          </View>
+          <Divider />
           {/* logout */}
           <View style={styles.listContainer}>
             <List.Item
@@ -157,20 +182,6 @@ class Profile extends Component {
             />
           </View>
           <Divider />
-          {/* Privacy Policy */}
-          <View style={styles.listContainer}>
-            <List.Item
-              onPress={() => Linking.openURL('https://sanspaper.com/privacy-policy/')}
-              style={styles.list}
-              titleStyle={styles.title}
-              title="Privacy and Policy"
-              left={() => (
-                <View style={styles.listIcon}>
-                  <PrivacyPolicyIcon width={30} height={40} color="green" />
-                </View>
-              )}
-            />
-          </View>
         </View>
 
         {/* <Modal
