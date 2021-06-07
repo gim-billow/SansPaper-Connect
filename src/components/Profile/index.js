@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Alert, Modal, TextInput, ScrollView} from 'react-native';
+import {Text, View, Alert, Modal, TextInput, ScrollView, Linking} from 'react-native';
 import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
@@ -164,7 +164,6 @@ class Profile extends Component {
               style={styles.list}
               titleStyle={styles.title}
               title="Privacy and Policy"
-              description={privacy}
               left={() => (
                 <View style={styles.listIcon}>
                   <PrivacyPolicyIcon width={30} height={40} color="green" />
