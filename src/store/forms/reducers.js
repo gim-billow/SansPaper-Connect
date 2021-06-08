@@ -99,9 +99,23 @@ export default (state = INIT_STATE, action) => {
         draftState.submittingForm = action.payload;
       });
     }
+    case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM: {
+      return produce(state, (draftState) => {
+        draftState.currentForm = {
+          fields: [],
+        };
+        draftState.currentFormId = '';
+      });
+    }
     case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS: {
       return produce(state, (draftState) => {
         draftState.currentForm.fields = [];
+      });
+    }
+    case FORM_REDUCER_ACTIONS.RESET_CURRENT_OFFLINE_FORM: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm = {};
+        draftState.offlineCurrentFormId = '';
       });
     }
     default:

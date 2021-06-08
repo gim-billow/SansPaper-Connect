@@ -134,28 +134,48 @@ function* goToOfflineLinkedItemScreen({payload = {}}) {
 function* goToOfflineFormFieldsScreen({payload = {}}) {
   try {
     showActivityIndicator();
-    const {componentId} = payload;
+    const {componentId, linkedItemId, formId} = payload;
     const offlineCurrentForm = yield select(selectOfflineCurrentForm);
     const currentLinkedItems = yield select(selectOfflineCurrentLinkedItems);
+    const offlineFormList = yield select(selectOfflineFormList);
     const {name, linkedid} = offlineCurrentForm;
-    let subForm;
-    if (linkedid) {
+    let subForm, currentForm, title, subTitle;
+
+    // FIXME:
+    if (formId) {
+      currentForm = R.find(R.propEq('id', formId))(offlineFormList);
+      yield put({
+        type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
+        // payload: {...formsData.value, draftId: draftId},
+        payload: currentForm,
+      });
+
+      title = currentForm.name;
+      subTitle = '';
+    }
+
+    // if (linkedid) {
+    if (linkedItemId) {
       let linkedId = null;
 
-      if (Array.isArray(linkedid)) {
-        linkedId = linkedid[0];
+      if (Array.isArray(linkedItemId)) {
+        linkedId = linkedItemId[0];
       } else {
-        linkedId = linkedid;
+        linkedId = linkedItemId;
       }
 
+      title = name;
       subForm = R.find(R.propEq('id', linkedId))(currentLinkedItems);
+      subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
     }
-    const subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
+
     const headerData = {
-      title: name,
+      title,
       subTitle,
     };
+
     dismissActivityIndicator();
+
     pushToOfflineFormFieldsScreen({
       componentId,
       headerData,

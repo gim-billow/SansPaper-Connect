@@ -219,16 +219,16 @@ async function submitForm(form) {
           if (isSubmitted) {
             dismissActivityIndicator();
             Navigation.popToRoot(screens.FormScreen);
-            Alert.alert('Alert', 'Form submitted and saved to outbox');
+            Alert.alert('', 'Form submitted and saved to outbox');
           } else {
             dismissActivityIndicator();
-            Alert.alert('Alert', 'Form not submitted');
+            Alert.alert('', 'Form not submitted');
           }
         },
         (error) => {
           dismissActivityIndicator();
           Alert.alert(
-            'Alert',
+            '',
             'Unable to retrieve your current location, please check if GPS is turn on and try again, form not submitted',
           );
         },
@@ -236,11 +236,11 @@ async function submitForm(form) {
       );
     } else {
       dismissActivityIndicator();
-      Alert.alert('Alert', 'Location Permission Error: Form not submitted');
+      Alert.alert('', 'Location Permission Error: Form not submitted');
     }
   } catch (error) {
     dismissActivityIndicator();
-    Alert.alert('Alert', 'Error submitting form, please contact support');
+    Alert.alert('', 'Error submitting form, please contact support');
   }
 }
 
@@ -254,7 +254,7 @@ function* preSubmitForm({payload}) {
     if (!isInternetReachable) {
       yield dismissActivityIndicator();
       Alert.alert(
-        'Alert',
+        '',
         'Internet is not available at the moment. Please check your internet.',
       );
       return;
@@ -580,8 +580,10 @@ function* saveAsDraft({payload}) {
     yield database.InsertToOutbox(dbPayload);
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
+    Navigation.popToRoot(screens.FormScreen);
+
     if (status === 'draft') {
-      yield Alert.alert('', 'Form saved to outbox');
+      yield Alert.alert('', 'Form saved');
     }
   } catch (error) {
     console.log('saveAsDraft error', error);
