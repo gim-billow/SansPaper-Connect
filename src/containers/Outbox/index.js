@@ -6,6 +6,7 @@ import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
+import {Navigation} from 'react-native-navigation';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
@@ -79,7 +80,7 @@ class Outbox extends React.Component {
 
   onDeleteAlert = (id) =>
     Alert.alert(
-      'Delete Form',
+      '',
       'Are you sure you want to delete the form?',
       [
         {

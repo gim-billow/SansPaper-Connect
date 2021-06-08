@@ -16,6 +16,8 @@ import Fields from 'components/Fields';
 import {
   updateOfflineFormFieldValue,
   resetCurrentFormDetails,
+  resetCurrentOfflineForm,
+  resetCurrentForm,
 } from 'store/forms';
 import {
   selectOfflineCurrentFormId,
@@ -36,6 +38,10 @@ class FormFieldsList extends React.Component {
     fieldsValue: {},
   };
 
+  componentDidMount() {
+    this.props.resetCurrentForm();
+  }
+
   componentDidUpdate(prevProps) {
     const {submitTriggered, scrollToMandatory} = this.props;
     if (prevProps.submitTriggered !== submitTriggered && scrollToMandatory) {
@@ -46,7 +52,7 @@ class FormFieldsList extends React.Component {
   }
 
   componentWillUnmount() {
-    //this.props.resetCurrentFormDetails();
+    this.props.resetCurrentOfflineForm();
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -139,4 +145,6 @@ export default connect(mapState, {
   updateOfflineFormFieldValue,
   resetCurrentFormDetails,
   goToGoogleMapScreen,
+  resetCurrentOfflineForm,
+  resetCurrentForm,
 })(FormFieldsList);
