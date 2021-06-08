@@ -199,12 +199,9 @@ android {
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    // implementation project(':react-native-vector-icons')
-    // implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation project(':react-native-sqlite-storage')
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-
     implementation(project(':react-native-maps')) {
        exclude group: 'com.google.android.gms', module: 'play-services-base'
        exclude group: 'com.google.android.gms', module: 'play-services-maps'
@@ -213,7 +210,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-base:17.2.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-    compile project(':reactnativesignaturecapture')
+    implementation project(':reactnativesignaturecapture')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
