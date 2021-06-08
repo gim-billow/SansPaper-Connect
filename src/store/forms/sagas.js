@@ -284,6 +284,22 @@ function* preSubmitForm({payload}) {
       );
       startAndFinishDateTime = yield select(selectStartAndFinishDate);
     }
+
+    /**
+     * convert value object to string and get the new value string
+     */
+    form = {...form};
+    const newFormFields = [...form.fields];
+    const newFields = newFormFields.map((field) => {
+      if (field.type === 'drawing') {
+        const newField = {...field, value: ''};
+        newField.value = field.value.newValue || '';
+        field = {...newField};
+      }
+      return field;
+    });
+    form.fields = newFields;
+
     let dateTimeError = '';
     const {
       mandatoryError,
@@ -298,7 +314,7 @@ function* preSubmitForm({payload}) {
       yield put(updateSubmitTriggered());
       yield put(updateScrollToMandatory(scrollToIndex));
 
-      yield Alert.alert('Alert', mandatoryError, alertConfig, {
+      yield Alert.alert('', mandatoryError, alertConfig, {
         cancelable: false,
       });
     } else {
@@ -325,7 +341,7 @@ function* preSubmitForm({payload}) {
         dismissActivityIndicator();
         yield put(updateSubmitTriggered());
         yield put(updateScrollToMandatory(scrollToIndex));
-        yield Alert.alert('Alert', dateTimeErrorMessage, alertConfig, {
+        yield Alert.alert('', dateTimeErrorMessage, alertConfig, {
           cancelable: false,
         });
       } else if (dateTimeError === 'hoursExceededError') {
@@ -333,7 +349,7 @@ function* preSubmitForm({payload}) {
         yield put(updateSubmitTriggered());
         yield put(updateScrollToMandatory(scrollToIndex));
         yield Alert.alert(
-          'Alert',
+          '',
           hoursExceededError,
           [
             {
@@ -374,6 +390,9 @@ function* preSubmitForm({payload}) {
         status: 'draft',
       },
     });
+
+    dismissActivityIndicator();
+    yield put(updateSubmittingForm(false));
 
     console.log('submitForm error', error);
   }

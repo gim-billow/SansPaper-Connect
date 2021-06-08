@@ -16,7 +16,6 @@ import Fields from 'components/Fields';
 import {
   updateOfflineFormFieldValue,
   resetCurrentFormDetails,
-  resetCurrentOfflineForm,
   resetCurrentForm,
 } from 'store/forms';
 import {
@@ -24,6 +23,7 @@ import {
   selectOfflineCurrentFormFields,
   selectScrollToMandatory,
   selectSubmitTriggered,
+  selectIsDraftForm,
 } from 'selector/form';
 import {selectOrganistation} from 'selector/sanspaper';
 
@@ -51,10 +51,6 @@ class FormFieldsList extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.resetCurrentOfflineForm();
-  }
-
   keyExtractor = (item, index) => index.toString();
 
   onPress = () => {
@@ -73,6 +69,7 @@ class FormFieldsList extends React.Component {
       organization,
       currentFormFields,
       goToGoogleMapScreen,
+      draftId,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -85,6 +82,7 @@ class FormFieldsList extends React.Component {
           updateFieldsValue: updateOfflineFormFieldValue,
           organization,
           currentFormFields,
+          draftId,
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],
           goToGoogleMapScreen,
@@ -139,12 +137,12 @@ const mapState = createStructuredSelector({
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,
   organization: selectOrganistation,
+  draftId: selectIsDraftForm,
 });
 
 export default connect(mapState, {
   updateOfflineFormFieldValue,
   resetCurrentFormDetails,
   goToGoogleMapScreen,
-  resetCurrentOfflineForm,
   resetCurrentForm,
 })(FormFieldsList);

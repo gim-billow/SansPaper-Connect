@@ -18,13 +18,13 @@ import {
   setCurrentForm,
   updateFormFieldValue,
   resetCurrentFormDetails,
+  resetCurrentOfflineForm,
 } from 'store/forms';
 import {
   selectCurrentFormId,
   selectCurrentFormFields,
   selectScrollToMandatory,
   selectSubmitTriggered,
-  selectCurrentFormUnfillMandatoryFields,
 } from 'selector/form';
 import {selectOrganistation} from 'selector/sanspaper';
 
@@ -38,6 +38,10 @@ class FormFieldsList extends React.Component {
     scrollEnabled: true,
     fieldsValue: {},
   };
+
+  componentDidMount() {
+    this.props.resetCurrentOfflineForm();
+  }
 
   componentDidUpdate(prevProps) {
     const {submitTriggered, scrollToMandatory} = this.props;
@@ -133,7 +137,6 @@ const mapState = createStructuredSelector({
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,
   organization: selectOrganistation,
-  test: selectCurrentFormUnfillMandatoryFields,
 });
 
 export default connect(mapState, {
@@ -141,4 +144,5 @@ export default connect(mapState, {
   updateFormFieldValue,
   resetCurrentFormDetails,
   goToGoogleMapScreen,
+  resetCurrentOfflineForm,
 })(FormFieldsList);
