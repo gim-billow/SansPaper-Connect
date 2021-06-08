@@ -13,6 +13,8 @@ import {
   selectOfflineFormList,
   selectCurrentFormId,
   selectCurrentForm,
+  selectOfflineCurrentForm,
+  selectOfflineCurrentFormId,
 } from 'selector/form';
 import {selectNetworkInfo} from '@selector/common';
 
@@ -53,7 +55,7 @@ class RightButton extends React.Component {
             // since submit button is hidden, it will run the saveAsDraft
             if (!netInfo.isInternetReachable) {
               // download first b4 submitting the form
-              if (offlineFormIndex === -1) {
+              if (offlineFormIndex === -1 && formId !== '') {
                 syncOfflineForm({
                   linkedTable: currentForm.linkedtable,
                   formId: currentForm.id,
@@ -78,7 +80,7 @@ class RightButton extends React.Component {
             }
 
             // download first b4 submitting the form
-            if (offlineFormIndex === -1) {
+            if (offlineFormIndex === -1 && formId !== '') {
               syncOfflineForm({
                 linkedTable: currentForm.linkedtable,
                 formId: currentForm.id,
@@ -122,7 +124,9 @@ const mapState = createStructuredSelector({
   isDraftForm: selectIsDraftForm,
   offlineForms: selectOfflineFormList,
   formId: selectCurrentFormId,
+  offlineFormId: selectOfflineCurrentFormId,
   currentForm: selectCurrentForm,
+  offlineCurrentForm: selectOfflineCurrentForm,
 });
 
 export default connect(mapState, {

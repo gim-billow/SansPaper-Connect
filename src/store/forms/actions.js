@@ -37,6 +37,8 @@ export const FORM_REDUCER_ACTIONS = {
   UPDATE_OFFLINE_CURRENT_FORM_FIELDS:
     'formActions/UPDATE_OFFLINE_CURRENT_FORM_FIELDS',
   RESET_CURRENT_FORM_DETAILS: 'formActions/RESET_CURRENT_FORM_DETAILS',
+  RESET_CURRENT_FORM: 'formActions/RESET_CURRENT_FORM',
+  RESET_CURRENT_OFFLINE_FORM: 'formActions/RESET_CURRENT_OFFLINE_FORM',
 };
 
 export const deleteOutboxForm = (payload) => ({
@@ -119,4 +121,12 @@ export const loadAllOutbox = () => ({
 export const loadOutboxByStatus = (payload) => ({
   type: FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS,
   payload,
+});
+
+export const resetCurrentForm = () => ({
+  type: FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM,
+});
+
+export const resetCurrentOfflineForm = () => ({
+  type: FORM_REDUCER_ACTIONS.RESET_CURRENT_OFFLINE_FORM,
 });

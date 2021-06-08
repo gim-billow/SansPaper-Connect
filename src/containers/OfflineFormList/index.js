@@ -38,7 +38,10 @@ class OfflineFormList extends React.Component {
     if (linked_table && linked_table !== '') {
       goToOfflineLinkedItemScreen({linkedTable: linked_table});
     } else {
-      goToOfflineFormFieldsScreen({componentId: screens.FormScreen});
+      goToOfflineFormFieldsScreen({
+        formId: form_id,
+        componentId: screens.FormScreen,
+      });
     }
   };
 
