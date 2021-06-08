@@ -285,6 +285,7 @@ const postSansPaperUpviseForm = async (form, orgPath) => {
       .collection('submittedUpviseForms')
       .doc(id);
 
+    console.log('formattedForm', formattedForm);
     batch.set(submitFormRef, formattedForm);
     const response = await batch.commit();
     return 'true';
