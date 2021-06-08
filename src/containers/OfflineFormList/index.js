@@ -59,7 +59,7 @@ class OfflineFormList extends React.Component {
 
   onDeleteAlert = (id) =>
     Alert.alert(
-      'Remove Form',
+      '',
       'Are you sure you want to remove the downloaded form?',
       [
         {
