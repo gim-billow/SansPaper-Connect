@@ -8,6 +8,7 @@ const INIT_STATE = {
     date: null,
   },
   appState: '',
+  activeScreen: '',
 };
 
 export default (state = INIT_STATE, action) => {
@@ -25,6 +26,11 @@ export default (state = INIT_STATE, action) => {
     case COMMON_REDUCER_ACTIONS.UPDATE_NETWORK_INFO: {
       return produce(state, (draftState) => {
         draftState.networkInfo = action.payload;
+      });
+    }
+    case COMMON_REDUCER_ACTIONS.WATCH_ACTIVE_SCREEN: {
+      return produce(state, (draftState) => {
+        draftState.activeScreen = action.payload;
       });
     }
     default:

@@ -9,9 +9,15 @@ export const COMMON_REDUCER_ACTIONS = {
   WATCH_NEWS_UPDATES: 'commonActions/WATCH_NEWS_UPDATES',
   UPDATE_NETWORK_INFO: 'commonAction/UPDATE_NETWORK_INFO',
   UPDATE_APP_STATE: 'commonAction/UPDATE_APP_STATE',
+  WATCH_ACTIVE_SCREEN: 'commonAction/WATCH_ACTIVE_SCREEN',
 };
 
 export const init = (payload) => ({
   type: COMMON_ACTIONS.INIT,
+  payload,
+});
+
+export const activeScreen = (payload) => ({
+  type: COMMON_REDUCER_ACTIONS.WATCH_ACTIVE_SCREEN,
   payload,
 });

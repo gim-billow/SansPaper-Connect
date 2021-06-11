@@ -78,9 +78,9 @@ export const showMainScreen = async () => {
   );
   const bookOpenIcon = await Feather.getImageSource('book-open', 25);
   const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
-  const downloadIcon = await FontAwesome5.getImageSource('hdd', 25);
+  const downloadIcon = await FontAwesome5.getImageSource('save', 25);
   const downloadIconSelect = await FontAwesome5.getImageSource(
-    'hdd',
+    'save',
     25,
     red,
     FA5Style.solid,

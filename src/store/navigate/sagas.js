@@ -49,9 +49,11 @@ function* goToMainScreen() {
   }
 }
 
+// FIXME:
 function* goToLinkedItemScreen({payload = {}}) {
   try {
-    showActivityIndicator('Go to linked Item screen');
+    // showActivityIndicator('Go to linked Item');
+    showActivityIndicator();
     const {linkedTable} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -141,7 +143,6 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
     const {name, linkedid} = offlineCurrentForm;
     let subForm, currentForm, title, subTitle;
 
-    // FIXME:
     if (formId) {
       currentForm = R.find(R.propEq('id', formId))(offlineFormList);
       yield put({
@@ -231,8 +232,10 @@ function* goToDraftFormFieldsScreen({payload}) {
   }
 }
 
+// FIXME:
 function* goToFormFieldsScreen({payload = {}}) {
   try {
+    // showActivityIndicator('Go to Form Fields');
     showActivityIndicator();
     const {linkedItemId, componentId} = payload;
     const currentFormId = yield select(selectCurrentFormId);
