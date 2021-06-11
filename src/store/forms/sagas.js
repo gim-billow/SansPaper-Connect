@@ -194,7 +194,7 @@ function* updateOfflineFormFieldValue({payload}) {
 
 async function submitForm(form) {
   try {
-    await showActivityIndicator();
+    showActivityIndicator();
     const permission = await hasLocationPermission();
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -247,12 +247,12 @@ async function submitForm(form) {
 function* preSubmitForm({payload}) {
   console.log('preSubmitForm', payload);
   try {
-    yield showActivityIndicator();
+    showActivityIndicator();
 
     // if there is no internet
     const {isInternetReachable} = yield select(selectNetworkInfo);
     if (!isInternetReachable) {
-      yield dismissActivityIndicator();
+      dismissActivityIndicator();
       Alert.alert(
         '',
         'Internet is not available at the moment. Please check your internet.',
@@ -359,7 +359,7 @@ function* preSubmitForm({payload}) {
             {
               text: 'Yes',
               onPress: async () => {
-                await showActivityIndicator();
+                showActivityIndicator();
                 submitForm(form);
                 Navigation.popToRoot(screens.FormScreen);
               },
@@ -400,7 +400,7 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
-    yield showActivityIndicator('Downloading....');
+    showActivityIndicator();
     const {linkedTable, formId, dlFirst = false} = payload;
     const dateNow = new Date();
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);

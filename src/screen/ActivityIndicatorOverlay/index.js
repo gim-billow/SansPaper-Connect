@@ -1,7 +1,6 @@
 //library
 import React from 'react';
 import {View, Text, ActivityIndicator} from 'react-native';
-import {Navigation} from 'react-native-navigation';
 
 //styles
 import styles from './styles';
@@ -19,29 +18,17 @@ class ActivityIndicatorOverlay extends React.Component {
     return option;
   };
 
-  componentDidMount() {
-    this.navigationEventListener = Navigation.events().bindComponent(this);
-  }
-
-  componentWillUnmount() {
-    // Unregistering listeners bound to components isn't mandatory since RNN handles the unregistration for you
-    if (this.navigationEventListener) {
-      this.navigationEventListener.remove();
-    }
-  }
-
   render() {
-    const {messages} = this.props;
-    console.log('messages', this.props);
+    // const {messages} = this.props;
+
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="white" />
-        {
-          messages !== '' && 
+        {/* {messages !== '' && (
           <View style={styles.messages}>
             <Text style={styles.text}>{messages}</Text>
           </View>
-        }
+        )} */}
       </View>
     );
   }

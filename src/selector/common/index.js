@@ -9,3 +9,4 @@ export const selectSortedNews = createSelector(selectNews, (newsList) =>
 );
 
 export const selectNetworkInfo = (state) => state.commonReducer.networkInfo;
+export const selectActiveScreen = (state) => state.commonReducer.activeScreen;

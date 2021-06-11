@@ -6,7 +6,7 @@ import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {Navigation} from 'react-native-navigation';
+import {filter, includes, findIndex, propEq} from 'ramda';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
@@ -17,10 +17,10 @@ import {
 } from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
-import {filter, includes} from 'ramda';
 import styles from './styles';
 import {red} from '@styles/colors';
 import {displayDate} from '@util/general';
+import {selectOfflineFormList, selectOfflineCurrentForm} from 'selector/form';
 
 class Outbox extends React.Component {
   state = {
@@ -97,9 +97,29 @@ class Outbox extends React.Component {
       },
     );
 
+  onNavigateToDraftScreen = (id, status) => {
+    const {offlineForms, outbox} = this.props;
+    const outboxes = [];
+    const offForms = [];
+
+    outbox.map((box) => outboxes.push(box.value.id));
+    offlineForms.map((form) => offForms.push(form.id));
+
+    const downloaded = outboxes.some((item) => offForms.includes(item));
+
+    if (status === 'submitted' && !downloaded) {
+      Alert.alert(
+        '',
+        'Download the form first before viewing the submitted form.',
+      );
+      return;
+    }
+
+    this.props.goToDraftFormFieldsScreen(id);
+  };
+
   renderItem = ({item}) => {
     const {id, value, status, createdAt, updatedAt} = item;
-    console.log('item', item);
     const {name} = value;
     const createString = `Submitted on ${displayDate(createdAt)}`;
     const updateString = `Updated on ${displayDate(updatedAt)}`;
@@ -115,7 +135,7 @@ class Outbox extends React.Component {
           <ListItem
             key={id}
             bottomDivider
-            onPress={() => this.props.goToDraftFormFieldsScreen(id)}>
+            onPress={() => this.onNavigateToDraftScreen(id, status)}>
             <ListItem.Content>
               <ListItem.Title>{name}</ListItem.Title>
               <ListItem.Subtitle style={{fontSize: 10}}>
@@ -183,6 +203,8 @@ class Outbox extends React.Component {
 
 const mapState = createStructuredSelector({
   outbox: selectOutbox,
+  offlineForms: selectOfflineFormList,
+  offlineCurrentForm: selectOfflineCurrentForm,
 });
 
 export default connect(mapState, {

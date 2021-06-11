@@ -7111,10 +7111,10 @@ react-native-modal-datetime-picker@^9.1.0:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-navigation@^7.1.0:
-  version "7.13.0"
-  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-7.13.0.tgz#3d3d97be1825034effab2a1deb5402a1fe1ba33e"
-  integrity sha512-/mdNuTlz9YVplJRB7Rv3g5cDgHCtw4RyG6ATdvrIJvMJOCU57ivCHuZkZDI/YQv7Txm48XD/EUkNahFFUATFZg==
+react-native-navigation@7.16.0:
+  version "7.16.0"
+  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-7.16.0.tgz#e1cdb18b11e7ecec8829570ffa6e80d481b00f69"
+  integrity sha512-wD/yDxhvaoCB9s9nwqtLEKzKDTLT+GW5QSyIgKtFOjmJSU0TLBHFbNjjlA3a9SefUzmd7D4sToQCqd9ZPYGYNA==
   dependencies:
     hoist-non-react-statics "3.x.x"
     lodash "4.17.x"
