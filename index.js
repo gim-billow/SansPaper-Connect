@@ -7,7 +7,6 @@ import React from 'react';
 // import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-import messaging from '@react-native-firebase/messaging';
 
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -24,6 +23,10 @@ import {appScreens, startApp} from './src/screen';
 
 // react native paper theme
 import {theme} from 'styles/papertheme';
+
+// import push notification & fcm
+import messaging from '@react-native-firebase/messaging';
+import './notificationService';
 
 const sagaMiddleware = createSagaMiddleware({
   sagaMonitor: Reactotron.createSagaMonitor(),

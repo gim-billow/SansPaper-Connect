@@ -11,12 +11,17 @@ import {
   Linking,
   Image,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 import InAppReview from 'react-native-in-app-review';
+
+// push remote and local notifications, fcm
 import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
@@ -55,10 +60,26 @@ class MainScreen extends React.Component {
 
       if (enabled) {
         const fetchedToken = await messaging().getToken();
-        console.log('Messaging token', fetchedToken);
+        console.log('FCM Token', fetchedToken);
 
         fcmListener = messaging().onMessage(async (remoteMsg) => {
-          console.log('Message received', remoteMsg);
+          const title = remoteMsg.notification.title;
+          const message = remoteMsg.notification.body;
+
+          console.log('Message title', title);
+          console.log('Message body', message);
+
+          if (Platform.OS === 'android') {
+            PushNotification.localNotification({
+              title,
+              message,
+            });
+          } else {
+            PushNotificationIOS.presentLocalNotification({
+              alertTitle: title,
+              alertBody: message,
+            });
+          }
         });
       }
     } catch (error) {
