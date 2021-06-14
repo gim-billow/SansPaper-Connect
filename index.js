@@ -7,6 +7,7 @@ import React from 'react';
 // import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+import messaging from '@react-native-firebase/messaging';
 
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -64,5 +65,9 @@ appScreens.forEach((ScreenComponent, key) => {
 });
 
 Navigation.events().registerAppLaunchedListener(() => {
+  messaging().setBackgroundMessageHandler(async (remoteMsg) => {
+    console.log('Message is handled in background', remoteMsg);
+  });
+
   startApp();
 });

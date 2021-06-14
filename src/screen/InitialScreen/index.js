@@ -35,7 +35,6 @@ class InitialScreen extends React.Component {
   };
 
   authListener;
-
   componentDidMount() {
     // initialize google auth
     GoogleSignin.configure({

@@ -16,6 +16,7 @@ import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 import InAppReview from 'react-native-in-app-review';
+import messaging from '@react-native-firebase/messaging';
 
 import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
@@ -26,6 +27,9 @@ import {red} from '@styles/colors';
 import {hasAppReview, setAppReview} from '@api/user';
 
 const {width} = Dimensions.get('screen');
+
+let fcmListener = null;
+
 class MainScreen extends React.Component {
   state = {
     showMore: [],
@@ -34,8 +38,32 @@ class MainScreen extends React.Component {
   componentDidMount() {
     // force update if new version is available
     this.checkVersion();
-
     this.appReview();
+    this.requestNotifPermission();
+  }
+
+  componentWillUnmount() {
+    fcmListener && fcmListener();
+  }
+
+  async requestNotifPermission() {
+    try {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        const fetchedToken = await messaging().getToken();
+        console.log('Messaging token', fetchedToken);
+
+        fcmListener = messaging().onMessage(async (remoteMsg) => {
+          console.log('Message received', remoteMsg);
+        });
+      }
+    } catch (error) {
+      console.log('Authorization error:', error);
+    }
   }
 
   async appReview() {
