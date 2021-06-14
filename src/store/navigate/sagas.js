@@ -189,6 +189,7 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
 function* goToDraftFormFieldsScreen({payload}) {
   try {
     showActivityIndicator();
+
     const draftId = payload;
     const outboxList = yield select(selectOutbox);
     const formsData = R.find(R.propEq('id', draftId))(outboxList);
@@ -221,18 +222,21 @@ function* goToDraftFormFieldsScreen({payload}) {
       title: name,
       subTitle,
     };
-    console.log('headerData', headerData);
+
     dismissActivityIndicator();
     pushToOfflineFormFieldsScreen({
       componentId: screens.OfflineFormScreen,
       headerData,
+      passProps: {
+        draftId,
+        outboxList,
+      },
     });
   } catch (error) {
     console.log('loadFormFields error', error);
   }
 }
 
-// FIXME:
 function* goToFormFieldsScreen({payload = {}}) {
   try {
     // showActivityIndicator('Go to Form Fields');
