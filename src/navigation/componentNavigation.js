@@ -40,6 +40,7 @@ export const pushToFormFieldsScreen = (props) => {
 
 export const pushToOfflineFormFieldsScreen = (props) => {
   const {componentId, headerData, passProps} = props;
+
   Navigation.push(componentId, {
     component: {
       id: 'OfflineFormFieldsScreen',

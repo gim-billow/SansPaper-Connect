@@ -1,6 +1,8 @@
 //library
 import React from 'react';
 import {View} from 'react-native';
+import {find, propEq} from 'ramda';
+
 import styles from './styles';
 import {white, red} from '@styles/colors';
 import OfflineFormFieldsList from '@containers/OfflineFormFieldsList';
@@ -20,7 +22,23 @@ class OfflineFormFieldsScreen extends React.Component {
 }
 
 OfflineFormFieldsScreen.options = (props) => {
+  let rightBtn = [];
   const {title, subTitle} = props.headerData;
+  const draftId = props.draftId;
+  const outbox = props.outboxList;
+
+  const selectedDraft = find(propEq('id', draftId))(outbox);
+  if (selectedDraft.status === 'draft') {
+    rightBtn.push({
+      id: screens.RightButton,
+      component: {
+        name: screens.RightButton,
+        passProps: {
+          offline: true,
+        },
+      },
+    });
+  }
 
   return {
     topBar: {
@@ -36,17 +54,7 @@ OfflineFormFieldsScreen.options = (props) => {
       backButton: {
         showTitle: false,
       },
-      rightButtons: [
-        {
-          id: screens.RightButton,
-          component: {
-            name: screens.RightButton,
-            passProps: {
-              offline: true,
-            },
-          },
-        },
-      ],
+      rightButtons: rightBtn,
     },
     statusBar: {
       visible: true,

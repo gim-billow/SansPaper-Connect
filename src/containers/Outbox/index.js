@@ -107,11 +107,8 @@ class Outbox extends React.Component {
 
     const downloaded = outboxes.some((item) => offForms.includes(item));
 
-    if (status === 'submitted' && !downloaded) {
-      Alert.alert(
-        '',
-        'Download the form first before viewing the submitted form.',
-      );
+    if (!downloaded) {
+      Alert.alert('', 'Download the form first before viewing the form.');
       return;
     }
 
