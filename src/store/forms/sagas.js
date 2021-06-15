@@ -238,6 +238,8 @@ async function submitForm(form) {
       dismissActivityIndicator();
       Alert.alert('', 'Location Permission Error: Form not submitted');
     }
+
+    dismissActivityIndicator();
   } catch (error) {
     dismissActivityIndicator();
     Alert.alert('', 'Error submitting form, please contact support');
