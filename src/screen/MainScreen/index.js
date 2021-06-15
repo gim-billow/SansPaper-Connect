@@ -11,11 +11,17 @@ import {
   Linking,
   Image,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 import InAppReview from 'react-native-in-app-review';
+
+// push remote and local notifications, fcm
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
@@ -26,6 +32,9 @@ import {red} from '@styles/colors';
 import {hasAppReview, setAppReview} from '@api/user';
 
 const {width} = Dimensions.get('screen');
+
+let fcmListener = null;
+
 class MainScreen extends React.Component {
   state = {
     showMore: [],
@@ -34,8 +43,49 @@ class MainScreen extends React.Component {
   componentDidMount() {
     // force update if new version is available
     this.checkVersion();
-
     this.appReview();
+    this.requestNotifPermission();
+  }
+
+  componentWillUnmount() {
+    fcmListener && fcmListener();
+  }
+
+  async requestNotifPermission() {
+    try {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        const fetchedToken = await messaging().getToken();
+        console.log('FCM Token', fetchedToken);
+
+        messaging()
+          .subscribeToTopic('sansPaperConnectConfig')
+          .then(() => console.log('Subscribed to topic!'));
+
+        fcmListener = messaging().onMessage(async (remoteMsg) => {
+          const title = remoteMsg.notification.title;
+          const message = remoteMsg.notification.body;
+
+          if (Platform.OS === 'android') {
+            PushNotification.localNotification({
+              title,
+              message,
+            });
+          } else {
+            PushNotificationIOS.presentLocalNotification({
+              alertTitle: title,
+              alertBody: message,
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.log('Authorization error:', error);
+    }
   }
 
   async appReview() {

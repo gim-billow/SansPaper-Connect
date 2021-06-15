@@ -24,6 +24,10 @@ import {appScreens, startApp} from './src/screen';
 // react native paper theme
 import {theme} from 'styles/papertheme';
 
+// import push notification & fcm
+import messaging from '@react-native-firebase/messaging';
+import './notificationService';
+
 const sagaMiddleware = createSagaMiddleware({
   sagaMonitor: Reactotron.createSagaMonitor(),
 });
@@ -64,5 +68,9 @@ appScreens.forEach((ScreenComponent, key) => {
 });
 
 Navigation.events().registerAppLaunchedListener(() => {
+  messaging().setBackgroundMessageHandler(async (remoteMsg) => {
+    console.log('Message is handled in background', remoteMsg);
+  });
+
   startApp();
 });
