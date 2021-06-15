@@ -52,8 +52,8 @@ function* goToMainScreen() {
 // FIXME:
 function* goToLinkedItemScreen({payload = {}}) {
   try {
-    // showActivityIndicator('Go to linked Item');
     showActivityIndicator();
+
     const {linkedTable} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -180,6 +180,9 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
     pushToOfflineFormFieldsScreen({
       componentId,
       headerData,
+      passProps: {
+        screen: 'offline',
+      },
     });
   } catch (error) {
     console.log('loadFormFields error', error);
@@ -189,6 +192,7 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
 function* goToDraftFormFieldsScreen({payload}) {
   try {
     showActivityIndicator();
+
     const draftId = payload;
     const outboxList = yield select(selectOutbox);
     const formsData = R.find(R.propEq('id', draftId))(outboxList);
@@ -221,22 +225,26 @@ function* goToDraftFormFieldsScreen({payload}) {
       title: name,
       subTitle,
     };
-    console.log('headerData', headerData);
+
     dismissActivityIndicator();
     pushToOfflineFormFieldsScreen({
       componentId: screens.OfflineFormScreen,
       headerData,
+      passProps: {
+        draftId,
+        outboxList,
+        screen: 'outbox',
+      },
     });
   } catch (error) {
     console.log('loadFormFields error', error);
   }
 }
 
-// FIXME:
 function* goToFormFieldsScreen({payload = {}}) {
   try {
-    // showActivityIndicator('Go to Form Fields');
     showActivityIndicator();
+
     const {linkedItemId, componentId} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -258,7 +266,14 @@ function* goToFormFieldsScreen({payload = {}}) {
     });
 
     dismissActivityIndicator();
-    pushToFormFieldsScreen({componentId, currentForm, currentLinkedItems});
+    pushToFormFieldsScreen({
+      componentId,
+      currentForm,
+      currentLinkedItems,
+      passProps: {
+        screen: 'online',
+      },
+    });
   } catch (error) {
     console.log('loadFormFields error', error);
   }

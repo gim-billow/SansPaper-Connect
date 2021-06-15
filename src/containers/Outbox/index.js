@@ -6,7 +6,7 @@ import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {filter, includes, findIndex, propEq} from 'ramda';
+import {filter, includes} from 'ramda';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
@@ -107,11 +107,8 @@ class Outbox extends React.Component {
 
     const downloaded = outboxes.some((item) => offForms.includes(item));
 
-    if (status === 'submitted' && !downloaded) {
-      Alert.alert(
-        '',
-        'Download the form first before viewing the submitted form.',
-      );
+    if (!downloaded) {
+      Alert.alert('', 'Download the form first before viewing the form.');
       return;
     }
 

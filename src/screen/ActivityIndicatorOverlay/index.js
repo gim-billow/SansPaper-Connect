@@ -19,16 +19,22 @@ class ActivityIndicatorOverlay extends React.Component {
   };
 
   render() {
-    // const {messages} = this.props;
+    const {messages} = this.props;
 
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="white" />
-        {/* {messages !== '' && (
-          <View style={styles.messages}>
-            <Text style={styles.text}>{messages}</Text>
-          </View>
-        )} */}
+        <View style={styles.loaderView}>
+          <ActivityIndicator size="large" color={red} />
+          {messages !== '' ? (
+            <View style={styles.messages}>
+              <Text style={styles.text}>{messages}</Text>
+            </View>
+          ) : (
+            <View style={styles.messages}>
+              <Text style={styles.text}>Loading...</Text>
+            </View>
+          )}
+        </View>
       </View>
     );
   }
