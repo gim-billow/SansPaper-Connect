@@ -62,8 +62,8 @@ class Profile extends Component {
 
   onPressLogoutHandler = () => {
     Alert.alert(
-      'Log out',
-      'Are you sure with this action? Logging out will clear all the stored forms data from your phone for offline usage.',
+      '',
+      'Are you sure you want to logout?',
       [
         {
           text: 'Cancel',
@@ -71,7 +71,7 @@ class Profile extends Component {
           style: 'cancel',
         },
         {
-          text: 'Yes',
+          text: 'Logout',
           onPress: async () => {
             await auth().signOut();
             await clearStorageUserId();

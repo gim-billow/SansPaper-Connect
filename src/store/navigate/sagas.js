@@ -52,8 +52,8 @@ function* goToMainScreen() {
 // FIXME:
 function* goToLinkedItemScreen({payload = {}}) {
   try {
-    // showActivityIndicator('Go to linked Item');
     showActivityIndicator();
+
     const {linkedTable} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -180,6 +180,9 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
     pushToOfflineFormFieldsScreen({
       componentId,
       headerData,
+      passProps: {
+        screen: 'offline',
+      },
     });
   } catch (error) {
     console.log('loadFormFields error', error);
@@ -230,6 +233,7 @@ function* goToDraftFormFieldsScreen({payload}) {
       passProps: {
         draftId,
         outboxList,
+        screen: 'outbox',
       },
     });
   } catch (error) {
@@ -239,8 +243,8 @@ function* goToDraftFormFieldsScreen({payload}) {
 
 function* goToFormFieldsScreen({payload = {}}) {
   try {
-    // showActivityIndicator('Go to Form Fields');
     showActivityIndicator();
+
     const {linkedItemId, componentId} = payload;
     const currentFormId = yield select(selectCurrentFormId);
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
@@ -262,7 +266,14 @@ function* goToFormFieldsScreen({payload = {}}) {
     });
 
     dismissActivityIndicator();
-    pushToFormFieldsScreen({componentId, currentForm, currentLinkedItems});
+    pushToFormFieldsScreen({
+      componentId,
+      currentForm,
+      currentLinkedItems,
+      passProps: {
+        screen: 'online',
+      },
+    });
   } catch (error) {
     console.log('loadFormFields error', error);
   }

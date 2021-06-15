@@ -37,7 +37,7 @@ function* loginUser({payload}) {
   try {
     const saveUser = yield select(selectSaveUser);
 
-    showActivityIndicator();
+    showActivityIndicator('Authenticating');
     // login the user
     yield login(payload);
 
@@ -80,7 +80,7 @@ function* forgotPasswordUser({payload}) {
   try {
     const {email} = payload;
 
-    showActivityIndicator();
+    showActivityIndicator('Sending');
 
     yield forgotPassword(email);
 
@@ -195,7 +195,7 @@ function* signUpEmailUser({payload}) {
   try {
     const {email} = payload;
 
-    showActivityIndicator();
+    showActivityIndicator('Sending');
 
     const signUpResponse = yield signUpEmailUserInterest(email);
     if (signUpResponse.success) {

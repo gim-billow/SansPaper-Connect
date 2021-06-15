@@ -19,8 +19,6 @@ import {
   selectOfflineFormList,
   selectCurrentFormId,
   selectCurrentForm,
-  selectOfflineCurrentForm,
-  selectOfflineCurrentFormId,
 } from 'selector/form';
 import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
 // import NoInternet from '@containers/NoInternet';
@@ -32,7 +30,7 @@ class FormFieldsScreen extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       prevProps.onScreen !== this.props.onScreen &&
-      this.props.onScreen === 'RightButton'
+      this.props.onScreen === 'online'
     ) {
       this._onOpenActionSheet();
     }
@@ -45,7 +43,6 @@ class FormFieldsScreen extends React.Component {
   _onOpenActionSheet = () => {
     const {
       formId,
-      offline,
       submitForm,
       saveAsDraft,
       isDraftForm,
@@ -80,13 +77,13 @@ class FormFieldsScreen extends React.Component {
                 });
               } else {
                 saveAsDraft({
-                  offline,
+                  offline: false,
                   status: 'draft',
                 });
               }
               return;
             }
-            submitForm(offline);
+            submitForm(false);
             break;
           case 1:
             // if not internet, just do nothing
@@ -104,7 +101,7 @@ class FormFieldsScreen extends React.Component {
               return;
             }
             saveAsDraft({
-              offline,
+              offline: false,
               status: buttonIndex === 0 ? 'submitted' : 'draft',
             });
             break;
@@ -132,6 +129,7 @@ class FormFieldsScreen extends React.Component {
 FormFieldsScreen.options = (props) => {
   let subForm = {};
   const {name, linkedid} = props.form;
+  const screen = props.screen;
 
   if (linkedid) {
     const items = props.items;
@@ -166,7 +164,8 @@ FormFieldsScreen.options = (props) => {
           component: {
             name: screens.RightButton,
             passProps: {
-              offline: false,
+              // offline: false,
+              screen,
             },
           },
         },
@@ -186,9 +185,7 @@ const mapState = createStructuredSelector({
   isDraftForm: selectIsDraftForm,
   offlineForms: selectOfflineFormList,
   formId: selectCurrentFormId,
-  offlineFormId: selectOfflineCurrentFormId,
   currentForm: selectCurrentForm,
-  offlineCurrentForm: selectOfflineCurrentForm,
   netInfo: selectNetworkInfo,
   onScreen: selectActiveScreen,
 });
