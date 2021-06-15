@@ -59,12 +59,13 @@ class MainScreen extends React.Component {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
       if (enabled) {
-        const fetchedToken = await messaging().getToken();
-        console.log('FCM Token', fetchedToken);
+        messaging()
+          .getToken()
+          .then((token) => console.log('FCM Token:', token));
 
         messaging()
           .subscribeToTopic('sansPaperConnectConfig')
-          .then(() => console.log('Subscribed to topic!'));
+          .then(() => console.log('Subscribed to topic'));
 
         fcmListener = messaging().onMessage(async (remoteMsg) => {
           const title = remoteMsg.notification.title;
