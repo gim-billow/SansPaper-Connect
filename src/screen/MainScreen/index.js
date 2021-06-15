@@ -62,12 +62,13 @@ class MainScreen extends React.Component {
         const fetchedToken = await messaging().getToken();
         console.log('FCM Token', fetchedToken);
 
+        messaging()
+          .subscribeToTopic('sansPaperConnectConfig')
+          .then(() => console.log('Subscribed to topic!'));
+
         fcmListener = messaging().onMessage(async (remoteMsg) => {
           const title = remoteMsg.notification.title;
           const message = remoteMsg.notification.body;
-
-          console.log('Message title', title);
-          console.log('Message body', message);
 
           if (Platform.OS === 'android') {
             PushNotification.localNotification({
