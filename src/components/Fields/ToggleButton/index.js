@@ -51,11 +51,11 @@ const ToggleButton = (props) => {
   const {item, id, updateFieldsValue, isEditable} = props;
   const {label, seloptions, rank, mandatory} = item;
 
-  const options = map((option) => {
-    return split(':', option)[1]
-      ? split(':', option)[1]
-      : split(':', option)[0];
-  }, split('|', seloptions));
+  // const options = map((option) => {
+  //   return split(':', option)[1]
+  //     ? split(':', option)[1]
+  //     : split(':', option)[0];
+  // }, split('|', seloptions));
 
   let dataOptions = map((option) => {
     return {
@@ -75,7 +75,7 @@ const ToggleButton = (props) => {
 
     if (value !== '' && value !== '-1') {
       const defaultVal = find(propEq('id', value))(dataOptions);
-      setOption(defaultVal.name);
+      setOption(defaultVal?.name);
       updateFieldsValue({rank: rank, value: value});
       return;
     }

@@ -158,7 +158,7 @@ class Profile extends Component {
               }
               style={styles.list}
               titleStyle={styles.title}
-              title="Privacy and Policy"
+              title="Privacy Policy"
               left={() => (
                 <View style={styles.listIcon}>
                   <PrivacyPolicyIcon width={30} height={40} color="green" />
