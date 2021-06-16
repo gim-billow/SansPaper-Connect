@@ -171,6 +171,9 @@ FormFieldsScreen.options = (props) => {
         },
       ],
     },
+    bottomTabs: {
+      visible: false,
+    },
     statusBar: {
       visible: true,
       backgroundColor: red,

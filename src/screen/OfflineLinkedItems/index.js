@@ -16,6 +16,9 @@ class OfflineLinkedItems extends React.Component {
           showTitle: false,
         },
       },
+      bottomTabs: {
+        visible: false,
+      },
       statusBar: {
         visible: true,
         backgroundColor: red,

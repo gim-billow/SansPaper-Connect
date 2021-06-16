@@ -9,9 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import {red, white} from '@styles/colors';
 import FormList from '@containers/FormList';
-// import NoInternet from '@containers/NoInternet';
 import OfflineFormList from '@containers/OfflineFormList';
-// import {selectNetworkInfo} from '@selector/common';
 
 const renderScene = SceneMap({
   first: FormList,

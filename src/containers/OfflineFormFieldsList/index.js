@@ -7,7 +7,7 @@ import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {goToGoogleMapScreen} from '@store/navigate';
-import {has} from 'ramda';
+import {has, find, propEq} from 'ramda';
 
 //component
 import Fields from 'components/Fields';
@@ -24,6 +24,7 @@ import {
   selectScrollToMandatory,
   selectSubmitTriggered,
   selectIsDraftForm,
+  selectOutbox,
 } from 'selector/form';
 import {selectOrganistation} from 'selector/sanspaper';
 
@@ -62,6 +63,16 @@ class FormFieldsList extends React.Component {
     this.setState({scrollEnabled: status});
   };
 
+  isEditable = () => {
+    const {outbox, draftId} = this.props;
+    const found = find(propEq('id', draftId))(outbox);
+
+    if (found && found.status === 'submitted') {
+      return false;
+    }
+    return true;
+  };
+
   renderItem = (props) => {
     const {item} = props;
     const {
@@ -70,6 +81,7 @@ class FormFieldsList extends React.Component {
       currentFormFields,
       goToGoogleMapScreen,
       draftId,
+      screen,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -79,6 +91,7 @@ class FormFieldsList extends React.Component {
           offline: true,
           formId: item.formid,
           item: item,
+          isEditable: screen === 'outbox' ? this.isEditable() : true,
           updateFieldsValue: updateOfflineFormFieldValue,
           organization,
           currentFormFields,
@@ -133,6 +146,7 @@ class FormFieldsList extends React.Component {
 
 const mapState = createStructuredSelector({
   currentFormId: selectOfflineCurrentFormId,
+  outbox: selectOutbox,
   currentFormFields: selectOfflineCurrentFormFields,
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,

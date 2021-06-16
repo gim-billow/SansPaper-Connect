@@ -100,7 +100,7 @@ class Currency extends Component {
   }
 
   render() {
-    const {item} = this.props;
+    const {item, isEditable} = this.props;
     const {data, selected} = this.state;
     const {container, selectToggle, button, itemText, topContainer} = styles;
 
@@ -115,6 +115,7 @@ class Currency extends Component {
           )}
           <View>
             <SectionedMultiSelect
+              disabled={!isEditable}
               styles={{
                 container,
                 selectToggle,

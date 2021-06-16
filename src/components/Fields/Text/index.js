@@ -12,7 +12,7 @@ import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;
-  const {updateFieldsValue, goToGoogleMapScreen} = props;
+  const {updateFieldsValue, goToGoogleMapScreen, isEditable} = props;
   const [text, setText] = useState('');
   const [selection, setSelection] = useState(
     Platform.OS === 'android' ? {start: 0} : null,
@@ -85,6 +85,7 @@ const SPText = (props) => {
           <View style={styles.textInputMap}>
             <View style={styles.inputWrapper}>
               <TextInput
+                disabled={!isEditable}
                 onFocus={onInputFocus}
                 onBlur={onBlurInput}
                 style={styles.textInputWithIcon}
@@ -98,6 +99,7 @@ const SPText = (props) => {
               />
             </View>
             <TouchableOpacity
+              disabled={!isEditable}
               style={styles.iconWrapper}
               onPress={enableLocation}>
               <Icon size={40} style={styles.map} name="place" />
@@ -119,6 +121,7 @@ const SPText = (props) => {
           <View style={commonStyles.spacing} />
         )}
         <TextInput
+          disabled={!isEditable}
           onFocus={onInputFocus}
           onBlur={onBlurInput}
           style={styles.textInput}

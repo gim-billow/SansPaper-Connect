@@ -119,7 +119,7 @@ class Select extends PureComponent {
   };
 
   render() {
-    const {item, single = true} = this.props;
+    const {item, single = true, isEditable} = this.props;
     const {selOptions} = this.state;
     const {container, selectToggle, button, itemText, chipsWrapper} = styles;
 
@@ -134,6 +134,7 @@ class Select extends PureComponent {
           )}
           <View>
             <SectionedMultiSelect
+              disabled={!isEditable}
               styles={{
                 container,
                 selectToggle,
@@ -150,6 +151,7 @@ class Select extends PureComponent {
               selectText="Select from options"
               onSelectedItemsChange={this.onSelectedItemsChange}
               selectedItems={this.state.options}
+              hideChipRemove={!isEditable}
             />
           </View>
         </View>

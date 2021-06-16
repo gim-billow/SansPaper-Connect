@@ -15,7 +15,7 @@ const Signature = (props) => {
   let refInput = createRef();
   const refInputIOS = useRef();
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue} = props;
+  const {updateFieldsValue, isEditable} = props;
   const [iosSig, setIosSig] = useState('');
   const [signatureSaved, setSignaturesSaved] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -120,7 +120,9 @@ const Signature = (props) => {
                 showTitleLabel={false}
                 viewMode={'portrait'}
               />
-              {signatureSaved && <View style={styles.dimmedSingature} />}
+              {!isEditable && signatureSaved && (
+                <View style={styles.dimmedSingature} />
+              )}
             </View>
           ) : (
             <View style={styles.signature}>
@@ -133,13 +135,16 @@ const Signature = (props) => {
                 onOK={_onSaveEvent}
                 webStyle={iosStyle}
               />
-              {signatureSaved && <View style={styles.dimmedSingature} />}
+              {!isEditable && signatureSaved && (
+                <View style={styles.dimmedSingature} />
+              )}
             </View>
           )}
 
           <View style={styles.buttonContainer}>
             <View style={styles.leftButton}>
               <Button
+                disabled={!isEditable}
                 mode="contained"
                 style={styles.buttonColor}
                 onPress={signaturePadClear}>
@@ -148,6 +153,7 @@ const Signature = (props) => {
             </View>
             <View style={styles.rightButton}>
               <Button
+                disabled={!isEditable}
                 mode="contained"
                 style={
                   changeTheme === true

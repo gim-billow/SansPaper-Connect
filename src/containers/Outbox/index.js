@@ -6,7 +6,7 @@ import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {filter, includes} from 'ramda';
+import {filter, includes, findIndex} from 'ramda';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOutbox} from '@selector/form';
@@ -97,17 +97,14 @@ class Outbox extends React.Component {
       },
     );
 
-  onNavigateToDraftScreen = (id, status) => {
-    const {offlineForms, outbox} = this.props;
-    const outboxes = [];
+  onNavigateToDraftScreen = (id, formId) => {
+    const {offlineForms} = this.props;
     const offForms = [];
 
-    outbox.map((box) => outboxes.push(box.value.id));
     offlineForms.map((form) => offForms.push(form.id));
+    const index = findIndex((item) => item === formId)(offForms);
 
-    const downloaded = outboxes.some((item) => offForms.includes(item));
-
-    if (!downloaded) {
+    if (index === -1) {
       Alert.alert('', 'Download the form first before viewing the form.');
       return;
     }
@@ -117,7 +114,7 @@ class Outbox extends React.Component {
 
   renderItem = ({item}) => {
     const {id, value, status, createdAt, updatedAt} = item;
-    const {name} = value;
+    const {name, id: formId} = value;
     const createString = `Submitted on ${displayDate(createdAt)}`;
     const updateString = `Updated on ${displayDate(updatedAt)}`;
 
@@ -132,7 +129,7 @@ class Outbox extends React.Component {
           <ListItem
             key={id}
             bottomDivider
-            onPress={() => this.onNavigateToDraftScreen(id, status)}>
+            onPress={() => this.onNavigateToDraftScreen(id, formId)}>
             <ListItem.Content>
               <ListItem.Title>{name}</ListItem.Title>
               <ListItem.Subtitle style={{fontSize: 10}}>

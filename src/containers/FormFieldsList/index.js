@@ -83,6 +83,7 @@ class FormFieldsList extends React.Component {
           item: item,
           updateFieldsValue: updatedFormFieldProps,
           organization,
+          isEditable: true,
           currentFormFields,
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],

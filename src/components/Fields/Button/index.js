@@ -7,7 +7,7 @@ import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 
 const Button = (props) => {
-  const {item} = props;
+  const {item, isEditable} = props;
 
   return (
     <ItemWrapper>
@@ -16,7 +16,7 @@ const Button = (props) => {
         <View style={styles.button}>
           <RNButton
             mode="contained"
-            disabled={item.label.includes('new') ? true : false}
+            disabled={!isEditable && item.label.includes('new') ? true : false}
             style={item.label.includes('new') ? null : styles.buttonColor}
             onPress={() => {}}>
             <Text style={styles.text}>{item.label}</Text>

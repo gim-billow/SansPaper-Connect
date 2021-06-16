@@ -108,9 +108,11 @@ class OfflineFormFieldsScreen extends React.Component {
   };
 
   render() {
+    const screen = this.props.screen;
+
     return (
       <View style={styles.container}>
-        <OfflineFormFieldsList />
+        <OfflineFormFieldsList screen={screen} />
       </View>
     );
   }
@@ -165,6 +167,9 @@ OfflineFormFieldsScreen.options = (props) => {
         showTitle: false,
       },
       rightButtons: rightBtn,
+    },
+    bottomTabs: {
+      visible: false,
     },
     statusBar: {
       visible: true,

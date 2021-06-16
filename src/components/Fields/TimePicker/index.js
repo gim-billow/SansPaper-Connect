@@ -12,7 +12,7 @@ import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const TimePicker = (props) => {
-  const {item, updateFieldsValue} = props;
+  const {item, updateFieldsValue, isEditable} = props;
   const [label, setLabel] = useState('Select Time');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -76,8 +76,12 @@ const TimePicker = (props) => {
           <View style={commonStyles.spacing} />
         )}
         <View style={styles.date}>
-          <TouchableRipple onLongPress={cancel} onPress={showTimePicker}>
+          <TouchableRipple
+            disabled={!isEditable}
+            onLongPress={cancel}
+            onPress={showTimePicker}>
             <Button
+              disabled={!isEditable}
               mode="contained"
               style={
                 changeTheme === true

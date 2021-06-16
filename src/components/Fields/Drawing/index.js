@@ -168,6 +168,7 @@ class DrawingBoard extends React.Component {
   };
 
   render() {
+    const {isEditable} = this.props;
     const {label, mandatory} = this.props.item;
     const {changeTheme, saving, signatureSaved, draftImage} = this.state;
 
@@ -187,6 +188,7 @@ class DrawingBoard extends React.Component {
             <View style={styles.button}>
               <View style={{paddingRight: 10}}>
                 <Button
+                  disabled={!isEditable}
                   mode="contained"
                   style={styles.buttonColor}
                   onPress={() => {
@@ -197,6 +199,7 @@ class DrawingBoard extends React.Component {
               </View>
               <View>
                 <Button
+                  disabled={!isEditable}
                   mode="contained"
                   style={
                     changeTheme === true
@@ -243,7 +246,7 @@ class DrawingBoard extends React.Component {
                     this.handleOnStrokeStart(true);
                     this.saveBase64Img();
                   }}
-                  touchEnabled={!signatureSaved && !saving}
+                  touchEnabled={isEditable && !signatureSaved && !saving}
                 />
               )}
             </View>

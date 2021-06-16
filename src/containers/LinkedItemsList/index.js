@@ -132,7 +132,7 @@ class LinkedItemsList extends React.Component {
             />
           </View>
 
-          {linkedtable.toLowerCase() === 'tools.tools' ? (
+          {linkedtable?.toLowerCase() === 'tools.tools' ? (
             <View style={styles.qrButton}>
               <RNButton
                 mode="contained"

@@ -12,7 +12,7 @@ import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const DateTimePicker = (props) => {
-  const {item, updateFieldsValue} = props;
+  const {item, updateFieldsValue, isEditable} = props;
   const [dateLabel, setDateLabel] = useState(
     setDateTimeFormatDisplay('date', Date.now()),
   );
@@ -120,6 +120,7 @@ const DateTimePicker = (props) => {
         <View style={styles.container}>
           <View style={[styles.button, styles.left]}>
             <Button
+              disabled={!isEditable}
               onLongPress={cancelDate}
               mode="contained"
               style={
@@ -147,6 +148,7 @@ const DateTimePicker = (props) => {
           </View>
           <View style={[styles.button, styles.right]}>
             <Button
+              disabled={!isEditable}
               onLongPress={cancelTime}
               mode="contained"
               style={

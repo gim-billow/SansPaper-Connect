@@ -9,7 +9,7 @@ import {darkRed, white} from 'styles/colors';
 import {commonStyles} from '@styles/common';
 
 const Checkbox = (props) => {
-  const {item, updateFieldsValue} = props;
+  const {item, updateFieldsValue, isEditable} = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   useEffect(() => {
@@ -30,10 +30,11 @@ const Checkbox = (props) => {
   return (
     <ItemWrapper>
       <View style={styles.topContainer}>
-        <TouchableOpacity onPress={() => onToggleCheckBox(!toggleCheckBox)}>
+        <TouchableOpacity
+          onPress={() => onToggleCheckBox(!toggleCheckBox)}
+          disabled={!isEditable}>
           <View style={styles.box} pointerEvents="none">
             <CheckB
-              disabled={false}
               onTintColor="transparent"
               value={toggleCheckBox}
               tintColors={{

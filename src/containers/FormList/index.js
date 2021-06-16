@@ -5,6 +5,7 @@ import {createStructuredSelector} from 'reselect';
 import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
+import {Spinner} from 'native-base';
 
 import {ListItem, Icon} from 'react-native-elements';
 import {selectOrganistationPath} from '@selector/sanspaper';
@@ -21,7 +22,7 @@ import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 import ItemWrapper from '../../components/Fields/ItemWrapper';
 import {filter, includes, findIndex, propEq} from 'ramda';
-import {Spinner} from 'native-base';
+
 import styles from './styles';
 import {darkGrey, green} from '@styles/colors';
 

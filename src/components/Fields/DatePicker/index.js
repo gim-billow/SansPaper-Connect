@@ -12,7 +12,7 @@ import {commonStyles} from '@styles/common';
 import MandatoryField from '../MandatoryField';
 
 const DatePicker = (props) => {
-  const {item, updateFieldsValue} = props;
+  const {item, updateFieldsValue, isEditable} = props;
   const [label, setLabel] = useState('Select Date');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -71,6 +71,7 @@ const DatePicker = (props) => {
         )}
         <View style={styles.date}>
           <Button
+            disabled={!isEditable}
             onLongPress={cancel}
             onPress={showDatePicker}
             mode="contained"

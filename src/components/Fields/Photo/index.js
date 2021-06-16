@@ -23,7 +23,7 @@ const imgQuality = Platform.OS === 'android' ? 0.9 : 0.75;
 
 const Photo = (props) => {
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue} = props;
+  const {updateFieldsValue, isEditable} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -124,6 +124,7 @@ const Photo = (props) => {
         )}
         <View style={styles.button}>
           <TouchableRipple
+            disabled={!isEditable}
             onLongPress={cancel}
             onPress={() => {
               setModalVisible(true);

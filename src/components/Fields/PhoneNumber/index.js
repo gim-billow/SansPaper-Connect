@@ -11,6 +11,7 @@ import ItemWrapper from '../ItemWrapper';
 
 const PhoneNumber = (props) => {
   const {label, rank, mandatory, value} = props.item;
+  const {isEditable, updateFieldsValue} = props;
   const phoneInput = useRef(null);
   let phoneNumber = '';
   let phoneCountry = 'AU';
@@ -26,7 +27,6 @@ const PhoneNumber = (props) => {
   }
 
   const changePhoneNumber = (text) => {
-    const {updateFieldsValue} = props;
     updateFieldsValue({rank: rank, value: text});
   };
 
@@ -42,6 +42,7 @@ const PhoneNumber = (props) => {
         <View style={styles.container}>
           <View style={styles.content}>
             <PhoneInput
+              disabled={!isEditable}
               ref={phoneInput}
               defaultValue={phoneNumber}
               defaultCode={phoneCountry}

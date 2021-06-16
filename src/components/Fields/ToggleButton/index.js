@@ -48,7 +48,7 @@ const _mapToColour = (id) => {
 
 const ToggleButton = (props) => {
   const [selected, setOption] = useState();
-  const {item, id, updateFieldsValue} = props;
+  const {item, id, updateFieldsValue, isEditable} = props;
   const {label, seloptions, rank, mandatory} = item;
 
   const options = map((option) => {
@@ -107,6 +107,7 @@ const ToggleButton = (props) => {
 
             return (
               <TouchableOpacity
+                disabled={!isEditable}
                 key={uniqueKey()}
                 style={[
                   colorControl.button,

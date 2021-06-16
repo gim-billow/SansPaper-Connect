@@ -48,7 +48,7 @@ class Duration extends Component {
   }
 
   render() {
-    const {item} = this.props;
+    const {item, isEditable} = this.props;
     const {hours, minutes} = this.state;
     // const keyboardType = this.props.keyboardType
     //   ? this.props.keyboardType
@@ -66,6 +66,7 @@ class Duration extends Component {
           <View style={styles.container}>
             <View style={styles.content}>
               <TextInput
+                disabled={!isEditable}
                 style={[styles.textInput, styles.left]}
                 value={hours}
                 label="Hours"
@@ -77,6 +78,7 @@ class Duration extends Component {
             </View>
             <View style={[styles.content, styles.right]}>
               <TextInput
+                disabled={!isEditable}
                 style={styles.textInput}
                 value={minutes}
                 label="Minutes"

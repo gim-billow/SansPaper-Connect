@@ -20,7 +20,7 @@ import MandatoryField from '../MandatoryField';
 
 const QrScanner = (props) => {
   const {label, rank, mandatory, value} = props.item;
-  const {updateFieldsValue} = props;
+  const {updateFieldsValue, isEditable} = props;
   const [changeTheme, setChangeTheme] = useState(false);
   const [title, setTitle] = useState('QR Scan');
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,6 +71,7 @@ const QrScanner = (props) => {
         )}
         <View style={styles.button}>
           <Button
+            disabled={!isEditable}
             onLongPress={cancel}
             onPress={() => {
               setModalVisible(true);
