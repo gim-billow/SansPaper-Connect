@@ -1,8 +1,9 @@
-import {screens} from '@constant/ScreenConstants';
-import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
 import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
+
+import {screens} from '@constant/ScreenConstants';
+import {red, backgroundColor} from '@styles/colors';
 import {regular} from '@styles/font';
 
 export const setDefaultOptions = () => {
@@ -23,6 +24,10 @@ export const setDefaultOptions = () => {
       backButton: {
         color: 'white',
       },
+    },
+    bottomTabs: {
+      backgroundColor,
+      hideShadow: true,
     },
   });
 };
@@ -62,29 +67,37 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const userIcon = await FontAwesome5.getImageSource('user', 25);
-  const userIconSelect = await FontAwesome5.getImageSource(
-    'user',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const clipboardIcon = await Feather.getImageSource('clipboard', 25);
-  const clipboardIconSelect = await FontAwesome5.getImageSource(
-    'clipboard',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const bookOpenIcon = await Feather.getImageSource('book-open', 25);
-  const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
-  const downloadIcon = await FontAwesome5.getImageSource('save', 25);
-  const downloadIconSelect = await FontAwesome5.getImageSource(
-    'save',
-    25,
-    red,
-    FA5Style.solid,
-  );
+  const bookOpenIcon = require('../assets/book.png');
+  const clipboardIcon = require('../assets/form.png');
+  const userIcon = require('../assets/profile.png');
+  const outboxIcon = require('../assets/outbox.png');
+  /** Profile */
+  // const userIcon = await FontAwesome5.getImageSource('user', 25);
+  // const userIconSelect = await FontAwesome5.getImageSource(
+  //   'user',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
+  /** FORM */
+  // const clipboardIcon = await Feather.getImageSource('clipboard', 25);
+  // const clipboardIconSelect = await FontAwesome5.getImageSource(
+  //   'clipboard',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
+  /** BOK */
+  // const bookOpenIcon = await Feather.getImageSource('book-open', 25);
+  // const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
+  /** OUTBOX */
+  // const downloadIcon = await FontAwesome5.getImageSource('save', 25);
+  // const downloadIconSelect = await FontAwesome5.getImageSource(
+  //   'save',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
 
   return Navigation.setRoot({
     root: {
@@ -109,9 +122,9 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'BoK',
+                  text: 'BOK',
                   icon: bookOpenIcon,
-                  selectedIcon: bookOpenIconSelect,
+                  selectedIcon: bookOpenIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -136,9 +149,9 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Form',
+                  text: 'FORM',
                   icon: clipboardIcon,
-                  selectedIcon: clipboardIconSelect,
+                  selectedIcon: clipboardIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -163,9 +176,9 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Profile',
+                  text: 'PROFILE',
                   icon: userIcon,
-                  selectedIcon: userIconSelect,
+                  selectedIcon: userIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -190,9 +203,9 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Outbox',
-                  icon: downloadIcon,
-                  selectedIcon: downloadIconSelect,
+                  text: 'OUTBOX',
+                  icon: outboxIcon,
+                  selectedIcon: outboxIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
