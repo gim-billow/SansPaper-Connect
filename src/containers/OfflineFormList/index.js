@@ -2,7 +2,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from 'react-native';
 import memoize from 'memoize-one';
 import {Icon, Card, SearchBar} from 'react-native-elements';
 import {filter, includes} from 'ramda';
@@ -20,10 +27,6 @@ import {darkGrey, red, lightGrey} from '@styles/colors';
 import {cardStyle, searchBarStyle} from '@styles/common';
 
 class OfflineFormList extends React.Component {
-  state = {
-    searchKeyword: '',
-  };
-
   keyExtractor = (item, index) => index?.toString();
 
   onPress = (linked_table, form_id) => {
@@ -44,17 +47,17 @@ class OfflineFormList extends React.Component {
     }
   };
 
-  getFilteredFormlist = memoize((formList, searchKeyword) => {
-    return filter(
-      (form) =>
-        includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
-      formList,
-    );
-  });
+  // getFilteredFormlist = memoize((formList, searchKeyword) => {
+  //   return filter(
+  //     (form) =>
+  //       includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
+  //     formList,
+  //   );
+  // });
 
-  handleOnChangeText = (text) => {
-    this.setState({searchKeyword: text});
-  };
+  // handleOnChangeText = (text) => {
+  //   this.setState({searchKeyword: text});
+  // };
 
   onDeleteAlert = (id) =>
     Alert.alert(
@@ -85,13 +88,16 @@ class OfflineFormList extends React.Component {
           <View style={styles.cardView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={() => this.onDeleteAlert(id)}>
-                <Icon
-                  type="ionicon"
-                  name="trash-outline"
-                  color={red}
-                  size={20}
-                />
-                {/* <Icon name="delete" color={red} /> */}
+                {Platform.OS === 'android' ? (
+                  <Icon type="antdesign" name="delete" color={red} size={16} />
+                ) : (
+                  <Icon
+                    type="ionicon"
+                    name="trash-outline"
+                    color={red}
+                    size={20}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -109,13 +115,11 @@ class OfflineFormList extends React.Component {
   };
 
   render() {
-    const {searchKeyword} = this.state;
-    const {formList} = this.props;
-    const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
+    const {filteredFromList, searchKeyword} = this.props;
 
     return (
       <View style={styles.flex1}>
-        <SearchBar
+        {/* <SearchBar
           placeholder="Search offline form"
           containerStyle={searchBarStyle.searchContainer}
           inputContainerStyle={searchBarStyle.searchInputContainer}
@@ -127,7 +131,7 @@ class OfflineFormList extends React.Component {
           onChangeText={this.handleOnChangeText}
           icon="search"
           clearIcon="clear"
-        />
+        /> */}
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList
             keyExtractor={this.keyExtractor}
@@ -151,7 +155,7 @@ class OfflineFormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  formList: selectOfflineFormList,
+  // formList: selectOfflineFormList,
 });
 
 export default connect(mapState, {

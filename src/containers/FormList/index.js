@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import memoize from 'memoize-one';
 import {Icon, Card, SearchBar} from 'react-native-elements';
@@ -27,14 +28,10 @@ import {screens} from '@constant/ScreenConstants';
 import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 
 import styles from './styles';
-import {lightGrey, green, darkGrey} from '@styles/colors';
+import {green, darkGrey} from '@styles/colors';
 import {cardStyle, searchBarStyle} from '@styles/common';
 
 class FormList extends React.Component {
-  state = {
-    searchKeyword: '',
-  };
-
   keyExtractor = (item, index) => index.toString();
 
   onPress = (linked_table, form_id) => {
@@ -61,17 +58,17 @@ class FormList extends React.Component {
     });
   };
 
-  getFilteredFormlist = memoize((formList, searchKeyword) => {
-    return filter(
-      (form) =>
-        includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
-      formList,
-    );
-  });
+  // getFilteredFormlist = memoize((formList, searchKeyword) => {
+  //   return filter(
+  //     (form) =>
+  //       includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
+  //     formList,
+  //   );
+  // });
 
-  handleOnChangeText = (text) => {
-    this.setState({searchKeyword: text});
-  };
+  // handleOnChangeText = (text) => {
+  //   this.setState({searchKeyword: text});
+  // };
 
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
@@ -89,38 +86,62 @@ class FormList extends React.Component {
               onPress={() => this.onPress(linkedtable, id)}>
               <Text style={styles.title}>{name}</Text>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
-              {/* <Icon name="assignment" color={lightGrey} /> */}
-              <Icon
-                type="ionicon"
-                name="document-text-outline"
-                color={darkGrey}
-                size={20}
-              />
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              {Platform.OS === 'android' ? (
+                <Icon
+                  type="antdesign"
+                  name="filetext1"
+                  color={darkGrey}
+                  size={16}
+                />
+              ) : (
+                <Icon
+                  type="ionicon"
+                  name="document-text-outline"
+                  color={darkGrey}
+                  size={20}
+                />
+              )}
               {index === -1 ? (
                 <TouchableOpacity
                   style={styles.downloadButton}
                   onPress={() => this.downloadForm(linkedtable, id)}>
-                  {/* <Icon name="file-download" color={darkGrey} /> */}
-                  <Icon
-                    type="ionicon"
-                    name="download-outline"
-                    color={darkGrey}
-                    size={20}
-                  />
+                  {Platform.OS === 'android' ? (
+                    <Icon
+                      type="antdesign"
+                      name="download"
+                      color={darkGrey}
+                      size={16}
+                    />
+                  ) : (
+                    <Icon
+                      type="ionicon"
+                      name="download-outline"
+                      color={darkGrey}
+                      size={20}
+                    />
+                  )}
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
                   disabled
                   style={styles.downloadButton}
                   onPress={() => {}}>
-                  {/* <Icon name="offline-pin" color={green} /> */}
-                  <Icon
-                    type="ionicon"
-                    name="checkmark-circle"
-                    color={green}
-                    size={20}
-                  />
+                  {Platform.OS === 'android' ? (
+                    <Icon
+                      type="antdesign"
+                      name="checkcircle"
+                      color={green}
+                      size={16}
+                    />
+                  ) : (
+                    <Icon
+                      type="ionicon"
+                      name="checkmark-circle"
+                      color={green}
+                      size={20}
+                    />
+                  )}
                 </TouchableOpacity>
               )}
             </View>
@@ -131,13 +152,18 @@ class FormList extends React.Component {
   };
 
   render() {
-    const {searchKeyword} = this.state;
-    const {formList, offlineForms} = this.props;
-    const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
+    // const {searchKeyword} = this.state;
+    const {
+      // formList,
+      offlineForms,
+      filteredFromList,
+      searchKeyword,
+    } = this.props;
+    // const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
 
     return (
       <View style={styles.container}>
-        <SearchBar
+        {/* <SearchBar
           placeholder="Search online form"
           containerStyle={searchBarStyle.searchContainer}
           inputContainerStyle={searchBarStyle.searchInputContainer}
@@ -149,7 +175,7 @@ class FormList extends React.Component {
           onChangeText={this.handleOnChangeText}
           icon="search"
           clearIcon="clear"
-        />
+        /> */}
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList
             keyExtractor={this.keyExtractor}
@@ -174,8 +200,8 @@ class FormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  formList: selectSortedFormList,
-  orgPath: selectOrganistationPath,
+  // formList: selectSortedFormList,
+  // orgPath: selectOrganistationPath,
   offlineForms: selectOfflineFormList,
 });
 

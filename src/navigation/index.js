@@ -3,9 +3,8 @@ import {Navigation} from 'react-native-navigation';
 // import Feather from 'react-native-vector-icons/Feather';
 
 import {screens} from '@constant/ScreenConstants';
-import {red, white} from '@styles/colors';
-import {regular} from '@styles/font';
-import {questrial} from '../styles/font';
+import {red, white, darkGrey} from '@styles/colors';
+import {regular, questrial} from '@styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
@@ -35,6 +34,8 @@ export const setDefaultOptions = () => {
     bottomTabs: {
       backgroundColor: white,
       hideShadow: true,
+      elevation: 0,
+      titleDisplayMode: 'alwaysShow',
     },
   });
 };
@@ -131,6 +132,7 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'BOK',
                   icon: bookOpenIcon,
+                  iconColor: darkGrey,
                   fontFamily: questrial,
                   selectedIcon: bookOpenIcon,
                   selectedIconColor: red,
@@ -160,35 +162,8 @@ export const showMainScreen = async () => {
                   text: 'FORM',
                   fontFamily: questrial,
                   icon: clipboardIcon,
+                  iconColor: darkGrey,
                   selectedIcon: clipboardIcon,
-                  selectedIconColor: red,
-                  selectedTextColor: red,
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              id: 'PROFILE_TAB',
-              children: [
-                {
-                  component: {
-                    id: screens.ProfileScreen,
-                    name: screens.ProfileScreen,
-                    options: {
-                      topBar: {
-                        visible: true,
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'PROFILE',
-                  fontFamily: questrial,
-                  icon: userIcon,
-                  selectedIcon: userIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -215,8 +190,38 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'OUTBOX',
                   fontFamily: questrial,
+                  iconColor: darkGrey,
                   icon: outboxIcon,
                   selectedIcon: outboxIcon,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'PROFILE_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.ProfileScreen,
+                    name: screens.ProfileScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'PROFILE',
+                  fontFamily: questrial,
+                  iconColor: darkGrey,
+                  icon: userIcon,
+                  selectedIcon: userIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },

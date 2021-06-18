@@ -2,7 +2,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+  Alert,
+  Platform,
+} from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
 import {filter, includes, findIndex} from 'ramda';
@@ -16,7 +24,7 @@ import {
 } from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
-import {red, darkGrey, lightGrey} from '@styles/colors';
+import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
 import {selectOfflineFormList, selectOfflineCurrentForm} from 'selector/form';
 import {cardStyle, searchBarStyle} from '@styles/common';
@@ -126,12 +134,16 @@ class Outbox extends React.Component {
           <View style={styles.cardView}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={() => this.onDeleteAlert(id)}>
-                <Icon
-                  type="ionicon"
-                  name="trash-outline"
-                  color={red}
-                  size={20}
-                />
+                {Platform.OS === 'android' ? (
+                  <Icon type="antdesign" name="delete" color={red} size={16} />
+                ) : (
+                  <Icon
+                    type="ionicon"
+                    name="trash-outline"
+                    color={red}
+                    size={20}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -165,26 +177,38 @@ class Outbox extends React.Component {
 
     return (
       <>
-        <TouchableOpacity
-          style={styles.filterView}
-          onPress={() => this.onFilterOutboxList('draft')}>
-          <Icon type="ionicon" name="options-outline" color={darkGrey} />
-          <Text style={styles.filterText}>{filterLabel}</Text>
-        </TouchableOpacity>
-        <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Outbox</Text>
           <SearchBar
             placeholder="Search outbox"
             containerStyle={searchBarStyle.searchContainer}
             inputContainerStyle={searchBarStyle.searchInputContainer}
             inputStyle={searchBarStyle.searchInput}
             searchIcon={{
-              color: darkGrey,
+              color: veryLightGrey,
             }}
+            selectionColor={veryLightGrey}
+            placeholderTextColor={veryLightGrey}
             value={searchKeyword}
             onChangeText={this.handleOnChangeText}
-            icon="search"
-            clearIcon="clear"
+            clearIcon={{
+              color: veryLightGrey,
+            }}
           />
+        </View>
+        <TouchableHighlight
+          underlayColor="transparent"
+          onPress={this.onFilterOutboxList}>
+          <View style={styles.filterView}>
+            {Platform.OS === 'android' ? (
+              <Icon type="antdesign" name="filter" color={white} />
+            ) : (
+              <Icon type="ionicon" name="options-outline" color={white} />
+            )}
+            <Text style={styles.filterText}>{filterLabel}</Text>
+          </View>
+        </TouchableHighlight>
+        <View style={styles.container}>
           {filteredOutbox && filteredOutbox.length > 0 ? (
             <FlatList
               keyExtractor={this.keyExtractor}

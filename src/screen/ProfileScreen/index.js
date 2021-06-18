@@ -8,12 +8,6 @@ import {red} from '@styles/colors';
 class ProfileScreen extends React.Component {
   static options = () => {
     const option = {
-      topBar: {
-        visible: false,
-        title: {
-          text: 'Profile',
-        },
-      },
       statusBar: {
         visible: true,
         backgroundColor: red,

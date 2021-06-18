@@ -1,12 +1,23 @@
 import {StyleSheet} from 'react-native';
-import {green, darkGrey, lightGrey, veryLightGrey} from '@styles/colors';
-import {questrial, regular} from '@styles/font';
+import {green, darkGrey, veryLightGrey, red, white} from '@styles/colors';
+import {questrial, regular, large} from '@styles/font';
 import {small} from '../../styles/font';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
+  },
+  header: {
+    backgroundColor: red,
+    justifyContent: 'center',
+    height: 124,
+    paddingHorizontal: 30,
+  },
+  headerText: {
+    fontSize: large,
+    color: white,
+    fontFamily: questrial,
+    letterSpacing: 0.5,
   },
   cardView: {
     flexDirection: 'row',
@@ -37,7 +48,7 @@ export default StyleSheet.create({
     letterSpacing: 0.2,
   },
   emptyContainer: {
-    marginTop: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -66,16 +77,18 @@ export default StyleSheet.create({
   },
   filterView: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     paddingVertical: 10,
-    backgroundColor: veryLightGrey,
+    backgroundColor: red,
     alignItems: 'center',
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
   filterText: {
     paddingLeft: 10,
     letterSpacing: 0.2,
     fontFamily: questrial,
     fontSize: regular,
-    color: darkGrey,
+    color: white,
   },
 });

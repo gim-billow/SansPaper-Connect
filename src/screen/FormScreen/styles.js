@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {white} from '@styles/colors';
-import {questrial, regular} from '@styles/font';
+import {white, red} from '@styles/colors';
+import {questrial, regular, large} from '@styles/font';
 
 export default StyleSheet.create({
   container: {
@@ -19,6 +19,23 @@ export default StyleSheet.create({
   },
   tab: {
     width: 'auto',
-    marginLeft: 15,
+    marginLeft: 30,
+  },
+  header: {
+    backgroundColor: red,
+    justifyContent: 'center',
+    height: 122,
+    paddingHorizontal: 30,
+  },
+  headerText: {
+    fontSize: large,
+    color: white,
+    fontFamily: questrial,
+    letterSpacing: 0.5,
+  },
+  tabBar: {
+    backgroundColor: red,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
 });

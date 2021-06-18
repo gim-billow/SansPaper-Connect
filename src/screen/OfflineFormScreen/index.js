@@ -13,14 +13,6 @@ const OfflineFormScreen = () => {
 };
 
 OfflineFormScreen.options = {
-  topBar: {
-    title: {
-      text: 'Outbox',
-    },
-    backButton: {
-      showTitle: false,
-    },
-  },
   statusBar: {
     visible: true,
     backgroundColor: red,

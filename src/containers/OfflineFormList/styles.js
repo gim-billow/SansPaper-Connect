@@ -23,7 +23,7 @@ export default StyleSheet.create({
     color: darkGrey,
   },
   emptyContainer: {
-    marginTop: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },

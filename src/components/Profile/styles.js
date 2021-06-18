@@ -1,31 +1,38 @@
 import {StyleSheet} from 'react-native';
 import {spaceMedium} from 'styles/space';
-import {regular} from 'styles/font';
-import {darkGrey} from '@styles/colors';
+import {regular, questrial, medium} from 'styles/font';
+import {red, white} from '@styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   top: {
-    paddingVertical: 40,
-    paddingHorizontal: 10,
+    backgroundColor: red,
+    height: 170,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 30,
   },
   name: {
-    fontSize: 25,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    paddingTop: 10,
+    fontSize: medium,
+    letterSpacing: 1,
+    color: white,
+    fontFamily: questrial,
   },
   subText: {
     textAlign: 'center',
-    color: darkGrey,
+    color: white,
     fontSize: regular,
+    fontFamily: questrial,
     marginHorizontal: spaceMedium,
   },
   listContainer: {
     paddingHorizontal: 30,
+    justifyContent: 'center',
   },
   list: {
     paddingVertical: 20,
@@ -35,17 +42,24 @@ export default StyleSheet.create({
     marginRight: 10,
   },
   title: {
-    fontWeight: 'bold',
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    color: '#000',
   },
   description: {
-    fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    paddingTop: 3,
   },
   updateText: {
+    fontFamily: questrial,
+    paddingVertical: 3,
     color: 'gray',
     fontSize: 10,
   },
   updateVersion: {
     color: 'green',
+    fontFamily: questrial,
   },
 
   // modal styles
@@ -98,5 +112,9 @@ export default StyleSheet.create({
   },
   marginLeftSmall: {
     marginLeft: 20,
+  },
+  profileLogo: {
+    width: 75,
+    height: 75,
   },
 });

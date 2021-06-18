@@ -29,7 +29,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   emptyContainer: {
-    marginTop: 10,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },

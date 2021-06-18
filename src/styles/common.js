@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed, veryLightGrey, darkGrey} from './colors';
+import {red, darkRed, altRed, veryLightGrey, darkGrey, white} from './colors';
 import {small, regular, questrial} from './font';
 import {spaceRegular} from 'styles/space';
 
@@ -63,16 +63,18 @@ export const searchBarStyle = StyleSheet.create({
     backgroundColor: 'transparent',
     borderTopWidth: 0,
     borderBottomWidth: 0,
-    marginHorizontal: 5,
-    marginTop: 10,
+    // marginHorizontal: 5,
+    padding: 0,
+    marginTop: 20,
   },
   searchInputContainer: {
-    borderRadius: 10,
-    backgroundColor: veryLightGrey,
+    borderRadius: 15,
+    backgroundColor: altRed,
   },
   searchInput: {
     fontFamily: questrial,
     fontSize: regular,
     letterSpacing: 0.2,
+    color: white,
   },
 });
