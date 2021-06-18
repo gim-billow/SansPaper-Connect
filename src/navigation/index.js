@@ -1,15 +1,19 @@
 import {Navigation} from 'react-native-navigation';
-import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
+// import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
+// import Feather from 'react-native-vector-icons/Feather';
 
 import {screens} from '@constant/ScreenConstants';
-import {red, backgroundColor} from '@styles/colors';
+import {red, white} from '@styles/colors';
 import {regular} from '@styles/font';
+import {questrial} from '../styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
     layout: {
       orientation: ['portrait'],
+    },
+    statusBar: {
+      style: 'light',
     },
     topBar: {
       animate: true,
@@ -17,16 +21,19 @@ export const setDefaultOptions = () => {
       background: {
         color: red,
       },
+      noBorder: true,
+      elevation: 0,
       title: {
         color: 'white',
         fontSize: regular,
+        fontFamily: questrial,
       },
       backButton: {
         color: 'white',
       },
     },
     bottomTabs: {
-      backgroundColor,
+      backgroundColor: white,
       hideShadow: true,
     },
   });
@@ -124,6 +131,7 @@ export const showMainScreen = async () => {
                 bottomTab: {
                   text: 'BOK',
                   icon: bookOpenIcon,
+                  fontFamily: questrial,
                   selectedIcon: bookOpenIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
@@ -150,6 +158,7 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'FORM',
+                  fontFamily: questrial,
                   icon: clipboardIcon,
                   selectedIcon: clipboardIcon,
                   selectedIconColor: red,
@@ -177,6 +186,7 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'PROFILE',
+                  fontFamily: questrial,
                   icon: userIcon,
                   selectedIcon: userIcon,
                   selectedIconColor: red,
@@ -204,6 +214,7 @@ export const showMainScreen = async () => {
               options: {
                 bottomTab: {
                   text: 'OUTBOX',
+                  fontFamily: questrial,
                   icon: outboxIcon,
                   selectedIcon: outboxIcon,
                   selectedIconColor: red,

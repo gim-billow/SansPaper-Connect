@@ -1,31 +1,36 @@
 import {StyleSheet} from 'react-native';
-import {lightGrey} from '@styles/colors';
+import {darkGrey} from '@styles/colors';
+import {questrial, regular} from '@styles/font';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-  },
-  flex1: {
     flex: 1,
   },
-  searchbar: {
-    marginBottom: 20,
-  },
-  emptyContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  row: {
-    flex: 1,
+  cardView: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  downloadButton: {
-    width: 50,
-    height: '100%',
+  titleView: {
+    flex: 1,
+    marginRight: 20,
+    marginLeft: 10,
+  },
+  title: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: darkGrey,
+  },
+  emptyContainer: {
+    marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 0.5,
-    borderColor: lightGrey,
+  },
+  emptyText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: darkGrey,
   },
 });

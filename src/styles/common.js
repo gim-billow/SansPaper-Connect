@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed} from './colors';
-import {small, regular} from './font';
+import {red, darkRed, veryLightGrey, darkGrey} from './colors';
+import {small, regular, questrial} from './font';
 import {spaceRegular} from 'styles/space';
 
 const {height} = Dimensions.get('screen');
@@ -39,5 +39,40 @@ export const commonStyles = StyleSheet.create({
   text: {
     fontSize: regular,
     paddingHorizontal: spaceRegular,
+  },
+});
+
+export const cardStyle = StyleSheet.create({
+  shadow: {
+    borderRadius: 10,
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+});
+
+export const searchBarStyle = StyleSheet.create({
+  searchContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    marginHorizontal: 5,
+    marginTop: 10,
+  },
+  searchInputContainer: {
+    borderRadius: 10,
+    backgroundColor: veryLightGrey,
+  },
+  searchInput: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
   },
 });

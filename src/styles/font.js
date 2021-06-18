@@ -1,3 +1,6 @@
+// font family
+export const questrial = 'Questrial-Regular';
+
 //font size
 export const small = 12;
 export const regular = 16;

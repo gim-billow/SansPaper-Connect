@@ -3,10 +3,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {View, FlatList, Text, TouchableOpacity, Alert} from 'react-native';
-import {Searchbar} from 'react-native-paper';
 import memoize from 'memoize-one';
+import {Icon, Card, SearchBar} from 'react-native-elements';
+import {filter, includes} from 'ramda';
 
-import {ListItem, Icon} from 'react-native-elements';
 import {selectOfflineFormList} from '@selector/form';
 import {updateOfflineCurrentFormId, deleteOfflineForm} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
@@ -14,15 +14,14 @@ import {
   goToOfflineLinkedItemScreen,
   goToOfflineFormFieldsScreen,
 } from '@store/navigate';
-import ItemWrapper from '../../components/Fields/ItemWrapper';
-import {filter, includes} from 'ramda';
+
 import styles from './styles';
-import {red} from '@styles/colors';
+import {darkGrey, red, lightGrey} from '@styles/colors';
+import {cardStyle, searchBarStyle} from '@styles/common';
 
 class OfflineFormList extends React.Component {
   state = {
     searchKeyword: '',
-    refresh: false,
   };
 
   keyExtractor = (item, index) => index?.toString();
@@ -65,6 +64,7 @@ class OfflineFormList extends React.Component {
         {
           text: 'Delete',
           onPress: () => this.props.deleteOfflineForm(id),
+          style: 'destructive',
         },
         {
           text: 'Cancel',
@@ -80,23 +80,30 @@ class OfflineFormList extends React.Component {
     const {name, linkedtable, id} = item;
 
     return (
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.downloadButton}
-          onPress={() => this.onDeleteAlert(id)}>
-          <Icon name="delete" color={red} />
-        </TouchableOpacity>
-        <ItemWrapper>
-          <ListItem
-            key={id}
-            bottomDivider
-            onPress={() => this.onPress(linkedtable, id)}>
-            <ListItem.Content>
-              <ListItem.Title>{name}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        </ItemWrapper>
+      <View style={{paddingVertical: 4}}>
+        <Card containerStyle={cardStyle.shadow}>
+          <View style={styles.cardView}>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={() => this.onDeleteAlert(id)}>
+                <Icon
+                  type="ionicon"
+                  name="trash-outline"
+                  color={red}
+                  size={20}
+                />
+                {/* <Icon name="delete" color={red} /> */}
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.titleView}
+              onPress={() => this.onPress(linkedtable, id)}>
+              <Text style={styles.title}>{name}</Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <Icon name="navigate-next" color={lightGrey} />
+            </View>
+          </View>
+        </Card>
       </View>
     );
   };
@@ -108,9 +115,14 @@ class OfflineFormList extends React.Component {
 
     return (
       <View style={styles.flex1}>
-        <Searchbar
-          placeholder="Search form"
-          style={styles.searchbar}
+        <SearchBar
+          placeholder="Search offline form"
+          containerStyle={searchBarStyle.searchContainer}
+          inputContainerStyle={searchBarStyle.searchInputContainer}
+          inputStyle={searchBarStyle.searchInput}
+          searchIcon={{
+            color: darkGrey,
+          }}
           value={searchKeyword}
           onChangeText={this.handleOnChangeText}
           icon="search"
@@ -118,18 +130,20 @@ class OfflineFormList extends React.Component {
         />
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList
-            style={styles.container}
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
-            refreshing={this.state.refresh}
           />
         ) : searchKeyword === '' ? (
           <View style={styles.emptyContainer}>
-            <Text>No forms downloaded yet </Text>
+            <Text style={styles.emptyText}>No forms downloaded yet.</Text>
           </View>
         ) : (
-          <Text>No results match your search criteria </Text>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              No results match your search criteria.
+            </Text>
+          </View>
         )}
       </View>
     );

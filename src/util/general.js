@@ -9,7 +9,7 @@ export const convertDate = (date) => {
 };
 
 export const displayDate = (date) => {
-  return moment(date).format('ddd MMM DD hh:mm A');
+  return moment(date).format('ddd MMM DD, H:mm a');
 };
 
 export const diff = function (a, b) {
