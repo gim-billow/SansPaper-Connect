@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import {findIndex, propEq} from 'ramda';
 
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import {commonStyles} from '@styles/common';
@@ -102,12 +100,23 @@ class Currency extends Component {
   render() {
     const {item, isEditable} = this.props;
     const {data, selected} = this.state;
-    const {container, selectToggle, button, itemText, topContainer} = styles;
+    const {
+      container,
+      selectToggle,
+      button,
+      itemText,
+      confirmText,
+      searchBar,
+      selectToggleText,
+      chipsWrapper,
+      chipText,
+      chipContainer,
+    } = styles;
 
     return (
-      <ItemWrapper>
-        <View style={topContainer}>
-          <Text style={commonStyles.text}>{item.label}</Text>
+      <>
+        <View style={styles.topContainer}>
+          <Text style={commonStyles.title}>{item.label}</Text>
           {item.mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -117,34 +126,30 @@ class Currency extends Component {
             <SectionedMultiSelect
               disabled={!isEditable}
               styles={{
+                confirmText,
                 container,
+                searchBar,
                 selectToggle,
                 button,
                 itemText,
+                selectToggleText,
+                chipsWrapper,
+                chipText,
+                chipContainer,
               }}
               items={data}
-              searchPlaceholderText="Search from items"
               IconRenderer={Icon}
+              showCancelButton
               uniqueKey="id"
               single={true}
-              showCancelButton
-              selectText="Select from options"
+              selectText="Search from items"
+              searchPlaceholderText="Search from items"
               onSelectedItemsChange={this.onValueChange.bind(this)}
               selectedItems={selected}
             />
-            {/* <Picker
-              mode="dropdown"
-              style={styles.container}
-              placeholder="Select from options"
-              iosIcon={<Icon name="chevron-down" />}
-              selectedValue={selected}
-              onValueChange={this.onValueChange.bind(this)}>
-              {this.populatePicker(data)}
-            </Picker> */}
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }

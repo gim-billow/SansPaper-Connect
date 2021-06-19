@@ -1,23 +1,16 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, superSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {small} from 'styles/font';
+import {spaceSmall, superSmall, spaceLarge, spaceRegular} from '@styles/space';
+import {questrial, regular} from '@styles/font';
 import {
   lightRed,
   darkRed,
   white,
   superLightRed,
-  darkGrey,
+  red,
   lightGrey,
 } from '@styles/colors';
 
 export default StyleSheet.create({
-  signatureColor: {
-    backgroundColor: 'transparent',
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderRadius: 5,
-    borderColor: lightGrey,
-  },
   dimmedSingature: {
     position: 'absolute',
     left: 0,
@@ -25,40 +18,38 @@ export default StyleSheet.create({
     top: 0,
     bottom: 0,
     backgroundColor: 'transparent',
-    marginHorizontal: spaceRegular,
   },
-  text: {
-    color: lightRed,
-    fontSize: small,
-  },
-  ChangeTextColor: {
-    color: white,
-    fontSize: small,
+  topContainer: {
+    marginVertical: spaceLarge,
   },
   container: {
-    marginVertical: spaceMedium,
-    paddingVertical: spaceSmall,
+    marginTop: spaceRegular,
   },
   signView: {
     borderWidth: 1.5,
     borderRadius: 5,
     borderColor: lightGrey,
     borderStyle: 'dashed',
-    marginHorizontal: spaceRegular,
+    marginBottom: 10,
   },
   droidSignature: {
     flex: 1,
     height: 200,
   },
   signature: {
-    paddingHorizontal: spaceRegular,
     height: 200,
+    marginBottom: 10,
+  },
+  disableText: {
+    color: white,
+  },
+  disable: {
+    backgroundColor: red,
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
     marginTop: spaceSmall,
-    marginHorizontal: spaceRegular,
   },
   leftButton: {
     flex: 1,
@@ -68,10 +59,12 @@ export default StyleSheet.create({
     flex: 1,
     marginLeft: superSmall,
   },
-  buttonColor: {
-    backgroundColor: white,
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
+    fontSize: regular,
   },
-  ChangeButtonColor: {
-    backgroundColor: darkRed,
+  btnContainer: {
+    borderRadius: 10,
   },
 });

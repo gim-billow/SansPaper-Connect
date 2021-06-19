@@ -1,11 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {lightGrey, white, darkRed} from 'styles/colors';
-// import {regular} from '@styles/font';
-import {spaceMedium, spaceRegular} from '@styles/space';
+import {spaceLarge} from '@styles/space';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceMedium,
+    marginVertical: spaceLarge,
   },
   checked: {
     backgroundColor: white,
@@ -23,7 +22,7 @@ export default StyleSheet.create({
   box: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: spaceRegular,
+    // marginHorizontal: spaceRegular,
   },
   toggle: {
     flex: 1,

@@ -1,49 +1,31 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceRegular, spaceMedium} from 'styles/space';
-import {regular, small} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {spaceRegular, spaceLarge} from 'styles/space';
+import {regular, questrial} from 'styles/font';
+import {white, red} from '@styles/colors';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceMedium,
+    marginVertical: spaceLarge,
   },
   container: {
-    flex: 1,
     flexDirection: 'row',
-    marginHorizontal: spaceRegular,
+    marginTop: spaceRegular,
   },
-  textSetWrapper: {
-    flex: 1,
-    paddingTop: spaceRegular,
+  btnContainer: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginRight: 10,
   },
-  textSet: {
-    paddingLeft: spaceRegular,
-    fontSize: 12,
-    color: 'grey',
+  disableText: {
+    color: white,
   },
-  left: {
-    marginRight: spaceSmall,
+  disable: {
+    backgroundColor: red,
   },
-  right: {
-    marginLeft: spaceSmall,
-  },
-  button: {
-    flex: 1,
-  },
-  SetDefault: {
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
     fontSize: regular,
-    paddingTop: spaceRegular,
-  },
-  buttonColor: {
-    backgroundColor: 'white',
-  },
-  ChangeButtonColor: {
-    backgroundColor: darkRed,
-  },
-  TextColor: {
-    color: lightRed,
-  },
-  ChangeTextColor: {
-    color: 'white',
   },
 });

@@ -17,6 +17,9 @@ import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 import InAppReview from 'react-native-in-app-review';
+import {Divider, SearchBar} from 'react-native-elements';
+import memoize from 'memoize-one';
+import R from 'ramda';
 
 // push remote and local notifications, fcm
 import messaging from '@react-native-firebase/messaging';
@@ -28,7 +31,8 @@ import {updateFormList} from '@store/forms';
 import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedNews} from '@selector/common';
 import styles from './styles';
-import {red} from '@styles/colors';
+import {red, veryLightGrey} from '@styles/colors';
+import {searchBarStyle} from '@styles/common';
 import {hasAppReview, setAppReview} from '@api/user';
 
 const {width} = Dimensions.get('screen');
@@ -38,6 +42,7 @@ let fcmListener = null;
 class MainScreen extends React.Component {
   state = {
     showMore: [],
+    searchKeyword: '',
   };
 
   componentDidMount() {
@@ -140,7 +145,7 @@ class MainScreen extends React.Component {
   renderMarkdown = ({item, index}) => {
     return (
       <>
-        <View style={styles.newsContainer}>
+        <View style={styles.markDownView}>
           <Markdown style={styles}>
             {!this.state.showMore[index]
               ? limitText(item.announcement, 170)
@@ -158,12 +163,30 @@ class MainScreen extends React.Component {
             </TouchableOpacity>
           ) : null}
         </View>
+        <Divider style={{marginHorizontal: 30}} />
       </>
     );
   };
 
+  getFilteredNews = memoize((news, searchKeyword) => {
+    return R.filter(
+      (item) =>
+        R.includes(
+          searchKeyword?.toLowerCase(),
+          item?.announcement?.toLowerCase(),
+        ),
+      news,
+    );
+  });
+
+  handleOnChangeText = (text) => {
+    this.setState({searchKeyword: text});
+  };
+
   render() {
+    const {searchKeyword} = this.state;
     const {updatedNews} = this.props;
+    const filteredNews = this.getFilteredNews(updatedNews, searchKeyword);
 
     if (!updatedNews.length) {
       return (
@@ -180,14 +203,29 @@ class MainScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Top News for Today</Text>
-          {/* TODO: add search functionality
-          <Icon name="search" type="font-awesome" /> */}
+          {/* <Text style={styles.headerText}>Today's Read</Text> */}
+          <Text style={styles.headerText}>Body of Knowledge</Text>
+          <SearchBar
+            placeholder="Search keywords"
+            containerStyle={searchBarStyle.searchContainer}
+            inputContainerStyle={searchBarStyle.searchInputContainer}
+            inputStyle={searchBarStyle.searchInput}
+            searchIcon={{
+              color: veryLightGrey,
+            }}
+            selectionColor={veryLightGrey}
+            placeholderTextColor={veryLightGrey}
+            value={searchKeyword}
+            onChangeText={this.handleOnChangeText}
+            clearIcon={{
+              color: veryLightGrey,
+            }}
+          />
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           keyExtractor={this.keyExtractor}
-          data={updatedNews}
+          data={filteredNews}
           renderItem={this.renderMarkdown}
           extraData={this.state}
         />
@@ -202,12 +240,6 @@ const mapState = createStructuredSelector({
 });
 
 MainScreen.options = {
-  topBar: {
-    visible: false,
-    title: {
-      text: 'News',
-    },
-  },
   statusBar: {
     visible: true,
     backgroundColor: red,

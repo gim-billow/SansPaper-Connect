@@ -1,8 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed} from './colors';
-import {small, regular} from './font';
-import {spaceRegular} from 'styles/space';
+import {red, darkRed, altRed, white} from './colors';
+import {small, regular, questrial, robotoMedium} from './font';
 
 const {height} = Dimensions.get('screen');
 export const customHeight = height / 1.5;
@@ -36,8 +35,52 @@ export const commonStyles = StyleSheet.create({
   spacing: {
     paddingVertical: 2,
   },
+  title: {
+    fontSize: regular,
+    fontFamily: robotoMedium,
+    color: '#000',
+  },
   text: {
     fontSize: regular,
-    paddingHorizontal: spaceRegular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    color: '#000',
+  },
+});
+
+export const cardStyle = StyleSheet.create({
+  shadow: {
+    borderRadius: 10,
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+});
+
+export const searchBarStyle = StyleSheet.create({
+  searchContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    // marginHorizontal: 5,
+    padding: 0,
+    marginTop: 20,
+  },
+  searchInputContainer: {
+    borderRadius: 15,
+    backgroundColor: altRed,
+  },
+  searchInput: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: white,
   },
 });

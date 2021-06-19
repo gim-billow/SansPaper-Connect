@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
-import {lightRed, darkRed, white} from '@styles/colors';
+import {spaceRegular, spaceLarge} from 'styles/space';
+import {red, white} from '@styles/colors';
+import {questrial, regular} from '@styles/font';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceMedium,
+    marginVertical: spaceLarge,
   },
   canvasContainer: {
     flexDirection: 'row',
@@ -16,41 +17,32 @@ export default StyleSheet.create({
     flexDirection: 'row',
     height: 500,
   },
-  text: {
-    color: lightRed,
-    fontSize: 14,
+  btnContainer: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  ChangeTextColor: {
-    color: white,
-    fontSize: 13,
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
+    fontSize: regular,
   },
   button: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingVertical: spaceSmall,
-    // paddingLeft: spaceSmall,
-  },
-  buttonColor: {
-    backgroundColor: 'white',
-  },
-  ChangeButtonColor: {
-    backgroundColor: darkRed,
+    justifyContent: 'flex-start',
+    marginVertical: spaceRegular,
   },
   box: {
     height: 500,
-    marginHorizontal: spaceRegular,
-  },
-  dimmedSingature: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 80,
-    bottom: 60,
-    backgroundColor: 'transparent',
-    marginHorizontal: spaceRegular,
   },
   canvasWrapper: {
     flexDirection: 'row',
+  },
+  disableText: {
+    color: white,
+  },
+  disable: {
+    backgroundColor: red,
   },
   image: {
     position: 'absolute',

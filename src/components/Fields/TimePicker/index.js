@@ -1,19 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const TimePicker = (props) => {
   const {item, updateFieldsValue, isEditable} = props;
-  const [label, setLabel] = useState('Select Time');
+  const [label, setLabel] = useState('Select time');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
@@ -58,46 +57,35 @@ const TimePicker = (props) => {
   };
 
   const cancel = () => {
-    if (label !== 'Select Time') {
+    if (label !== 'Select time') {
       Toast.show('Success, remove the time ' + label.toString());
-      setLabel('Select Time');
+      setLabel('Select time');
       setChangeTheme(false);
       updateFieldsValue({rank: item.rank, value: ''});
     }
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{item.label}</Text>
+        <Text style={commonStyles.title}>{item.label}</Text>
         {item.mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
         <View style={styles.date}>
-          <TouchableRipple
+          <Button
             disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={label.toString()}
+            type={changeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.container}
+            onPress={showTimePicker}
             onLongPress={cancel}
-            onPress={showTimePicker}>
-            <Button
-              disabled={!isEditable}
-              mode="contained"
-              style={
-                changeTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }>
-              <Text
-                style={
-                  changeTheme === true
-                    ? styles.ChangeTextColor
-                    : styles.TextColor
-                }>
-                {label.toString()}
-              </Text>
-            </Button>
-          </TouchableRipple>
+          />
           <DateTimePickerModal
             isVisible={isTimePickerVisible}
             mode="time"
@@ -107,8 +95,7 @@ const TimePicker = (props) => {
           />
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

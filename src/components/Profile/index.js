@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  Alert,
-  Modal,
-  TextInput,
-  ScrollView,
-  Linking,
-} from 'react-native';
+import {Text, View, Alert, Linking, Image} from 'react-native';
 import styles from './styles';
 
 import auth from '@react-native-firebase/auth';
@@ -17,11 +9,8 @@ import {clearStorageUserId} from '@api/upvise';
 
 import {getReadableVersion} from 'react-native-device-info';
 
-import {Button, List} from 'react-native-paper';
+import {List} from 'react-native-paper';
 import {Divider} from 'react-native-elements';
-
-// icons
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // svg icon
 import MailIcon from './SvgIcon/MailIcon';
@@ -37,6 +26,7 @@ import {createStructuredSelector} from 'reselect';
 import {logoutUser} from '@store/user';
 import {selectEmail} from 'selector/user';
 import {selectUser, selectOrganistation} from 'selector/sanspaper';
+import {darkGrey, red} from '@styles/colors';
 
 class Profile extends Component {
   state = {
@@ -91,41 +81,33 @@ class Profile extends Component {
       <>
         <View style={styles.container}>
           <View style={styles.top}>
+            <Image
+              source={require('../../assets/user.png')}
+              resizeMode="contain"
+              resizeMethod="auto"
+              style={styles.profileLogo}
+            />
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.subText}>{organization.name}</Text>
           </View>
-          <Divider />
+
           {/* email */}
           <View style={styles.listContainer}>
             <List.Item
               style={styles.list}
               titleStyle={styles.title}
               title="Email"
+              descriptionStyle={styles.description}
               description={email}
               left={() => (
                 <View style={styles.listIcon}>
-                  <MailIcon width={30} height={40} color="green" />
+                  <MailIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
-          {/* change password */}
-          {/* <View style={styles.listContainer}>
-            <List.Item
-              onPress={this.showModal}
-              style={styles.list}
-              titleStyle={styles.title}
-              title="Change Password"
-              description="*********"
-              left={() => (
-                <View style={styles.listIcon}>
-                  <MaterialIcons name="lock" size={30} color="green" />
-                </View>
-              )}
-            />
-          </View>
-          <Divider /> */}
+
           {/* update */}
           <View style={styles.listContainer}>
             <List.Item
@@ -144,12 +126,13 @@ class Profile extends Component {
               descriptionStyle={styles.updateText}
               left={() => (
                 <View style={styles.listIcon}>
-                  <UpdatedIcon width={30} height={40} color="green" />
+                  <UpdatedIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
+
           {/* Privacy Policy */}
           <View style={styles.listContainer}>
             <List.Item
@@ -161,12 +144,13 @@ class Profile extends Component {
               title="Privacy Policy"
               left={() => (
                 <View style={styles.listIcon}>
-                  <PrivacyPolicyIcon width={30} height={40} color="green" />
+                  <PrivacyPolicyIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
+
           {/* logout */}
           <View style={styles.listContainer}>
             <List.Item
@@ -176,44 +160,12 @@ class Profile extends Component {
               title="Logout"
               left={() => (
                 <View style={styles.listIcon}>
-                  <LogoutIcon width={30} height={40} color="red" />
+                  <LogoutIcon width={30} height={40} color={red} />
                 </View>
               )}
             />
           </View>
-          <Divider />
         </View>
-
-        {/* <Modal
-          animationType="fade"
-          transparent={true}
-          visible={this.state.visible}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.changePasswordText}>Change Password</Text>
-              <Text style={styles.passwordTextStyle}>Old Password</Text>
-              <TextInput style={styles.textInput} />
-              <Text style={styles.passwordTextStyle}>New Password</Text>
-              <TextInput style={styles.textInput} />
-              <Text style={styles.passwordTextStyle}>Retype Password</Text>
-              <TextInput style={styles.textInput} />
-              <View style={styles.changePasswordSubContainer}>
-                <Button
-                  style={styles.marginLeftRegular}
-                  mode="contained"
-                  onPress={this.hideModal}>
-                  <Text>Cancel</Text>
-                </Button>
-                <Button
-                  style={styles.marginLeftSmall}
-                  mode="contained"
-                  onPress={() => {}}>
-                  <Text>Confirm</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-        </Modal> */}
       </>
     );
   }

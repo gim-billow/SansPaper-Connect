@@ -1,21 +1,25 @@
 import {StyleSheet} from 'react-native';
-import {spaceRegular, spaceMedium} from 'styles/space';
-import {red} from 'styles/colors';
+import {spaceRegular, spaceLarge} from 'styles/space';
+import {red, white, darkGrey} from 'styles/colors';
+import {questrial, regular} from '@styles/font';
 
 export default StyleSheet.create({
   textInput: {
-    backgroundColor: 'white',
-    marginHorizontal: spaceRegular,
+    backgroundColor: white,
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: darkGrey,
   },
-  textInputWithIcon: {
-    backgroundColor: 'white',
+  input: {
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   textContainer: {
-    marginVertical: spaceMedium,
+    marginVertical: spaceLarge,
   },
   textInputMap: {
     flex: 1,
-    marginLeft: spaceRegular,
     flexDirection: 'row',
   },
   inputWrapper: {

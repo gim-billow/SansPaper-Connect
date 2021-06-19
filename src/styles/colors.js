@@ -4,6 +4,7 @@ export const white = '#fff';
 export const superLightRed = '#ffb3b3';
 export const veryLightRed = '#ffdad8';
 export const red = '#b71c1c';
+export const altRed = '#9E1818';
 export const lightRed = '#f05545';
 export const darkRed = '#7f0000';
 

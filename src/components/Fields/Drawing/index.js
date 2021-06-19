@@ -2,12 +2,11 @@ import React from 'react';
 import {View, Text, Platform, Image as RNImage} from 'react-native';
 import {SketchCanvas} from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
-import {Divider} from 'react-native-elements';
-import {Button} from 'react-native-paper';
+import {Button} from 'react-native-elements';
+// import {Button} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 
-import ItemWrapper from '../ItemWrapper';
 import Stroke from './Stroke';
 import {selectOrganistation} from '@selector/sanspaper';
 import MandatoryField from '../MandatoryField';
@@ -176,9 +175,9 @@ class DrawingBoard extends React.Component {
       return <View />;
     }
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.topContainer}>
-          <Text style={commonStyles.text}>{label}</Text>
+          <Text style={commonStyles.title}>{label}</Text>
           {mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -189,39 +188,28 @@ class DrawingBoard extends React.Component {
               <View style={{paddingRight: 10}}>
                 <Button
                   disabled={!isEditable}
-                  mode="contained"
+                  disabledTitleStyle={styles.disableText}
+                  disabledStyle={styles.disable}
+                  type="outline"
                   style={styles.buttonColor}
-                  onPress={() => {
-                    this.onClear();
-                  }}>
-                  <Text style={styles.text}>Clear</Text>
-                </Button>
+                  title="Clear"
+                  titleStyle={styles.title}
+                  buttonStyle={styles.btnContainer}
+                  onPress={this.onClear}
+                />
               </View>
               <View>
                 <Button
-                  disabled={!isEditable}
-                  mode="contained"
-                  style={
-                    changeTheme === true
-                      ? styles.ChangeButtonColor
-                      : styles.buttonColor
-                  }
-                  onPress={() => {
-                    this.onSave();
-                  }}>
-                  <Text
-                    style={
-                      changeTheme === true
-                        ? styles.ChangeTextColor
-                        : styles.text
-                    }>
-                    {changeTheme === true
-                      ? 'Saved'
-                      : saving
-                      ? 'Saving...'
-                      : 'Save'}
-                  </Text>
-                </Button>
+                  disabled={!isEditable || changeTheme}
+                  disabledTitleStyle={styles.disableText}
+                  disabledStyle={styles.disable}
+                  type={changeTheme ? 'solid' : 'outline'}
+                  style={styles.buttonColor}
+                  title={changeTheme ? 'Saved' : saving ? 'Saving...' : 'Save'}
+                  titleStyle={styles.title}
+                  buttonStyle={styles.btnContainer}
+                  onPress={this.onSave}
+                />
               </View>
             </View>
             <View style={{flex: 1}}>
@@ -271,8 +259,7 @@ class DrawingBoard extends React.Component {
             </View>
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }

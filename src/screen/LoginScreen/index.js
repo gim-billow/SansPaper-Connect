@@ -18,15 +18,16 @@ import {
   Overlay,
   Text as RNEText,
   Divider,
+  Icon,
 } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 import {createStructuredSelector} from 'reselect';
 import auth from '@react-native-firebase/auth';
 import * as yup from 'yup';
 
 //styles
 import styles, {iconProps} from './styles';
-import {lightRed, red} from 'styles/colors';
+import {red, white} from 'styles/colors';
 
 //constants
 import {CommonImages} from 'constant/Images';
@@ -50,6 +51,7 @@ import {
 import {selectUserStatus, selectLoginCode} from '@selector/user';
 import {init} from '@store/common';
 import {readUserEmail} from '@api/user';
+import {darkGrey} from '../../styles/colors';
 
 const forgotEmailSchema = yup.object().shape({
   forgotPassEmail: yup.string().required().email(),
@@ -68,15 +70,12 @@ class LoginScreen extends React.Component {
   static options = () => {
     const option = {
       topBar: {
-        title: {
-          text: 'Login',
-        },
         visible: false,
       },
       statusBar: {
         visible: true,
-        backgroundColor: red,
-        styles: 'light',
+        backgroundColor: white,
+        style: 'dark',
       },
     };
     return option;
@@ -318,7 +317,7 @@ class LoginScreen extends React.Component {
           <IconTextInput
             onChangeText={this.onUserNameChange}
             iconProps={{...iconProps, name: 'envelope'}}
-            placeHolder="E-Mail Address"
+            placeHolder="E-mail"
             error={errorUser}
             value={username}
           />
@@ -335,8 +334,17 @@ class LoginScreen extends React.Component {
           <View style={styles.new_submitBtn}>
             <Button
               title="Login"
-              raised
+              titleStyle={styles.loginText}
               buttonStyle={styles.new_submitBtnStyle}
+              icon={
+                <Icon
+                  type={Platform.OS === 'android' ? 'antdesign' : 'ionicon'}
+                  name={Platform.OS === 'android' ? 'login' : 'log-in-outline'}
+                  size={Platform.OS === 'android' ? 16 : 20}
+                  color="white"
+                  iconStyle={styles.loginIcon}
+                />
+              }
               onPress={this.onLoginPress}
               disabled={loginCode === 'locked'}
             />
@@ -347,12 +355,12 @@ class LoginScreen extends React.Component {
                 onPress={this.onChangeRememberMe}
                 checked={remember}
                 textStyle={styles.checkboxText}
-                checkedColor={lightRed}
+                checkedColor={red}
               />
               <TouchableOpacity
                 style={styles.forgot}
                 onPress={this.onToggleForgotPassOverlay}>
-                <Text style={styles.forgotText}>Forgot Password?</Text>
+                <Text style={styles.forgotText}>Forgot password?</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -429,21 +437,21 @@ class LoginScreen extends React.Component {
           isVisible={forgotPassOverlay}
           onBackdropPress={this.onToggleForgotPassOverlay}>
           <View style={styles.overlayHeader}>
-            <View style={styles.overlayHeaderText}>
-              <RNEText h4>Forgot Password</RNEText>
-              <Text style={styles.overlaySubText}>
-                Enter your email below to receive a password reset link
-              </Text>
-            </View>
+            <RNEText style={styles.overlayHeaderText}>Forgot Password</RNEText>
+            <RNEText style={styles.overlaySubText}>
+              Enter your email below to receive a password reset link
+            </RNEText>
           </View>
           <Input
             placeholder="Enter email address"
             leftIcon={
-              <Icon name="envelope" {...iconProps} style={{width: 20}} />
+              <FAIcon name="envelope" {...iconProps} style={{width: 20}} />
             }
+            inputStyle={styles.overlayTitle}
             inputContainerStyle={
               !errorForgotPassEmail ? styles.inputContainer : styles.error
             }
+            selectionColor={darkGrey}
             autoCapitalize="none"
             value={forgotPassEmail}
             errorMessage={errorForgotPassEmail}
@@ -451,7 +459,7 @@ class LoginScreen extends React.Component {
             errorStyle={!errorForgotPassEmail ? styles.errorView : undefined}
           />
           <Button
-            title="Send Recovery Email"
+            title="Send recovery email"
             onPress={this.onForgotPasswordPress}
             buttonStyle={styles.closeBtnOverlay}
             titleStyle={styles.closeTxtOverlay}
@@ -466,17 +474,17 @@ class LoginScreen extends React.Component {
           isVisible={signupOverlay}
           onBackdropPress={this.onToggleSignUpOverlay}>
           <View style={styles.overlayHeader}>
-            <View style={styles.overlayHeaderText}>
-              <RNEText h4>Request Invitation</RNEText>
-              <Text style={styles.overlaySubText}>
-                Enter your email below to request invitation from the team.
-              </Text>
-            </View>
+            <RNEText style={styles.overlayHeaderText}>
+              Request Invitation
+            </RNEText>
+            <RNEText style={styles.overlaySubText}>
+              Enter your email below to request invitation from the team.
+            </RNEText>
           </View>
           <Input
             placeholder="Enter email address"
             leftIcon={
-              <Icon name="envelope" {...iconProps} style={{width: 20}} />
+              <FAIcon name="envelope" {...iconProps} style={{width: 20}} />
             }
             inputContainerStyle={
               !errorSignUpEmail ? styles.inputContainer : styles.error
@@ -488,7 +496,7 @@ class LoginScreen extends React.Component {
             errorStyle={!errorSignUpEmail ? styles.errorView : undefined}
           />
           <Button
-            title="Send Email"
+            title="Send request"
             onPress={this.onSignUpEmailPress}
             buttonStyle={styles.closeBtnOverlay}
             titleStyle={styles.closeTxtOverlay}

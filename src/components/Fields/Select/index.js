@@ -1,13 +1,11 @@
 import React, {PureComponent} from 'react';
 import {Text, View} from 'react-native';
-import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import R from 'ramda';
 
-import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions, getOptionsFromDB} from './helper';
@@ -121,12 +119,23 @@ class Select extends PureComponent {
   render() {
     const {item, single = true, isEditable} = this.props;
     const {selOptions} = this.state;
-    const {container, selectToggle, button, itemText, chipsWrapper} = styles;
+    const {
+      container,
+      selectToggle,
+      button,
+      itemText,
+      chipsWrapper,
+      searchBar,
+      confirmText,
+      selectToggleText,
+      chipText,
+      chipContainer,
+    } = styles;
 
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.topContainer}>
-          <Text style={commonStyles.text}>{item.label}</Text>
+          <Text style={commonStyles.title}>{item.label}</Text>
           {item.mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -136,27 +145,31 @@ class Select extends PureComponent {
             <SectionedMultiSelect
               disabled={!isEditable}
               styles={{
+                confirmText,
                 container,
+                searchBar,
                 selectToggle,
                 button,
                 itemText,
+                selectToggleText,
                 chipsWrapper,
+                chipText,
+                chipContainer,
               }}
               items={selOptions}
-              searchPlaceholderText="Search from items"
               IconRenderer={Icon}
+              showCancelButton
               uniqueKey="id"
               single={single}
-              showCancelButton
-              selectText="Select from options"
+              selectText="Search from items"
+              searchPlaceholderText="Search from items"
               onSelectedItemsChange={this.onSelectedItemsChange}
               selectedItems={this.state.options}
               hideChipRemove={!isEditable}
             />
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }

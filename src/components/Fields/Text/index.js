@@ -1,13 +1,12 @@
 import React, {useEffect, useState, memo} from 'react';
-import {TextInput} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Input} from 'react-native-elements';
 import {Text, View, Platform, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
+import {darkGrey, lightGrey} from '@styles/colors';
 import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
@@ -74,9 +73,9 @@ const SPText = (props) => {
     label.toLowerCase().includes('address')
   ) {
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.textContainer}>
-          <Text style={commonStyles.text}>{label}</Text>
+          <Text style={commonStyles.title}>{label}</Text>
           {mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -84,14 +83,16 @@ const SPText = (props) => {
           )}
           <View style={styles.textInputMap}>
             <View style={styles.inputWrapper}>
-              <TextInput
+              <Input
                 disabled={!isEditable}
                 onFocus={onInputFocus}
                 onBlur={onBlurInput}
-                style={styles.textInputWithIcon}
+                inputStyle={styles.textInput}
                 value={text}
-                label="Insert here"
-                mode="outlined"
+                placeholder="Insert here"
+                placeholderTextColor={lightGrey}
+                containerStyle={styles.input}
+                selectionColor={darkGrey}
                 selection={selection}
                 keyboardType={keyboard(type)}
                 multiline={type === 'textarea' ? true : false}
@@ -106,36 +107,36 @@ const SPText = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.textContainer}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
-        <TextInput
+        <Input
           disabled={!isEditable}
           onFocus={onInputFocus}
           onBlur={onBlurInput}
-          style={styles.textInput}
+          inputStyle={styles.textInput}
           value={text}
-          label="Insert here"
-          mode="outlined"
+          containerStyle={styles.input}
+          placeholder="Insert here"
+          placeholderTextColor={lightGrey}
+          selectionColor={darkGrey}
           selection={selection}
           keyboardType={keyboard(type)}
           multiline={type === 'textarea' ? true : false}
           onChangeText={(updatedText) => onChangeText(updatedText)}
         />
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

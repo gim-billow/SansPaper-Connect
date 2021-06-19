@@ -1,6 +1,6 @@
 //library
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {View, Platform, Text} from 'react-native';
 import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem, Icon} from 'react-native-elements';
@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {goToGoogleMapScreen} from '@store/navigate';
 import {has} from 'ramda';
-import {lightGrey} from '@styles/colors';
 
 //component
 import Fields from 'components/Fields';
@@ -30,7 +29,7 @@ import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
 import {fieldsProps} from './helper';
-import styles from '../../components/Fields/ItemWrapper/styles';
+import styles from './styles';
 
 class FormFieldsList extends React.Component {
   state = {
@@ -112,7 +111,7 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={styles.flex1}>
+      <View style={styles.container}>
         <KeyboardAwareFlatList
           innerRef={(ref) => {
             this.flatListRef = ref;
@@ -120,6 +119,7 @@ class FormFieldsList extends React.Component {
           keyExtractor={this.keyExtractor}
           data={currentFormFields}
           initialNumToRender={500}
+          showsVerticalScrollIndicator={false}
           renderItem={this.renderItem}
           scrollEnabled={scrollEnabled}
           removeClippedSubviews={false}

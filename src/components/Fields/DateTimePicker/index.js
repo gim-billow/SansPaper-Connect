@@ -1,13 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Divider} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 
 import {setDateTimeFormatDisplay, setDateTime, swapDateNum} from './helper';
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
@@ -20,7 +19,7 @@ const DateTimePicker = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeDateTheme, setChangeDateTheme] = useState(false);
 
-  const [timeLabel, setTimeLabel] = useState('Select Time');
+  const [timeLabel, setTimeLabel] = useState('Select time');
   const [displayTime, setDisplayTime] = useState(new Date().getTime());
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
@@ -99,7 +98,7 @@ const DateTimePicker = (props) => {
   };
 
   const cancelTime = () => {
-    setTimeLabel('Select Time');
+    setTimeLabel('Select time');
     setDisplayTime(new Date().getTime());
 
     setChangeTimeTheme(false);
@@ -109,76 +108,55 @@ const DateTimePicker = (props) => {
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{item.label}</Text>
+        <Text style={commonStyles.title}>{item.label}</Text>
         {item.mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
         <View style={styles.container}>
-          <View style={[styles.button, styles.left]}>
-            <Button
-              disabled={!isEditable}
-              onLongPress={cancelDate}
-              mode="contained"
-              style={
-                changeDateTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }
-              onPress={showDatePicker}>
-              <Text
-                style={
-                  changeDateTheme === true
-                    ? styles.ChangeTextColor
-                    : styles.TextColor
-                }>
-                {dateLabel.toString()}
-              </Text>
-            </Button>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              date={new Date(displayDate)}
-              onConfirm={dateHandleConfirm}
-              onCancel={hideDatePicker}
-            />
-          </View>
-          <View style={[styles.button, styles.right]}>
-            <Button
-              disabled={!isEditable}
-              onLongPress={cancelTime}
-              mode="contained"
-              style={
-                changeTimeTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }
-              onPress={showTimePicker}>
-              <Text
-                style={
-                  changeTimeTheme === true
-                    ? styles.ChangeTextColor
-                    : styles.TextColor
-                }>
-                {timeLabel.toString()}
-              </Text>
-            </Button>
-            <DateTimePickerModal
-              isVisible={isTimePickerVisible}
-              mode="time"
-              date={new Date(displayTime)}
-              headerTextIOS="Set a time"
-              onConfirm={timeHandleConfirm}
-              onCancel={hideTimePicker}
-            />
-          </View>
+          <Button
+            disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={dateLabel.toString()}
+            type={changeDateTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.btnContainer}
+            onPress={showDatePicker}
+            onLongPress={cancelDate}
+          />
+          <Button
+            disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={timeLabel.toString()}
+            type={changeTimeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.btnContainer}
+            onPress={showTimePicker}
+            onLongPress={cancelTime}
+          />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            date={new Date(displayDate)}
+            onConfirm={dateHandleConfirm}
+            onCancel={hideDatePicker}
+          />
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            date={new Date(displayTime)}
+            headerTextIOS="Set a time"
+            onConfirm={timeHandleConfirm}
+            onCancel={hideTimePicker}
+          />
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

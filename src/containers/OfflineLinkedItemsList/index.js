@@ -9,9 +9,8 @@ import {
   Platform,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {ListItem, Icon} from 'react-native-elements';
+import {Icon, Button as RNEButton} from 'react-native-elements';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
-import {Button as RNButton} from 'react-native-paper';
 import {connect} from 'react-redux';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -48,21 +47,6 @@ class OfflineLinkedItemsList extends React.Component {
 
   updateSelOptions = (options) => {
     this.setState({selOptions: options});
-  };
-
-  keyExtractor = (item, index) => index?.toString();
-
-  renderItem = ({item}) => {
-    const {name, id} = item;
-    return (
-      <ListItem key={id} bottomDivider onPress={() => this.onPress(id)}>
-        <MIcon name="file-text-o" type="font-awesome" />
-        <ListItem.Content>
-          <ListItem.Title>{name}</ListItem.Title>
-        </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem>
-    );
   };
 
   onSelectedItemsChange = (id) => {
@@ -108,88 +92,120 @@ class OfflineLinkedItemsList extends React.Component {
 
   render() {
     const {name, linkedtable} = this.props.currentForm;
-    const {container, selectToggle, button, itemText} = styles;
+    const {
+      container,
+      selectToggle,
+      button,
+      itemText,
+      selectToggleText,
+      searchBar,
+      confirmText,
+    } = styles;
 
     return this.state.selOptions.length > 0 ? (
-      <ItemWrapper>
-        <View style={styles.topContainer}>
+      <View style={styles.topContainer}>
+        <View style={styles.subjectHeader}>
           <Text
-            style={[
-              commonStyles.text,
-              commonStyles.spacing,
-            ]}>{`Please select the item you are completing "${name}" for:`}</Text>
-          <View>
-            <SectionedMultiSelect
-              styles={{
-                container,
-                selectToggle,
-                button,
-                itemText,
-              }}
-              items={this.state.selOptions}
-              IconRenderer={MIcon}
-              showCancelButton
-              uniqueKey="id"
-              single={true}
-              selectText="Select from options"
-              onSelectedItemsChange={this.onSelectedItemsChange}
-              selectedItems={this.state.options}
+            style={
+              styles.headerText
+            }>{`Please select the item you are completing "${name}" for:`}</Text>
+        </View>
+        <View style={styles.selectView}>
+          <SectionedMultiSelect
+            styles={{
+              confirmText,
+              container,
+              searchBar,
+              selectToggle,
+              button,
+              itemText,
+              selectToggleText,
+            }}
+            items={this.state.selOptions}
+            IconRenderer={MIcon}
+            showCancelButton
+            uniqueKey="id"
+            single={true}
+            selectText="Select subject"
+            onSelectedItemsChange={this.onSelectedItemsChange}
+            selectedItems={this.state.options}
+          />
+        </View>
+
+        {linkedtable.toLowerCase() === 'tools.tools' ? (
+          <View style={styles.qrView}>
+            <RNEButton
+              onPress={() => this.setState({showModal: true})}
+              icon={
+                Platform.OS === 'android' ? (
+                  <Icon
+                    type="antdesign"
+                    size={20}
+                    name="qrcode"
+                    color="white"
+                  />
+                ) : (
+                  <Icon
+                    type="ionicon"
+                    size={20}
+                    name="qr-code-outline"
+                    color="white"
+                  />
+                )
+              }
+              title="Scan serial number"
+              buttonStyle={styles.qrButton}
+              titleStyle={styles.qrText}
             />
           </View>
+        ) : null}
 
-          {linkedtable.toLowerCase() === 'tools.tools' ? (
-            <View style={styles.qrButton}>
-              <RNButton
-                mode="contained"
-                onPress={() => this.setState({showModal: true})}>
-                <Text style={commonStyles.text}>Scan serial number</Text>
-              </RNButton>
+        <Modal
+          animationType="fade"
+          visible={this.state.showModal}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.qrArea}>
+              <QRCodeScanner
+                onRead={this.onSuccess}
+                showMarker
+                markerStyle={styles.qrBorderColor}
+                topContent={
+                  <SafeAreaView style={styles.h}>
+                    <View style={styles.header}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({
+                            showModal: !this.state.showModal,
+                          })
+                        }>
+                        <View style={styles.qrBackBtn}>
+                          <Icon
+                            containerStyle={styles.icon}
+                            name="chevron-left"
+                            type="font-awesome"
+                            color="#fff"
+                          />
+                          <Text style={styles.modalText}>Back</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </SafeAreaView>
+                }
+              />
             </View>
-          ) : null}
-
-          <Modal
-            animationType="fade"
-            visible={this.state.showModal}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.qrArea}>
-                <QRCodeScanner
-                  onRead={this.onSuccess}
-                  showMarker
-                  markerStyle={styles.qrBorderColor}
-                  topContent={
-                    <SafeAreaView style={styles.h}>
-                      <View style={styles.header}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            this.setState({
-                              showModal: !this.state.showModal,
-                            })
-                          }>
-                          <View style={styles.qrBackBtn}>
-                            <Icon
-                              containerStyle={styles.icon}
-                              name="chevron-left"
-                              type="font-awesome"
-                              color="#fff"
-                            />
-                            <Text style={styles.modalText}>Back</Text>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    </SafeAreaView>
-                  }
-                />
-              </View>
-            </View>
-          </Modal>
-        </View>
-      </ItemWrapper>
+          </View>
+        </Modal>
+      </View>
     ) : (
-      <View>
-        <Text> Error: please contact support</Text>
+      <View style={styles.topContainer}>
+        <View style={styles.subjectHeader}>
+          <Text style={styles.headerText}>
+            Linked items are empty. Please contact support.
+          </Text>
+        </View>
       </View>
     );
   }

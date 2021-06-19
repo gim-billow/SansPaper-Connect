@@ -1,14 +1,18 @@
-import {screens} from '@constant/ScreenConstants';
-import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
-import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
-import {regular} from '@styles/font';
+// import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
+// import Feather from 'react-native-vector-icons/Feather';
+
+import {screens} from '@constant/ScreenConstants';
+import {red, white, darkGrey} from '@styles/colors';
+import {regular, questrial} from '@styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
     layout: {
       orientation: ['portrait'],
+    },
+    statusBar: {
+      style: 'light',
     },
     topBar: {
       animate: true,
@@ -16,13 +20,22 @@ export const setDefaultOptions = () => {
       background: {
         color: red,
       },
+      noBorder: true,
+      elevation: 0,
       title: {
         color: 'white',
         fontSize: regular,
+        fontFamily: questrial,
       },
       backButton: {
         color: 'white',
       },
+    },
+    bottomTabs: {
+      backgroundColor: white,
+      hideShadow: true,
+      elevation: 0,
+      titleDisplayMode: 'alwaysShow',
     },
   });
 };
@@ -62,29 +75,37 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const userIcon = await FontAwesome5.getImageSource('user', 25);
-  const userIconSelect = await FontAwesome5.getImageSource(
-    'user',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const clipboardIcon = await Feather.getImageSource('clipboard', 25);
-  const clipboardIconSelect = await FontAwesome5.getImageSource(
-    'clipboard',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const bookOpenIcon = await Feather.getImageSource('book-open', 25);
-  const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
-  const downloadIcon = await FontAwesome5.getImageSource('save', 25);
-  const downloadIconSelect = await FontAwesome5.getImageSource(
-    'save',
-    25,
-    red,
-    FA5Style.solid,
-  );
+  const bookOpenIcon = require('../assets/book.png');
+  const clipboardIcon = require('../assets/form.png');
+  const userIcon = require('../assets/profile.png');
+  const outboxIcon = require('../assets/outbox.png');
+  /** Profile */
+  // const userIcon = await FontAwesome5.getImageSource('user', 25);
+  // const userIconSelect = await FontAwesome5.getImageSource(
+  //   'user',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
+  /** FORM */
+  // const clipboardIcon = await Feather.getImageSource('clipboard', 25);
+  // const clipboardIconSelect = await FontAwesome5.getImageSource(
+  //   'clipboard',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
+  /** BOK */
+  // const bookOpenIcon = await Feather.getImageSource('book-open', 25);
+  // const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
+  /** OUTBOX */
+  // const downloadIcon = await FontAwesome5.getImageSource('save', 25);
+  // const downloadIconSelect = await FontAwesome5.getImageSource(
+  //   'save',
+  //   25,
+  //   red,
+  //   FA5Style.solid,
+  // );
 
   return Navigation.setRoot({
     root: {
@@ -109,9 +130,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'BoK',
+                  text: 'BOK',
                   icon: bookOpenIcon,
-                  selectedIcon: bookOpenIconSelect,
+                  iconColor: darkGrey,
+                  fontFamily: questrial,
+                  selectedIcon: bookOpenIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -136,36 +159,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Form',
+                  text: 'FORM',
+                  fontFamily: questrial,
                   icon: clipboardIcon,
-                  selectedIcon: clipboardIconSelect,
-                  selectedIconColor: red,
-                  selectedTextColor: red,
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              id: 'PROFILE_TAB',
-              children: [
-                {
-                  component: {
-                    id: screens.ProfileScreen,
-                    name: screens.ProfileScreen,
-                    options: {
-                      topBar: {
-                        visible: true,
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Profile',
-                  icon: userIcon,
-                  selectedIcon: userIconSelect,
+                  iconColor: darkGrey,
+                  selectedIcon: clipboardIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -190,9 +188,40 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Outbox',
-                  icon: downloadIcon,
-                  selectedIcon: downloadIconSelect,
+                  text: 'OUTBOX',
+                  fontFamily: questrial,
+                  iconColor: darkGrey,
+                  icon: outboxIcon,
+                  selectedIcon: outboxIcon,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'PROFILE_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.ProfileScreen,
+                    name: screens.ProfileScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'PROFILE',
+                  fontFamily: questrial,
+                  iconColor: darkGrey,
+                  icon: userIcon,
+                  selectedIcon: userIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
