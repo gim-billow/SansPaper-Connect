@@ -18,6 +18,8 @@
 		74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */; };
 		758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */; };
 		F11B51EC267BDEC4001244B8 /* Questrial-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */; };
+		F1D93452267E7940008D7353 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1D93450267E793F008D7353 /* Roboto-Medium.ttf */; };
+		F1D93453267E7940008D7353 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1D93451267E7940008D7353 /* Roboto-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,8 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Questrial-Regular.ttf"; sourceTree = "<group>"; };
 		F12C62D52635CA4A00C2A80A /* SansPaperIntegration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SansPaperIntegration.entitlements; path = SansPaperIntegration/SansPaperIntegration.entitlements; sourceTree = "<group>"; };
+		F1D93450267E793F008D7353 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		F1D93451267E7940008D7353 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperIntegration.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration.debug.xcconfig"; sourceTree = "<group>"; };
 		FDC51EA6F3513144A79130D2 /* Pods-SansPaperIntegration-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		FFF3525F26F59A41639DEBD1 /* Pods-SansPaperIntegration-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -167,6 +171,8 @@
 		74CFDE56253DE1EF00A31EE6 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				F1D93450267E793F008D7353 /* Roboto-Medium.ttf */,
+				F1D93451267E7940008D7353 /* Roboto-Regular.ttf */,
 				F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */,
 				74CFDE57253DE1EF00A31EE6 /* Fontisto.ttf */,
 				74CFDE58253DE1EF00A31EE6 /* Octicons.ttf */,
@@ -351,7 +357,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */,
+				F1D93453267E7940008D7353 /* Roboto-Regular.ttf in Resources */,
 				74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */,
+				F1D93452267E7940008D7353 /* Roboto-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F11B51EC267BDEC4001244B8 /* Questrial-Regular.ttf in Resources */,
 				74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */,

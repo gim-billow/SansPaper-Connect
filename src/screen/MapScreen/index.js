@@ -190,6 +190,9 @@ MapScreen.options = {
       },
     ],
   },
+  bottomTabs: {
+    visible: false,
+  },
   statusBar: {
     visible: true,
     backgroundColor: red,

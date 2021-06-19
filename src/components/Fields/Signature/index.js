@@ -1,12 +1,9 @@
 import React, {useState, useEffect, createRef, useRef} from 'react';
 import {View, Text, Platform} from 'react-native';
-import {Divider} from 'react-native-elements';
-// import SignaturePad from 'react-native-signature-pad'; // ios
+import {Button} from 'react-native-elements';
 import SignatureScreen from 'react-native-signature-canvas'; // ios
 import SignatureCapture from 'react-native-signature-capture'; // android
-import {Button} from 'react-native-paper';
 
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import {commonStyles} from '@styles/common';
@@ -99,15 +96,15 @@ const Signature = (props) => {
   `;
 
   return (
-    <ItemWrapper>
-      <View style={styles.container}>
-        <Text style={commonStyles.text}>{label}</Text>
+    <>
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
-        <View>
+        <View style={styles.container}>
           {Platform.OS === 'android' ? (
             <View style={styles.signView}>
               <SignatureCapture
@@ -120,9 +117,8 @@ const Signature = (props) => {
                 showTitleLabel={false}
                 viewMode={'portrait'}
               />
-              {!isEditable && signatureSaved && (
-                <View style={styles.dimmedSingature} />
-              )}
+              {!isEditable ||
+                (signatureSaved && <View style={styles.dimmedSingature} />)}
             </View>
           ) : (
             <View style={styles.signature}>
@@ -135,9 +131,8 @@ const Signature = (props) => {
                 onOK={_onSaveEvent}
                 webStyle={iosStyle}
               />
-              {!isEditable && signatureSaved && (
-                <View style={styles.dimmedSingature} />
-              )}
+              {!isEditable ||
+                (signatureSaved && <View style={styles.dimmedSingature} />)}
             </View>
           )}
 
@@ -145,35 +140,33 @@ const Signature = (props) => {
             <View style={styles.leftButton}>
               <Button
                 disabled={!isEditable}
-                mode="contained"
+                disabledTitleStyle={styles.disableText}
+                disabledStyle={styles.disable}
+                type="outline"
                 style={styles.buttonColor}
-                onPress={signaturePadClear}>
-                <Text style={styles.text}>Clear Signature</Text>
-              </Button>
+                title="Clear signature"
+                titleStyle={styles.title}
+                buttonStyle={styles.btnContainer}
+                onPress={signaturePadClear}
+              />
             </View>
             <View style={styles.rightButton}>
               <Button
-                disabled={!isEditable}
-                mode="contained"
-                style={
-                  changeTheme === true
-                    ? styles.ChangeButtonColor
-                    : styles.buttonColor
-                }
-                onPress={signaturePadSave}>
-                <Text
-                  style={
-                    changeTheme === true ? styles.ChangeTextColor : styles.text
-                  }>
-                  {changeTheme === true ? 'Signature Saved' : 'Save Signature'}
-                </Text>
-              </Button>
+                disabled={!isEditable || changeTheme}
+                disabledTitleStyle={styles.disableText}
+                disabledStyle={styles.disable}
+                type={changeTheme ? 'solid' : 'outline'}
+                style={styles.buttonColor}
+                title={changeTheme ? 'Signature saved' : 'Save signature'}
+                titleStyle={styles.title}
+                buttonStyle={styles.btnContainer}
+                onPress={signaturePadSave}
+              />
             </View>
           </View>
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

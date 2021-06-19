@@ -15,14 +15,14 @@ import createSagaMiddleware from 'redux-saga';
 import Reactotron from 'reactotron-react-native';
 
 import {Provider} from 'react-redux';
-import {Provider as PaperProvider} from 'react-native-paper';
+
+// React native elements customization
+import {ThemeProvider} from 'react-native-elements';
+import {theme} from './rn-elements';
 
 // redux
 import {rootSaga, rootReducer} from './src/store';
 import {appScreens, startApp} from './src/screen';
-
-// react native paper theme
-import {theme} from 'styles/papertheme';
 
 // import push notification & fcm
 import messaging from '@react-native-firebase/messaging';
@@ -53,13 +53,9 @@ appScreens.forEach((ScreenComponent, key) => {
     () => (props) => (
       <Provider store={store}>
         <ActionSheetProvider>
-          <PaperProvider
-            theme={theme}
-            settings={{
-              icon: (props) => <MaterialIcon {...props} />,
-            }}>
+          <ThemeProvider theme={theme}>
             <ScreenComponent {...props} style={{backgroundColor: 'white'}} />
-          </PaperProvider>
+          </ThemeProvider>
         </ActionSheetProvider>
       </Provider>
     ),

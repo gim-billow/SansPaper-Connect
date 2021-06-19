@@ -1,13 +1,11 @@
 import React, {useRef} from 'react';
 import {View, Text} from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
-import {Divider} from 'react-native-elements';
 import parsePhoneNumber from 'libphonenumber-js';
 
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 
 const PhoneNumber = (props) => {
   const {label, rank, mandatory, value} = props.item;
@@ -31,9 +29,9 @@ const PhoneNumber = (props) => {
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
@@ -44,6 +42,10 @@ const PhoneNumber = (props) => {
             <PhoneInput
               disabled={!isEditable}
               ref={phoneInput}
+              containerStyle={styles.phoneContainer}
+              textContainerStyle={styles.phoneTextContainer}
+              codeTextStyle={styles.phoneNumText}
+              textInputStyle={styles.phoneNumText}
               defaultValue={phoneNumber}
               defaultCode={phoneCountry}
               layout="first"
@@ -52,8 +54,7 @@ const PhoneNumber = (props) => {
           </View>
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

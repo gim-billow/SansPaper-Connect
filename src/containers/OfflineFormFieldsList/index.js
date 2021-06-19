@@ -124,13 +124,14 @@ class FormFieldsList extends React.Component {
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={styles.flex1}>
+      <View style={styles.container}>
         <KeyboardAwareFlatList
           innerRef={(ref) => {
             this.flatListRef = ref;
           }}
           keyExtractor={this.keyExtractor}
           data={currentFormFields}
+          showsVerticalScrollIndicator={false}
           initialNumToRender={500}
           renderItem={this.renderItem}
           scrollEnabled={scrollEnabled}

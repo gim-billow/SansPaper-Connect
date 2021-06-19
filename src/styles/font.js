@@ -1,5 +1,7 @@
 // font family
 export const questrial = 'Questrial-Regular';
+export const roboto = 'Roboto-Regular';
+export const robotoMedium = 'Roboto-Medium';
 
 //font size
 export const small = 12;

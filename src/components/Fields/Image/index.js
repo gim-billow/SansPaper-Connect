@@ -24,9 +24,9 @@ const Image = (props) => {
   }, [props.item]);
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.container}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         <RNImage
           source={{uri: imgData}}
           resizeMode="center"
@@ -34,8 +34,8 @@ const Image = (props) => {
           style={styles.image}
         />
       </View>
-      <Divider />
-    </ItemWrapper>
+      {/* <Divider /> */}
+    </>
   );
 };
 

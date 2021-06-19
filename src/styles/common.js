@@ -1,8 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed, altRed, veryLightGrey, darkGrey, white} from './colors';
-import {small, regular, questrial} from './font';
-import {spaceRegular} from 'styles/space';
+import {red, darkRed, altRed, white} from './colors';
+import {small, regular, questrial, robotoMedium} from './font';
 
 const {height} = Dimensions.get('screen');
 export const customHeight = height / 1.5;
@@ -36,9 +35,16 @@ export const commonStyles = StyleSheet.create({
   spacing: {
     paddingVertical: 2,
   },
+  title: {
+    fontSize: regular,
+    fontFamily: robotoMedium,
+    color: '#000',
+  },
   text: {
     fontSize: regular,
-    paddingHorizontal: spaceRegular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    color: '#000',
   },
 });
 

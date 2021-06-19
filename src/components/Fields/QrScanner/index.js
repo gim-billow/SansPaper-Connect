@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
   Alert,
@@ -8,14 +9,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {Button} from 'react-native-paper';
-import {Divider, Icon} from 'react-native-elements';
+import {Icon, Button} from 'react-native-elements';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import QRCode from 'react-native-qrcode-svg';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
-import {commonStyles} from '../../../styles/common';
+import {commonStyles} from '@styles/common';
 import MandatoryField from '../MandatoryField';
 
 const QrScanner = (props) => {
@@ -30,7 +29,7 @@ const QrScanner = (props) => {
     if (value) {
       setQrDetails(value);
       setChangeTheme(true);
-      setTitle('retake qr scan');
+      setTitle('Rescan QR');
     }
   }, []);
 
@@ -53,9 +52,9 @@ const QrScanner = (props) => {
   };
 
   return (
-    <ItemWrapper>
-      <View style={styles.container}>
-        <Text style={commonStyles.text}>{label}</Text>
+    <>
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
@@ -72,23 +71,15 @@ const QrScanner = (props) => {
         <View style={styles.button}>
           <Button
             disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={title}
+            type={changeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.container}
+            onPress={() => setModalVisible(true)}
             onLongPress={cancel}
-            onPress={() => {
-              setModalVisible(true);
-            }}
-            mode="contained"
-            style={
-              changeTheme === true
-                ? styles.ChangeButtonColor
-                : styles.buttonColor
-            }>
-            <Text
-              style={
-                changeTheme === true ? styles.ChangeTextColor : styles.TextColor
-              }>
-              {title.toString()}
-            </Text>
-          </Button>
+          />
         </View>
         <Modal
           animationType="fade"
@@ -126,8 +117,7 @@ const QrScanner = (props) => {
           </View>
         </Modal>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

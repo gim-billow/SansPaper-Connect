@@ -21,6 +21,7 @@ import {
   selectCurrentForm,
 } from 'selector/form';
 import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
+import {questrial} from '@styles/font';
 // import NoInternet from '@containers/NoInternet';
 
 /**
@@ -152,7 +153,8 @@ FormFieldsScreen.options = (props) => {
       },
       subtitle: {
         text: subForm.hasOwnProperty('name') ? subForm.name : '',
-        fontSize: 13,
+        fontSize: 12,
+        fontFamily: questrial,
         color: white,
       },
       backButton: {

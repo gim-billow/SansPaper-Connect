@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import CheckB from '@react-native-community/checkbox';
-import {Divider} from 'react-native-elements';
 
-import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import {darkRed, white} from 'styles/colors';
 import {commonStyles} from '@styles/common';
@@ -28,7 +27,7 @@ const Checkbox = (props) => {
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
         <TouchableOpacity
           onPress={() => onToggleCheckBox(!toggleCheckBox)}
@@ -42,14 +41,14 @@ const Checkbox = (props) => {
               }}
               onCheckColor={white}
               onFillColor={darkRed}
-              onChange={() => {}}
             />
-            <Text style={commonStyles.text}>{item.label}</Text>
+            <Text style={[commonStyles.text, {marginLeft: 20}]}>
+              {item.label}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 
