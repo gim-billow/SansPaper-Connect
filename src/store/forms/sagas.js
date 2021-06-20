@@ -51,10 +51,11 @@ import {
   selectOrganistation,
   selectUpviseTemplatePath,
 } from '@selector/sanspaper';
-import {selectNetworkInfo} from '@selector/common';
+import {selectNetworkInfo, selectActiveScreen} from '@selector/common';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectType, projectDependant} from './contants';
 import * as database from '@database';
+import {activeScreen} from '../common';
 
 async function hasLocationPermissionIOS() {
   const openSetting = () => {
@@ -192,9 +193,9 @@ function* updateOfflineFormFieldValue({payload}) {
   }
 }
 
-async function submitForm(form) {
+async function submitForm(form, screen) {
   try {
-    showActivityIndicator();
+    // showActivityIndicator();
     const permission = await hasLocationPermission();
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -218,7 +219,13 @@ async function submitForm(form) {
 
           if (isSubmitted) {
             dismissActivityIndicator();
-            Navigation.popToRoot(screens.FormScreen);
+
+            if (screen === 'outbox') {
+              Navigation.popToRoot(screens.OfflineFormScreen);
+            } else {
+              Navigation.popToRoot(screens.FormScreen);
+            }
+
             Alert.alert('', 'Form submitted and saved to outbox');
           } else {
             dismissActivityIndicator();
@@ -239,9 +246,9 @@ async function submitForm(form) {
       Alert.alert('', 'Location Permission Error: Form not submitted');
     }
 
-    dismissActivityIndicator();
+    // dismissActivityIndicator();
   } catch (error) {
-    dismissActivityIndicator();
+    // dismissActivityIndicator();
     Alert.alert('', 'Error submitting form, please contact support');
   }
 }
@@ -253,12 +260,14 @@ function* preSubmitForm({payload}) {
 
     // if there is no internet
     const {isInternetReachable} = yield select(selectNetworkInfo);
+    const screen = yield select(selectActiveScreen);
     if (!isInternetReachable) {
       dismissActivityIndicator();
       Alert.alert(
         '',
         'Internet is not available at the moment. Please check your internet.',
       );
+      yield put(activeScreen(''));
       return;
     }
 
@@ -311,6 +320,7 @@ function* preSubmitForm({payload}) {
 
     // check if there is an empty value in a mandatory field
     if (unfilledMandatoryFields.length > 0) {
+      dismissActivityIndicator();
       const {rank} = unfilledMandatoryFields[0];
       const scrollToIndex = rank === 1 ? rank : rank - 1;
       yield put(updateSubmitTriggered());
@@ -319,6 +329,8 @@ function* preSubmitForm({payload}) {
       yield Alert.alert('', mandatoryError, alertConfig, {
         cancelable: false,
       });
+      yield put(activeScreen(''));
+      yield put(updateSubmittingForm(false));
     } else {
       let scrollToIndex = null;
       forEach(({startDateTime, finishDateTime, rank}) => {
@@ -346,6 +358,8 @@ function* preSubmitForm({payload}) {
         yield Alert.alert('', dateTimeErrorMessage, alertConfig, {
           cancelable: false,
         });
+        yield put(activeScreen(''));
+        yield put(updateSubmittingForm(false));
       } else if (dateTimeError === 'hoursExceededError') {
         dismissActivityIndicator();
         yield put(updateSubmitTriggered());
@@ -361,35 +375,38 @@ function* preSubmitForm({payload}) {
             {
               text: 'Yes',
               onPress: async () => {
-                showActivityIndicator();
-                submitForm(form);
-                Navigation.popToRoot(screens.FormScreen);
+                // showActivityIndicator();
+                submitForm(form, screen);
+                // Navigation.popToRoot(screens.FormScreen);
               },
             },
           ],
           {cancelable: false},
         );
+        yield put(activeScreen(''));
+        yield put(updateSubmittingForm(false));
       } else {
-        submitForm(form);
-        Navigation.popToRoot(screens.FormScreen);
+        submitForm(form, screen);
+        // Navigation.popToRoot(screens.FormScreen);
       }
     }
 
-    yield saveAsDraft({
-      payload: {
-        offline,
-        status: 'submitted',
-      },
-    });
+    if (!dateTimeError && unfilledMandatoryFields.length <= 0) {
+      yield saveAsDraft({
+        payload: {
+          offline,
+          status: 'submitted',
+        },
+      });
+    }
 
-    dismissActivityIndicator();
-    yield put(updateSubmittingForm(false));
+    // dismissActivityIndicator();
   } catch (error) {
     // save to draft if submit failed
     yield saveAsDraft({
       payload: {
         offline: false,
-        status: 'draft',
+        status: 'pending',
       },
     });
 
@@ -587,7 +604,6 @@ function* saveAsDraft({payload}) {
       form = yield select(selectOfflineCurrentForm);
     } else {
       form = yield select(selectCurrentForm);
-      console.log('selected form', form);
     }
     const {draftId = null, ...payloadForm} = form;
     const dbPayload = {
@@ -597,16 +613,19 @@ function* saveAsDraft({payload}) {
       value: JSON.stringify(payloadForm),
       status,
     };
-    console.log('saved data', dbPayload);
+
     yield database.InsertToOutbox(dbPayload);
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
-    Navigation.popToRoot(screens.FormScreen);
-
     if (status === 'draft') {
-      yield Alert.alert('', 'Form saved');
+      yield Alert.alert('', 'Form saved as draft.');
+      Navigation.popToRoot(screens.FormScreen);
+    } else if (status === 'pending') {
+      yield Alert.alert('', 'Form saved as pending.');
+      Navigation.popToRoot(screens.FormScreen);
     }
   } catch (error) {
+    yield Alert.alert('', 'Form not saved. Something went wrong!');
     console.log('saveAsDraft error', error);
   }
 }
@@ -617,16 +636,24 @@ function* deleteOfflineForm({payload}) {
     yield database.deleteFormById({formId: formId});
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
   } catch (error) {
+    yield Alert.alert('', 'Error in deleting the offline form');
     console.log('deleteOfflineForm error', error);
   }
 }
 
 function* deleteOutboxForm({payload}) {
   try {
-    const draftId = payload;
+    const {draftId, status} = payload;
     yield database.deleteOutboxById({draftId: draftId});
-    yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+
+    if (status === 'all') {
+      yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+      return;
+    }
+
+    yield loadOutboxByStatus(status);
   } catch (error) {
+    yield Alert.alert('', 'Error in deleting the outbox form');
     console.log('deleteOutboxForm error', error);
   }
 }

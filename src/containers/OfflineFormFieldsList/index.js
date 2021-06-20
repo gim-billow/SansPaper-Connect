@@ -15,8 +15,8 @@ import Fields from 'components/Fields';
 //redux,selector
 import {
   updateOfflineFormFieldValue,
-  resetCurrentFormDetails,
   resetCurrentForm,
+  updateSubmittingForm,
 } from 'store/forms';
 import {
   selectOfflineCurrentFormId,
@@ -50,6 +50,10 @@ class FormFieldsList extends React.Component {
         scrollToMandatory === 1 ? scrollToMandatory - 1 : scrollToMandatory;
       this.scrollToIndex(index);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.updateSubmittingForm(false);
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -157,7 +161,7 @@ const mapState = createStructuredSelector({
 
 export default connect(mapState, {
   updateOfflineFormFieldValue,
-  resetCurrentFormDetails,
   goToGoogleMapScreen,
   resetCurrentForm,
+  updateSubmittingForm,
 })(FormFieldsList);

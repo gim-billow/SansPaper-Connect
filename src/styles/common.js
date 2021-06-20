@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed, altRed, white} from './colors';
+import {red, darkRed, altRed, white, darkGrey} from './colors';
 import {small, regular, questrial, robotoMedium} from './font';
 
 const {height} = Dimensions.get('screen');
@@ -45,6 +45,11 @@ export const commonStyles = StyleSheet.create({
     fontFamily: questrial,
     letterSpacing: 0.2,
     color: '#000',
+  },
+  actionSheetAndroid: {
+    fontFamily: questrial,
+    color: darkGrey,
+    letterSpacing: 0.2,
   },
 });
 

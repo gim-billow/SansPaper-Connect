@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Alert,
+  Image,
   Platform,
 } from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
@@ -24,44 +25,63 @@ import {
 } from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
-import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
+import {red, lightGrey, white, veryLightGrey, darkGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
 import {selectOfflineFormList, selectOfflineCurrentForm} from 'selector/form';
-import {cardStyle, searchBarStyle} from '@styles/common';
+import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
+import {questrial, regular} from '@styles/font';
+import {CommonImages} from '@constant/Images';
+
+const renderImage = (source) => (
+  <Image source={source} resizeMode="contain" style={{width: 20, height: 20}} />
+);
 
 class Outbox extends React.Component {
   state = {
     searchKeyword: '',
     filterLabel: 'All forms',
+    filtered: 'all',
   };
 
   onFilterOutboxList = () => {
     const {loadOutboxByStatus, loadAllOutbox} = this.props;
     const options = ['Draft', 'Pending', 'Submitted', 'All', 'Cancel'];
+    const icons = [
+      renderImage(CommonImages.formDraft),
+      renderImage(CommonImages.formPending),
+      renderImage(CommonImages.formSubmit),
+      renderImage(CommonImages.formAll),
+      renderImage(CommonImages.formClose),
+    ];
     const cancelButtonIndex = 4;
 
     this.props.showActionSheetWithOptions(
       {
         options,
+        icons,
         cancelButtonIndex,
+        textStyle: {...commonStyles.actionSheetAndroid},
       },
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
             loadOutboxByStatus('draft');
-            this.setState({filterLabel: 'Draft forms'});
+            this.setState({filterLabel: 'Draft forms', filtered: 'draft'});
             break;
           case 1:
             loadOutboxByStatus('pending');
-            this.setState({filterLabel: 'Pending forms'});
+            this.setState({filterLabel: 'Pending forms', filtered: 'pending'});
             break;
           case 2:
             loadOutboxByStatus('submitted');
-            this.setState({filterLabel: 'Submitted forms'});
+            this.setState({
+              filterLabel: 'Submitted forms',
+              filtered: 'submitted',
+            });
             break;
           case 3:
             loadAllOutbox();
-            this.setState({filterLabel: 'All forms'});
+            this.setState({filterLabel: 'All forms', filtered: 'all'});
             break;
           default:
             break;
@@ -87,14 +107,17 @@ class Outbox extends React.Component {
     this.setState({searchKeyword: text});
   };
 
-  onDeleteAlert = (id) =>
-    Alert.alert(
+  onDeleteAlert = (id) => {
+    const {filtered} = this.state;
+
+    return Alert.alert(
       '',
       'Are you sure you want to delete the form?',
       [
         {
           text: 'Delete',
-          onPress: () => this.props.deleteOutboxForm(id),
+          onPress: () =>
+            this.props.deleteOutboxForm({draftId: id, status: filtered}),
           style: 'destructive',
         },
         {
@@ -106,6 +129,7 @@ class Outbox extends React.Component {
         cancelable: false,
       },
     );
+  };
 
   onNavigateToDraftScreen = (id, formId) => {
     const {offlineForms} = this.props;
