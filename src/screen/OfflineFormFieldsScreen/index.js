@@ -5,9 +5,11 @@ import {find, propEq, findIndex} from 'ramda';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './styles';
 import {white, red} from '@styles/colors';
+import {commonStyles} from '@styles/common';
 import OfflineFormFieldsList from '@containers/OfflineFormFieldsList';
 import {screens} from '@constant/ScreenConstants';
 import {selectNetworkInfo, selectActiveScreen} from '@selector/common';
@@ -21,6 +23,8 @@ import {
   selectOfflineCurrentFormId,
 } from 'selector/form';
 import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
+
+const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
 
 /**
  * This is used in the form lists
@@ -55,14 +59,28 @@ class OfflineFormFieldsScreen extends React.Component {
       offlineForms,
     );
     const options = netInfo.isInternetReachable
-      ? ['Submit', isDraftForm ? 'Update draft' : 'Save as draft', 'Cancel']
-      : [isDraftForm ? 'Update draft' : 'Save as draft', 'Cancel'];
-    const cancelButtonIndex = netInfo.isInternetReachable ? 2 : 1;
+      ? [
+          'Submit',
+          isDraftForm ? 'Update draft' : 'Save as draft',
+          'Save as pending',
+          'Cancel',
+        ]
+      : [
+          isDraftForm ? 'Update draft' : 'Save as draft',
+          'Save as pending',
+          'Cancel',
+        ];
+    const cancelButtonIndex = netInfo.isInternetReachable ? 3 : 2;
+    const icons = netInfo.isInternetReachable
+      ? [setIcon('send'), setIcon('save'), setIcon('spinner'), setIcon('times')]
+      : [setIcon('save'), setIcon('spinner'), setIcon('times')];
 
     this.props.showActionSheetWithOptions(
       {
         options,
+        icons,
         cancelButtonIndex,
+        textStyle: {...commonStyles.actionSheetAndroid},
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -80,8 +98,11 @@ class OfflineFormFieldsScreen extends React.Component {
           case 1:
             // if not internet, just do nothing
             if (!netInfo.isInternetReachable) {
-              this.props.activeScreen('');
-              return;
+              saveAsDraft({
+                offline: true,
+                status: 'pending',
+              });
+              break;
             }
             // download first b4 submitting the form
             if (offlineFormIndex === -1 && offlineFormId !== '') {
@@ -98,6 +119,17 @@ class OfflineFormFieldsScreen extends React.Component {
             });
             break;
           case 2:
+            // if not internet, just do nothing
+            if (!netInfo.isInternetReachable) {
+              this.props.activeScreen('');
+              return;
+            }
+            saveAsDraft({
+              offline: false,
+              status: 'pending',
+            });
+            break;
+          case 3:
             this.props.activeScreen('');
             break;
           default:

@@ -190,12 +190,34 @@ class MainScreen extends React.Component {
 
     if (!updatedNews.length) {
       return (
-        <View style={styles.noItemsContainer}>
-          <Image
-            source={require('../../assets/no-items.jpeg')}
-            resizeMode="contain"
-            style={{width: width - 50}}
-          />
+        <View style={styles.container}>
+          <View style={styles.header}>
+            {/* <Text style={styles.headerText}>Today's Read</Text> */}
+            <Text style={styles.headerText}>Body of Knowledge</Text>
+            <SearchBar
+              placeholder="Search keywords"
+              containerStyle={searchBarStyle.searchContainer}
+              inputContainerStyle={searchBarStyle.searchInputContainer}
+              inputStyle={searchBarStyle.searchInput}
+              searchIcon={{
+                color: veryLightGrey,
+              }}
+              selectionColor={veryLightGrey}
+              placeholderTextColor={veryLightGrey}
+              value={searchKeyword}
+              onChangeText={this.handleOnChangeText}
+              clearIcon={{
+                color: veryLightGrey,
+              }}
+            />
+          </View>
+          <View style={styles.noItemsContainer}>
+            <Image
+              source={require('../../assets/no-items.jpeg')}
+              resizeMode="contain"
+              style={{width: width - 100}}
+            />
+          </View>
         </View>
       );
     }

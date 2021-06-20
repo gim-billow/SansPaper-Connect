@@ -7,6 +7,7 @@ import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {goToGoogleMapScreen} from '@store/navigate';
+import {updateSubmittingForm} from '@store/forms';
 import {has} from 'ramda';
 
 //component
@@ -52,7 +53,9 @@ class FormFieldsList extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.resetCurrentFormDetails();
+    const {updateSubmittingForm, resetCurrentFormDetails} = this.props;
+    resetCurrentFormDetails();
+    updateSubmittingForm(false);
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -146,4 +149,5 @@ export default connect(mapState, {
   resetCurrentFormDetails,
   goToGoogleMapScreen,
   resetCurrentOfflineForm,
+  updateSubmittingForm,
 })(FormFieldsList);

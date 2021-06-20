@@ -5,10 +5,10 @@ import {regular, medium, small, large, questrial} from '@styles/font';
 
 export default StyleSheet.create({
   noItemsContainer: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: white,
+    // backgroundColor: white,
   },
   container: {
     flex: 1,
