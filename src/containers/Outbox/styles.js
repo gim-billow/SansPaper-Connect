@@ -10,8 +10,7 @@ export default StyleSheet.create({
   header: {
     backgroundColor: red,
     justifyContent: 'center',
-    height: 124,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
   },
   headerText: {
     fontSize: large,
@@ -77,12 +76,11 @@ export default StyleSheet.create({
   },
   filterView: {
     flexDirection: 'row',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    paddingBottom: 12,
     backgroundColor: red,
     alignItems: 'center',
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
   },
   filterText: {
     paddingLeft: 10,

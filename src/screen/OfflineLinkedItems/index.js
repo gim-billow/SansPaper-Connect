@@ -3,7 +3,6 @@ import {View} from 'react-native';
 
 import OfflineLinkedItemsList from '@containers/OfflineLinkedItemsList';
 import styles from './styles';
-import {red} from '@styles/colors';
 
 class OfflineLinkedItems extends React.Component {
   static options = () => {
@@ -18,11 +17,6 @@ class OfflineLinkedItems extends React.Component {
       },
       bottomTabs: {
         visible: false,
-      },
-      statusBar: {
-        visible: true,
-        backgroundColor: red,
-        styles: 'light',
       },
     };
     return option;

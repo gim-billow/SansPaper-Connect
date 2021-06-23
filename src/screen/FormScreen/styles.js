@@ -5,7 +5,7 @@ import {questrial, regular, large} from '@styles/font';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    // padding: 10,
     backgroundColor: white,
   },
   logo: {
@@ -19,13 +19,13 @@ export default StyleSheet.create({
   },
   tab: {
     width: 'auto',
-    marginLeft: 30,
+    marginLeft: 15,
   },
   header: {
     backgroundColor: red,
     justifyContent: 'center',
-    height: 122,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
+    paddingBottom: 5,
   },
   headerText: {
     fontSize: large,
@@ -35,7 +35,5 @@ export default StyleSheet.create({
   },
   tabBar: {
     backgroundColor: red,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
   },
 });

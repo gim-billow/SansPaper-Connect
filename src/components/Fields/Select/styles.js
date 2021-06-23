@@ -2,11 +2,11 @@ import {StyleSheet} from 'react-native';
 
 import {regular, questrial} from 'styles/font';
 import {red, veryLightGrey, darkGrey, lightGrey} from '@styles/colors';
-import {spaceLarge, superSmall, spaceSmall} from '@styles/space';
+import {spaceMedium, superSmall, spaceSmall} from '@styles/space';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   itemText: {
     fontSize: regular,

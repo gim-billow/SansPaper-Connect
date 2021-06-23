@@ -16,7 +16,16 @@ import {
 } from 'redux-saga/effects';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
-import {assoc, map, adjust, find, propEq, forEach, includes} from 'ramda';
+import {
+  assoc,
+  map,
+  adjust,
+  find,
+  propEq,
+  forEach,
+  includes,
+  findIndex,
+} from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
@@ -46,6 +55,7 @@ import {
   selectStartAndFinishDate,
   selectFormList,
   selectOfflineCurrentForm,
+  selectOfflineFormList,
 } from '@selector/form';
 import {
   selectOrganistation,
@@ -254,7 +264,6 @@ async function submitForm(form, screen) {
 }
 
 function* preSubmitForm({payload}) {
-  console.log('preSubmitForm', payload);
   try {
     showActivityIndicator();
 
@@ -272,6 +281,7 @@ function* preSubmitForm({payload}) {
     }
 
     yield put(updateSubmittingForm(true));
+
     const alertConfig = [
       {
         text: 'Ok',
@@ -282,6 +292,7 @@ function* preSubmitForm({payload}) {
     let form = {};
     let unfilledMandatoryFields = {};
     let startAndFinishDateTime = {};
+
     if (offline) {
       form = yield select(selectOfflineCurrentForm);
       unfilledMandatoryFields = yield select(
@@ -391,13 +402,28 @@ function* preSubmitForm({payload}) {
       }
     }
 
+    // FIXME:
     if (!dateTimeError && unfilledMandatoryFields.length <= 0) {
-      yield saveAsDraft({
-        payload: {
-          offline,
-          status: 'submitted',
-        },
-      });
+      // sync form to offline
+      const offlineForms = yield select(selectOfflineFormList);
+      const offlineFormIndex = findIndex(propEq('id', form.id))(offlineForms);
+      if (offlineFormIndex === -1) {
+        yield syncOfflineForm({
+          payload: {
+            linkedTable: form.linkedtable,
+            formId: form.id,
+            dlFirst: true,
+            submitSync: 'submitted',
+          },
+        });
+      } else {
+        yield saveAsDraft({
+          payload: {
+            offline,
+            status: 'submitted',
+          },
+        });
+      }
     }
 
     // dismissActivityIndicator();
@@ -420,7 +446,7 @@ function* preSubmitForm({payload}) {
 function* syncOfflineForm({payload = {}}) {
   try {
     showActivityIndicator();
-    const {linkedTable, formId, dlFirst = false} = payload;
+    const {linkedTable, formId, dlFirst = false, submitSync = null} = payload;
     const dateNow = new Date();
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
@@ -516,14 +542,13 @@ function* syncOfflineForm({payload = {}}) {
       yield saveAsDraft({
         payload: {
           offline: false,
-          status: 'draft',
+          status: submitSync || 'draft',
         },
       });
     }
 
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
     dismissActivityIndicator();
-    //console.log('linkedItem', JSON.stringify(linkedItem));
   } catch (error) {
     dismissActivityIndicator();
     console.log('error', error);
@@ -597,7 +622,7 @@ function* saveAsDraft({payload}) {
   try {
     const dateNow = new Date();
 
-    const {offline, status} = payload;
+    const {offline, status, changeStatus = false, filterBy = 'all'} = payload;
 
     let form = {};
     if (offline) {
@@ -615,12 +640,25 @@ function* saveAsDraft({payload}) {
     };
 
     yield database.InsertToOutbox(dbPayload);
+    if (changeStatus) {
+      if (filterBy === 'all') {
+        yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+      } else {
+        yield put({
+          type: FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS,
+          payload: status === 'draft' ? 'pending' : 'draft',
+        });
+      }
+      yield Alert.alert('', 'Form status changed.');
+      return;
+    }
+
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
-    if (status === 'draft') {
+    if (status === 'draft' && !changeStatus) {
       yield Alert.alert('', 'Form saved as draft.');
       Navigation.popToRoot(screens.FormScreen);
-    } else if (status === 'pending') {
+    } else if (status === 'pending' && !changeStatus) {
       yield Alert.alert('', 'Form saved as pending.');
       Navigation.popToRoot(screens.FormScreen);
     }

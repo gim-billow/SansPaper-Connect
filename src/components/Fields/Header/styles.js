@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {medium, questrial} from '@styles/font';
-import {spaceLarge} from '@styles/space';
+import {spaceMedium} from '@styles/space';
 import {red, white} from '@styles/colors';
 
 export default StyleSheet.create({
@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   textView: {
     backgroundColor: red,

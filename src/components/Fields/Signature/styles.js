@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {spaceSmall, superSmall, spaceLarge, spaceRegular} from '@styles/space';
+import {spaceSmall, superSmall, spaceMedium, spaceRegular} from '@styles/space';
 import {questrial, regular} from '@styles/font';
 import {
   lightRed,
@@ -20,7 +20,7 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
   },
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   container: {
     marginTop: spaceRegular,

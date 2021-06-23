@@ -22,14 +22,14 @@ import {
   deleteOutboxForm,
   loadOutboxByStatus,
   loadAllOutbox,
+  saveAsDraft,
 } from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
-import {red, lightGrey, white, veryLightGrey, darkGrey} from '@styles/colors';
+import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
 import {selectOfflineFormList, selectOfflineCurrentForm} from 'selector/form';
 import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
-import {questrial, regular} from '@styles/font';
 import {CommonImages} from '@constant/Images';
 
 const renderImage = (source) => (
@@ -143,7 +143,45 @@ class Outbox extends React.Component {
       return;
     }
 
-    this.props.goToDraftFormFieldsScreen(id);
+    this.props.goToDraftFormFieldsScreen({draftId: id, navigate: true});
+  };
+
+  onSwapFormStatus = (id, status) => {
+    const {goToDraftFormFieldsScreen, saveAsDraft} = this.props;
+    const {filtered} = this.state;
+
+    if (status === 'submitted') {
+      Alert.alert('', 'You cannot change the status of the submitted form.');
+      return;
+    }
+
+    goToDraftFormFieldsScreen({draftId: id});
+    setTimeout(() => {
+      Alert.alert(
+        '',
+        `Change form status to ${status === 'draft' ? 'pending' : 'draft'}?`,
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Ok',
+            onPress: () => {
+              saveAsDraft({
+                offline: true,
+                status: status === 'draft' ? 'pending' : 'draft',
+                changeStatus: true,
+                filterBy: filtered,
+              });
+            },
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+    }, 500);
   };
 
   renderItem = ({item}) => {
@@ -172,7 +210,8 @@ class Outbox extends React.Component {
             </View>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
-              onPress={() => this.onNavigateToDraftScreen(id, formId)}>
+              onPress={() => this.onNavigateToDraftScreen(id, formId)}
+              onLongPress={() => this.onSwapFormStatus(id, status)}>
               <View style={styles.titleView}>
                 <Text style={styles.title}>{name}</Text>
                 <Text style={styles.subTitle1}>{createString}</Text>
@@ -202,7 +241,7 @@ class Outbox extends React.Component {
     return (
       <>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Outbox</Text>
+          {/* <Text style={styles.headerText}>Outbox</Text> */}
           <SearchBar
             placeholder="Search outbox"
             containerStyle={searchBarStyle.searchContainer}
@@ -267,5 +306,6 @@ export default connect(mapState, {
   goToDraftFormFieldsScreen,
   deleteOutboxForm,
   loadOutboxByStatus,
+  saveAsDraft,
   loadAllOutbox,
 })(connectActionSheet(Outbox));

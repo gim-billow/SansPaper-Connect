@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {regular, questrial} from '@styles/font';
-import {spaceSmall, superSmall, spaceLarge, spaceRegular} from '@styles/space';
+import {spaceSmall, superSmall, spaceMedium, spaceRegular} from '@styles/space';
 import {red, white, lightGrey, darkGrey} from '@styles/colors';
 
 export default StyleSheet.create({
@@ -11,7 +11,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   container: {
     flexDirection: 'row',

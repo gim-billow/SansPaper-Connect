@@ -14,6 +14,7 @@ import SelectMap from './MapScreen/SelectMap';
 import OfflineFormScreen from './OfflineFormScreen';
 import OfflineLinkedItems from './OfflineLinkedItems';
 import OfflineFormFieldsScreen from './OfflineFormFieldsScreen';
+import HeaderScreen from './HeaderScreen';
 
 const appScreens = new Map();
 
@@ -31,5 +32,6 @@ appScreens.set(screens.RightButton, RightButton);
 appScreens.set(screens.ProfileScreen, ProfileScreen);
 appScreens.set(screens.MapScreen, MapScreen);
 appScreens.set(screens.SelectMap, SelectMap);
+appScreens.set(screens.HeaderScreen, HeaderScreen);
 
 export default appScreens;

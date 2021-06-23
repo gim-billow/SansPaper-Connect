@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {superSmall, spaceSmall, spaceLarge, spaceRegular} from 'styles/space';
+import {superSmall, spaceSmall, spaceMedium, spaceRegular} from 'styles/space';
 import {regular, medium} from 'styles/font';
 import {lightRed, darkRed, white, red} from '@styles/colors';
 import {questrial} from '../../../styles/font';
@@ -8,7 +8,7 @@ const width = Dimensions.get('screen').width;
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   container: {
     borderRadius: 10,

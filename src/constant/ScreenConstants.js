@@ -13,4 +13,5 @@ export const screens = {
   ProfileScreen: 'ProfileScreen',
   MapScreen: 'MapScreen',
   SelectMap: 'SelectMap',
+  HeaderScreen: 'HeaderScreen',
 };

@@ -20,6 +20,7 @@ import {
   Divider,
   Icon,
 } from 'react-native-elements';
+import {Navigation} from 'react-native-navigation';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import {createStructuredSelector} from 'reselect';
 import auth from '@react-native-firebase/auth';
@@ -50,6 +51,7 @@ import {
 } from '@store/user';
 import {selectUserStatus, selectLoginCode} from '@selector/user';
 import {init} from '@store/common';
+import {screens} from '@constant/ScreenConstants';
 import {readUserEmail} from '@api/user';
 import {darkGrey} from '../../styles/colors';
 
@@ -71,11 +73,6 @@ class LoginScreen extends React.Component {
     const option = {
       topBar: {
         visible: false,
-      },
-      statusBar: {
-        visible: true,
-        backgroundColor: white,
-        style: 'dark',
       },
     };
     return option;
@@ -108,6 +105,8 @@ class LoginScreen extends React.Component {
   keyboardActive = false;
 
   componentDidMount() {
+    Navigation.events().bindComponent(this);
+
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       this._keyboardDidShow,
@@ -121,6 +120,15 @@ class LoginScreen extends React.Component {
 
     // check if user email is remembered
     this.readUserEmail();
+  }
+
+  componentDidAppear() {
+    Navigation.mergeOptions(screens.LoginScreen, {
+      statusBar: {
+        style: 'dark',
+        backgroundColor: white,
+      },
+    });
   }
 
   componentWillUnmount() {

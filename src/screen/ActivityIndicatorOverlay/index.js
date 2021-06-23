@@ -1,22 +1,25 @@
 //library
 import React from 'react';
 import {View, Text, ActivityIndicator} from 'react-native';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 
 //styles
 import styles from './styles';
 import {red} from '@styles/colors';
+import {screens} from '@constant/ScreenConstants';
 
-class ActivityIndicatorOverlay extends React.Component {
-  static options = () => {
-    const option = {
+class ActivityIndicatorOverlay extends NavigationComponent {
+  componentDidMount() {
+    Navigation.events().bindComponent(this);
+  }
+
+  componentDidAppear() {
+    Navigation.mergeOptions(screens.ActivityIndicatorOverlay, {
       statusBar: {
-        visible: true,
-        backgroundColor: red,
-        styles: 'light',
+        visible: false,
       },
-    };
-    return option;
-  };
+    });
+  }
 
   render() {
     const {messages} = this.props;

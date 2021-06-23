@@ -10,17 +10,18 @@ export default StyleSheet.create({
   },
   subjectHeader: {
     backgroundColor: red,
-    height: 170,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    // height: 170,
+    // borderBottomLeftRadius: 25,
+    // borderBottomRightRadius: 25,
     justifyContent: 'center',
     paddingHorizontal: 30,
+    paddingVertical: 30,
   },
   headerText: {
     fontFamily: questrial,
-    fontSize: medium,
+    fontSize: regular,
     color: white,
-    letterSpacing: 0.2,
+    letterSpacing: 0.1,
   },
   selectView: {
     marginTop: 30,

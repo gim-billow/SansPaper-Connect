@@ -9,26 +9,34 @@ export default StyleSheet.create({
   },
   top: {
     backgroundColor: red,
-    height: 170,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    flexDirection: 'row',
+    // height: 170,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 23,
+    paddingBottom: 23,
+  },
+  topHeader: {
+    flex: 1,
+    marginLeft: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 30,
+  },
+  profileLogo: {
+    width: 75,
+    height: 75,
   },
   name: {
-    paddingTop: 10,
     fontSize: medium,
+    marginBottom: 5,
     letterSpacing: 1,
     color: white,
     fontFamily: questrial,
   },
   subText: {
-    textAlign: 'center',
     color: white,
-    fontSize: regular,
+    fontSize: regular - 2,
     fontFamily: questrial,
-    marginHorizontal: spaceMedium,
   },
   listContainer: {
     paddingHorizontal: 30,
@@ -112,9 +120,5 @@ export default StyleSheet.create({
   },
   marginLeftSmall: {
     marginLeft: 20,
-  },
-  profileLogo: {
-    width: 75,
-    height: 75,
   },
 });

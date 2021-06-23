@@ -193,7 +193,7 @@ function* goToDraftFormFieldsScreen({payload}) {
   try {
     showActivityIndicator();
 
-    const draftId = payload;
+    const {draftId, navigate = false} = payload;
     const outboxList = yield select(selectOutbox);
     const formsData = R.find(R.propEq('id', draftId))(outboxList);
     const linkedItemName =
@@ -207,35 +207,38 @@ function* goToDraftFormFieldsScreen({payload}) {
       type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
       payload: {...formsData.value, draftId: draftId},
     });
-    let subForm;
-    const {name, linkedid} = formsData.value;
-    if (linkedid) {
-      let linkedId = null;
 
-      if (Array.isArray(linkedid)) {
-        linkedId = linkedid[0];
-      } else {
-        linkedId = linkedid;
+    if (navigate) {
+      let subForm;
+      const {name, linkedid} = formsData.value;
+      if (linkedid) {
+        let linkedId = null;
+
+        if (Array.isArray(linkedid)) {
+          linkedId = linkedid[0];
+        } else {
+          linkedId = linkedid;
+        }
+
+        subForm = R.find(R.propEq('id', linkedId))(linkedItems);
       }
+      const subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
+      const headerData = {
+        title: name,
+        subTitle,
+      };
 
-      subForm = R.find(R.propEq('id', linkedId))(linkedItems);
+      pushToOfflineFormFieldsScreen({
+        componentId: screens.OfflineFormScreen,
+        headerData,
+        passProps: {
+          draftId,
+          outboxList,
+          screen: 'outbox',
+        },
+      });
     }
-    const subTitle = subForm?.hasOwnProperty('name') ? subForm.name : '';
-    const headerData = {
-      title: name,
-      subTitle,
-    };
-
     dismissActivityIndicator();
-    pushToOfflineFormFieldsScreen({
-      componentId: screens.OfflineFormScreen,
-      headerData,
-      passProps: {
-        draftId,
-        outboxList,
-        screen: 'outbox',
-      },
-    });
   } catch (error) {
     console.log('loadFormFields error', error);
   }

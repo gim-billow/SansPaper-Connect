@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {lightGrey, darkRed} from 'styles/colors';
+import {lightGrey} from 'styles/colors';
 import {regular} from 'styles/font';
 
 export default StyleSheet.create({

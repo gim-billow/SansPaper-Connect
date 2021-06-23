@@ -87,8 +87,10 @@ class Profile extends Component {
               resizeMethod="auto"
               style={styles.profileLogo}
             />
-            <Text style={styles.name}>{name}</Text>
-            <Text style={styles.subText}>{organization.name}</Text>
+            <View style={styles.topHeader}>
+              <Text style={styles.name}>{name}</Text>
+              <Text style={styles.subText}>{organization.name}</Text>
+            </View>
           </View>
 
           {/* email */}

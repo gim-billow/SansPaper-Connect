@@ -62,12 +62,12 @@ class FormFieldsScreen extends React.Component {
       ? [
           'Submit',
           isDraftForm ? 'Update draft' : 'Save as draft',
-          'Save as pending',
+          isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ]
       : [
           isDraftForm ? 'Update draft' : 'Save as draft',
-          'Save as pending',
+          isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ];
     const cancelButtonIndex = netInfo.isInternetReachable ? 3 : 2;
@@ -207,11 +207,6 @@ FormFieldsScreen.options = (props) => {
     },
     bottomTabs: {
       visible: false,
-    },
-    statusBar: {
-      visible: true,
-      backgroundColor: red,
-      styles: 'light',
     },
   };
 };

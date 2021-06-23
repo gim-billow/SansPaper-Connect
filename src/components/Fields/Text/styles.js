@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {spaceRegular, spaceLarge} from 'styles/space';
+import {spaceRegular, spaceMedium} from 'styles/space';
 import {red, white, darkGrey} from 'styles/colors';
 import {questrial, regular} from '@styles/font';
 
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     paddingRight: 0,
   },
   textContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   textInputMap: {
     flex: 1,

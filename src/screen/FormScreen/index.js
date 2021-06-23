@@ -9,7 +9,7 @@ import R from 'ramda';
 import {createStructuredSelector} from 'reselect';
 
 import styles from './styles';
-import {red, white, veryLightGrey, lightRed} from '@styles/colors';
+import {white, veryLightGrey, lightRed} from '@styles/colors';
 import FormList from '@containers/FormList';
 import OfflineFormList from '@containers/OfflineFormList';
 import {searchBarStyle} from '@styles/common';
@@ -25,12 +25,6 @@ class FormScreen extends React.Component {
       {key: 'second', title: 'Offline'},
     ],
   };
-  // const [index, setIndex] = React.useState(0);
-  // const [searchKeyword, setSearchKeyword] = React.useState('');
-  // const [routes] = React.useState([
-  //   {key: 'first', title: 'Online'},
-  //   {key: 'second', title: 'Offline'},
-  // ]);
 
   getFilteredFormlist = memoize((forms, keyword) => {
     return R.filter(
@@ -88,9 +82,8 @@ class FormScreen extends React.Component {
     const {index, routes, searchKeyword} = this.state;
 
     return (
-      <>
+      <View style={{flex: 1}}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Forms</Text>
           <SearchBar
             placeholder="Search form"
             containerStyle={searchBarStyle.searchContainer}
@@ -116,21 +109,10 @@ class FormScreen extends React.Component {
           initialLayout={{width}}
           sceneContainerStyle={styles.container}
         />
-      </>
+      </View>
     );
   }
 }
-
-FormScreen.options = {
-  statusBar: {
-    visible: true,
-    backgroundColor: red,
-    styles: 'light',
-  },
-  topBar: {
-    visible: true,
-  },
-};
 
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,

@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {spaceLarge, spaceRegular, superSmall, spaceSmall} from 'styles/space';
+import {spaceMedium, spaceRegular, superSmall, spaceSmall} from 'styles/space';
 import {regular, questrial, medium} from 'styles/font';
 import {white, red, darkGrey} from '@styles/colors';
 
@@ -7,7 +7,7 @@ const width = Dimensions.get('screen').width;
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   button: {
     marginTop: spaceSmall,

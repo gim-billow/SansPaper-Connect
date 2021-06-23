@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {lightGrey, white, darkRed} from 'styles/colors';
-import {spaceLarge} from '@styles/space';
+import {spaceMedium} from '@styles/space';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   checked: {
     backgroundColor: white,

@@ -62,12 +62,12 @@ class OfflineFormFieldsScreen extends React.Component {
       ? [
           'Submit',
           isDraftForm ? 'Update draft' : 'Save as draft',
-          'Save as pending',
+          isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ]
       : [
           isDraftForm ? 'Update draft' : 'Save as draft',
-          'Save as pending',
+          isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ];
     const cancelButtonIndex = netInfo.isInternetReachable ? 3 : 2;
@@ -125,7 +125,7 @@ class OfflineFormFieldsScreen extends React.Component {
               return;
             }
             saveAsDraft({
-              offline: false,
+              offline: true,
               status: 'pending',
             });
             break;
@@ -170,7 +170,7 @@ OfflineFormFieldsScreen.options = (props) => {
     });
   } else if (screen === 'outbox') {
     const selectedDraft = find(propEq('id', draftId))(outbox);
-    if (selectedDraft.status === 'draft') {
+    if (selectedDraft.status !== 'submitted') {
       rightBtn.push({
         id: screens.RightButton,
         component: {
@@ -202,11 +202,6 @@ OfflineFormFieldsScreen.options = (props) => {
     },
     bottomTabs: {
       visible: false,
-    },
-    statusBar: {
-      visible: true,
-      backgroundColor: red,
-      styles: 'light',
     },
   };
 };

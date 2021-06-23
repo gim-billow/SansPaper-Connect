@@ -192,8 +192,6 @@ class MainScreen extends React.Component {
       return (
         <View style={styles.container}>
           <View style={styles.header}>
-            {/* <Text style={styles.headerText}>Today's Read</Text> */}
-            <Text style={styles.headerText}>Body of Knowledge</Text>
             <SearchBar
               placeholder="Search keywords"
               containerStyle={searchBarStyle.searchContainer}
@@ -225,8 +223,6 @@ class MainScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          {/* <Text style={styles.headerText}>Today's Read</Text> */}
-          <Text style={styles.headerText}>Body of Knowledge</Text>
           <SearchBar
             placeholder="Search keywords"
             containerStyle={searchBarStyle.searchContainer}
@@ -260,13 +256,5 @@ const mapState = createStructuredSelector({
   updatedNews: selectSortedNews,
   orgPath: selectOrganistationPath,
 });
-
-MainScreen.options = {
-  statusBar: {
-    visible: true,
-    backgroundColor: red,
-    styles: 'light',
-  },
-};
 
 export default connect(mapState, {updateFormList})(MainScreen);

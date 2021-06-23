@@ -1,10 +1,9 @@
 import {Navigation} from 'react-native-navigation';
-// import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
-// import Feather from 'react-native-vector-icons/Feather';
+import {nanoid} from 'nanoid';
 
 import {screens} from '@constant/ScreenConstants';
 import {red, white, darkGrey} from '@styles/colors';
-import {regular, questrial} from '@styles/font';
+import {regular, questrial, large, robotoMedium} from '@styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
@@ -13,22 +12,21 @@ export const setDefaultOptions = () => {
     },
     statusBar: {
       style: 'light',
+      backgroundColor: red,
     },
     topBar: {
-      animate: true,
-      hideOnScroll: false,
       background: {
         color: red,
       },
       noBorder: true,
       elevation: 0,
       title: {
-        color: 'white',
+        color: white,
         fontSize: regular,
         fontFamily: questrial,
       },
       backButton: {
-        color: 'white',
+        color: white,
       },
     },
     bottomTabs: {
@@ -79,33 +77,6 @@ export const showMainScreen = async () => {
   const clipboardIcon = require('../assets/form.png');
   const userIcon = require('../assets/profile.png');
   const outboxIcon = require('../assets/outbox.png');
-  /** Profile */
-  // const userIcon = await FontAwesome5.getImageSource('user', 25);
-  // const userIconSelect = await FontAwesome5.getImageSource(
-  //   'user',
-  //   25,
-  //   red,
-  //   FA5Style.solid,
-  // );
-  /** FORM */
-  // const clipboardIcon = await Feather.getImageSource('clipboard', 25);
-  // const clipboardIconSelect = await FontAwesome5.getImageSource(
-  //   'clipboard',
-  //   25,
-  //   red,
-  //   FA5Style.solid,
-  // );
-  /** BOK */
-  // const bookOpenIcon = await Feather.getImageSource('book-open', 25);
-  // const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
-  /** OUTBOX */
-  // const downloadIcon = await FontAwesome5.getImageSource('save', 25);
-  // const downloadIconSelect = await FontAwesome5.getImageSource(
-  //   'save',
-  //   25,
-  //   red,
-  //   FA5Style.solid,
-  // );
 
   return Navigation.setRoot({
     root: {
@@ -123,6 +94,16 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-BOK',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Body Of Knowledge',
+                            },
+                          },
+                        },
                       },
                     },
                   },
@@ -152,6 +133,16 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-FORMS',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Forms',
+                            },
+                          },
+                        },
                       },
                     },
                   },
@@ -181,6 +172,16 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-OUTBOX',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Outbox',
+                            },
+                          },
+                        },
                       },
                     },
                   },
@@ -210,6 +211,16 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-PROFILE',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Profile',
+                            },
+                          },
+                        },
                       },
                     },
                   },

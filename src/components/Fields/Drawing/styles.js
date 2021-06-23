@@ -1,11 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {spaceRegular, spaceLarge} from 'styles/space';
+import {spaceRegular, spaceMedium} from 'styles/space';
 import {red, white} from '@styles/colors';
 import {questrial, regular} from '@styles/font';
 
 export default StyleSheet.create({
   topContainer: {
-    marginVertical: spaceLarge,
+    marginVertical: spaceMedium,
   },
   canvasContainer: {
     flexDirection: 'row',
