@@ -14,6 +14,7 @@ import memoize from 'memoize-one';
 import {Icon, Card, SearchBar} from 'react-native-elements';
 import {filter, includes, findIndex, propEq} from 'ramda';
 
+import Skeleton from '@components/Skeleton';
 import {selectOrganistationPath} from '@selector/sanspaper';
 import {
   selectSortedFormList,
@@ -185,7 +186,7 @@ class FormList extends React.Component {
           />
         ) : searchKeyword === '' ? (
           <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color="grey" />
+            <Skeleton />
           </View>
         ) : (
           <View style={styles.emptyContainer}>

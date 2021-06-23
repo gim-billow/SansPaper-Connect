@@ -4,7 +4,6 @@ import {robotoMedium, large} from '@styles/font';
 import {white} from '@styles/colors';
 
 function HeaderScreen(props) {
-  console.tron.log('Header Screen', props);
   return (
     <View style={styles.container}>
       <Text style={styles.headerTitle}>{props.title}</Text>

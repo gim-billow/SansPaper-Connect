@@ -31,7 +31,7 @@ import {updateFormList} from '@store/forms';
 import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedNews} from '@selector/common';
 import styles from './styles';
-import {red, veryLightGrey} from '@styles/colors';
+import {veryLightGrey} from '@styles/colors';
 import {searchBarStyle} from '@styles/common';
 import {hasAppReview, setAppReview} from '@api/user';
 
