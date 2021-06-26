@@ -10,21 +10,27 @@ import {createStructuredSelector} from 'reselect';
 
 import styles from './styles';
 import {white, veryLightGrey, lightRed} from '@styles/colors';
+import {screens} from '@constant/ScreenConstants';
 import FormList from '@containers/FormList';
 import OfflineFormList from '@containers/OfflineFormList';
 import {searchBarStyle} from '@styles/common';
+import {activeScreen} from '@store/common';
 import {selectSortedFormList, selectOfflineFormList} from '@selector/form';
 
 const width = Dimensions.get('window').width;
 class FormScreen extends React.Component {
-  state = {
-    index: 0,
-    searchKeyword: '',
-    routes: [
-      {key: 'first', title: 'Online'},
-      {key: 'second', title: 'Offline'},
-    ],
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      index: 0,
+      searchKeyword: '',
+      routes: [
+        {key: 'first', title: 'Online'},
+        {key: 'second', title: 'Offline'},
+      ],
+    };
+  }
 
   getFilteredFormlist = memoize((forms, keyword) => {
     return R.filter(
@@ -114,9 +120,24 @@ class FormScreen extends React.Component {
   }
 }
 
+FormScreen.options = () => {
+  return {
+    topBar: {
+      rightButtons: [
+        {
+          id: screens.SyncButton,
+          component: {
+            name: screens.SyncButton,
+          },
+        },
+      ],
+    },
+  };
+};
+
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,
   offlineFormList: selectOfflineFormList,
 });
 
-export default connect(mapState, null)(FormScreen);
+export default connect(mapState, {activeScreen})(FormScreen);

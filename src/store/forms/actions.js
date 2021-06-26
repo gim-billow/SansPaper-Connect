@@ -8,6 +8,7 @@ export const FORM_ACTION = {
   UPDATE_FORM_FIELD_VALUE: 'formActions/UPDATE_FORM_FIELD_VALUE',
   UPDATE_OFFLINE_FORM_FIELD_VALUE:
     'formActions/UPDATE_OFFLINE_FORM_FIELD_VALUE',
+  OFFLINE_FORM_SYNC: 'formActions/OFFLINE_FORM_SYNC',
 };
 
 export const FORM_SAGA_ACTIONS = {
@@ -129,4 +130,8 @@ export const resetCurrentForm = () => ({
 
 export const resetCurrentOfflineForm = () => ({
   type: FORM_REDUCER_ACTIONS.RESET_CURRENT_OFFLINE_FORM,
+});
+
+export const offlineFormSync = () => ({
+  type: FORM_ACTION.OFFLINE_FORM_SYNC,
 });

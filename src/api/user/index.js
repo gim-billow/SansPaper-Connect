@@ -14,6 +14,14 @@ export const login = async (loginProps) => {
   }
 };
 
+export const logout = async () => {
+  try {
+    await auth().signOut();
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const saveUserEmail = async (props) => {
   try {
     const {username, saveUser} = props;
@@ -27,7 +35,10 @@ export const saveUserEmail = async (props) => {
 export const readUserEmail = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('@savedUserEmail');
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    if (jsonValue) {
+      return JSON.parse(jsonValue);
+    }
+    return {username: null, saveUser: false};
   } catch (e) {
     throw e;
   }

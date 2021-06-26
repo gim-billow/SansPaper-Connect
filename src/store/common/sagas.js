@@ -11,7 +11,7 @@ import {
 import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+// import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment-timezone';
 
@@ -28,6 +28,7 @@ import {FORM_SAGA_ACTIONS} from '@store/forms';
 import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 import DB, * as database from '@database';
 import {selectNetworkInfo} from '@selector/common';
+import {dismissActivityIndicator} from '../../navigation';
 
 function subscribeAppStateChannel() {
   return eventChannel((emmiter) => {
@@ -120,14 +121,16 @@ function* init({payload}) {
     yield put({
       type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
     });
+
+    dismissActivityIndicator();
   } catch (error) {
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
     yield put({
       type: USER_ACTIONS.ERROR_SSO_USER,
     });
     yield auth().signOut();
-    yield GoogleSignin.revokeAccess();
-    yield GoogleSignin.signOut();
+    // yield GoogleSignin.revokeAccess();
+    // yield GoogleSignin.signOut();
     console.log('init error', error);
   }
 }

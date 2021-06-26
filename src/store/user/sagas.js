@@ -9,8 +9,8 @@ import {
   cancelled,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
+// import {GoogleSignin} from '@react-native-google-signin/google-signin';
+// import auth from '@react-native-firebase/auth';
 
 import {
   USER_ACTIONS,
@@ -21,6 +21,7 @@ import {
 } from './actions';
 import {
   login,
+  logout,
   googleLogin,
   appleLogin,
   saveUserEmail,
@@ -28,8 +29,10 @@ import {
   forgotPassword,
   signUpEmailUserInterest,
 } from 'api/user';
+import {clearStorageUserId} from 'api/upvise';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectSaveUser} from '@selector/user';
+import {selectNetworkInfo} from '@selector/common';
 import {firebase} from '@react-native-firebase/firestore';
 import {fetchSansPaperUser, updateChangePass} from '@api/upvise';
 
@@ -47,10 +50,11 @@ function* loginUser({payload}) {
       yield removeUserEmail();
     }
 
-    dismissActivityIndicator();
+    // dismissActivityIndicator();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
   } catch (e) {
     const saveUser = yield select(selectSaveUser);
+    const networkInfo = yield select(selectNetworkInfo);
 
     if (saveUser) {
       yield saveUserEmail({...payload, saveUser});
@@ -67,6 +71,9 @@ function* loginUser({payload}) {
         'Too many failed attempts. Account is locked and require to change your password.',
       );
       yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'locked'});
+    } else if (!networkInfo.isInternetReachable) {
+      Alert.alert('', 'Internet is not available. Login once internet is back');
+      yield put({type: USER_ACTIONS.LOGIN_CODE, payload: null});
     } else {
       Alert.alert('', 'Something went wrong.');
       yield put({type: USER_ACTIONS.LOGIN_CODE, payload: e.code});
@@ -127,6 +134,7 @@ function* updateUserDetails({payload}) {
 
 function* logoutUser({payload}) {
   try {
+    showActivityIndicator();
     const {email, uid, status, loginCode} = payload;
 
     // set changepass back to false
@@ -139,6 +147,8 @@ function* logoutUser({payload}) {
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_EMAIL, payload: email});
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: loginCode});
+
+    yield clearStorageUserId();
 
     // const isSignedIn = yield GoogleSignin.isSignedIn();
 
@@ -153,9 +163,13 @@ function* logoutUser({payload}) {
     //   yield auth().signOut();
     // }
 
-    yield auth().signOut();
-  } catch (error) {
-    console.log('userlogout saga error: ', error);
+    yield logout();
+  } catch (e) {
+    if (e.code) {
+      Alert.alert('', 'Something went wrong!');
+    }
+
+    dismissActivityIndicator();
   }
 }
 

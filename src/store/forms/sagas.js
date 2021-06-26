@@ -13,19 +13,21 @@ import {
   cancelled,
   put,
   select,
+  delay,
 } from 'redux-saga/effects';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
-import {
-  assoc,
-  map,
-  adjust,
-  find,
-  propEq,
-  forEach,
-  includes,
-  findIndex,
-} from 'ramda';
+// import {
+//   assoc,
+//   map,
+//   adjust,
+//   find,
+//   propEq,
+//   forEach,
+//   includes,
+//   findIndex,
+// } from 'ramda';
+import * as R from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
@@ -158,7 +160,10 @@ function* watchFormsTemplatesUpdates({payload}) {
   try {
     while (true) {
       const forms = yield take(channel);
-      yield put({type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST, payload: forms});
+      yield put({
+        type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST,
+        payload: forms,
+      });
     }
   } finally {
     if (yield cancelled()) {
@@ -171,9 +176,9 @@ function* updateFormFieldValue({payload}) {
   try {
     const {rank, value} = payload;
     const currentForm = yield select(selectCurrentForm);
-    const updatedForm = adjust(
+    const updatedForm = R.adjust(
       rank - 1,
-      (i) => assoc('value', value, i),
+      (i) => R.assoc('value', value, i),
       currentForm.fields,
     );
     yield put({
@@ -189,9 +194,9 @@ function* updateOfflineFormFieldValue({payload}) {
   try {
     const {rank, value} = payload;
     const currentForm = yield select(selectOfflineCurrentForm);
-    const updatedForm = adjust(
+    const updatedForm = R.adjust(
       rank - 1,
-      (i) => assoc('value', value, i),
+      (i) => R.assoc('value', value, i),
       currentForm.fields,
     );
     yield put({
@@ -212,14 +217,14 @@ async function submitForm(form, screen) {
         async (position) => {
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
-          let updatedForm = assoc('geo', geo, form);
+          let updatedForm = R.assoc('geo', geo, form);
 
           const addr = await Geocoder.from([
             position.coords.latitude,
             position.coords.longitude,
           ]);
 
-          updatedForm = assoc(
+          updatedForm = R.assoc(
             'address',
             addr.results[0].formatted_address,
             updatedForm,
@@ -344,7 +349,7 @@ function* preSubmitForm({payload}) {
       yield put(updateSubmittingForm(false));
     } else {
       let scrollToIndex = null;
-      forEach(({startDateTime, finishDateTime, rank}) => {
+      R.forEach(({startDateTime, finishDateTime, rank}) => {
         const hours = moment
           .duration(finishDateTime - startDateTime, 'milliseconds')
           .asHours();
@@ -402,11 +407,12 @@ function* preSubmitForm({payload}) {
       }
     }
 
-    // FIXME:
     if (!dateTimeError && unfilledMandatoryFields.length <= 0) {
       // sync form to offline
       const offlineForms = yield select(selectOfflineFormList);
-      const offlineFormIndex = findIndex(propEq('id', form.id))(offlineForms);
+      const offlineFormIndex = R.findIndex(R.propEq('id', form.id))(
+        offlineForms,
+      );
       if (offlineFormIndex === -1) {
         yield syncOfflineForm({
           payload: {
@@ -445,18 +451,26 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
-    showActivityIndicator();
-    const {linkedTable, formId, dlFirst = false, submitSync = null} = payload;
+    const {
+      linkedTable,
+      formId,
+      dlFirst = false,
+      submitSync = null,
+      multiple = false,
+    } = payload;
+    if (!multiple) {
+      showActivityIndicator();
+    }
     const dateNow = new Date();
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const organisation = yield select(selectOrganistation);
     const forms = yield select(selectFormList);
-    const selectedForm = find(propEq('id', formId))(forms);
+    const selectedForm = R.find(R.propEq('id', formId))(forms);
     const fieldsPath = `${upviseTemplatePath}/${formId}/upviseFields`;
 
     //sync forms
     const currentFormFields = yield getFormFields({fieldsPath});
-    const currentForm = assoc('fields', currentFormFields, selectedForm);
+    const currentForm = R.assoc('fields', currentFormFields, selectedForm);
     const currentFormPayload = {
       id: formId,
       createdAt: dateNow.toISOString(),
@@ -492,10 +506,10 @@ function* syncOfflineForm({payload = {}}) {
     for (const field of currentFormFields) {
       const {seloptions, type} = field;
 
-      if (includes(type, selectType)) {
+      if (R.includes(type, selectType)) {
         let isProjectDependant = false;
         for (const project of projectDependant) {
-          if (includes(project, seloptions)) {
+          if (R.includes(project, seloptions)) {
             isProjectDependant = true;
           }
         }
@@ -538,44 +552,49 @@ function* syncOfflineForm({payload = {}}) {
       }
     }
 
-    if (dlFirst) {
-      yield saveAsDraft({
-        payload: {
-          offline: false,
-          status: submitSync || 'draft',
-        },
-      });
-    }
+    if (!multiple) {
+      if (dlFirst) {
+        yield saveAsDraft({
+          payload: {
+            offline: false,
+            status: submitSync || 'draft',
+          },
+        });
+      }
 
-    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
-    dismissActivityIndicator();
+      yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+      dismissActivityIndicator();
+    }
   } catch (error) {
-    dismissActivityIndicator();
+    const {multiple = false} = payload;
+    if (!multiple) {
+      dismissActivityIndicator();
+    }
     console.log('error', error);
   }
 }
 
-function* loadFormFields({payload = {}}) {
-  try {
-    const {rank, value} = payload;
-    const currentForm = yield select(selectCurrentForm);
-    const updatedForm = adjust(
-      rank - 1,
-      (i) => assoc('value', value, i),
-      currentForm.fields,
-    );
-    yield put({
-      type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
-      payload: updatedForm,
-    });
-  } catch (error) {
-    console.log('loginUser error', error);
-  }
-}
+// function* loadFormFields({payload = {}}) {
+//   try {
+//     const {rank, value} = payload;
+//     const currentForm = yield select(selectCurrentForm);
+//     const updatedForm = R.adjust(
+//       rank - 1,
+//       (i) => R.assoc('value', value, i),
+//       currentForm.fields,
+//     );
+//     yield put({
+//       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
+//       payload: updatedForm,
+//     });
+//   } catch (error) {
+//     console.log('loginUser error', error);
+//   }
+// }
 
 function* loadOfflineForms() {
   const offlineFormsString = yield database.getOfflineForms();
-  const offlineForms = map(
+  const offlineForms = R.map(
     (form) => JSON.parse(form.value),
     offlineFormsString,
   );
@@ -588,7 +607,7 @@ function* loadOfflineForms() {
 
 function* loadOutbox() {
   const outboxString = yield database.getAllFromOutbox();
-  const outboxItems = map(
+  const outboxItems = R.map(
     (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
     outboxString,
   );
@@ -604,7 +623,7 @@ function* loadOutboxByStatus({payload}) {
     const outboxString = yield database.getOutboxFormsByStatus({
       status: payload,
     });
-    const outboxItems = map(
+    const outboxItems = R.map(
       (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
       outboxString,
     );
@@ -696,6 +715,48 @@ function* deleteOutboxForm({payload}) {
   }
 }
 
+function* offlineFormSync() {
+  try {
+    // if there is no internet
+    const {isInternetReachable} = yield select(selectNetworkInfo);
+    if (!isInternetReachable) {
+      Alert.alert('', 'Unable to sync form. No current internet');
+      return;
+    }
+
+    const offlineForms = yield select(selectOfflineFormList);
+    const formCount = R.length(offlineForms);
+    const offlineFormsCopy = R.clone(offlineForms);
+
+    if (!formCount) {
+      Alert.alert('', 'No offline forms to be synced.');
+      return;
+    }
+
+    showActivityIndicator('Syncing offline forms');
+
+    yield database.deleteAllForms();
+    yield delay(3000);
+    yield all(
+      offlineFormsCopy.map((form) => {
+        return syncOfflineForm({
+          payload: {
+            linkedTable: form.linkedtable,
+            formId: form.id,
+            multiple: true,
+          },
+        });
+      }),
+    );
+
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+    dismissActivityIndicator();
+  } catch (error) {
+    console.log('ERROR', error);
+    dismissActivityIndicator();
+  }
+}
+
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
   takeLatest(FORM_ACTION.UPDATE_FORM_FIELD_VALUE, updateFormFieldValue),
@@ -711,4 +772,5 @@ export default all([
   takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
   takeLatest(FORM_ACTION.DELETE_OFFLINE_FORM, deleteOfflineForm),
   takeLatest(FORM_ACTION.DELETE_OUTBOX_FORM, deleteOutboxForm),
+  takeLatest(FORM_ACTION.OFFLINE_FORM_SYNC, offlineFormSync),
 ]);
