@@ -14,4 +14,5 @@ export const screens = {
   MapScreen: 'MapScreen',
   SelectMap: 'SelectMap',
   HeaderScreen: 'HeaderScreen',
+  SyncButton: 'SyncButton',
 };

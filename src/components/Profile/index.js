@@ -26,6 +26,7 @@ import {createStructuredSelector} from 'reselect';
 import {logoutUser} from '@store/user';
 import {selectEmail} from 'selector/user';
 import {selectUser, selectOrganistation} from 'selector/sanspaper';
+import {selectNetworkInfo} from 'selector/common';
 import {darkGrey, red} from '@styles/colors';
 
 class Profile extends Component {
@@ -50,7 +51,12 @@ class Profile extends Component {
     });
   };
 
+  showNoInternetAlert = () =>
+    Alert.alert('', 'No internet available. Logout once internet is back');
+
   onPressLogoutHandler = () => {
+    const {networkInfo, logoutUser} = this.props;
+
     Alert.alert(
       '',
       'Are you sure you want to logout?',
@@ -63,9 +69,11 @@ class Profile extends Component {
         {
           text: 'Logout',
           onPress: async () => {
-            await auth().signOut();
-            await clearStorageUserId();
-            this.props.logoutUser();
+            if (!networkInfo.isInternetReachable) {
+              this.showNoInternetAlert();
+              return;
+            }
+            logoutUser();
           },
         },
       ],
@@ -176,6 +184,7 @@ class Profile extends Component {
 const mapState = createStructuredSelector({
   email: selectEmail,
   user: selectUser,
+  networkInfo: selectNetworkInfo,
   organization: selectOrganistation,
 });
 

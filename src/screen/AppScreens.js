@@ -15,6 +15,7 @@ import OfflineFormScreen from './OfflineFormScreen';
 import OfflineLinkedItems from './OfflineLinkedItems';
 import OfflineFormFieldsScreen from './OfflineFormFieldsScreen';
 import HeaderScreen from './HeaderScreen';
+import SyncButton from './SyncButton';
 
 const appScreens = new Map();
 
@@ -33,5 +34,6 @@ appScreens.set(screens.ProfileScreen, ProfileScreen);
 appScreens.set(screens.MapScreen, MapScreen);
 appScreens.set(screens.SelectMap, SelectMap);
 appScreens.set(screens.HeaderScreen, HeaderScreen);
+appScreens.set(screens.SyncButton, SyncButton);
 
 export default appScreens;

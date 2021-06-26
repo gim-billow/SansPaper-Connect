@@ -49,7 +49,7 @@ export const getStorageUserId = async () => {
 };
 
 export const clearStorageUserId = async () => {
-  await AsyncStorage.setItem('@userid', '');
+  await AsyncStorage.removeItem('@userid');
 };
 
 export const getUser = () => {

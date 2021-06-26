@@ -121,5 +121,6 @@ export default StyleSheet.create({
     fontFamily: questrial,
     fontSize: 16,
     letterSpacing: 0.2,
+    paddingVertical: 5,
   },
 });
