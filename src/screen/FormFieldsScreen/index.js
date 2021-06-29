@@ -8,7 +8,7 @@ import {connectActionSheet} from '@expo/react-native-action-sheet';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './styles';
-import {white, red} from '@styles/colors';
+import {white} from '@styles/colors';
 import {commonStyles} from '@styles/common';
 import FormFieldsList from '@containers/FormFieldsList';
 import {screens} from '@constant/ScreenConstants';
@@ -22,6 +22,7 @@ import {
   selectCurrentFormId,
   selectCurrentForm,
 } from 'selector/form';
+import {selectOfflineFeatureExpired} from '@selector/user';
 import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
 import {questrial} from '@styles/font';
 // import NoInternet from '@containers/NoInternet';
@@ -37,6 +38,10 @@ class FormFieldsScreen extends React.Component {
       prevProps.onScreen !== this.props.onScreen &&
       this.props.onScreen === 'online'
     ) {
+      if (this.props.offlineFeatureExpired) {
+        this._onlySubmitActionSheet();
+        return;
+      }
       this._onOpenActionSheet();
     }
   }
@@ -44,6 +49,31 @@ class FormFieldsScreen extends React.Component {
   componentWillUnmount() {
     this.props.activeScreen('');
   }
+
+  _onlySubmitActionSheet = () => {
+    const {submitForm} = this.props;
+    const options = ['Submit', 'Cancel'];
+    const cancelButtonIndex = 1;
+    const icons = [setIcon('send'), setIcon('times')];
+
+    this.props.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        icons,
+        textStyle: {...commonStyles.actionSheetAndroid},
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            submitForm(false);
+            break;
+          default:
+            break;
+        }
+      },
+    );
+  };
 
   _onOpenActionSheet = () => {
     const {
@@ -220,6 +250,7 @@ const mapState = createStructuredSelector({
   currentForm: selectCurrentForm,
   netInfo: selectNetworkInfo,
   onScreen: selectActiveScreen,
+  offlineFeatureExpired: selectOfflineFeatureExpired,
 });
 
 export default connect(mapState, {

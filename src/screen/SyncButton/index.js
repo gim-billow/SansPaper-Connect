@@ -1,13 +1,26 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Platform} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Platform,
+  Alert,
+} from 'react-native';
 import {Icon} from 'react-native-elements';
+import {createStructuredSelector} from 'reselect';
 import {connect} from 'react-redux';
 
+import {selectOfflineFeatureExpired} from '@selector/user';
 import {offlineFormSync} from '@store/forms';
 import {white} from '@styles/colors';
 
 function SyncButton(props) {
   const onPressSyncForm = () => {
+    if (props.offlineFeatureExpired) {
+      Alert.alert('', 'This feature is currently unavailable');
+      return;
+    }
+
     props.offlineFormSync();
   };
 
@@ -29,4 +42,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, {offlineFormSync})(SyncButton);
+const mapState = createStructuredSelector({
+  offlineFeatureExpired: selectOfflineFeatureExpired,
+});
+
+export default connect(mapState, {offlineFormSync})(SyncButton);

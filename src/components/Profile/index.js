@@ -1,32 +1,17 @@
 import React, {Component} from 'react';
-import {Text, View, Alert, Linking, Image} from 'react-native';
+import {Text, View, Alert, Linking, ActivityIndicator} from 'react-native';
 import styles from './styles';
-
-import auth from '@react-native-firebase/auth';
-
-// api
-import {clearStorageUserId} from '@api/upvise';
 
 import {getReadableVersion} from 'react-native-device-info';
 
 import {List} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Divider, Image} from 'react-native-elements';
 
 // svg icon
 import MailIcon from './SvgIcon/MailIcon';
 import LogoutIcon from './SvgIcon/LogoutIcon';
 import UpdatedIcon from './SvgIcon/UpdatedIcon';
 import PrivacyPolicyIcon from './SvgIcon/PrivacyPolicyIcon';
-
-//redux
-import {connect} from 'react-redux';
-import {createStructuredSelector} from 'reselect';
-
-//redux, selector
-import {logoutUser} from '@store/user';
-import {selectEmail} from 'selector/user';
-import {selectUser, selectOrganistation} from 'selector/sanspaper';
-import {selectNetworkInfo} from 'selector/common';
 import {darkGrey, red} from '@styles/colors';
 
 class Profile extends Component {
@@ -82,19 +67,41 @@ class Profile extends Component {
   };
 
   render() {
-    const {email, user, organization} = this.props;
+    const {
+      email,
+      user,
+      organization,
+      openActionSheet,
+      profilePicture,
+      loadingImg,
+    } = this.props;
     const name = user?._data?.name;
 
     return (
       <>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Image
-              source={require('../../assets/user.png')}
-              resizeMode="contain"
-              resizeMethod="auto"
-              style={styles.profileLogo}
-            />
+            {loadingImg && (
+              <View style={styles.loader}>
+                <ActivityIndicator style={styles.activityLoader} color="#fff" />
+              </View>
+            )}
+            {profilePicture ? (
+              <Image
+                source={{uri: profilePicture}}
+                resizeMethod="resize"
+                onPress={openActionSheet}
+                style={styles.profileImg}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/user.png')}
+                resizeMode="contain"
+                resizeMethod="auto"
+                onPress={openActionSheet}
+                style={styles.profileLogo}
+              />
+            )}
             <View style={styles.topHeader}>
               <Text style={styles.name}>{name}</Text>
               <Text style={styles.subText}>{organization.name}</Text>
@@ -181,11 +188,4 @@ class Profile extends Component {
   }
 }
 
-const mapState = createStructuredSelector({
-  email: selectEmail,
-  user: selectUser,
-  networkInfo: selectNetworkInfo,
-  organization: selectOrganistation,
-});
-
-export default connect(mapState, {logoutUser})(Profile);
+export default Profile;

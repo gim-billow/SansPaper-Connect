@@ -1,4 +1,5 @@
 import {Alert} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {
   put,
   all,
@@ -9,6 +10,7 @@ import {
   cancelled,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
+import moment from 'moment';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
 
@@ -28,13 +30,26 @@ import {
   removeUserEmail,
   forgotPassword,
   signUpEmailUserInterest,
+  profilePicUploadStorage,
+  addProfImageToFirestore,
+  loadProfilePicture,
+  checkOfflineFeature,
 } from 'api/user';
-import {clearStorageUserId} from 'api/upvise';
-import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
-import {selectSaveUser} from '@selector/user';
+import {
+  showActivityIndicator,
+  dismissActivityIndicator,
+  updateProfileLoadingScreen,
+} from 'navigation';
+import {selectSaveUser, selectUID} from '@selector/user';
+import {selectUser} from '@selector/sanspaper';
 import {selectNetworkInfo} from '@selector/common';
 import {firebase} from '@react-native-firebase/firestore';
-import {fetchSansPaperUser, updateChangePass} from '@api/upvise';
+import {
+  fetchSansPaperUser,
+  updateChangePass,
+  clearStorageUserId,
+} from '@api/upvise';
+import {convertDate} from '@util/general';
 
 function* loginUser({payload}) {
   try {
@@ -191,11 +206,18 @@ function* watchUserChangeUpdate() {
   try {
     while (true) {
       const authUser = yield take(user);
-      const {passchange} = authUser.data();
+      const {passchange = false, profileImg = null} = authUser.data();
 
       if (passchange) {
         yield put(onLogoutUser());
         yield put(resetLoginCode());
+      }
+
+      if (profileImg) {
+        yield put({
+          type: USER_SAGA_ACTIONS.ON_LOAD_USER_PROFILE,
+          payload: profileImg,
+        });
       }
     }
   } finally {
@@ -222,6 +244,126 @@ function* signUpEmailUser({payload}) {
   }
 }
 
+function* saveProfilePic({payload}) {
+  try {
+    const base64Img = payload;
+    const user = yield select(selectUser);
+    const uid = yield select(selectUID);
+    const networkInfo = yield select(selectNetworkInfo);
+
+    if (!networkInfo.isInternetReachable) {
+      Alert.alert('', 'Unable to upload. Internet is not available.');
+      return;
+    }
+
+    updateProfileLoadingScreen(true);
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.LOAD_PROFILE_PICTURE,
+      payload: true,
+    });
+
+    let name = user?._data?.name;
+    name = name.toUpperCase().replace(' ', '_');
+
+    const filename = `${name}_${Date.now()}_PROFILE_IMG.jpg`;
+
+    // save image to storage
+    const uploadedImg = yield profilePicUploadStorage(filename, base64Img);
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC,
+      payload: uploadedImg,
+    });
+
+    updateProfileLoadingScreen(false);
+
+    Toast.show('Profile picture picture successfully set.');
+
+    // add to profile image to user in firestore
+    yield addProfImageToFirestore(uid, filename);
+  } catch (error) {
+    console.log('Error saveProfilePic', error);
+    throw error;
+  }
+}
+
+function* loadUserProfilePic({payload}) {
+  const filename = payload;
+
+  try {
+    // load image from storage
+    const uploadedImg = yield loadProfilePicture(filename);
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC,
+      payload: uploadedImg,
+    });
+
+    updateProfileLoadingScreen(false);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// function* checkOfflineAccess() {
+//   try {
+//     const offlineFeature = yield checkOfflineFeature();
+
+//     if (offlineFeature) {
+//       const date = offlineFeature.expiry.seconds * 1000;
+
+//       const expired = Date.now() < new Date(date) ? false : true;
+
+//       yield put({
+//         type: USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS,
+//         payload: expired,
+//       });
+//     }
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+function subscribeOnOfflineAccessChanged(formsRef) {
+  return eventChannel((emitter) => {
+    formsRef.onSnapshot(async () => {
+      const offline = await checkOfflineFeature();
+      emitter(offline);
+    });
+
+    return () => formsRef;
+  });
+}
+
+function* watchOfflineAccessChangeUpdate() {
+  const formsRef = yield firebase.firestore().collection('sanspaperbeta');
+  const offlineAccessRef = yield call(
+    subscribeOnOfflineAccessChanged,
+    formsRef,
+  );
+
+  try {
+    while (true) {
+      const offlineAccess = yield take(offlineAccessRef);
+      if (offlineAccess.exists) {
+        const offlineFeature = offlineAccess.data();
+        const date = offlineFeature.expiry.seconds * 1000;
+        const expired = Date.now() < new Date(date) ? false : true;
+
+        yield put({
+          type: USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS,
+          payload: expired,
+        });
+      }
+    }
+  } finally {
+    if (yield cancelled()) {
+      offlineAccessRef.close();
+    }
+  }
+}
+
 export default all([
   takeLatest(USER_SAGA_ACTIONS.ON_USER_CHANGED, watchUserChangeUpdate),
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
@@ -230,5 +372,11 @@ export default all([
   takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),
   takeLatest(USER_ACTIONS.APPLE_LOGIN, loginWithApple),
   takeLatest(USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, updateUserDetails),
+  takeLatest(USER_ACTIONS.SAVE_PROFILE_PIC, saveProfilePic),
+  takeLatest(USER_SAGA_ACTIONS.ON_LOAD_USER_PROFILE, loadUserProfilePic),
   takeLatest(USER_ACTIONS.LOGOUT, logoutUser),
+  takeLatest(
+    USER_SAGA_ACTIONS.CHECK_OFFLINE_ACCESS,
+    watchOfflineAccessChangeUpdate,
+  ),
 ]);

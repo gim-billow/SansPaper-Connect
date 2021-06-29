@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {spaceMedium} from 'styles/space';
 import {regular, questrial, medium} from 'styles/font';
 import {red, white} from '@styles/colors';
 
@@ -22,9 +21,27 @@ export default StyleSheet.create({
     marginLeft: 20,
     justifyContent: 'center',
   },
+  profileImg: {
+    borderRadius: 50,
+    width: 75,
+    height: 75,
+  },
   profileLogo: {
     width: 75,
     height: 75,
+  },
+  loader: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 50,
+    width: 75,
+    height: 75,
+    left: 20,
+    top: 23,
+    zIndex: 100,
+  },
+  activityLoader: {
+    marginTop: 25,
   },
   name: {
     fontSize: medium,

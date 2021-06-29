@@ -8,18 +8,24 @@ export const USER_ACTIONS = {
   SAVE_USER: 'userActions/SAVE_USER',
   FORGO_PASSWORD: 'userActions/FORGOT_PASSWORD',
   SIGN_UP_EMAIL: 'userActions/SIGN_UP_EMAIL',
+  SAVE_PROFILE_PIC: 'userActions/SAVE_PROFILE_PIC',
 };
 
 export const USER_SAGA_ACTIONS = {
   UPDATE_USER_DETAILS: 'userActions/UPDATE_USER_DETAILS',
   ON_USER_CHANGED: 'userActions/ON_USER_CHANGED',
   ON_CHANGE_PASS_BOOL: 'userActions/ON_CHANGE_PASS_BOOL',
+  ON_LOAD_USER_PROFILE: 'userActions/ON_LOAD_USER_PROFILE',
+  CHECK_OFFLINE_ACCESS: 'userActions/CHECK_OFFLINE_ACCESS',
 };
 
 export const USER_REDUCER_ACTIONS = {
   UPDATE_LOGIN_STATUS: 'userActions/UPDATE_LOGIN_STATUS',
   UPDATE_USER_EMAIL: 'userAction/UPDATE_USER_EMAIL',
   UPDATE_USER_ID: 'userAction/UPDATE_USER_ID',
+  LOAD_PROFILE_PICTURE: 'userAction/LOAD_PROFILE_PICTURE',
+  UPDATE_PROFILE_PIC: 'userActions/UPDATE_PROFILE_PIC',
+  SET_OFFLINE_ACCESS: 'userActions/SET_OFFLINE_ACCESS',
 };
 
 export const loginUser = (payload) => ({
@@ -61,5 +67,10 @@ export const saveUser = (payload) => ({
 
 export const signUpEmail = (payload) => ({
   type: USER_ACTIONS.SIGN_UP_EMAIL,
+  payload,
+});
+
+export const saveProfilePicture = (payload) => ({
+  type: USER_ACTIONS.SAVE_PROFILE_PIC,
   payload,
 });

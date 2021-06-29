@@ -1,9 +1,8 @@
 import {Navigation} from 'react-native-navigation';
-import {nanoid} from 'nanoid';
 
 import {screens} from '@constant/ScreenConstants';
 import {red, white, darkGrey} from '@styles/colors';
-import {regular, questrial, large, robotoMedium} from '@styles/font';
+import {regular, questrial} from '@styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
@@ -143,6 +142,14 @@ export const showMainScreen = async () => {
                             },
                           },
                         },
+                        rightButtons: [
+                          {
+                            id: screens.SyncButton,
+                            component: {
+                              name: screens.SyncButton,
+                            },
+                          },
+                        ],
                       },
                     },
                   },
@@ -223,6 +230,9 @@ export const showMainScreen = async () => {
                         },
                       },
                     },
+                    passProps: {
+                      loadingImg: true,
+                    },
                   },
                 },
               ],
@@ -267,4 +277,10 @@ export const showActivityIndicator = (messages = '') => {
 
 export const dismissActivityIndicator = () => {
   Navigation.dismissOverlay(screens.ActivityIndicatorOverlay);
+};
+
+export const updateProfileLoadingScreen = (loading) => {
+  Navigation.updateProps(screens.ProfileScreen, {
+    loadingImg: loading,
+  });
 };

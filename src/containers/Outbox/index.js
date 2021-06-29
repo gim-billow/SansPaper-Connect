@@ -17,7 +17,11 @@ import memoize from 'memoize-one';
 import {filter, includes, findIndex} from 'ramda';
 import {Icon, Card, SearchBar} from 'react-native-elements';
 
-import {selectOutbox} from '@selector/form';
+import {
+  selectOutbox,
+  selectOfflineFormList,
+  selectOfflineCurrentForm,
+} from '@selector/form';
 import {
   deleteOutboxForm,
   loadOutboxByStatus,
@@ -28,7 +32,7 @@ import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
 import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
-import {selectOfflineFormList, selectOfflineCurrentForm} from 'selector/form';
+import {selectOfflineFeatureExpired} from '@selector/user';
 import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
 import {CommonImages} from '@constant/Images';
 
@@ -235,13 +239,55 @@ class Outbox extends React.Component {
 
   render() {
     const {searchKeyword, filterLabel} = this.state;
-    const {outbox} = this.props;
+    const {outbox, offlineFeatureExpired} = this.props;
     const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
+
+    if (offlineFeatureExpired) {
+      return (
+        <>
+          <View style={styles.header}>
+            <SearchBar
+              placeholder="Search outbox"
+              containerStyle={searchBarStyle.searchContainer}
+              inputContainerStyle={searchBarStyle.searchInputContainer}
+              inputStyle={searchBarStyle.searchInput}
+              searchIcon={{
+                color: veryLightGrey,
+              }}
+              selectionColor={veryLightGrey}
+              placeholderTextColor={veryLightGrey}
+              value={searchKeyword}
+              onChangeText={this.handleOnChangeText}
+              clearIcon={{
+                color: veryLightGrey,
+              }}
+            />
+          </View>
+          <TouchableHighlight
+            underlayColor="transparent"
+            onPress={this.onFilterOutboxList}>
+            <View style={styles.filterView}>
+              {Platform.OS === 'android' ? (
+                <Icon type="antdesign" name="filter" color={white} />
+              ) : (
+                <Icon type="ionicon" name="options-outline" color={white} />
+              )}
+              <Text style={styles.filterText}>{filterLabel}</Text>
+            </View>
+          </TouchableHighlight>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              Offline access feature is expired. To continue using the feature,
+              contact the administrator.
+            </Text>
+          </View>
+        </>
+      );
+    }
 
     return (
       <>
         <View style={styles.header}>
-          {/* <Text style={styles.headerText}>Outbox</Text> */}
           <SearchBar
             placeholder="Search outbox"
             containerStyle={searchBarStyle.searchContainer}
@@ -300,6 +346,7 @@ const mapState = createStructuredSelector({
   outbox: selectOutbox,
   offlineForms: selectOfflineFormList,
   offlineCurrentForm: selectOfflineCurrentForm,
+  offlineFeatureExpired: selectOfflineFeatureExpired,
 });
 
 export default connect(mapState, {

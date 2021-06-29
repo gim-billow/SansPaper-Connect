@@ -7,10 +7,10 @@ import memoize from 'memoize-one';
 import {connect} from 'react-redux';
 import R from 'ramda';
 import {createStructuredSelector} from 'reselect';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 
 import styles from './styles';
 import {white, veryLightGrey, lightRed} from '@styles/colors';
-import {screens} from '@constant/ScreenConstants';
 import FormList from '@containers/FormList';
 import OfflineFormList from '@containers/OfflineFormList';
 import {searchBarStyle} from '@styles/common';
@@ -18,7 +18,7 @@ import {activeScreen} from '@store/common';
 import {selectSortedFormList, selectOfflineFormList} from '@selector/form';
 
 const width = Dimensions.get('window').width;
-class FormScreen extends React.Component {
+class FormScreen extends NavigationComponent {
   constructor(props) {
     super(props);
 
@@ -30,6 +30,8 @@ class FormScreen extends React.Component {
         {key: 'second', title: 'Offline'},
       ],
     };
+
+    Navigation.events().bindComponent(this);
   }
 
   getFilteredFormlist = memoize((forms, keyword) => {
@@ -120,20 +122,20 @@ class FormScreen extends React.Component {
   }
 }
 
-FormScreen.options = () => {
-  return {
-    topBar: {
-      rightButtons: [
-        {
-          id: screens.SyncButton,
-          component: {
-            name: screens.SyncButton,
-          },
-        },
-      ],
-    },
-  };
-};
+// FormScreen.options = () => {
+//   return {
+//     topBar: {
+//       rightButtons: [
+//         {
+//           id: screens.SyncButton,
+//           component: {
+//             name: screens.SyncButton,
+//           },
+//         },
+//       ],
+//     },
+//   };
+// };
 
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,

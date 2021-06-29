@@ -50,12 +50,14 @@ export default StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 50,
   },
   emptyText: {
     fontFamily: questrial,
     fontSize: regular,
     letterSpacing: 0.2,
     color: darkGrey,
+    textAlign: 'center',
   },
   draft: {
     color: darkGrey,

@@ -10,11 +10,9 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import memoize from 'memoize-one';
-import {Icon, Card, SearchBar} from 'react-native-elements';
-import {filter, includes} from 'ramda';
+import {Icon, Card} from 'react-native-elements';
 
-import {selectOfflineFormList} from '@selector/form';
+import {selectOfflineFeatureExpired} from '@selector/user';
 import {updateOfflineCurrentFormId, deleteOfflineForm} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {
@@ -23,8 +21,8 @@ import {
 } from '@store/navigate';
 
 import styles from './styles';
-import {darkGrey, red, lightGrey} from '@styles/colors';
-import {cardStyle, searchBarStyle} from '@styles/common';
+import {red, lightGrey} from '@styles/colors';
+import {cardStyle} from '@styles/common';
 
 class OfflineFormList extends React.Component {
   keyExtractor = (item, index) => index?.toString();
@@ -46,18 +44,6 @@ class OfflineFormList extends React.Component {
       });
     }
   };
-
-  // getFilteredFormlist = memoize((formList, searchKeyword) => {
-  //   return filter(
-  //     (form) =>
-  //       includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
-  //     formList,
-  //   );
-  // });
-
-  // handleOnChangeText = (text) => {
-  //   this.setState({searchKeyword: text});
-  // };
 
   onDeleteAlert = (id) =>
     Alert.alert(
@@ -115,23 +101,21 @@ class OfflineFormList extends React.Component {
   };
 
   render() {
-    const {filteredFromList, searchKeyword} = this.props;
+    const {filteredFromList, searchKeyword, offlineFeatureExpired} = this.props;
+
+    if (offlineFeatureExpired) {
+      return (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>
+            Offline access feature is expired. To continue using the feature,
+            contact the administrator.
+          </Text>
+        </View>
+      );
+    }
 
     return (
       <View style={styles.flex1}>
-        {/* <SearchBar
-          placeholder="Search offline form"
-          containerStyle={searchBarStyle.searchContainer}
-          inputContainerStyle={searchBarStyle.searchInputContainer}
-          inputStyle={searchBarStyle.searchInput}
-          searchIcon={{
-            color: darkGrey,
-          }}
-          value={searchKeyword}
-          onChangeText={this.handleOnChangeText}
-          icon="search"
-          clearIcon="clear"
-        /> */}
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList
             keyExtractor={this.keyExtractor}
@@ -155,7 +139,7 @@ class OfflineFormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  // formList: selectOfflineFormList,
+  offlineFeatureExpired: selectOfflineFeatureExpired,
 });
 
 export default connect(mapState, {

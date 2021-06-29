@@ -13,3 +13,10 @@ export const getTextInsideParens = (string) => {
   const regExp = /\(([^)]+)\)/;
   return regExp.exec(string)[1];
 };
+
+export const getExtension = (value) => {
+  if (!value) {
+    return null;
+  }
+  return value.split('.').pop();
+};
