@@ -28,7 +28,11 @@ import {FORM_SAGA_ACTIONS} from '@store/forms';
 import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 import DB, * as database from '@database';
 import {selectNetworkInfo} from '@selector/common';
-import {dismissActivityIndicator} from '../../navigation';
+import {
+  dismissActivityIndicator,
+  updateProfileLoadingScreen,
+} from '../../navigation';
+import {getExtension} from '../../util/string';
 
 function subscribeAppStateChannel() {
   return eventChannel((emmiter) => {
@@ -64,6 +68,7 @@ function* init({payload}) {
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});
 
     const spUser = yield getSansPaperUser({userId: uid});
+
     //define organisation path
     const organisationPath = yield spUser.data().organisations.path || '';
 
@@ -122,13 +127,35 @@ function* init({payload}) {
       type: USER_SAGA_ACTIONS.ON_USER_CHANGED,
     });
 
+    // check offline feature access
+    yield put({
+      type: USER_SAGA_ACTIONS.CHECK_OFFLINE_ACCESS,
+    });
+
+    // load profile picture
+    const profPic = yield spUser.data().profileImg || null;
+    const extension = profPic ? getExtension(profPic).toLowerCase() : null;
+
+    if (
+      profPic &&
+      ((extension && extension === 'jpg') || extension === 'jpeg')
+    ) {
+      yield put({
+        type: USER_SAGA_ACTIONS.ON_LOAD_USER_PROFILE,
+        payload: profPic,
+      });
+    } else {
+      updateProfileLoadingScreen(false);
+    }
+
     dismissActivityIndicator();
   } catch (error) {
-    yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
-    yield put({
-      type: USER_ACTIONS.ERROR_SSO_USER,
-    });
-    yield auth().signOut();
+    dismissActivityIndicator();
+    // yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'sso/error-login'});
+    // yield put({
+    //   type: USER_ACTIONS.ERROR_SSO_USER,
+    // });
+    // yield auth().signOut();
     // yield GoogleSignin.revokeAccess();
     // yield GoogleSignin.signOut();
     console.log('init error', error);

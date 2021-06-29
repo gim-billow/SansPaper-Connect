@@ -1,7 +1,9 @@
 import auth from '@react-native-firebase/auth';
+import {firebase} from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import axios from 'axios';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {appleAuth} from '@invertase/react-native-apple-authentication';
+// import {GoogleSignin} from '@react-native-google-signin/google-signin';
+// import {appleAuth} from '@invertase/react-native-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const login = async (loginProps) => {
@@ -52,47 +54,47 @@ export const removeUserEmail = async () => {
   }
 };
 
-export const googleLogin = async () => {
-  try {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
+// export const googleLogin = async () => {
+//   try {
+//     // Get the users ID token
+//     const {idToken} = await GoogleSignin.signIn();
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+//     // Create a Google credential with the token
+//     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-    // Sign-in the user with the credential
-    await auth().signInWithCredential(googleCredential);
-  } catch (e) {
-    throw e;
-  }
-};
+//     // Sign-in the user with the credential
+//     await auth().signInWithCredential(googleCredential);
+//   } catch (e) {
+//     throw e;
+//   }
+// };
 
-export const appleLogin = async () => {
-  try {
-    // Start the sign-in request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
+// export const appleLogin = async () => {
+//   try {
+//     // Start the sign-in request
+//     const appleAuthRequestResponse = await appleAuth.performRequest({
+//       requestedOperation: appleAuth.Operation.LOGIN,
+//       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+//     });
 
-    // Ensure Apple returned a user identityToken
-    if (!appleAuthRequestResponse.identityToken) {
-      throw 'Apple Sign-In failed - no identify token returned';
-    }
+//     // Ensure Apple returned a user identityToken
+//     if (!appleAuthRequestResponse.identityToken) {
+//       throw 'Apple Sign-In failed - no identify token returned';
+//     }
 
-    // Create a Firebase credential from the response
-    const {identityToken, nonce} = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(
-      identityToken,
-      nonce,
-    );
+//     // Create a Firebase credential from the response
+//     const {identityToken, nonce} = appleAuthRequestResponse;
+//     const appleCredential = auth.AppleAuthProvider.credential(
+//       identityToken,
+//       nonce,
+//     );
 
-    // Sign the user in with the credential
-    await auth().signInWithCredential(appleCredential);
-  } catch (e) {
-    throw e;
-  }
-};
+//     // Sign the user in with the credential
+//     await auth().signInWithCredential(appleCredential);
+//   } catch (e) {
+//     throw e;
+//   }
+// };
 
 export const forgotPassword = async (email) => {
   try {
@@ -154,5 +156,57 @@ export const setAppReview = async (value) => {
     );
   } catch (error) {
     throw error;
+  }
+};
+
+export const loadProfilePicture = async (filename) => {
+  const app = firebase.app();
+  const bucket = app.storage(
+    'gs://billow-software.appspot.com/SansPaperUserProfileImage/',
+  );
+
+  return await bucket.ref('/' + filename).getDownloadURL();
+};
+
+export const profilePicUploadStorage = async (filename, base64Img) => {
+  try {
+    const app = firebase.app();
+    const bucket = app.storage(
+      'gs://billow-software.appspot.com/SansPaperUserProfileImage/',
+    );
+
+    await bucket
+      .ref('/' + filename)
+      .putString(base64Img, 'base64', {contentType: 'image/jpeg'});
+
+    const imageURL = await bucket.ref('/' + filename).getDownloadURL();
+
+    return imageURL;
+  } catch (e) {
+    console.log('Error in profilePicUploadStorage', e);
+  }
+};
+
+export const addProfImageToFirestore = async (uid, filename) => {
+  try {
+    await firebase.firestore().collection('sanspaperusers').doc(uid).update({
+      profileImg: filename,
+    });
+  } catch (error) {
+    console.warn('Error addProfImageToFirestore', error);
+  }
+};
+
+export const checkOfflineFeature = async () => {
+  try {
+    const docSnapshot = await firebase
+      .firestore()
+      .collection('sanspaperbeta')
+      .doc('offline')
+      .get();
+
+    return docSnapshot;
+  } catch (error) {
+    console.warn('Error checkOfflineFeature', error);
   }
 };

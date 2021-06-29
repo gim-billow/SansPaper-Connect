@@ -4,9 +4,11 @@ import {USER_ACTIONS, USER_REDUCER_ACTIONS} from './actions';
 const INIT_STATE = {
   loginStatus: false,
   email: '',
+  profilePic: null,
   uid: '',
   loginCode: null,
   saveUser: false,
+  offlineFeatureExpired: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -41,6 +43,16 @@ export default (state = INIT_STATE, action) => {
     case USER_ACTIONS.SAVE_USER: {
       return produce(state, (draftState) => {
         draftState.saveUser = action.payload;
+      });
+    }
+    case USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC: {
+      return produce(state, (draftState) => {
+        draftState.profilePic = action.payload;
+      });
+    }
+    case USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS: {
+      return produce(state, (draftState) => {
+        draftState.offlineFeatureExpired = action.payload;
       });
     }
     default:
