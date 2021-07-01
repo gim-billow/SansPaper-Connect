@@ -32,7 +32,7 @@ import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
 import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
-import {selectOfflineFeatureExpired} from '@selector/user';
+import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
 import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
 import {CommonImages} from '@constant/Images';
 
@@ -239,10 +239,10 @@ class Outbox extends React.Component {
 
   render() {
     const {searchKeyword, filterLabel} = this.state;
-    const {outbox, offlineFeatureExpired} = this.props;
+    const {outbox, offlineFeature, betaAccess} = this.props;
     const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
 
-    if (offlineFeatureExpired) {
+    if (!offlineFeature && !betaAccess) {
       return (
         <>
           <View style={styles.header}>
@@ -346,7 +346,8 @@ const mapState = createStructuredSelector({
   outbox: selectOutbox,
   offlineForms: selectOfflineFormList,
   offlineCurrentForm: selectOfflineCurrentForm,
-  offlineFeatureExpired: selectOfflineFeatureExpired,
+  offlineFeature: selectOfflineFeature,
+  betaAccess: selectBetaAccess,
 });
 
 export default connect(mapState, {

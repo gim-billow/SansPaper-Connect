@@ -64,7 +64,7 @@ function* init({payload}) {
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
 
     //getting user info
-    const {uid} = payload._user;
+    const {uid, email} = payload._user;
     yield put({type: USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, payload: payload});
 
     const spUser = yield getSansPaperUser({userId: uid});
@@ -129,7 +129,12 @@ function* init({payload}) {
 
     // check offline feature access
     yield put({
-      type: USER_SAGA_ACTIONS.CHECK_OFFLINE_ACCESS,
+      type: USER_SAGA_ACTIONS.ON_BETA_ACCESS_EXPIRY_DATE,
+    });
+
+    yield put({
+      type: USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
+      payload: email,
     });
 
     // load profile picture

@@ -22,7 +22,7 @@ import {
   selectCurrentFormId,
   selectCurrentForm,
 } from 'selector/form';
-import {selectOfflineFeatureExpired} from '@selector/user';
+import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
 import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
 import {questrial} from '@styles/font';
 // import NoInternet from '@containers/NoInternet';
@@ -34,11 +34,9 @@ const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
  */
 class FormFieldsScreen extends React.Component {
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.onScreen !== this.props.onScreen &&
-      this.props.onScreen === 'online'
-    ) {
-      if (this.props.offlineFeatureExpired) {
+    const {onScreen, offlineFeature, betaAccess} = this.props;
+    if (prevProps.onScreen !== onScreen && onScreen === 'online') {
+      if (!offlineFeature && !betaAccess) {
         this._onlySubmitActionSheet();
         return;
       }
@@ -51,7 +49,7 @@ class FormFieldsScreen extends React.Component {
   }
 
   _onlySubmitActionSheet = () => {
-    const {submitForm} = this.props;
+    const {submitForm, activeScreen} = this.props;
     const options = ['Submit', 'Cancel'];
     const cancelButtonIndex = 1;
     const icons = [setIcon('send'), setIcon('times')];
@@ -67,6 +65,9 @@ class FormFieldsScreen extends React.Component {
         switch (buttonIndex) {
           case 0:
             submitForm(false);
+            break;
+          case 1:
+            activeScreen('');
             break;
           default:
             break;
@@ -250,7 +251,8 @@ const mapState = createStructuredSelector({
   currentForm: selectCurrentForm,
   netInfo: selectNetworkInfo,
   onScreen: selectActiveScreen,
-  offlineFeatureExpired: selectOfflineFeatureExpired,
+  offlineFeature: selectOfflineFeature,
+  betaAccess: selectBetaAccess,
 });
 
 export default connect(mapState, {

@@ -8,7 +8,8 @@ const INIT_STATE = {
   uid: '',
   loginCode: null,
   saveUser: false,
-  offlineFeatureExpired: false,
+  offlineFeature: false,
+  betaAccess: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -50,9 +51,14 @@ export default (state = INIT_STATE, action) => {
         draftState.profilePic = action.payload;
       });
     }
-    case USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS: {
+    case USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE: {
       return produce(state, (draftState) => {
-        draftState.offlineFeatureExpired = action.payload;
+        draftState.offlineFeature = action.payload;
+      });
+    }
+    case USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY: {
+      return produce(state, (draftState) => {
+        draftState.betaAccess = action.payload;
       });
     }
     default:

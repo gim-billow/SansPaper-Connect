@@ -10,13 +10,13 @@ import {Icon} from 'react-native-elements';
 import {createStructuredSelector} from 'reselect';
 import {connect} from 'react-redux';
 
-import {selectOfflineFeatureExpired} from '@selector/user';
+import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
 import {offlineFormSync} from '@store/forms';
 import {white} from '@styles/colors';
 
 function SyncButton(props) {
   const onPressSyncForm = () => {
-    if (props.offlineFeatureExpired) {
+    if (!props.offlineFeature && !props.betaAccess) {
       Alert.alert('', 'This feature is currently unavailable');
       return;
     }
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
 });
 
 const mapState = createStructuredSelector({
-  offlineFeatureExpired: selectOfflineFeatureExpired,
+  offlineFeature: selectOfflineFeature,
+  betaAccess: selectBetaAccess,
 });
 
 export default connect(mapState, {offlineFormSync})(SyncButton);

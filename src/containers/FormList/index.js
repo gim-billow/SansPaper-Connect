@@ -2,24 +2,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
-import memoize from 'memoize-one';
-import {Icon, Card, SearchBar} from 'react-native-elements';
-import {filter, includes, findIndex, propEq} from 'ramda';
+import {View, FlatList, Text, TouchableOpacity, Platform} from 'react-native';
+import {Icon, Card} from 'react-native-elements';
+import {findIndex, propEq} from 'ramda';
 
 import Skeleton from '@components/Skeleton';
-import {selectOrganistationPath} from '@selector/sanspaper';
-import {
-  selectSortedFormList,
-  selectOfflineFormList,
-} from '@selector/form/index';
+import {selectOfflineFormList} from '@selector/form/index';
+import {selectBetaAccess, selectOfflineFeature} from '@selector/user';
 import {
   updateCurrentFormId,
   updateFormList,
@@ -30,7 +19,7 @@ import {goToLinkedItemScreen, goToFormFieldsScreen} from '@store/navigate';
 
 import styles from './styles';
 import {green, darkGrey} from '@styles/colors';
-import {cardStyle, searchBarStyle} from '@styles/common';
+import {cardStyle} from '@styles/common';
 
 class FormList extends React.Component {
   keyExtractor = (item, index) => index.toString();
@@ -59,21 +48,9 @@ class FormList extends React.Component {
     });
   };
 
-  // getFilteredFormlist = memoize((formList, searchKeyword) => {
-  //   return filter(
-  //     (form) =>
-  //       includes(searchKeyword?.toLowerCase(), form?.name?.toLowerCase()),
-  //     formList,
-  //   );
-  // });
-
-  // handleOnChangeText = (text) => {
-  //   this.setState({searchKeyword: text});
-  // };
-
   renderItem = ({item}) => {
     const {name, linkedtable, id} = item;
-    const {offlineForms} = this.props;
+    const {offlineForms, offlineFeature, betaAccess} = this.props;
 
     const index = findIndex(propEq('name', name))(offlineForms);
 
@@ -103,48 +80,50 @@ class FormList extends React.Component {
                   size={20}
                 />
               )}
-              {index === -1 ? (
-                <TouchableOpacity
-                  style={styles.downloadButton}
-                  onPress={() => this.downloadForm(linkedtable, id)}>
-                  {Platform.OS === 'android' ? (
-                    <Icon
-                      type="antdesign"
-                      name="download"
-                      color={darkGrey}
-                      size={16}
-                    />
-                  ) : (
-                    <Icon
-                      type="ionicon"
-                      name="download-outline"
-                      color={darkGrey}
-                      size={20}
-                    />
-                  )}
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  disabled
-                  style={styles.downloadButton}
-                  onPress={() => {}}>
-                  {Platform.OS === 'android' ? (
-                    <Icon
-                      type="antdesign"
-                      name="checkcircle"
-                      color={green}
-                      size={16}
-                    />
-                  ) : (
-                    <Icon
-                      type="ionicon"
-                      name="checkmark-circle"
-                      color={green}
-                      size={20}
-                    />
-                  )}
-                </TouchableOpacity>
-              )}
+              {offlineFeature && betaAccess ? (
+                index === -1 ? (
+                  <TouchableOpacity
+                    style={styles.downloadButton}
+                    onPress={() => this.downloadForm(linkedtable, id)}>
+                    {Platform.OS === 'android' ? (
+                      <Icon
+                        type="antdesign"
+                        name="download"
+                        color={darkGrey}
+                        size={16}
+                      />
+                    ) : (
+                      <Icon
+                        type="ionicon"
+                        name="download-outline"
+                        color={darkGrey}
+                        size={20}
+                      />
+                    )}
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    disabled
+                    style={styles.downloadButton}
+                    onPress={() => {}}>
+                    {Platform.OS === 'android' ? (
+                      <Icon
+                        type="antdesign"
+                        name="checkcircle"
+                        color={green}
+                        size={16}
+                      />
+                    ) : (
+                      <Icon
+                        type="ionicon"
+                        name="checkmark-circle"
+                        color={green}
+                        size={20}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )
+              ) : null}
             </View>
           </View>
         </Card>
@@ -153,30 +132,10 @@ class FormList extends React.Component {
   };
 
   render() {
-    // const {searchKeyword} = this.state;
-    const {
-      // formList,
-      offlineForms,
-      filteredFromList,
-      searchKeyword,
-    } = this.props;
-    // const filteredFromList = this.getFilteredFormlist(formList, searchKeyword);
+    const {offlineForms, filteredFromList, searchKeyword} = this.props;
 
     return (
       <View style={styles.container}>
-        {/* <SearchBar
-          placeholder="Search online form"
-          containerStyle={searchBarStyle.searchContainer}
-          inputContainerStyle={searchBarStyle.searchInputContainer}
-          inputStyle={searchBarStyle.searchInput}
-          searchIcon={{
-            color: darkGrey,
-          }}
-          value={searchKeyword}
-          onChangeText={this.handleOnChangeText}
-          icon="search"
-          clearIcon="clear"
-        /> */}
         {filteredFromList && filteredFromList.length > 0 ? (
           <FlatList
             keyExtractor={this.keyExtractor}
@@ -201,8 +160,8 @@ class FormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  // formList: selectSortedFormList,
-  // orgPath: selectOrganistationPath,
+  offlineFeature: selectOfflineFeature,
+  betaAccess: selectBetaAccess,
   offlineForms: selectOfflineFormList,
 });
 

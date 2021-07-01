@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Icon, Card} from 'react-native-elements';
 
-import {selectOfflineFeatureExpired} from '@selector/user';
+import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
 import {updateOfflineCurrentFormId, deleteOfflineForm} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {
@@ -101,9 +101,14 @@ class OfflineFormList extends React.Component {
   };
 
   render() {
-    const {filteredFromList, searchKeyword, offlineFeatureExpired} = this.props;
+    const {
+      filteredFromList,
+      searchKeyword,
+      offlineFeature,
+      betaAccess,
+    } = this.props;
 
-    if (offlineFeatureExpired) {
+    if (!offlineFeature && !betaAccess) {
       return (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>
@@ -139,7 +144,8 @@ class OfflineFormList extends React.Component {
 }
 
 const mapState = createStructuredSelector({
-  offlineFeatureExpired: selectOfflineFeatureExpired,
+  offlineFeature: selectOfflineFeature,
+  betaAccess: selectBetaAccess,
 });
 
 export default connect(mapState, {

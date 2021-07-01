@@ -34,6 +34,7 @@ import {
   addProfImageToFirestore,
   loadProfilePicture,
   checkOfflineFeature,
+  getSanspaperIdOfflineExpiry,
 } from 'api/user';
 import {
   showActivityIndicator,
@@ -325,7 +326,7 @@ function* loadUserProfilePic({payload}) {
 //   }
 // }
 
-function subscribeOnOfflineAccessChanged(formsRef) {
+function subscribeOnBetaAccessExpiryDateChange(formsRef) {
   return eventChannel((emitter) => {
     formsRef.onSnapshot(async () => {
       const offline = await checkOfflineFeature();
@@ -336,30 +337,71 @@ function subscribeOnOfflineAccessChanged(formsRef) {
   });
 }
 
-function* watchOfflineAccessChangeUpdate() {
+function* watchBetaAccessExpiryDate() {
   const formsRef = yield firebase.firestore().collection('sanspaperbeta');
-  const offlineAccessRef = yield call(
-    subscribeOnOfflineAccessChanged,
+  const betaAccessRef = yield call(
+    subscribeOnBetaAccessExpiryDateChange,
     formsRef,
   );
 
   try {
     while (true) {
-      const offlineAccess = yield take(offlineAccessRef);
-      if (offlineAccess.exists) {
-        const offlineFeature = offlineAccess.data();
-        const date = offlineFeature.expiry.seconds * 1000;
-        const expired = Date.now() < new Date(date) ? false : true;
+      const betaAccess = yield take(betaAccessRef);
+      if (betaAccess.exists) {
+        const betaAccessExpiryDate = betaAccess.data();
+        const date = betaAccessExpiryDate.expiry.seconds * 1000;
+        const expired = Date.now() < new Date(date) ? true : false;
 
         yield put({
-          type: USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS,
+          type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
           payload: expired,
         });
       }
     }
   } finally {
     if (yield cancelled()) {
-      offlineAccessRef.close();
+      betaAccessRef.close();
+    }
+  }
+}
+
+function subscribeOnOfflineFeatureExpiryDateChange(formsRef, sanspaperId) {
+  return eventChannel((emitter) => {
+    formsRef.onSnapshot(async () => {
+      const offline = await getSanspaperIdOfflineExpiry(sanspaperId);
+      emitter(offline);
+    });
+
+    return () => formsRef;
+  });
+}
+
+function* watchOfflineFeatureExpiryDate({payload}) {
+  const sanspaperId = payload;
+  const formsRef = yield firebase.firestore().collection('sanspaperid');
+  const offlineFeatureRef = yield call(
+    subscribeOnOfflineFeatureExpiryDateChange,
+    formsRef,
+    sanspaperId,
+  );
+
+  try {
+    while (true) {
+      const offlineFeature = yield take(offlineFeatureRef);
+      if (offlineFeature.exists) {
+        const offlineFeatureExpiryDate = offlineFeature.data();
+        const date = offlineFeatureExpiryDate.offline.seconds * 1000;
+        const accessFeature = Date.now() < new Date(date) ? true : false;
+
+        yield put({
+          type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+          payload: accessFeature,
+        });
+      }
+    }
+  } finally {
+    if (yield cancelled()) {
+      offlineFeatureRef.close();
     }
   }
 }
@@ -376,7 +418,11 @@ export default all([
   takeLatest(USER_SAGA_ACTIONS.ON_LOAD_USER_PROFILE, loadUserProfilePic),
   takeLatest(USER_ACTIONS.LOGOUT, logoutUser),
   takeLatest(
-    USER_SAGA_ACTIONS.CHECK_OFFLINE_ACCESS,
-    watchOfflineAccessChangeUpdate,
+    USER_SAGA_ACTIONS.ON_BETA_ACCESS_EXPIRY_DATE,
+    watchBetaAccessExpiryDate,
+  ),
+  takeLatest(
+    USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
+    watchOfflineFeatureExpiryDate,
   ),
 ]);

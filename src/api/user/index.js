@@ -210,3 +210,17 @@ export const checkOfflineFeature = async () => {
     console.warn('Error checkOfflineFeature', error);
   }
 };
+
+export const getSanspaperIdOfflineExpiry = async (userEmail) => {
+  try {
+    const docSnapshot = await firebase
+      .firestore()
+      .collection('sanspaperid')
+      .doc(userEmail)
+      .get();
+
+    return docSnapshot;
+  } catch (error) {
+    console.warn('Error getSanspaperIdOfflineExpiry', error);
+  }
+};
