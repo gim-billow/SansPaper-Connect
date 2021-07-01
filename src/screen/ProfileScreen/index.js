@@ -86,6 +86,7 @@ class ProfileScreen extends NavigationComponent {
       networkInfo,
       profilePicture,
       loadingImg,
+      logoutUser,
     } = this.props;
 
     return (
@@ -98,6 +99,7 @@ class ProfileScreen extends NavigationComponent {
           organization={organization}
           loadingImg={loadingImg}
           profilePicture={profilePicture}
+          logoutUser={logoutUser}
         />
       </View>
     );
