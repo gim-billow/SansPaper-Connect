@@ -80,50 +80,48 @@ class FormList extends React.Component {
                   size={20}
                 />
               )}
-              {offlineFeature && betaAccess ? (
-                index === -1 ? (
-                  <TouchableOpacity
-                    style={styles.downloadButton}
-                    onPress={() => this.downloadForm(linkedtable, id)}>
-                    {Platform.OS === 'android' ? (
-                      <Icon
-                        type="antdesign"
-                        name="download"
-                        color={darkGrey}
-                        size={16}
-                      />
-                    ) : (
-                      <Icon
-                        type="ionicon"
-                        name="download-outline"
-                        color={darkGrey}
-                        size={20}
-                      />
-                    )}
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    disabled
-                    style={styles.downloadButton}
-                    onPress={() => {}}>
-                    {Platform.OS === 'android' ? (
-                      <Icon
-                        type="antdesign"
-                        name="checkcircle"
-                        color={green}
-                        size={16}
-                      />
-                    ) : (
-                      <Icon
-                        type="ionicon"
-                        name="checkmark-circle"
-                        color={green}
-                        size={20}
-                      />
-                    )}
-                  </TouchableOpacity>
-                )
-              ) : null}
+              {!offlineFeature && !betaAccess ? null : index === -1 ? (
+                <TouchableOpacity
+                  style={styles.downloadButton}
+                  onPress={() => this.downloadForm(linkedtable, id)}>
+                  {Platform.OS === 'android' ? (
+                    <Icon
+                      type="antdesign"
+                      name="download"
+                      color={darkGrey}
+                      size={16}
+                    />
+                  ) : (
+                    <Icon
+                      type="ionicon"
+                      name="download-outline"
+                      color={darkGrey}
+                      size={20}
+                    />
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  disabled
+                  style={styles.downloadButton}
+                  onPress={() => {}}>
+                  {Platform.OS === 'android' ? (
+                    <Icon
+                      type="antdesign"
+                      name="checkcircle"
+                      color={green}
+                      size={16}
+                    />
+                  ) : (
+                    <Icon
+                      type="ionicon"
+                      name="checkmark-circle"
+                      color={green}
+                      size={20}
+                    />
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </Card>
@@ -132,7 +130,13 @@ class FormList extends React.Component {
   };
 
   render() {
-    const {offlineForms, filteredFromList, searchKeyword} = this.props;
+    const {
+      offlineForms,
+      filteredFromList,
+      searchKeyword,
+      offlineFeature,
+      betaAccess,
+    } = this.props;
 
     return (
       <View style={styles.container}>
@@ -141,7 +145,7 @@ class FormList extends React.Component {
             keyExtractor={this.keyExtractor}
             data={filteredFromList}
             renderItem={this.renderItem}
-            extraData={offlineForms}
+            extraData={[offlineForms, offlineFeature, betaAccess]}
           />
         ) : searchKeyword === '' ? (
           <View style={styles.loaderContainer}>
