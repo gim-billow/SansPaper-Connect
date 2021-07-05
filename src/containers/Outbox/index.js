@@ -49,15 +49,15 @@ class Outbox extends React.Component {
 
   onFilterOutboxList = () => {
     const {loadOutboxByStatus, loadAllOutbox} = this.props;
-    const options = ['Draft', 'Pending', 'Submitted', 'All', 'Cancel'];
+    const options = ['Draft', 'Submitted', 'All', 'Cancel'];
     const icons = [
       renderImage(CommonImages.formDraft),
-      renderImage(CommonImages.formPending),
+      // renderImage(CommonImages.formPending),
       renderImage(CommonImages.formSubmit),
       renderImage(CommonImages.formAll),
       renderImage(CommonImages.formClose),
     ];
-    const cancelButtonIndex = 4;
+    const cancelButtonIndex = 3;
 
     this.props.showActionSheetWithOptions(
       {
@@ -72,18 +72,21 @@ class Outbox extends React.Component {
             loadOutboxByStatus('draft');
             this.setState({filterLabel: 'Draft forms', filtered: 'draft'});
             break;
+          /**
+           * TODO: Will add back once background fetch functionality is added
+           */
+          // case 1:
+          //   loadOutboxByStatus('pending');
+          //   this.setState({filterLabel: 'Pending forms', filtered: 'pending'});
+          //   break;
           case 1:
-            loadOutboxByStatus('pending');
-            this.setState({filterLabel: 'Pending forms', filtered: 'pending'});
-            break;
-          case 2:
             loadOutboxByStatus('submitted');
             this.setState({
               filterLabel: 'Submitted forms',
               filtered: 'submitted',
             });
             break;
-          case 3:
+          case 2:
             loadAllOutbox();
             this.setState({filterLabel: 'All forms', filtered: 'all'});
             break;
@@ -215,7 +218,11 @@ class Outbox extends React.Component {
             <TouchableOpacity
               style={{flexDirection: 'row'}}
               onPress={() => this.onNavigateToDraftScreen(id, formId)}
-              onLongPress={() => this.onSwapFormStatus(id, status)}>
+              /**
+               * TODO: Will add back once background fetch functionality is added
+               */
+              // onLongPress={() => this.onSwapFormStatus(id, status)}
+            >
               <View style={styles.titleView}>
                 <Text style={styles.title}>{name}</Text>
                 <Text style={styles.subTitle1}>{createString}</Text>

@@ -435,10 +435,14 @@ function* preSubmitForm({payload}) {
     // dismissActivityIndicator();
   } catch (error) {
     // save to draft if submit failed
+    /**
+     * TODO: Will add back once background fetch functionality is added
+     * change draft to pending
+     */
     yield saveAsDraft({
       payload: {
         offline: false,
-        status: 'pending',
+        status: 'draft',
       },
     });
 

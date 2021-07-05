@@ -62,18 +62,26 @@ class OfflineFormFieldsScreen extends React.Component {
       ? [
           'Submit',
           isDraftForm ? 'Update draft' : 'Save as draft',
-          isDraftForm ? 'Update pending' : 'Save as pending',
+          /**
+           * TODO: Will add back once background fetch functionality is added
+           */
+          // isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ]
       : [
           isDraftForm ? 'Update draft' : 'Save as draft',
-          isDraftForm ? 'Update pending' : 'Save as pending',
+          /**
+           * TODO: Will add back once background fetch functionality is added
+           */
+          // isDraftForm ? 'Update pending' : 'Save as pending',
           'Cancel',
         ];
-    const cancelButtonIndex = netInfo.isInternetReachable ? 3 : 2;
+    const cancelButtonIndex = netInfo.isInternetReachable ? 2 : 1;
     const icons = netInfo.isInternetReachable
-      ? [setIcon('send'), setIcon('save'), setIcon('spinner'), setIcon('times')]
-      : [setIcon('save'), setIcon('spinner'), setIcon('times')];
+      ? // ? [setIcon('send'), setIcon('save'), setIcon('spinner'), setIcon('times')]
+        [setIcon('send'), setIcon('save'), setIcon('times')]
+      : // : [setIcon('save'), setIcon('spinner'), setIcon('times')];
+        [setIcon('save'), setIcon('times')];
 
     this.props.showActionSheetWithOptions(
       {
@@ -100,7 +108,7 @@ class OfflineFormFieldsScreen extends React.Component {
             if (!netInfo.isInternetReachable) {
               saveAsDraft({
                 offline: true,
-                status: 'pending',
+                status: 'draft',
               });
               break;
             }
@@ -118,18 +126,21 @@ class OfflineFormFieldsScreen extends React.Component {
               status: buttonIndex === 0 ? 'submitted' : 'draft',
             });
             break;
+          /**
+           * TODO: Will add back once background fetch functionality is added
+           */
+          // case 2:
+          //   // if not internet, just do nothing
+          //   if (!netInfo.isInternetReachable) {
+          //     this.props.activeScreen('');
+          //     return;
+          //   }
+          //   saveAsDraft({
+          //     offline: true,
+          //     status: 'pending',
+          //   });
+          //   break;
           case 2:
-            // if not internet, just do nothing
-            if (!netInfo.isInternetReachable) {
-              this.props.activeScreen('');
-              return;
-            }
-            saveAsDraft({
-              offline: true,
-              status: 'pending',
-            });
-            break;
-          case 3:
             this.props.activeScreen('');
             break;
           default:
