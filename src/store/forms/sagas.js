@@ -15,6 +15,7 @@ import {
   select,
   delay,
 } from 'redux-saga/effects';
+import Toast from 'react-native-simple-toast';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
 // import {
@@ -567,6 +568,7 @@ function* syncOfflineForm({payload = {}}) {
       }
 
       yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+      Toast.show('Form will be available offline.', Toast.LONG);
       dismissActivityIndicator();
     }
   } catch (error) {

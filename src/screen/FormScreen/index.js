@@ -1,5 +1,6 @@
 //library
 import React from 'react';
+import produce from 'immer';
 import {Dimensions, Text, View} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {SearchBar} from 'react-native-elements';
@@ -16,6 +17,7 @@ import OfflineFormList from '@containers/OfflineFormList';
 import {searchBarStyle} from '@styles/common';
 import {activeScreen} from '@store/common';
 import {selectSortedFormList, selectOfflineFormList} from '@selector/form';
+import {selectNetworkInfo} from '@selector/common';
 
 const width = Dimensions.get('window').width;
 class FormScreen extends NavigationComponent {
@@ -26,12 +28,43 @@ class FormScreen extends NavigationComponent {
       index: 0,
       searchKeyword: '',
       routes: [
-        {key: 'first', title: 'Online'},
-        {key: 'second', title: 'Offline'},
+        {key: 'first', title: 'Online', disable: false},
+        {key: 'second', title: 'Offline', disable: true},
       ],
     };
 
     Navigation.events().bindComponent(this);
+  }
+
+  componentDidMount() {
+    const isInternetReachable = this.props.networkInfo.isInternetReachable;
+
+    if (!isInternetReachable) {
+      this.updateScreenState(1, 0);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const isAvailPrevProps = prevProps.networkInfo.isInternetReachable;
+    const isAvailThisProps = this.props.networkInfo.isInternetReachable;
+
+    if (isAvailPrevProps !== isAvailThisProps) {
+      if (!isAvailThisProps) {
+        this.updateScreenState(1, 0);
+      } else {
+        this.updateScreenState(0, 1);
+      }
+    }
+  }
+
+  updateScreenState(index, indexDisabled) {
+    this.setState(
+      produce((draft) => {
+        draft.index = index;
+        draft.routes[indexDisabled].disable = true;
+        draft.routes[index].disable = false;
+      }),
+    );
   }
 
   getFilteredFormlist = memoize((forms, keyword) => {
@@ -80,6 +113,14 @@ class FormScreen extends NavigationComponent {
       renderLabel={({route, color}) => (
         <Text style={[styles.tabText, {color}]}>{route.title}</Text>
       )}
+      onTabPress={({route, preventDefault}) => {
+        if (route.key === 'first' && route.disable) {
+          preventDefault();
+        }
+        if (route.key === 'second' && route.disable) {
+          preventDefault();
+        }
+      }}
       indicatorStyle={{opacity: 0}}
       style={styles.tabBar}
       tabStyle={styles.tab}
@@ -87,7 +128,7 @@ class FormScreen extends NavigationComponent {
   );
 
   render() {
-    const {index, routes, searchKeyword} = this.state;
+    const {index, routes, searchKeyword, disable} = this.state;
 
     return (
       <View style={{flex: 1}}>
@@ -110,9 +151,10 @@ class FormScreen extends NavigationComponent {
           />
         </View>
         <TabView
-          navigationState={{index, routes}}
+          navigationState={{index, routes, disable}}
           renderScene={this.renderScene}
           renderTabBar={this.renderTabBar}
+          swipeEnabled={false}
           onIndexChange={(idx) => this.setState({index: idx})}
           initialLayout={{width}}
           sceneContainerStyle={styles.container}
@@ -140,6 +182,7 @@ class FormScreen extends NavigationComponent {
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,
   offlineFormList: selectOfflineFormList,
+  networkInfo: selectNetworkInfo,
 });
 
 export default connect(mapState, {activeScreen})(FormScreen);

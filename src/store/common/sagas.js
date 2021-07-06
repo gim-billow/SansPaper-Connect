@@ -28,6 +28,7 @@ import {FORM_SAGA_ACTIONS} from '@store/forms';
 import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
 import DB, * as database from '@database';
 import {selectNetworkInfo} from '@selector/common';
+import {selectEmail} from '@selector/user';
 import {
   dismissActivityIndicator,
   updateProfileLoadingScreen,
@@ -212,6 +213,8 @@ function* watchNetworkState() {
       console.log('networkState', networkState);
       const {isInternetReachable} = networkState;
       const previousNetworkInfo = yield select(selectNetworkInfo);
+      const userEmail = yield select(selectEmail);
+
       if (!previousNetworkInfo.isInternetReachable && isInternetReachable) {
         const difference = moment().diff(
           moment(previousNetworkInfo.date),
@@ -228,6 +231,11 @@ function* watchNetworkState() {
       yield put({
         type: COMMON_REDUCER_ACTIONS.UPDATE_NETWORK_INFO,
         payload: payload,
+      });
+
+      yield put({
+        type: USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
+        payload: userEmail,
       });
     }
   } catch (error) {

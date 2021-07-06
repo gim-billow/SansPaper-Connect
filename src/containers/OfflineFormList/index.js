@@ -23,6 +23,7 @@ import {
 import styles from './styles';
 import {red, lightGrey} from '@styles/colors';
 import {cardStyle} from '@styles/common';
+import {selectNetworkInfo} from '@selector/common';
 
 class OfflineFormList extends React.Component {
   keyExtractor = (item, index) => index?.toString();
@@ -106,6 +107,7 @@ class OfflineFormList extends React.Component {
       searchKeyword,
       offlineFeature,
       betaAccess,
+      networkInfo,
     } = this.props;
 
     if (!offlineFeature && !betaAccess) {
@@ -127,9 +129,24 @@ class OfflineFormList extends React.Component {
             data={filteredFromList}
             renderItem={this.renderItem}
           />
+        ) : networkInfo.isInternetReachable ? (
+          searchKeyword === '' ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No forms downloaded yet.</Text>
+            </View>
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
+                No results match your search criteria.
+              </Text>
+            </View>
+          )
         ) : searchKeyword === '' ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No forms downloaded yet.</Text>
+            <Text style={styles.emptyText}>
+              No forms has been downloaded. Reconnect and download the form
+              first to use when offline.
+            </Text>
           </View>
         ) : (
           <View style={styles.emptyContainer}>
@@ -146,6 +163,7 @@ class OfflineFormList extends React.Component {
 const mapState = createStructuredSelector({
   offlineFeature: selectOfflineFeature,
   betaAccess: selectBetaAccess,
+  networkInfo: selectNetworkInfo,
 });
 
 export default connect(mapState, {

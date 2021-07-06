@@ -307,25 +307,6 @@ function* loadUserProfilePic({payload}) {
   }
 }
 
-// function* checkOfflineAccess() {
-//   try {
-//     const offlineFeature = yield checkOfflineFeature();
-
-//     if (offlineFeature) {
-//       const date = offlineFeature.expiry.seconds * 1000;
-
-//       const expired = Date.now() < new Date(date) ? false : true;
-
-//       yield put({
-//         type: USER_REDUCER_ACTIONS.SET_OFFLINE_ACCESS,
-//         payload: expired,
-//       });
-//     }
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 function subscribeOnBetaAccessExpiryDateChange(formsRef) {
   return eventChannel((emitter) => {
     formsRef.onSnapshot(async () => {
@@ -396,6 +377,11 @@ function* watchOfflineFeatureExpiryDate({payload}) {
         yield put({
           type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
           payload: accessFeature,
+        });
+      } else {
+        yield put({
+          type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+          payload: false,
         });
       }
     }
