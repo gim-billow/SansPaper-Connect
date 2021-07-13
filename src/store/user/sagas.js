@@ -35,6 +35,9 @@ import {
   loadProfilePicture,
   checkOfflineFeature,
   getSanspaperIdOfflineExpiry,
+  saveBetaAccessExpiryDate,
+  saveOfflineFeatureExpiryDate,
+  removeOfflineFeatureExpiryDate,
 } from 'api/user';
 import {
   showActivityIndicator,
@@ -50,7 +53,6 @@ import {
   updateChangePass,
   clearStorageUserId,
 } from '@api/upvise';
-import {convertDate} from '@util/general';
 
 function* loginUser({payload}) {
   try {
@@ -293,15 +295,19 @@ function* loadUserProfilePic({payload}) {
   const filename = payload;
 
   try {
-    // load image from storage
-    const uploadedImg = yield loadProfilePicture(filename);
+    const networkInfo = yield select(selectNetworkInfo);
 
-    yield put({
-      type: USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC,
-      payload: uploadedImg,
-    });
+    if (networkInfo.isInternetReachable) {
+      // load image from storage
+      const uploadedImg = yield loadProfilePicture(filename);
 
-    updateProfileLoadingScreen(false);
+      yield put({
+        type: USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC,
+        payload: uploadedImg,
+      });
+
+      updateProfileLoadingScreen(false);
+    }
   } catch (error) {
     throw error;
   }
@@ -331,11 +337,19 @@ function* watchBetaAccessExpiryDate() {
       if (betaAccess.exists) {
         const betaAccessExpiryDate = betaAccess.data();
         const date = betaAccessExpiryDate.expiry.seconds * 1000;
+
+        yield saveBetaAccessExpiryDate(date);
+
         const expired = Date.now() < new Date(date) ? true : false;
 
         yield put({
           type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
           payload: expired,
+        });
+      } else {
+        yield put({
+          type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
+          payload: false,
         });
       }
     }
@@ -372,6 +386,9 @@ function* watchOfflineFeatureExpiryDate({payload}) {
       if (offlineFeature.exists) {
         const offlineFeatureExpiryDate = offlineFeature.data();
         const date = offlineFeatureExpiryDate.offline.seconds * 1000;
+
+        yield saveOfflineFeatureExpiryDate(date);
+
         const accessFeature = Date.now() < new Date(date) ? true : false;
 
         yield put({
@@ -379,6 +396,8 @@ function* watchOfflineFeatureExpiryDate({payload}) {
           payload: accessFeature,
         });
       } else {
+        yield removeOfflineFeatureExpiryDate();
+
         yield put({
           type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
           payload: false,
