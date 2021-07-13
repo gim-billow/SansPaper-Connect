@@ -27,6 +27,19 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 5,
   },
+  subHeader: {
+    backgroundColor: red,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 15,
+  },
+  subHederText: {
+    color: white,
+    fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    paddingLeft: 5,
+  },
   headerText: {
     fontSize: large,
     color: white,

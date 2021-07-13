@@ -34,6 +34,48 @@ export const saveUserEmail = async (props) => {
   }
 };
 
+export const saveBetaAccessExpiryDate = async (date) => {
+  try {
+    const dateString = new Date(date).toDateString();
+    await AsyncStorage.setItem('@betaAccessExpiryDate', dateString);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const readBetaAccessExpiryDate = () => {
+  try {
+    return AsyncStorage.getItem('@betaAccessExpiryDate');
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const saveOfflineFeatureExpiryDate = async (date) => {
+  try {
+    const dateString = new Date(date).toDateString();
+    await AsyncStorage.setItem('@offlineFeatureExpiryDate', dateString);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const readOfflineFeatureExpiryDate = () => {
+  try {
+    return AsyncStorage.getItem('@offlineFeatureExpiryDate');
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const removeOfflineFeatureExpiryDate = () => {
+  try {
+    return AsyncStorage.removeItem('@offlineFeatureExpiryDate');
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const readUserEmail = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('@savedUserEmail');
@@ -179,11 +221,30 @@ export const profilePicUploadStorage = async (filename, base64Img) => {
       .ref('/' + filename)
       .putString(base64Img, 'base64', {contentType: 'image/jpeg'});
 
+    await saveProfileImageInStorage(base64Img);
+
     const imageURL = await bucket.ref('/' + filename).getDownloadURL();
 
     return imageURL;
   } catch (e) {
     console.log('Error in profilePicUploadStorage', e);
+  }
+};
+
+export const saveProfileImageInStorage = async (image) => {
+  try {
+    const base64 = 'data:image/jpg;base64,' + image;
+    await AsyncStorage.setItem('@profileImgBase64', base64);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const readProfileImageInStorage = () => {
+  try {
+    return AsyncStorage.getItem('@profileImgBase64');
+  } catch (e) {
+    throw e;
   }
 };
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createRef, useRef} from 'react';
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, Image} from 'react-native';
 import {Button} from 'react-native-elements';
 import SignatureScreen from 'react-native-signature-canvas'; // ios
 import SignatureCapture from 'react-native-signature-capture'; // android
@@ -14,6 +14,8 @@ const Signature = (props) => {
   const {label, rank, mandatory} = props.item;
   const {updateFieldsValue, isEditable} = props;
   const [iosSig, setIosSig] = useState('');
+  const [androidSig, setAndroidSig] = useState('');
+  const [firstLoadAndroid, setFirstLoadAndroid] = useState(false);
   const [signatureSaved, setSignaturesSaved] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
@@ -22,18 +24,20 @@ const Signature = (props) => {
 
     if (value) {
       if (Platform.OS === 'android') {
-        // TODO: cannot test since sql storage in android has issues
+        setAndroidSig('data:image/png;base64,' + value);
+        setFirstLoadAndroid(true);
       } else if (Platform.OS === 'ios') {
         setIosSig('data:image/png;base64,' + value);
-        setSignaturesSaved(true);
-        setChangeTheme(true);
       }
+      setSignaturesSaved(true);
+      setChangeTheme(true);
     }
   }, [props.item]);
 
   const signaturePadClear = () => {
     if (Platform.OS === 'android') {
       refInput.resetImage();
+      setFirstLoadAndroid(false);
     } else {
       refInputIOS.current.clearSignature();
     }
@@ -118,7 +122,16 @@ const Signature = (props) => {
                 viewMode={'portrait'}
               />
               {!isEditable ||
-                (signatureSaved && <View style={styles.dimmedSingature} />)}
+                (signatureSaved && (
+                  <View style={styles.dimmedSingature}>
+                    {firstLoadAndroid ? (
+                      <Image
+                        style={styles.dimmedSingature}
+                        source={{uri: androidSig}}
+                      />
+                    ) : null}
+                  </View>
+                ))}
             </View>
           ) : (
             <View style={styles.signature}>

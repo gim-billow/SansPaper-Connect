@@ -12,12 +12,16 @@ import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
 import moment from 'moment-timezone';
 
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
 import {showMainScreen} from '@navigation';
+import {
+  readBetaAccessExpiryDate,
+  readOfflineFeatureExpiryDate,
+  readProfileImageInStorage,
+} from '@api/user';
 import {
   getSansPaperUser,
   getSansPaperUserOrganisation,
@@ -25,7 +29,7 @@ import {
 } from '@api/upvise';
 import {SANSPAPER_REDUCER_ACTIONS} from '@store/sanspaper/';
 import {FORM_SAGA_ACTIONS} from '@store/forms';
-import {USER_ACTIONS, USER_SAGA_ACTIONS} from '../user';
+import {USER_SAGA_ACTIONS, USER_REDUCER_ACTIONS} from '../user';
 import DB, * as database from '@database';
 import {selectNetworkInfo} from '@selector/common';
 import {selectEmail} from '@selector/user';
@@ -33,7 +37,7 @@ import {
   dismissActivityIndicator,
   updateProfileLoadingScreen,
 } from '../../navigation';
-import {getExtension} from '../../util/string';
+import {getExtension} from '@util/string';
 
 function subscribeAppStateChannel() {
   return eventChannel((emmiter) => {
@@ -204,6 +208,59 @@ function* watchBodyOfKnowledgeUpdates({payload}) {
   }
 }
 
+function* watchOfflineFeatureExpiry() {
+  try {
+    const date = yield readOfflineFeatureExpiryDate();
+
+    const accessFeature = Date.now() < new Date(date) ? true : false;
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+      payload: accessFeature,
+    });
+  } catch (error) {
+    yield put({
+      type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+      payload: false,
+    });
+    console.error('watchOfflineFeatureExpiry');
+  }
+}
+
+function* watchBetaAccessExpiry() {
+  try {
+    const date = yield readBetaAccessExpiryDate();
+
+    const expired = Date.now() < new Date(date) ? true : false;
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
+      payload: expired,
+    });
+  } catch (error) {
+    yield put({
+      type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
+      payload: false,
+    });
+    console.error('watchBetaAccessExpiry');
+  }
+}
+
+function* loadProfilePictureOffline() {
+  try {
+    const profilePicture = yield readProfileImageInStorage();
+
+    yield put({
+      type: USER_REDUCER_ACTIONS.UPDATE_PROFILE_PIC,
+      payload: profilePicture,
+    });
+
+    updateProfileLoadingScreen(false);
+  } catch (error) {
+    updateProfileLoadingScreen(false);
+  }
+}
+
 function* watchNetworkState() {
   const channel = yield call(subscribeNetworkStateChannel);
   try {
@@ -214,6 +271,12 @@ function* watchNetworkState() {
       const {isInternetReachable} = networkState;
       const previousNetworkInfo = yield select(selectNetworkInfo);
       const userEmail = yield select(selectEmail);
+
+      if (!isInternetReachable) {
+        yield watchOfflineFeatureExpiry();
+        yield watchBetaAccessExpiry();
+        yield loadProfilePictureOffline();
+      }
 
       if (!previousNetworkInfo.isInternetReachable && isInternetReachable) {
         const difference = moment().diff(
