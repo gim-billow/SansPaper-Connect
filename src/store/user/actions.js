@@ -9,6 +9,7 @@ export const USER_ACTIONS = {
   FORGO_PASSWORD: 'userActions/FORGOT_PASSWORD',
   SIGN_UP_EMAIL: 'userActions/SIGN_UP_EMAIL',
   SAVE_PROFILE_PIC: 'userActions/SAVE_PROFILE_PIC',
+  REMOVE_ALL_DOWNLOAD_FORMS: 'userActions/REMOVE_ALL_DOWNLOAD_FORMS',
 };
 
 export const USER_SAGA_ACTIONS = {
@@ -18,6 +19,7 @@ export const USER_SAGA_ACTIONS = {
   ON_LOAD_USER_PROFILE: 'userActions/ON_LOAD_USER_PROFILE',
   ON_BETA_ACCESS_EXPIRY_DATE: 'userActions/ON_BETA_ACCESS_EXPIRY_DATE',
   ON_USER_ACCESS_OFFLINE_DATE: 'userActions/ON_USER_ACCESS_OFFLINE_DATE',
+  ON_WATCH_BOK_SUBSCRIPTION: 'userActions/ON_WATCH_BOK_SUBSCRIPTION',
 };
 
 export const USER_REDUCER_ACTIONS = {
@@ -28,6 +30,7 @@ export const USER_REDUCER_ACTIONS = {
   UPDATE_PROFILE_PIC: 'userActions/UPDATE_PROFILE_PIC',
   SET_BETA_ACCESS_EXPIRY: 'userActions/SET_BETA_ACCESS_EXPIRY',
   SET_USER_ACCESS_OFFLINE: 'userActions/SET_USER_ACCESS_OFFLINE',
+  SET_USER_BOK_FEATURE: 'userActions/SET_USER_BOK_FEATURE',
 };
 
 export const loginUser = (payload) => ({
@@ -75,4 +78,8 @@ export const signUpEmail = (payload) => ({
 export const saveProfilePicture = (payload) => ({
   type: USER_ACTIONS.SAVE_PROFILE_PIC,
   payload,
+});
+
+export const removeAllDownloadForms = () => ({
+  type: USER_ACTIONS.REMOVE_ALL_DOWNLOAD_FORMS,
 });

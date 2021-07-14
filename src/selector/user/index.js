@@ -6,3 +6,4 @@ export const selectProfilePicture = (state) => state.userReducer.profilePic;
 export const selectUID = (state) => state.userReducer.uid;
 export const selectOfflineFeature = (state) => state.userReducer.offlineFeature;
 export const selectBetaAccess = (state) => state.userReducer.betaAccess;
+export const selectBokAccess = (state) => state.userReducer.bokAccess;

@@ -30,6 +30,7 @@ import {limitText} from '@util/string';
 import {updateFormList} from '@store/forms';
 import {selectOrganistationPath} from '@selector/sanspaper';
 import {selectSortedNews} from '@selector/common';
+import {selectBokAccess, selectBetaAccess} from '@selector/user';
 import styles from './styles';
 import {veryLightGrey} from '@styles/colors';
 import {searchBarStyle} from '@styles/common';
@@ -185,7 +186,7 @@ class MainScreen extends React.Component {
 
   render() {
     const {searchKeyword} = this.state;
-    const {updatedNews} = this.props;
+    const {updatedNews, betaAccess, bokAccess} = this.props;
     const filteredNews = this.getFilteredNews(updatedNews, searchKeyword);
 
     if (!updatedNews.length) {
@@ -210,11 +211,19 @@ class MainScreen extends React.Component {
             />
           </View>
           <View style={styles.noItemsContainer}>
-            <Image
-              source={require('../../assets/no-items.jpeg')}
-              resizeMode="contain"
-              style={{width: width - 100}}
-            />
+            {!betaAccess && !bokAccess ? (
+              <Image
+                source={require('../../assets/BOK-subscribe.jpg')}
+                resizeMode="contain"
+                style={{width: width}}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/no-items.jpeg')}
+                resizeMode="contain"
+                style={{width: width - 100}}
+              />
+            )}
           </View>
         </View>
       );
@@ -240,19 +249,31 @@ class MainScreen extends React.Component {
             }}
           />
         </View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          keyExtractor={this.keyExtractor}
-          data={filteredNews}
-          renderItem={this.renderMarkdown}
-          extraData={this.state}
-        />
+        {!betaAccess && !bokAccess ? (
+          <View style={styles.noItemsContainer}>
+            <Image
+              source={require('../../assets/BOK-subscribe.jpg')}
+              resizeMode="contain"
+              style={{width: width}}
+            />
+          </View>
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            keyExtractor={this.keyExtractor}
+            data={filteredNews}
+            renderItem={this.renderMarkdown}
+            extraData={this.state}
+          />
+        )}
       </View>
     );
   }
 }
 
 const mapState = createStructuredSelector({
+  bokAccess: selectBokAccess,
+  betaAccess: selectBetaAccess,
   updatedNews: selectSortedNews,
   orgPath: selectOrganistationPath,
 });

@@ -9,10 +9,19 @@ import {NavigationComponent, Navigation} from 'react-native-navigation';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './styles';
-import {selectEmail, selectProfilePicture} from 'selector/user';
+import {
+  selectEmail,
+  selectProfilePicture,
+  selectBetaAccess,
+  selectOfflineFeature,
+} from 'selector/user';
 import {selectUser, selectOrganistation} from 'selector/sanspaper';
 import {selectNetworkInfo} from 'selector/common';
-import {logoutUser, saveProfilePicture} from '@store/user';
+import {
+  logoutUser,
+  saveProfilePicture,
+  removeAllDownloadForms,
+} from '@store/user';
 import {commonStyles} from '@styles/common';
 import Profile from '@components/Profile';
 
@@ -87,6 +96,9 @@ class ProfileScreen extends NavigationComponent {
       profilePicture,
       loadingImg,
       logoutUser,
+      removeAllDownloadForms,
+      betaAccess,
+      offlineFeature,
     } = this.props;
 
     return (
@@ -100,6 +112,9 @@ class ProfileScreen extends NavigationComponent {
           loadingImg={loadingImg}
           profilePicture={profilePicture}
           logoutUser={logoutUser}
+          betaAccess={betaAccess}
+          offlineFeature={offlineFeature}
+          removeAllDownloadForms={removeAllDownloadForms}
         />
       </View>
     );
@@ -110,10 +125,14 @@ const mapState = createStructuredSelector({
   email: selectEmail,
   user: selectUser,
   networkInfo: selectNetworkInfo,
+  betaAccess: selectBetaAccess,
+  offlineFeature: selectOfflineFeature,
   organization: selectOrganistation,
   profilePicture: selectProfilePicture,
 });
 
-export default connect(mapState, {logoutUser, saveProfilePicture})(
-  connectActionSheet(ProfileScreen),
-);
+export default connect(mapState, {
+  logoutUser,
+  saveProfilePicture,
+  removeAllDownloadForms,
+})(connectActionSheet(ProfileScreen));
