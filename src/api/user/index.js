@@ -60,6 +60,23 @@ export const saveOfflineFeatureExpiryDate = async (date) => {
   }
 };
 
+export const saveBokFeatureExpiryDate = async (date) => {
+  try {
+    const dateString = new Date(date).toDateString();
+    await AsyncStorage.setItem('@bokFeatureExpiryDate', dateString);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const readBokFeatureExpiryDate = () => {
+  try {
+    return AsyncStorage.getItem('@bokFeatureExpiryDate');
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const readOfflineFeatureExpiryDate = () => {
   try {
     return AsyncStorage.getItem('@offlineFeatureExpiryDate');
@@ -71,6 +88,14 @@ export const readOfflineFeatureExpiryDate = () => {
 export const removeOfflineFeatureExpiryDate = () => {
   try {
     return AsyncStorage.removeItem('@offlineFeatureExpiryDate');
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const removeBokFeatureExpiryDate = () => {
+  try {
+    return AsyncStorage.removeItem('@bokFeatureExpiryDate');
   } catch (e) {
     throw e;
   }
@@ -248,6 +273,14 @@ export const readProfileImageInStorage = () => {
   }
 };
 
+export const removeProfileImageInStorage = () => {
+  try {
+    return AsyncStorage.removeItem('@profileImgBase64');
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const addProfImageToFirestore = async (uid, filename) => {
   try {
     await firebase.firestore().collection('sanspaperusers').doc(uid).update({
@@ -283,5 +316,19 @@ export const getSanspaperIdOfflineExpiry = async (userEmail) => {
     return docSnapshot;
   } catch (error) {
     console.warn('Error getSanspaperIdOfflineExpiry', error);
+  }
+};
+
+export const getBokFeatureExpiry = async (userEmail) => {
+  try {
+    const docSnapshot = await firebase
+      .firestore()
+      .collection('sanspaperbok')
+      .doc(userEmail)
+      .get();
+
+    return docSnapshot;
+  } catch (error) {
+    console.warn('Error getBokFeatureExpiry', error);
   }
 };

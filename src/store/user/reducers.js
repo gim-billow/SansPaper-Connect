@@ -10,6 +10,7 @@ const INIT_STATE = {
   saveUser: false,
   offlineFeature: false,
   betaAccess: false,
+  bokAccess: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -59,6 +60,11 @@ export default (state = INIT_STATE, action) => {
     case USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY: {
       return produce(state, (draftState) => {
         draftState.betaAccess = action.payload;
+      });
+    }
+    case USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE: {
+      return produce(state, (draftState) => {
+        draftState.bokAccess = action.payload;
       });
     }
     default:

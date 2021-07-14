@@ -8,6 +8,8 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Image,
+  Dimensions,
   Platform,
 } from 'react-native';
 import {Icon, Card} from 'react-native-elements';
@@ -24,6 +26,8 @@ import styles from './styles';
 import {red, lightGrey} from '@styles/colors';
 import {cardStyle} from '@styles/common';
 import {selectNetworkInfo} from '@selector/common';
+
+const {width} = Dimensions.get('screen');
 
 class OfflineFormList extends React.Component {
   keyExtractor = (item, index) => index?.toString();
@@ -113,10 +117,11 @@ class OfflineFormList extends React.Component {
     if (!offlineFeature && !betaAccess) {
       return (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>
-            Offline access feature is expired. To continue using the feature,
-            contact the administrator.
-          </Text>
+          <Image
+            source={require('../../assets/offline-unlock.jpg')}
+            resizeMode="contain"
+            style={{width: width}}
+          />
         </View>
       );
     }

@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   Alert,
   Image,
+  Dimensions,
   Platform,
 } from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
@@ -35,6 +36,8 @@ import {displayDate} from '@util/general';
 import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
 import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
 import {CommonImages} from '@constant/Images';
+
+const {width} = Dimensions.get('screen');
 
 const renderImage = (source) => (
   <Image source={source} resizeMode="contain" style={{width: 20, height: 20}} />
@@ -283,10 +286,11 @@ class Outbox extends React.Component {
             </View>
           </TouchableHighlight>
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              Offline access feature is expired. To continue using the feature,
-              contact the administrator.
-            </Text>
+            <Image
+              source={require('../../assets/offline-unlock.jpg')}
+              resizeMode="contain"
+              style={{width: width}}
+            />
           </View>
         </>
       );

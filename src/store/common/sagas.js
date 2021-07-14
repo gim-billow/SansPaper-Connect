@@ -21,6 +21,7 @@ import {
   readBetaAccessExpiryDate,
   readOfflineFeatureExpiryDate,
   readProfileImageInStorage,
+  readBokFeatureExpiryDate,
 } from '@api/user';
 import {
   getSansPaperUser,
@@ -142,6 +143,11 @@ function* init({payload}) {
       payload: email,
     });
 
+    yield put({
+      type: USER_SAGA_ACTIONS.ON_WATCH_BOK_SUBSCRIPTION,
+      payload: email,
+    });
+
     // load profile picture
     const profPic = yield spUser.data().profileImg || null;
     const extension = profPic ? getExtension(profPic).toLowerCase() : null;
@@ -212,12 +218,19 @@ function* watchOfflineFeatureExpiry() {
   try {
     const date = yield readOfflineFeatureExpiryDate();
 
-    const accessFeature = Date.now() < new Date(date) ? true : false;
+    if (date) {
+      const accessFeature = Date.now() < new Date(date) ? true : false;
 
-    yield put({
-      type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
-      payload: accessFeature,
-    });
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+        payload: accessFeature,
+      });
+    } else {
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+        payload: false,
+      });
+    }
   } catch (error) {
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
@@ -231,18 +244,51 @@ function* watchBetaAccessExpiry() {
   try {
     const date = yield readBetaAccessExpiryDate();
 
-    const expired = Date.now() < new Date(date) ? true : false;
+    if (date) {
+      const expired = Date.now() < new Date(date) ? true : false;
 
-    yield put({
-      type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
-      payload: expired,
-    });
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
+        payload: expired,
+      });
+    } else {
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
+        payload: false,
+      });
+    }
   } catch (error) {
     yield put({
       type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
       payload: false,
     });
     console.error('watchBetaAccessExpiry');
+  }
+}
+
+function* watchBokAccessExpiry() {
+  try {
+    const date = yield readBokFeatureExpiryDate();
+
+    if (date) {
+      const expired = Date.now() < new Date(date) ? true : false;
+
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
+        payload: expired,
+      });
+    } else {
+      yield put({
+        type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
+        payload: false,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
+      payload: false,
+    });
+    console.error('watchBokAccessExpiry');
   }
 }
 
@@ -267,7 +313,6 @@ function* watchNetworkState() {
     while (true) {
       const dateNow = new Date();
       const networkState = yield take(channel);
-      console.log('networkState', networkState);
       const {isInternetReachable} = networkState;
       const previousNetworkInfo = yield select(selectNetworkInfo);
       const userEmail = yield select(selectEmail);
@@ -275,6 +320,7 @@ function* watchNetworkState() {
       if (!isInternetReachable) {
         yield watchOfflineFeatureExpiry();
         yield watchBetaAccessExpiry();
+        yield watchBokAccessExpiry();
         yield loadProfilePictureOffline();
       }
 

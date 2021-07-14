@@ -40,11 +40,26 @@ class Profile extends Component {
     Alert.alert('', 'No internet available. Logout once internet is back');
 
   onPressLogoutHandler = () => {
-    const {networkInfo, logoutUser} = this.props;
+    const {
+      networkInfo,
+      logoutUser,
+      removeAllDownloadForms,
+      betaAccess,
+      offlineFeature,
+    } = this.props;
+
+    let message = '';
+
+    if (!betaAccess && !offlineFeature) {
+      message = 'Are you sure you want to logout?';
+    } else {
+      message =
+        'Are you sure with this action? Logging out will clear all the stored forms data from your phone for offline usage.';
+    }
 
     Alert.alert(
-      '',
-      'Are you sure you want to logout?',
+      'Logout',
+      message,
       [
         {
           text: 'Cancel',
@@ -58,8 +73,14 @@ class Profile extends Component {
               this.showNoInternetAlert();
               return;
             }
+
+            if (offlineFeature || betaAccess) {
+              removeAllDownloadForms();
+            }
+
             logoutUser();
           },
+          style: 'destructive',
         },
       ],
       {cancelable: false},
