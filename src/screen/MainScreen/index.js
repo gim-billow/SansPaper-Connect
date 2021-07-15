@@ -12,6 +12,7 @@ import {
   Image,
   Dimensions,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
@@ -51,6 +52,12 @@ class MainScreen extends React.Component {
     this.checkVersion();
     this.appReview();
     this.requestNotifPermission();
+  }
+
+  componentDidUpdate() {
+    const {bokAccess, betaAccess} = this.props;
+
+    console.tron.log('BOK & BETA', bokAccess, betaAccess);
   }
 
   componentWillUnmount() {
@@ -249,6 +256,7 @@ class MainScreen extends React.Component {
             }}
           />
         </View>
+        {/* FIXME: it shows here */}
         {!betaAccess && !bokAccess ? (
           <View style={styles.noItemsContainer}>
             <Image

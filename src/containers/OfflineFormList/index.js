@@ -149,8 +149,9 @@ class OfflineFormList extends React.Component {
         ) : searchKeyword === '' ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              No forms has been downloaded. Reconnect and download the form
-              first to use when offline.
+              No forms have been downloaded. Please connect to the internet and
+              download a form (using the download button to the right of the
+              form) to use here when offline.
             </Text>
           </View>
         ) : (

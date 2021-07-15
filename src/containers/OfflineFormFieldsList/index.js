@@ -1,18 +1,18 @@
 //library
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {View, Platform, Text} from 'react-native';
 import {KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {ListItem, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {goToGoogleMapScreen} from '@store/navigate';
 import {has, find, propEq} from 'ramda';
 
 //component
 import Fields from 'components/Fields';
 
 //redux,selector
+import {goToGoogleMapScreen} from '@store/navigate';
 import {
   updateOfflineFormFieldValue,
   resetCurrentForm,
@@ -26,11 +26,12 @@ import {
   selectIsDraftForm,
   selectOutbox,
 } from 'selector/form';
+import {selectNetworkInfo} from '@selector/common';
 import {selectOrganistation} from 'selector/sanspaper';
 
 //constants
 import {fieldsProps} from './helper';
-import styles from '../../components/Fields/ItemWrapper/styles';
+import styles from './styles';
 
 class FormFieldsList extends React.Component {
   state = {
@@ -86,6 +87,7 @@ class FormFieldsList extends React.Component {
       goToGoogleMapScreen,
       draftId,
       screen,
+      networkInfo,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -100,6 +102,7 @@ class FormFieldsList extends React.Component {
           organization,
           currentFormFields,
           draftId,
+          isInternetReachable: networkInfo.isInternetReachable,
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],
           goToGoogleMapScreen,
@@ -124,27 +127,38 @@ class FormFieldsList extends React.Component {
   };
 
   render() {
-    const {currentFormFields} = this.props;
+    const {currentFormFields, networkInfo} = this.props;
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={styles.container}>
-        <KeyboardAwareFlatList
-          innerRef={(ref) => {
-            this.flatListRef = ref;
-          }}
-          keyExtractor={this.keyExtractor}
-          data={currentFormFields}
-          showsVerticalScrollIndicator={false}
-          initialNumToRender={500}
-          renderItem={this.renderItem}
-          scrollEnabled={scrollEnabled}
-          removeClippedSubviews={false}
-          extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
-          enableOnAndroid={true}
-          enableResetScrollToCoords={false}
-        />
-      </View>
+      <>
+        {!networkInfo.isInternetReachable ? (
+          <View style={styles.offline}>
+            <Text style={styles.offlineText}>Currently in offline mode</Text>
+          </View>
+        ) : null}
+        <View
+          style={[
+            styles.container,
+            !networkInfo.isInternetReachable ? {paddingTop: 30} : null,
+          ]}>
+          <KeyboardAwareFlatList
+            innerRef={(ref) => {
+              this.flatListRef = ref;
+            }}
+            keyExtractor={this.keyExtractor}
+            data={currentFormFields}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={500}
+            renderItem={this.renderItem}
+            scrollEnabled={scrollEnabled}
+            removeClippedSubviews={false}
+            extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
+            enableOnAndroid={true}
+            enableResetScrollToCoords={false}
+          />
+        </View>
+      </>
     );
   }
 }
@@ -157,6 +171,7 @@ const mapState = createStructuredSelector({
   submitTriggered: selectSubmitTriggered,
   organization: selectOrganistation,
   draftId: selectIsDraftForm,
+  networkInfo: selectNetworkInfo,
 });
 
 export default connect(mapState, {

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {spaceRegular, spaceMedium} from 'styles/space';
-import {red, white, darkGrey} from 'styles/colors';
+import {white, darkGrey} from 'styles/colors';
 import {questrial, regular} from '@styles/font';
 
 export default StyleSheet.create({
@@ -29,7 +29,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   map: {
-    color: red,
     paddingHorizontal: spaceRegular,
   },
 });

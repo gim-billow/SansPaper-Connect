@@ -27,6 +27,7 @@ import {
   selectSubmitTriggered,
 } from 'selector/form';
 import {selectOrganistation} from 'selector/sanspaper';
+import {selectNetworkInfo} from '@selector/common';
 
 //constants
 import {fieldsProps} from './helper';
@@ -76,6 +77,7 @@ class FormFieldsList extends React.Component {
       organization,
       currentFormFields,
       goToGoogleMapScreen,
+      networkInfo,
     } = this.props;
 
     if (!item.hidden) {
@@ -87,6 +89,7 @@ class FormFieldsList extends React.Component {
           organization,
           isEditable: true,
           currentFormFields,
+          isInternetReachable: networkInfo.isInternetReachable,
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],
           goToGoogleMapScreen,
@@ -110,27 +113,38 @@ class FormFieldsList extends React.Component {
   };
 
   render() {
-    const {currentFormFields} = this.props;
+    const {currentFormFields, networkInfo} = this.props;
     const {scrollEnabled} = this.state;
 
     return (
-      <View style={styles.container}>
-        <KeyboardAwareFlatList
-          innerRef={(ref) => {
-            this.flatListRef = ref;
-          }}
-          keyExtractor={this.keyExtractor}
-          data={currentFormFields}
-          initialNumToRender={500}
-          showsVerticalScrollIndicator={false}
-          renderItem={this.renderItem}
-          scrollEnabled={scrollEnabled}
-          removeClippedSubviews={false}
-          extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
-          enableOnAndroid={true}
-          enableResetScrollToCoords={false}
-        />
-      </View>
+      <>
+        {!networkInfo.isInternetReachable ? (
+          <View style={styles.offline}>
+            <Text style={styles.offlineText}>Currently in offline mode</Text>
+          </View>
+        ) : null}
+        <View
+          style={[
+            styles.container,
+            !networkInfo.isInternetReachable ? {paddingTop: 30} : null,
+          ]}>
+          <KeyboardAwareFlatList
+            innerRef={(ref) => {
+              this.flatListRef = ref;
+            }}
+            keyExtractor={this.keyExtractor}
+            data={currentFormFields}
+            initialNumToRender={500}
+            showsVerticalScrollIndicator={false}
+            renderItem={this.renderItem}
+            scrollEnabled={scrollEnabled}
+            removeClippedSubviews={false}
+            extraScrollHeight={Platform.OS === 'ios' ? 50 : 0}
+            enableOnAndroid={true}
+            enableResetScrollToCoords={false}
+          />
+        </View>
+      </>
     );
   }
 }
@@ -141,6 +155,7 @@ const mapState = createStructuredSelector({
   scrollToMandatory: selectScrollToMandatory,
   submitTriggered: selectSubmitTriggered,
   organization: selectOrganistation,
+  networkInfo: selectNetworkInfo,
 });
 
 export default connect(mapState, {

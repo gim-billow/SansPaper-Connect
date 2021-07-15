@@ -7,6 +7,7 @@ import {
   select,
   call,
   take,
+  delay,
   cancelled,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
@@ -310,6 +311,7 @@ function* loadUserProfilePic({payload}) {
         payload: uploadedImg,
       });
 
+      yield delay(5000);
       updateProfileLoadingScreen(false);
     }
   } catch (error) {
@@ -487,6 +489,7 @@ function* removeAllDownloadForms() {
     yield removeUserEmail();
     yield removeProfileImageInStorage();
     yield database.deleteAllForms();
+    yield database.deleteAllOutbox();
   } catch (error) {
     throw error;
   }

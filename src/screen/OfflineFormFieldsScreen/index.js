@@ -106,13 +106,14 @@ class OfflineFormFieldsScreen extends React.Component {
           case 1:
             // if not internet, just do nothing
             if (!netInfo.isInternetReachable) {
-              saveAsDraft({
-                offline: true,
-                status: 'draft',
-              });
-              break;
+              this.props.activeScreen('');
+              // saveAsDraft({
+              //   offline: true,
+              //   status: 'draft',
+              // });
+              return;
             }
-            // download first b4 submitting the form
+
             if (offlineFormIndex === -1 && offlineFormId !== '') {
               syncOfflineForm({
                 linkedTable: offlineCurrentForm.linkedtable,

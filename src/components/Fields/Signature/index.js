@@ -121,17 +121,16 @@ const Signature = (props) => {
                 showTitleLabel={false}
                 viewMode={'portrait'}
               />
-              {!isEditable ||
-                (signatureSaved && (
-                  <View style={styles.dimmedSingature}>
-                    {firstLoadAndroid ? (
-                      <Image
-                        style={styles.dimmedSingature}
-                        source={{uri: androidSig}}
-                      />
-                    ) : null}
-                  </View>
-                ))}
+              {(!isEditable || signatureSaved) && (
+                <View style={styles.dimmedSingature}>
+                  {firstLoadAndroid ? (
+                    <Image
+                      style={styles.dimmedSingature}
+                      source={{uri: androidSig}}
+                    />
+                  ) : null}
+                </View>
+              )}
             </View>
           ) : (
             <View style={styles.signature}>

@@ -91,6 +91,8 @@ export const deleteAllFormsQuery = 'DELETE from forms';
 
 export const deleteFormByIdQuery = 'DELETE from forms WHERE id = ?';
 
+export const deleteAllOutboxQuery = 'DELETE from outbox';
+
 export const deleteOutboxByIdQuery = 'DELETE from outbox WHERE id = ?';
 
 export const getAllFromOutboxQuery = 'SELECT * from outbox';

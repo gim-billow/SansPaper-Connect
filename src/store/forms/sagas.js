@@ -679,6 +679,7 @@ function* saveAsDraft({payload}) {
     }
 
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+    yield put(activeScreen(''));
 
     if (status === 'draft' && !changeStatus) {
       yield Alert.alert('', 'Form saved as draft.');

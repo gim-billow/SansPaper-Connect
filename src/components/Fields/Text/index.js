@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
-import {darkGrey, lightGrey} from '@styles/colors';
+import {darkGrey, lightGrey, red} from '@styles/colors';
 import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
@@ -99,12 +99,26 @@ const SPText = (props) => {
                 onChangeText={(updatedText) => onChangeText(updatedText)}
               />
             </View>
-            <TouchableOpacity
-              disabled={!isEditable}
-              style={styles.iconWrapper}
-              onPress={enableLocation}>
-              <Icon size={40} style={styles.map} name="place" />
-            </TouchableOpacity>
+            {props.isInternetReachable ? (
+              <TouchableOpacity
+                disabled={!isEditable}
+                style={styles.iconWrapper}
+                onPress={enableLocation}>
+                <Icon color={red} size={40} style={styles.map} name="place" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                disabled={true}
+                style={styles.iconWrapper}
+                onPress={enableLocation}>
+                <Icon
+                  color={darkGrey}
+                  size={40}
+                  style={styles.map}
+                  name="location-off"
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </>

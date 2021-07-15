@@ -10,7 +10,7 @@ const INIT_STATE = {
   saveUser: false,
   offlineFeature: false,
   betaAccess: false,
-  bokAccess: false,
+  bokAccess: true,
 };
 
 export default (state = INIT_STATE, action) => {

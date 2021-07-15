@@ -4,7 +4,8 @@ import {white} from 'styles/colors';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingBottom: 30,
     backgroundColor: white,
   },
   logo: {

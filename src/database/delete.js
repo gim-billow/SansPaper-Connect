@@ -3,6 +3,7 @@ import {
   deleteAllFormsQuery,
   deleteFormByIdQuery,
   deleteOutboxByIdQuery,
+  deleteAllOutboxQuery,
 } from './query';
 
 export const deleteAllForms = async () => {
@@ -10,6 +11,15 @@ export const deleteAllForms = async () => {
     await DB.ExecuteQuery(deleteAllFormsQuery);
   } catch (e) {
     console.log('DB deleteAllForms Error', e);
+    return [];
+  }
+};
+
+export const deleteAllOutbox = async () => {
+  try {
+    await DB.ExecuteQuery(deleteAllOutboxQuery);
+  } catch (e) {
+    console.log('DB deleteAllOutbox Error', e);
     return [];
   }
 };
