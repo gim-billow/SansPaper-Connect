@@ -76,12 +76,18 @@ export default StyleSheet.create({
     fontFamily: questrial,
     letterSpacing: 0.2,
   },
-  filterView: {
+  filter: {
     flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 15,
     paddingBottom: 12,
+  },
+  filterView: {
+    flexDirection: 'row',
+
     backgroundColor: red,
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   filterText: {
@@ -90,5 +96,16 @@ export default StyleSheet.create({
     fontFamily: questrial,
     fontSize: regular,
     color: white,
+  },
+  itemView: {
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    paddingBottom: 12,
+  },
+  itemText: {
+    color: white,
+    fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
   },
 });

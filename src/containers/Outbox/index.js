@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {filter, includes, findIndex} from 'ramda';
+import {filter, includes, findIndex, length} from 'ramda';
 import {Icon, Card, SearchBar} from 'react-native-elements';
 
 import {
@@ -194,7 +194,7 @@ class Outbox extends React.Component {
     }, 500);
   };
 
-  renderItem = ({item}) => {
+  renderItem = ({item, index}) => {
     const {id, value, status, createdAt, updatedAt} = item;
     const {name, id: formId} = value;
     const createString = `Submitted on ${displayDate(createdAt)}`;
@@ -227,7 +227,7 @@ class Outbox extends React.Component {
               // onLongPress={() => this.onSwapFormStatus(id, status)}
             >
               <View style={styles.titleView}>
-                <Text style={styles.title}>{name}</Text>
+                <Text style={styles.title}>{`#${index + 1} - ${name}`}</Text>
                 <Text style={styles.subTitle1}>{createString}</Text>
                 <Text style={styles.subTitle2}>{updateString}</Text>
               </View>
@@ -316,18 +316,31 @@ class Outbox extends React.Component {
             }}
           />
         </View>
-        <TouchableHighlight
-          underlayColor="transparent"
-          onPress={this.onFilterOutboxList}>
-          <View style={styles.filterView}>
-            {Platform.OS === 'android' ? (
-              <Icon type="antdesign" name="filter" color={white} />
+        <View style={styles.filterView}>
+          <TouchableHighlight
+            underlayColor="transparent"
+            onPress={this.onFilterOutboxList}>
+            <View style={styles.filter}>
+              {Platform.OS === 'android' ? (
+                <Icon type="antdesign" name="filter" color={white} />
+              ) : (
+                <Icon type="ionicon" name="options-outline" color={white} />
+              )}
+              <Text style={styles.filterText}>{filterLabel}</Text>
+            </View>
+          </TouchableHighlight>
+          <View style={styles.itemView}>
+            {!filteredOutbox.length ? (
+              <Text style={styles.itemText}>No item</Text>
+            ) : filteredOutbox.length === 1 ? (
+              <Text style={styles.itemText}>1 item</Text>
             ) : (
-              <Icon type="ionicon" name="options-outline" color={white} />
+              <Text style={styles.itemText}>{`${length(
+                filteredOutbox,
+              )} items`}</Text>
             )}
-            <Text style={styles.filterText}>{filterLabel}</Text>
           </View>
-        </TouchableHighlight>
+        </View>
         <View style={styles.container}>
           {filteredOutbox && filteredOutbox.length > 0 ? (
             <FlatList
