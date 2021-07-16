@@ -54,12 +54,6 @@ class MainScreen extends React.Component {
     this.requestNotifPermission();
   }
 
-  componentDidUpdate() {
-    const {bokAccess, betaAccess} = this.props;
-
-    console.tron.log('BOK & BETA', bokAccess, betaAccess);
-  }
-
   componentWillUnmount() {
     fcmListener && fcmListener();
   }
