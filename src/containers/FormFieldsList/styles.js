@@ -1,6 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
 
-import {orange, white} from '@styles/colors';
+import {purple, white} from '@styles/colors';
 import {regular, questrial} from '@styles/font';
 
 export default StyleSheet.create({
@@ -12,7 +12,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 500,
-    backgroundColor: orange,
+    backgroundColor: purple,
   },
   offlineText: {
     ...Platform.select({

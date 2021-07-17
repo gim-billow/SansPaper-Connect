@@ -18,6 +18,7 @@ import {
 import Toast from 'react-native-simple-toast';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
+import crashlytics from '@react-native-firebase/crashlytics';
 // import {
 //   assoc,
 //   map,
@@ -175,6 +176,7 @@ function* watchFormsTemplatesUpdates({payload}) {
 
 function* updateFormFieldValue({payload}) {
   try {
+    crashlytics().log('updateFormFieldValue');
     const {rank, value} = payload;
     const currentForm = yield select(selectCurrentForm);
     const updatedForm = R.adjust(
@@ -187,12 +189,14 @@ function* updateFormFieldValue({payload}) {
       payload: updatedForm,
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loginUser error', error);
   }
 }
 
 function* updateOfflineFormFieldValue({payload}) {
   try {
+    crashlytics().log('updateOfflineFormFieldValue');
     const {rank, value} = payload;
     const currentForm = yield select(selectOfflineCurrentForm);
     const updatedForm = R.adjust(
@@ -205,12 +209,14 @@ function* updateOfflineFormFieldValue({payload}) {
       payload: updatedForm,
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loginUser error', error);
   }
 }
 
 async function submitForm(form, screen) {
   try {
+    crashlytics().log('submitForm');
     // showActivityIndicator();
     const permission = await hasLocationPermission();
     if (permission) {
@@ -249,6 +255,7 @@ async function submitForm(form, screen) {
           }
         },
         (error) => {
+          crashlytics().recordError(error);
           dismissActivityIndicator();
           Alert.alert(
             '',
@@ -264,6 +271,7 @@ async function submitForm(form, screen) {
 
     // dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     // dismissActivityIndicator();
     Alert.alert('', 'Error submitting form, please contact support');
   }
@@ -271,6 +279,7 @@ async function submitForm(form, screen) {
 
 function* preSubmitForm({payload}) {
   try {
+    crashlytics().log('preSubmitForm');
     showActivityIndicator();
 
     // if there is no internet
@@ -435,6 +444,7 @@ function* preSubmitForm({payload}) {
 
     // dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     // save to draft if submit failed
     /**
      * TODO: Will add back once background fetch functionality is added
@@ -456,6 +466,8 @@ function* preSubmitForm({payload}) {
 
 function* syncOfflineForm({payload = {}}) {
   try {
+    crashlytics().log('syncOfflineForm');
+
     const {
       linkedTable,
       formId,
@@ -482,6 +494,7 @@ function* syncOfflineForm({payload = {}}) {
       updatedAt: dateNow.toISOString(),
       value: JSON.stringify(currentForm),
     };
+
     yield database.InsertForm(currentFormPayload);
     //sync linked item
     if (linkedTable && linkedTable !== '') {
@@ -493,15 +506,14 @@ function* syncOfflineForm({payload = {}}) {
       });
 
       if (linkedItems?.data) {
-        //console.log('linkedItems?.data', linkedItems?.data);
         const {lastBuildDate, items} = linkedItems?.data;
-        //console.log('items', items);
         const linkedItemsDBPayload = {
           id: linkedItemName,
           createdAt: lastBuildDate,
           updatedAt: lastBuildDate,
           value: JSON.stringify(items),
         };
+
         yield database.InsertLinkedItems(linkedItemsDBPayload);
       }
     }
@@ -572,6 +584,7 @@ function* syncOfflineForm({payload = {}}) {
       dismissActivityIndicator();
     }
   } catch (error) {
+    crashlytics().recordError(error);
     const {multiple = false} = payload;
     if (!multiple) {
       dismissActivityIndicator();
@@ -626,6 +639,7 @@ function* loadOutbox() {
 
 function* loadOutboxByStatus({payload}) {
   try {
+    crashlytics().log('loadOutboxByStatus');
     const outboxString = yield database.getOutboxFormsByStatus({
       status: payload,
     });
@@ -639,12 +653,57 @@ function* loadOutboxByStatus({payload}) {
       payload: outboxItems,
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loadOutboxByStatus error', error);
+  }
+}
+
+function* filterOutboxBy({payload}) {
+  try {
+    const {orderBy, sortBy, status} = payload;
+
+    let order = '',
+      sortedBoxItems = [];
+    if (orderBy === 'updated') {
+      order = 'updatedAt';
+    } else if (orderBy === 'submitted') {
+      order = 'createdAt';
+    }
+
+    let outboxString;
+    if (status === 'all') {
+      outboxString = yield database.getAllFromOutbox();
+    } else {
+      outboxString = yield database.getOutboxFormsByStatus({
+        status,
+      });
+    }
+
+    const outboxItems = R.map(
+      (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+      outboxString,
+    );
+
+    if (sortBy === 'asc') {
+      const sortOrderBy = R.ascend(R.prop(order));
+      sortedBoxItems = R.sort(sortOrderBy, outboxItems);
+    } else {
+      const sortOrderBy = R.descend(R.prop(order));
+      sortedBoxItems = R.sort(sortOrderBy, outboxItems);
+    }
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+      payload: sortedBoxItems,
+    });
+  } catch (error) {
+    console.log('filterOutboxBy error', error);
   }
 }
 
 function* saveAsDraft({payload}) {
   try {
+    crashlytics().log('saveAsDraft');
     const dateNow = new Date();
 
     const {offline, status, changeStatus = false, filterBy = 'all'} = payload;
@@ -689,6 +748,7 @@ function* saveAsDraft({payload}) {
       Navigation.popToRoot(screens.FormScreen);
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield Alert.alert('', 'Form not saved. Something went wrong!');
     console.log('saveAsDraft error', error);
   }
@@ -696,10 +756,12 @@ function* saveAsDraft({payload}) {
 
 function* deleteOfflineForm({payload}) {
   try {
+    crashlytics().log('deleteOfflineForm');
     const formId = payload;
     yield database.deleteFormById({formId: formId});
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
   } catch (error) {
+    crashlytics().recordError(error);
     yield Alert.alert('', 'Error in deleting the offline form');
     console.log('deleteOfflineForm error', error);
   }
@@ -707,6 +769,7 @@ function* deleteOfflineForm({payload}) {
 
 function* deleteOutboxForm({payload}) {
   try {
+    crashlytics().log('deleteOutboxForm');
     const {draftId, status} = payload;
     yield database.deleteOutboxById({draftId: draftId});
 
@@ -717,6 +780,7 @@ function* deleteOutboxForm({payload}) {
 
     yield loadOutboxByStatus(status);
   } catch (error) {
+    crashlytics().recordError(error);
     yield Alert.alert('', 'Error in deleting the outbox form');
     console.log('deleteOutboxForm error', error);
   }
@@ -724,6 +788,7 @@ function* deleteOutboxForm({payload}) {
 
 function* offlineFormSync() {
   try {
+    crashlytics().log('offlineFormSync');
     // if there is no internet
     const {isInternetReachable} = yield select(selectNetworkInfo);
     if (!isInternetReachable) {
@@ -759,6 +824,7 @@ function* offlineFormSync() {
     yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
     dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('ERROR', error);
     dismissActivityIndicator();
   }
@@ -776,6 +842,7 @@ export default all([
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX, loadOutbox),
   takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS, loadOutboxByStatus),
+  takeLatest(FORM_SAGA_ACTIONS.FILTER_OUTBOX_BY, filterOutboxBy),
   takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
   takeLatest(FORM_ACTION.DELETE_OFFLINE_FORM, deleteOfflineForm),
   takeLatest(FORM_ACTION.DELETE_OUTBOX_FORM, deleteOutboxForm),

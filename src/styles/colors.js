@@ -25,3 +25,5 @@ export const lightBlue = '#7b93f1';
 
 export const orange = '#dc8403';
 export const lightOrange = '#ffeacc';
+
+export const purple = '#5b34a0';

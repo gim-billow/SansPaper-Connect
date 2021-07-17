@@ -11,6 +11,7 @@ import {
 import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
+import crashlytics from '@react-native-firebase/crashlytics';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import moment from 'moment-timezone';
 
@@ -56,6 +57,7 @@ function subscribeNetworkStateChannel() {
 
 function* init({payload}) {
   try {
+    crashlytics().log('Initialize');
     //init DB
     yield DB.openDBConnection();
     yield database.CreateTable();
@@ -174,6 +176,7 @@ function* init({payload}) {
     // yield auth().signOut();
     // yield GoogleSignin.revokeAccess();
     // yield GoogleSignin.signOut();
+    crashlytics().recordError(error);
     console.log('init error', error);
   }
 }
@@ -216,6 +219,7 @@ function* watchBodyOfKnowledgeUpdates({payload}) {
 
 function* watchOfflineFeatureExpiry() {
   try {
+    crashlytics().log('watchOfflineFeatureExpiry');
     const date = yield readOfflineFeatureExpiryDate();
 
     if (date) {
@@ -232,6 +236,7 @@ function* watchOfflineFeatureExpiry() {
       });
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
       payload: false,
@@ -242,6 +247,7 @@ function* watchOfflineFeatureExpiry() {
 
 function* watchBetaAccessExpiry() {
   try {
+    crashlytics().log('watchBetaAccessExpiry');
     const date = yield readBetaAccessExpiryDate();
 
     if (date) {
@@ -258,6 +264,7 @@ function* watchBetaAccessExpiry() {
       });
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_BETA_ACCESS_EXPIRY,
       payload: false,
@@ -268,6 +275,7 @@ function* watchBetaAccessExpiry() {
 
 function* watchBokAccessExpiry() {
   try {
+    crashlytics().log('watchBokAccessExpiry');
     const date = yield readBokFeatureExpiryDate();
 
     if (date) {
@@ -284,6 +292,7 @@ function* watchBokAccessExpiry() {
       });
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
       payload: false,
@@ -294,6 +303,7 @@ function* watchBokAccessExpiry() {
 
 function* loadProfilePictureOffline() {
   try {
+    crashlytics().log('loadProfilePictureOffline');
     const profilePicture = yield readProfileImageInStorage();
 
     yield put({
@@ -303,6 +313,7 @@ function* loadProfilePictureOffline() {
 
     updateProfileLoadingScreen(false);
   } catch (error) {
+    crashlytics().recordError(error);
     updateProfileLoadingScreen(false);
   }
 }
@@ -310,6 +321,7 @@ function* loadProfilePictureOffline() {
 function* watchNetworkState() {
   const channel = yield call(subscribeNetworkStateChannel);
   try {
+    crashlytics().log('watchNetworkState');
     while (true) {
       const dateNow = new Date();
       const networkState = yield take(channel);
@@ -348,6 +360,7 @@ function* watchNetworkState() {
       });
     }
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('watchNetworkStatus error', error);
   } finally {
     if (yield cancelled()) {

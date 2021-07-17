@@ -17,6 +17,7 @@ export const FORM_SAGA_ACTIONS = {
   LOAD_OFFLINE_FORM: 'formActions/LOAD_OFFLINE_FORM',
   WATCH_FORM_UPDATES: 'formActions/WATCH_FORM_UPDATES',
   GET_ALL_LINKED_ITEMS: 'formActions/GET_ALL_LINKED_ITEMS',
+  FILTER_OUTBOX_BY: 'formActions/FILTER_OUTBOX_BY',
 };
 
 export const FORM_REDUCER_ACTIONS = {
@@ -121,6 +122,11 @@ export const loadAllOutbox = () => ({
 
 export const loadOutboxByStatus = (payload) => ({
   type: FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS,
+  payload,
+});
+
+export const filterOutboxBy = (payload) => ({
+  type: FORM_SAGA_ACTIONS.FILTER_OUTBOX_BY,
   payload,
 });
 

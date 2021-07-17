@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {green, darkGrey, veryLightGrey, red, white} from '@styles/colors';
-import {questrial, regular, large} from '@styles/font';
+import {green, darkGrey, purple, red, white} from '@styles/colors';
+import {questrial, regular, large, roboto} from '@styles/font';
 import {small} from '../../styles/font';
 
 export default StyleSheet.create({
@@ -29,10 +29,17 @@ export default StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    fontFamily: questrial,
+    fontFamily: roboto,
     fontSize: regular,
     letterSpacing: 0.2,
+    marginBottom: 2,
+  },
+  title2: {
+    fontFamily: questrial,
+    fontSize: regular - 2,
+    letterSpacing: 0.2,
     marginBottom: 5,
+    color: purple,
   },
   subTitle1: {
     fontFamily: questrial,
@@ -79,13 +86,12 @@ export default StyleSheet.create({
   filter: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingRight: 20,
     paddingTop: 15,
     paddingBottom: 12,
   },
   filterView: {
     flexDirection: 'row',
-
     backgroundColor: red,
     justifyContent: 'space-between',
     alignItems: 'center',

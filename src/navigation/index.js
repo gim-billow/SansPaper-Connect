@@ -185,7 +185,7 @@ export const showMainScreen = async () => {
                             name: screens.HeaderScreen,
                             alignment: 'fill',
                             passProps: {
-                              title: 'Outbox',
+                              title: 'Outbox (Local Storage)',
                             },
                           },
                         },
