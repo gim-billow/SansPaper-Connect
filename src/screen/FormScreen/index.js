@@ -29,47 +29,11 @@ class FormScreen extends NavigationComponent {
     super(props);
 
     this.state = {
-      // index: 0,
       searchKeyword: '',
-      // routes: [
-      //   {key: 'first', title: 'Online', disable: false},
-      //   {key: 'second', title: 'Offline', disable: true},
-      // ],
     };
 
     Navigation.events().bindComponent(this);
   }
-
-  // componentDidMount() {
-  //   const isInternetReachable = this.props.networkInfo.isInternetReachable;
-
-  //   if (!isInternetReachable) {
-  //     this.updateScreenState(1, 0);
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   const isAvailPrevProps = prevProps.networkInfo.isInternetReachable;
-  //   const isAvailThisProps = this.props.networkInfo.isInternetReachable;
-
-  //   if (isAvailPrevProps !== isAvailThisProps) {
-  //     if (!isAvailThisProps) {
-  //       this.updateScreenState(1, 0);
-  //     } else {
-  //       this.updateScreenState(0, 1);
-  //     }
-  //   }
-  // }
-
-  // updateScreenState(index, indexDisabled) {
-  //   this.setState(
-  //     produce((draft) => {
-  //       draft.index = index;
-  //       draft.routes[indexDisabled].disable = true;
-  //       draft.routes[index].disable = false;
-  //     }),
-  //   );
-  // }
 
   getFilteredFormlist = memoize((forms, keyword) => {
     return R.filter(
@@ -81,55 +45,6 @@ class FormScreen extends NavigationComponent {
   handleOnChangeText = (text) => {
     this.setState({searchKeyword: text});
   };
-
-  // renderScene = ({route}) => {
-  //   switch (route.key) {
-  //     case 'first':
-  //       return (
-  //         <FormList
-  //           searchKeyword={this.state.searchKeyword}
-  //           filteredFromList={this.getFilteredFormlist(
-  //             this.props.formList,
-  //             this.state.searchKeyword,
-  //           )}
-  //         />
-  //       );
-  //     case 'second':
-  //       return (
-  //         <OfflineFormList
-  //           searchKeyword={this.state.searchKeyword}
-  //           filteredFromList={this.getFilteredFormlist(
-  //             this.props.offlineFormList,
-  //             this.state.searchKeyword,
-  //           )}
-  //         />
-  //       );
-  //     default:
-  //       return null;
-  //   }
-  // };
-
-  // renderTabBar = (prop) => (
-  //   <TabBar
-  //     {...prop}
-  //     activeColor={white}
-  //     inactiveColor={lightRed}
-  //     renderLabel={({route, color}) => (
-  //       <Text style={[styles.tabText, {color}]}>{route.title}</Text>
-  //     )}
-  //     onTabPress={({route, preventDefault}) => {
-  //       if (route.key === 'first' && route.disable) {
-  //         preventDefault();
-  //       }
-  //       if (route.key === 'second' && route.disable) {
-  //         preventDefault();
-  //       }
-  //     }}
-  //     indicatorStyle={{opacity: 0}}
-  //     style={styles.tabBar}
-  //     tabStyle={styles.tab}
-  //   />
-  // );
 
   render() {
     const {searchKeyword} = this.state;
@@ -179,34 +94,10 @@ class FormScreen extends NavigationComponent {
             />
           )}
         </View>
-        {/* <TabView
-          navigationState={{index, routes, disable}}
-          renderScene={this.renderScene}
-          renderTabBar={this.renderTabBar}
-          swipeEnabled={false}
-          onIndexChange={(idx) => this.setState({index: idx})}
-          initialLayout={{width}}
-          sceneContainerStyle={styles.container}
-        /> */}
       </View>
     );
   }
 }
-
-// FormScreen.options = () => {
-//   return {
-//     topBar: {
-//       rightButtons: [
-//         {
-//           id: screens.SyncButton,
-//           component: {
-//             name: screens.SyncButton,
-//           },
-//         },
-//       ],
-//     },
-//   };
-// };
 
 const mapState = createStructuredSelector({
   formList: selectSortedFormList,

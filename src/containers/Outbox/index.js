@@ -15,8 +15,9 @@ import {
 } from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {filter, includes, findIndex, length} from 'ramda';
+import {filter, includes, findIndex} from 'ramda';
 import {Icon, Card, SearchBar} from 'react-native-elements';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import {
   selectOutbox,
@@ -28,6 +29,7 @@ import {
   loadOutboxByStatus,
   loadAllOutbox,
   saveAsDraft,
+  filterOutboxBy,
 } from '@store/forms';
 import {goToDraftFormFieldsScreen} from '@store/navigate';
 import styles from './styles';
@@ -42,12 +44,16 @@ const {width} = Dimensions.get('screen');
 const renderImage = (source) => (
   <Image source={source} resizeMode="contain" style={{width: 20, height: 20}} />
 );
+const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
 
 class Outbox extends React.Component {
   state = {
     searchKeyword: '',
-    filterLabel: 'All forms',
+    filterLabel: 'all',
     filtered: 'all',
+    orderBy: 'submitted',
+    orderByLabel: 'submitted',
+    sortBy: 'asc',
   };
 
   onFilterOutboxList = () => {
@@ -73,7 +79,7 @@ class Outbox extends React.Component {
         switch (buttonIndex) {
           case 0:
             loadOutboxByStatus('draft');
-            this.setState({filterLabel: 'Draft forms', filtered: 'draft'});
+            this.setState({filterLabel: 'draft', filtered: 'draft'});
             break;
           /**
            * TODO: Will add back once background fetch functionality is added
@@ -85,13 +91,44 @@ class Outbox extends React.Component {
           case 1:
             loadOutboxByStatus('submitted');
             this.setState({
-              filterLabel: 'Submitted forms',
+              filterLabel: 'submitted',
               filtered: 'submitted',
             });
             break;
           case 2:
             loadAllOutbox();
-            this.setState({filterLabel: 'All forms', filtered: 'all'});
+            this.setState({filterLabel: 'all', filtered: 'all'});
+            break;
+          default:
+            break;
+        }
+      },
+    );
+  };
+
+  onOrderFormBy = () => {
+    const {filterOutboxBy} = this.props;
+    const {sortBy, filtered} = this.state;
+    const options = ['Submitted date', 'Updated date', 'Cancel'];
+    const icons = [setIcon('calendar'), setIcon('calendar'), setIcon('times')];
+    const cancelButtonIndex = 2;
+
+    this.props.showActionSheetWithOptions(
+      {
+        options,
+        icons,
+        cancelButtonIndex,
+        textStyle: {...commonStyles.actionSheetAndroid},
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            filterOutboxBy({orderBy: 'submitted', sortBy, status: filtered});
+            this.setState({orderBy: 'submitted'});
+            break;
+          case 1:
+            filterOutboxBy({orderBy: 'updated', sortBy, status: filtered});
+            this.setState({orderBy: 'updated'});
             break;
           default:
             break;
@@ -194,9 +231,27 @@ class Outbox extends React.Component {
     }, 500);
   };
 
+  onSortBy = () => {
+    const {filterOutboxBy} = this.props;
+    const {sortBy, orderBy, filtered} = this.state;
+
+    switch (sortBy) {
+      case 'asc':
+        filterOutboxBy({orderBy, sortBy: 'desc', status: filtered});
+        this.setState({sortBy: 'desc'});
+        break;
+      case 'desc':
+        filterOutboxBy({orderBy, sortBy: 'asc', status: filtered});
+        this.setState({sortBy: 'asc'});
+        break;
+      default:
+        break;
+    }
+  };
+
   renderItem = ({item, index}) => {
     const {id, value, status, createdAt, updatedAt} = item;
-    const {name, id: formId} = value;
+    const {name, id: formId, linkedItemName = null} = value;
     const createString = `Submitted on ${displayDate(createdAt)}`;
     const updateString = `Updated on ${displayDate(updatedAt)}`;
 
@@ -227,7 +282,16 @@ class Outbox extends React.Component {
               // onLongPress={() => this.onSwapFormStatus(id, status)}
             >
               <View style={styles.titleView}>
-                <Text style={styles.title}>{`#${index + 1} - ${name}`}</Text>
+                <Text
+                  style={[
+                    styles.title,
+                    linkedItemName ? {marginBottom: 2} : {marginBottom: 5},
+                  ]}>
+                  {name}
+                </Text>
+                {linkedItemName ? (
+                  <Text style={styles.title2}>{linkedItemName}</Text>
+                ) : null}
                 <Text style={styles.subTitle1}>{createString}</Text>
                 <Text style={styles.subTitle2}>{updateString}</Text>
               </View>
@@ -248,7 +312,7 @@ class Outbox extends React.Component {
   };
 
   render() {
-    const {searchKeyword, filterLabel} = this.state;
+    const {searchKeyword, filterLabel, sortBy, orderBy} = this.state;
     const {outbox, offlineFeature, betaAccess} = this.props;
     const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
 
@@ -273,18 +337,53 @@ class Outbox extends React.Component {
               }}
             />
           </View>
-          <TouchableHighlight
-            underlayColor="transparent"
-            onPress={this.onFilterOutboxList}>
-            <View style={styles.filterView}>
-              {Platform.OS === 'android' ? (
-                <Icon type="antdesign" name="filter" color={white} />
-              ) : (
-                <Icon type="ionicon" name="options-outline" color={white} />
-              )}
-              <Text style={styles.filterText}>{filterLabel}</Text>
+          <View style={styles.filterView}>
+            <View style={{flexDirection: 'row', paddingLeft: 20}}>
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={this.onFilterOutboxList}>
+                <View style={styles.filter}>
+                  {Platform.OS === 'android' ? (
+                    <Icon type="antdesign" name="filter" color={white} />
+                  ) : (
+                    <Icon type="ionicon" name="options-outline" color={white} />
+                  )}
+                  <Text style={styles.filterText}>{filterLabel}</Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={this.onOrderFormBy}>
+                <View style={styles.filter}>
+                  <Icon type="font-awesome" name="sort" color={white} />
+                  <Text style={styles.filterText}>{orderBy}</Text>
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={this.onSortBy}>
+                <View style={styles.filter}>
+                  <Icon
+                    type="font-awesome"
+                    name={`sort-alpha-${sortBy}`}
+                    color={white}
+                  />
+                  <Text style={styles.filterText}>{sortBy}</Text>
+                </View>
+              </TouchableHighlight>
             </View>
-          </TouchableHighlight>
+            {/* <View style={styles.itemView}>
+              {!filteredOutbox.length ? (
+                <Text style={styles.itemText}>No items</Text>
+              ) : filteredOutbox.length === 1 ? (
+                <Text style={styles.itemText}>1 item</Text>
+              ) : (
+                <Text style={styles.itemText}>{`${length(
+                  filteredOutbox,
+                )} items`}</Text>
+              )}
+            </View> */}
+          </View>
           <View style={styles.emptyContainer}>
             <Image
               source={require('../../assets/offline-unlock.jpg')}
@@ -317,21 +416,43 @@ class Outbox extends React.Component {
           />
         </View>
         <View style={styles.filterView}>
-          <TouchableHighlight
-            underlayColor="transparent"
-            onPress={this.onFilterOutboxList}>
-            <View style={styles.filter}>
-              {Platform.OS === 'android' ? (
-                <Icon type="antdesign" name="filter" color={white} />
-              ) : (
-                <Icon type="ionicon" name="options-outline" color={white} />
-              )}
-              <Text style={styles.filterText}>{filterLabel}</Text>
-            </View>
-          </TouchableHighlight>
-          <View style={styles.itemView}>
+          <View style={{flexDirection: 'row', paddingLeft: 20}}>
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={this.onFilterOutboxList}>
+              <View style={styles.filter}>
+                {Platform.OS === 'android' ? (
+                  <Icon type="antdesign" name="filter" color={white} />
+                ) : (
+                  <Icon type="ionicon" name="options-outline" color={white} />
+                )}
+                <Text style={styles.filterText}>{filterLabel}</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={this.onOrderFormBy}>
+              <View style={styles.filter}>
+                <Icon type="font-awesome" name="sort" color={white} />
+                <Text style={styles.filterText}>{orderBy}</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={this.onSortBy}>
+              <View style={styles.filter}>
+                <Icon
+                  type="font-awesome"
+                  name={`sort-alpha-${sortBy}`}
+                  color={white}
+                />
+                <Text style={styles.filterText}>{sortBy}</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+          {/* <View style={styles.itemView}>
             {!filteredOutbox.length ? (
-              <Text style={styles.itemText}>No item</Text>
+              <Text style={styles.itemText}>No items</Text>
             ) : filteredOutbox.length === 1 ? (
               <Text style={styles.itemText}>1 item</Text>
             ) : (
@@ -339,7 +460,7 @@ class Outbox extends React.Component {
                 filteredOutbox,
               )} items`}</Text>
             )}
-          </View>
+          </View> */}
         </View>
         <View style={styles.container}>
           {filteredOutbox && filteredOutbox.length > 0 ? (
@@ -380,4 +501,5 @@ export default connect(mapState, {
   loadOutboxByStatus,
   saveAsDraft,
   loadAllOutbox,
+  filterOutboxBy,
 })(connectActionSheet(Outbox));

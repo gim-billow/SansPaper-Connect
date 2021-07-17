@@ -2,7 +2,7 @@
 import {all, takeLatest, put, select} from 'redux-saga/effects';
 import {NAVIGATE_ACTIONS} from './actions';
 import {FORM_REDUCER_ACTIONS} from '@store/forms';
-import {assoc} from 'ramda';
+import crashlytics from '@react-native-firebase/crashlytics';
 import {screens} from '@constant/ScreenConstants';
 import {showLoginScreen, showMainScreen} from '@navigation';
 import {queryUpviseTable} from 'api/upvise';
@@ -21,6 +21,7 @@ import {
   selectOfflineCurrentForm,
   selectOfflineCurrentFormId,
   selectOfflineCurrentLinkedItems,
+  selectCurrentForm,
 } from '@selector/form';
 import {
   pushToLinkedItem,
@@ -49,9 +50,9 @@ function* goToMainScreen() {
   }
 }
 
-// FIXME:
 function* goToLinkedItemScreen({payload = {}}) {
   try {
+    crashlytics().log('goToLinkedItemScreen');
     showActivityIndicator();
 
     const {linkedTable} = payload;
@@ -62,7 +63,7 @@ function* goToLinkedItemScreen({payload = {}}) {
 
     const fieldsPath = `${upviseTemplatePath}/${currentFormId}/upviseFields`;
     const currentFormFields = yield getFormFields({fieldsPath});
-    const currentForm = assoc('fields', currentFormFields, currentFormInfo);
+    const currentForm = R.assoc('fields', currentFormFields, currentFormInfo);
 
     const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
     const linkedItem = yield queryUpviseTable({
@@ -90,12 +91,14 @@ function* goToLinkedItemScreen({payload = {}}) {
     dismissActivityIndicator();
     pushToLinkedItem(linkedItemPayload);
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('getAllLinkedItems error', error);
   }
 }
 
 function* goToOfflineLinkedItemScreen({payload = {}}) {
   try {
+    crashlytics().log('goToOfflineLinkedItemScreen');
     showActivityIndicator();
     const {linkedTable} = payload;
     const linkedItemName = UpviseTablesMap[linkedTable.toLowerCase()];
@@ -113,6 +116,7 @@ function* goToOfflineLinkedItemScreen({payload = {}}) {
     const formsData = R.find(R.propEq('id', offlineCurrentFormId))(
       offlineFormList,
     );
+
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
       payload: formsData,
@@ -129,25 +133,27 @@ function* goToOfflineLinkedItemScreen({payload = {}}) {
     dismissActivityIndicator();
     pushToOfflineLinkedItem(offlineLinkedItemPayload);
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('getAllLinkedItems error', error);
   }
 }
 
 function* goToOfflineFormFieldsScreen({payload = {}}) {
   try {
+    crashlytics().log('goToOfflineFormFieldsScreen');
     showActivityIndicator();
     const {componentId, linkedItemId, formId} = payload;
     const offlineCurrentForm = yield select(selectOfflineCurrentForm);
     const currentLinkedItems = yield select(selectOfflineCurrentLinkedItems);
     const offlineFormList = yield select(selectOfflineFormList);
-    const {name, linkedid} = offlineCurrentForm;
+    const {name} = offlineCurrentForm;
     let subForm, currentForm, title, subTitle;
 
     if (formId) {
       currentForm = R.find(R.propEq('id', formId))(offlineFormList);
+
       yield put({
         type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
-        // payload: {...formsData.value, draftId: draftId},
         payload: currentForm,
       });
 
@@ -155,12 +161,26 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
       subTitle = '';
     }
 
-    // if (linkedid) {
     if (linkedItemId) {
       let linkedId = null;
 
       if (Array.isArray(linkedItemId)) {
         linkedId = linkedItemId[0];
+
+        currentForm = R.assoc('linkedid', linkedItemId, offlineCurrentForm);
+        const currentLinkedItem = R.find(R.propEq('id', linkedItemId[0]))(
+          currentLinkedItems,
+        );
+        const updatedCurrentForm = R.assoc(
+          'linkedItemName',
+          currentLinkedItem.name,
+          currentForm,
+        );
+
+        yield put({
+          type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
+          payload: updatedCurrentForm,
+        });
       } else {
         linkedId = linkedItemId;
       }
@@ -185,12 +205,14 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
       },
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loadFormFields error', error);
   }
 }
 
 function* goToDraftFormFieldsScreen({payload}) {
   try {
+    crashlytics().log('goToDraftFormFieldsScreen');
     showActivityIndicator();
 
     const {draftId, navigate = false} = payload;
@@ -240,12 +262,14 @@ function* goToDraftFormFieldsScreen({payload}) {
     }
     dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loadFormFields error', error);
   }
 }
 
 function* goToFormFieldsScreen({payload = {}}) {
   try {
+    crashlytics().log('goToFormFieldsScreen');
     showActivityIndicator();
 
     const {linkedItemId, componentId} = payload;
@@ -258,10 +282,19 @@ function* goToFormFieldsScreen({payload = {}}) {
     const currentFormFields = yield getFormFields({fieldsPath});
     let currentForm = {};
     if (linkedItemId && linkedItemId !== '') {
-      const updatedFormInfo = assoc('linkedid', linkedItemId, currentFormInfo);
-      currentForm = assoc('fields', currentFormFields, updatedFormInfo);
+      const currentLinkedItem = R.find(R.propEq('id', linkedItemId[0]))(
+        currentLinkedItems,
+      );
+
+      let updatedFormInfo = R.assoc('linkedid', linkedItemId, currentFormInfo);
+      updatedFormInfo = R.assoc(
+        'linkedItemName',
+        currentLinkedItem.name,
+        updatedFormInfo,
+      );
+      currentForm = R.assoc('fields', currentFormFields, updatedFormInfo);
     } else {
-      currentForm = assoc('fields', currentFormFields, currentFormInfo);
+      currentForm = R.assoc('fields', currentFormFields, currentFormInfo);
     }
     yield put({
       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM,
@@ -278,21 +311,31 @@ function* goToFormFieldsScreen({payload = {}}) {
       },
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loadFormFields error', error);
   }
 }
 
 function* goToGoogleMapScreen({payload = {}}) {
   try {
+    crashlytics().log('goToGoogleMapScreen');
+
+    const currentForm = yield select(selectCurrentForm);
+    const fieldLength = R.length(currentForm.fields);
+
     const {setText, address} = payload;
     pushToMapScreen({
-      componentId: screens.FormFieldsScreen,
+      componentId: fieldLength
+        ? screens.FormFieldsScreen
+        : screens.OfflineFormFieldsScreen,
       passProps: {
         setText,
         address,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    crashlytics().recordError(error);
+  }
 }
 
 export default all([

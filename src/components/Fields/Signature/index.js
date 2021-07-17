@@ -143,8 +143,9 @@ const Signature = (props) => {
                 onOK={_onSaveEvent}
                 webStyle={iosStyle}
               />
-              {!isEditable ||
-                (signatureSaved && <View style={styles.dimmedSingature} />)}
+              {(!isEditable || signatureSaved) && (
+                <View style={styles.dimmedSingature} />
+              )}
             </View>
           )}
 

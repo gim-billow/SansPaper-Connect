@@ -11,6 +11,7 @@ import {
   cancelled,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
+import crashlytics from '@react-native-firebase/crashlytics';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
 
@@ -61,6 +62,7 @@ import {
 
 function* loginUser({payload}) {
   try {
+    crashlytics().log('loginUser');
     const saveUser = yield select(selectSaveUser);
 
     showActivityIndicator('Authenticating');
@@ -76,6 +78,7 @@ function* loginUser({payload}) {
     // dismissActivityIndicator();
     yield put({type: USER_ACTIONS.LOGIN_CODE, payload: 'success'});
   } catch (e) {
+    crashlytics().recordError(e);
     const saveUser = yield select(selectSaveUser);
     const networkInfo = yield select(selectNetworkInfo);
 
@@ -108,6 +111,7 @@ function* loginUser({payload}) {
 
 function* forgotPasswordUser({payload}) {
   try {
+    crashlytics().log('forgotPasswordUser');
     const {email} = payload;
 
     showActivityIndicator('Sending');
@@ -116,6 +120,7 @@ function* forgotPasswordUser({payload}) {
 
     dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     dismissActivityIndicator();
   }
 }
@@ -146,17 +151,20 @@ function* loginWithApple() {
 
 function* updateUserDetails({payload}) {
   try {
+    crashlytics().log('updateUserDetails');
     const {email, uid} = payload._user;
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_LOGIN_STATUS, payload: true});
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_EMAIL, payload: email});
     yield put({type: USER_REDUCER_ACTIONS.UPDATE_USER_ID, payload: uid});
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('updateUserDetails saga error: ', error);
   }
 }
 
 function* logoutUser({payload}) {
   try {
+    crashlytics().log('logoutUser');
     showActivityIndicator();
     const {email, uid, status, loginCode} = payload;
 
@@ -188,6 +196,7 @@ function* logoutUser({payload}) {
 
     yield logout();
   } catch (e) {
+    crashlytics().recordError(e);
     if (e.code) {
       Alert.alert('', 'Something went wrong!');
     }
@@ -237,6 +246,7 @@ function* watchUserChangeUpdate() {
 
 function* signUpEmailUser({payload}) {
   try {
+    crashlytics().log('signUpEmailUser');
     const {email} = payload;
 
     showActivityIndicator('Sending');
@@ -248,12 +258,14 @@ function* signUpEmailUser({payload}) {
 
     dismissActivityIndicator();
   } catch (error) {
+    crashlytics().recordError(error);
     dismissActivityIndicator();
   }
 }
 
 function* saveProfilePic({payload}) {
   try {
+    crashlytics().log('saveProfilePic');
     const base64Img = payload;
     const user = yield select(selectUser);
     const uid = yield select(selectUID);
@@ -291,6 +303,7 @@ function* saveProfilePic({payload}) {
     // add to profile image to user in firestore
     yield addProfImageToFirestore(uid, filename);
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('Error saveProfilePic', error);
     throw error;
   }
@@ -300,6 +313,7 @@ function* loadUserProfilePic({payload}) {
   const filename = payload;
 
   try {
+    crashlytics().log('loadUserProfilePic');
     const networkInfo = yield select(selectNetworkInfo);
 
     if (networkInfo.isInternetReachable) {
@@ -315,6 +329,7 @@ function* loadUserProfilePic({payload}) {
       updateProfileLoadingScreen(false);
     }
   } catch (error) {
+    crashlytics().recordError(error);
     throw error;
   }
 }
@@ -388,6 +403,8 @@ function* watchOfflineFeatureExpiryDate({payload}) {
   );
 
   try {
+    crashlytics().log('watchOfflineFeatureExpiryDate');
+
     while (true) {
       const offlineFeature = yield take(offlineFeatureRef);
       if (offlineFeature.exists) {
@@ -412,6 +429,7 @@ function* watchOfflineFeatureExpiryDate({payload}) {
       }
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
       payload: false,
@@ -446,6 +464,7 @@ function* watchBokAccess({payload}) {
   );
 
   try {
+    crashlytics().log('watchBokAccess');
     while (true) {
       const bokFeature = yield take(bokFeatureRef);
       if (bokFeature.exists) {
@@ -470,6 +489,7 @@ function* watchBokAccess({payload}) {
       }
     }
   } catch (error) {
+    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
       payload: false,
