@@ -5,8 +5,10 @@ import {
   // Dimensions,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 // import {TabView, TabBar} from 'react-native-tab-view';
+import analytics from '@react-native-firebase/analytics';
 import {SearchBar} from 'react-native-elements';
 import memoize from 'memoize-one';
 import {connect} from 'react-redux';
@@ -33,6 +35,19 @@ class FormScreen extends NavigationComponent {
     };
 
     Navigation.events().bindComponent(this);
+  }
+
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
   }
 
   getFilteredFormlist = memoize((forms, keyword) => {

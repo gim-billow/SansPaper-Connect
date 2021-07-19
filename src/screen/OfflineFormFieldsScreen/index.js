@@ -6,9 +6,11 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
+import analytics from '@react-native-firebase/analytics';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 
 import styles from './styles';
-import {white, red} from '@styles/colors';
+import {white} from '@styles/colors';
 import {commonStyles} from '@styles/common';
 import OfflineFormFieldsList from '@containers/OfflineFormFieldsList';
 import {screens} from '@constant/ScreenConstants';
@@ -29,7 +31,20 @@ const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
 /**
  * This is used in the form lists
  */
-class OfflineFormFieldsScreen extends React.Component {
+class OfflineFormFieldsScreen extends NavigationComponent {
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
+  }
+
   componentDidUpdate(prevProps) {
     if (
       prevProps.onScreen !== this.props.onScreen &&
