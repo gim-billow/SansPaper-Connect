@@ -530,30 +530,46 @@ function* syncOfflineForm({payload = {}}) {
             isProjectDependant = true;
           }
         }
+
+        const options = yield getQueryByOptions(
+          seloptions,
+          type,
+          organisation,
+          '',
+        );
+
+        if (type === 'project') {
+          projectList = [...options];
+        }
+
         if (isProjectDependant) {
           for (const project of projectList) {
-            const options = yield getQueryByOptions(
+            const projectOptions = yield getQueryByOptions(
               seloptions,
               type,
               organisation,
               project.id,
             );
-            const selectOptionsPayload = {
-              formId,
-              seloptions,
-              projectId: project.id,
-              type,
-              value: JSON.stringify(options),
-            };
-            database.InsertSelectOptions(selectOptionsPayload);
+
+            if (projectOptions && projectOptions.length) {
+              const selectOptionsPayload = {
+                formId,
+                seloptions,
+                projectId: project.id,
+                type,
+                value: JSON.stringify(projectOptions),
+              };
+              database.InsertSelectOptions(selectOptionsPayload);
+            }
           }
         } else {
-          const options = yield getQueryByOptions(
-            seloptions,
-            type,
-            organisation,
-            '',
-          );
+          // const options = yield getQueryByOptions(
+          //   seloptions,
+          //   type,
+          //   organisation,
+          //   '',
+          // );
+
           //storing project list to iterate for milestone and categorytools
           if (options) {
             const selectOptionsPayload = {

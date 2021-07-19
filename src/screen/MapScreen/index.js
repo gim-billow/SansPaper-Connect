@@ -3,6 +3,8 @@ import {View, Dimensions, Text, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
+import analytics from '@react-native-firebase/analytics';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 
 import Geocoder from 'react-native-geocoding';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
@@ -20,7 +22,7 @@ const ASPECT_RATIO = screen.width / screen.height;
 const LATITUDE_DELTA = 0.0043;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class MapScreen extends React.Component {
+class MapScreen extends NavigationComponent {
   state = {
     region: {
       latitude: 0,
@@ -41,6 +43,19 @@ class MapScreen extends React.Component {
   componentDidMount() {
     navigator.geolocation = require('react-native-geolocation-service');
     this.onInitCurrentLocation();
+  }
+
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
   }
 
   async onInitCurrentLocation() {

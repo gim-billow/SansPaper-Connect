@@ -9,8 +9,9 @@ import R from 'ramda';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
 import {getQueryByOptions, getOptionsFromDB} from './helper';
-import {selectProjectValue} from 'selector/form';
+import {selectProjectValue, selectOfflineProjectValue} from 'selector/form';
 import {commonStyles} from '@styles/common';
+import {projectDependant} from '@store/forms';
 
 class Select extends PureComponent {
   state = {
@@ -24,15 +25,30 @@ class Select extends PureComponent {
     if (value !== '') {
       selected = R.split('|', value);
     }
-    const {organization, projectValue, offline = false, formId} = this.props;
+    const {
+      organization,
+      projectValue,
+      offlineProjectValue,
+      offline = false,
+      formId,
+    } = this.props;
     let options = [];
     if (offline) {
+      let projectVal = '';
+
+      for (const project of projectDependant) {
+        if (R.includes(project, seloptions)) {
+          projectVal = offlineProjectValue;
+        }
+      }
+
       const params = {
         formId,
         seloptions,
         type,
-        projectValue,
+        projectValue: projectVal,
       };
+
       options = await getOptionsFromDB(params);
     } else {
       options = await getQueryByOptions(
@@ -42,25 +58,53 @@ class Select extends PureComponent {
         projectValue,
       );
     }
+
     this.updateSetOptions(options, selected);
   }
 
   async componentDidUpdate(prevProps) {
-    const {item, organization, projectValue} = this.props;
-    if (prevProps.projectValue !== projectValue) {
-      if (item.seloptions.includes('projects.milestones')) {
-        this.resetSelOptions();
-        const option = `=Query.options('projects.milestones', "projectid='${projectValue}'")`;
+    const {
+      item,
+      organization,
+      projectValue,
+      offlineProjectValue,
+      offline = false,
+      formId,
+    } = this.props;
 
-        const options = await getQueryByOptions(
-          option,
-          item.type,
-          organization,
-          projectValue,
-        );
+    if (offline) {
+      if (prevProps.offlineProjectValue !== offlineProjectValue) {
+        if (item.seloptions.includes('projects.milestones')) {
+          this.resetSelOptions();
 
-        this.updateSetOptions(options, [item.value]);
-        return;
+          const params = {
+            formId,
+            seloptions: item.seloptions,
+            type: item.type,
+            projectValue: offlineProjectValue,
+          };
+
+          const options = await getOptionsFromDB(params);
+          this.updateSetOptions(options, [item.value]);
+        }
+      }
+    } else {
+      if (prevProps.projectValue !== projectValue) {
+        if (item.seloptions.includes('projects.milestones')) {
+          this.resetSelOptions();
+
+          const option = `=Query.options('projects.milestones', "projectid='${projectValue}'")`;
+
+          const options = await getQueryByOptions(
+            option,
+            item.type,
+            organization,
+            projectValue,
+          );
+
+          this.updateSetOptions(options, [item.value]);
+          return;
+        }
       }
     }
   }
@@ -176,6 +220,7 @@ class Select extends PureComponent {
 
 const mapState = createStructuredSelector({
   projectValue: selectProjectValue,
+  offlineProjectValue: selectOfflineProjectValue,
 });
 
 export default connect(mapState)(Select);

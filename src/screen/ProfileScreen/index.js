@@ -6,6 +6,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {NavigationComponent, Navigation} from 'react-native-navigation';
+import analytics from '@react-native-firebase/analytics';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './styles';
@@ -34,6 +35,19 @@ class ProfileScreen extends NavigationComponent {
     this._onOpenActionSheet = this._onOpenActionSheet.bind(this);
 
     Navigation.events().bindComponent(this);
+  }
+
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
   }
 
   openFromCamera() {

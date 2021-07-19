@@ -86,6 +86,11 @@ export const selectProjectValue = createSelector(
   (fields) => (fields && fields.length > 0 ? fields[0].value : ''),
 );
 
+export const selectOfflineProjectValue = createSelector(
+  selectOfflineCurrentFormFields,
+  (fields) => (fields && fields.length > 0 ? fields[0].value : ''),
+);
+
 export const selectStartAndFinishDate = createSelector(
   selectCurrentFormFields,
   (fields) => {

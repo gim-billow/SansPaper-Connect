@@ -1,6 +1,8 @@
 //library
 import React from 'react';
 import {connect} from 'react-redux';
+import analytics from '@react-native-firebase/analytics';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 import {
   View,
   FlatList,
@@ -41,7 +43,7 @@ const {width} = Dimensions.get('screen');
 
 let fcmListener = null;
 
-class MainScreen extends React.Component {
+class MainScreen extends NavigationComponent {
   state = {
     showMore: [],
     searchKeyword: '',
@@ -52,6 +54,19 @@ class MainScreen extends React.Component {
     this.checkVersion();
     this.appReview();
     this.requestNotifPermission();
+  }
+
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
   }
 
   componentWillUnmount() {
