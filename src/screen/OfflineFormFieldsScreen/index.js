@@ -59,6 +59,7 @@ class OfflineFormFieldsScreen extends NavigationComponent {
         topBar: {
           backButton: {
             popStackOnPress: false,
+            color: '#fff',
           },
         },
       });
@@ -67,6 +68,7 @@ class OfflineFormFieldsScreen extends NavigationComponent {
         topBar: {
           backButton: {
             popStackOnPress: true,
+            color: '#fff',
           },
         },
       });
@@ -263,7 +265,6 @@ OfflineFormFieldsScreen.options = (props) => {
       component: {
         name: screens.RightButton,
         passProps: {
-          // offline: true,
           screen,
         },
       },
@@ -276,7 +277,6 @@ OfflineFormFieldsScreen.options = (props) => {
         component: {
           name: screens.RightButton,
           passProps: {
-            // offline: true,
             screen,
           },
         },

@@ -135,7 +135,7 @@ class Select extends PureComponent {
   };
 
   onSelectedItemsChange = (selectedItems) => {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     let value = '';
 
     // if single, remove the selected option
@@ -164,6 +164,7 @@ class Select extends PureComponent {
 
     this.setState({options: R.filter((x) => x !== '', selectedItems)});
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({
       rank: item.rank,
       value: item.type === 'selectmulti' ? value : selectedItems[0],

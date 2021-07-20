@@ -506,8 +506,6 @@ function* removeAllDownloadForms() {
   try {
     yield removeBokFeatureExpiryDate();
     yield removeOfflineFeatureExpiryDate();
-    yield removeUserEmail();
-    yield removeProfileImageInStorage();
     yield database.deleteAllForms();
     yield database.deleteAllOutbox();
   } catch (error) {

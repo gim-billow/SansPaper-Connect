@@ -7,12 +7,12 @@ import {
   cancelled,
   select,
   take,
+  delay,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
 import crashlytics from '@react-native-firebase/crashlytics';
-import * as R from 'ramda';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import moment from 'moment-timezone';
 
@@ -314,6 +314,7 @@ function* loadProfilePictureOffline() {
       payload: profilePicture,
     });
 
+    yield delay(5000);
     updateProfileLoadingScreen(false);
   } catch (error) {
     crashlytics().recordError(error);
