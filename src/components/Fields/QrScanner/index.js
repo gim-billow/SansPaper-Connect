@@ -19,7 +19,7 @@ import MandatoryField from '../MandatoryField';
 
 const QrScanner = (props) => {
   const {label, rank, mandatory, value} = props.item;
-  const {updateFieldsValue, isEditable} = props;
+  const {updateFieldsValue, isEditable, draftFormHasChanges, draftId} = props;
   const [changeTheme, setChangeTheme] = useState(false);
   const [title, setTitle] = useState('QR Scan');
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,6 +48,7 @@ const QrScanner = (props) => {
     setChangeTheme(true);
     setModalVisible(false);
     setTitle('retake qr scan');
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: rank, value: e.data});
   };
 

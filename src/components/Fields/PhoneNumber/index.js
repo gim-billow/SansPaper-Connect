@@ -9,7 +9,7 @@ import styles from './styles';
 
 const PhoneNumber = (props) => {
   const {label, rank, mandatory, value} = props.item;
-  const {isEditable, updateFieldsValue} = props;
+  const {isEditable, updateFieldsValue, draftFormHasChanges, draftId} = props;
   const phoneInput = useRef(null);
   let phoneNumber = '';
   let phoneCountry = 'AU';
@@ -25,6 +25,7 @@ const PhoneNumber = (props) => {
   }
 
   const changePhoneNumber = (text) => {
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: rank, value: text});
   };
 

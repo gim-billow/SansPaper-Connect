@@ -20,6 +20,7 @@ const INIT_STATE = {
   offlineScrollToMandatory: null,
   offlineSubmitTriggered: 0,
   offlineSubmittingFrom: false,
+  draftFormHasChanges: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -116,6 +117,11 @@ export default (state = INIT_STATE, action) => {
       return produce(state, (draftState) => {
         draftState.offlineCurrentForm = {};
         draftState.offlineCurrentFormId = '';
+      });
+    }
+    case FORM_REDUCER_ACTIONS.DRAFT_FORM_HAS_CHANGES: {
+      return produce(state, (draftState) => {
+        draftState.draftFormHasChanges = action.payload;
       });
     }
     default:

@@ -11,7 +11,13 @@ import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const DateTimePicker = (props) => {
-  const {item, updateFieldsValue, isEditable} = props;
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftId,
+    draftFormHasChanges,
+  } = props;
   const [dateLabel, setDateLabel] = useState(
     setDateTimeFormatDisplay('date', Date.now()),
   );
@@ -19,14 +25,18 @@ const DateTimePicker = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeDateTheme, setChangeDateTheme] = useState(false);
 
-  const [timeLabel, setTimeLabel] = useState('Select time');
+  const [timeLabel, setTimeLabel] = useState(
+    setDateTimeFormatDisplay('time', Date.now()),
+  );
   const [displayTime, setDisplayTime] = useState(new Date().getTime());
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTimeTheme, setChangeTimeTheme] = useState(false);
 
   useEffect(() => {
-    const value = props.item.value.toString();
+    let value = props.item.value || '';
     if (value) {
+      value = props.item.value.toString();
+      // if (value) {
       let dateFormat, timeFormat;
       if (value.includes('Date')) {
         dateFormat = setDateTimeFormatDisplay('date', Date.now());
@@ -39,9 +49,9 @@ const DateTimePicker = (props) => {
         setDateLabel(dateFormat);
         setTimeLabel(timeFormat);
       }
-
       setChangeDateTheme(true);
       setChangeTimeTheme(true);
+      // }
     }
   }, []);
 
@@ -70,6 +80,7 @@ const DateTimePicker = (props) => {
     setDisplayDate(swapDateNum(dateFormat));
     setChangeDateTheme(true);
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: dateTime});
   };
 
@@ -82,6 +93,7 @@ const DateTimePicker = (props) => {
     setDisplayTime(dateTime);
     setChangeTimeTheme(true);
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: dateTime});
   };
 
@@ -92,17 +104,19 @@ const DateTimePicker = (props) => {
     setDisplayDate(swapDateNum(dateFormat));
 
     setChangeDateTheme(false);
-    updateFieldsValue({rank: item.rank, value: 0});
+    updateFieldsValue({rank: item.rank, value: ''});
 
     Toast.show('Date cleared.');
   };
 
   const cancelTime = () => {
-    setTimeLabel('Select time');
+    const dateFormat = setDateTimeFormatDisplay('time', Date.now());
+    // setTimeLabel('Select time');
+    setTimeLabel(dateFormat);
     setDisplayTime(new Date().getTime());
 
     setChangeTimeTheme(false);
-    updateFieldsValue({rank: item.rank, value: 0});
+    updateFieldsValue({rank: item.rank, value: ''});
 
     Toast.show('Time cleared.');
   };

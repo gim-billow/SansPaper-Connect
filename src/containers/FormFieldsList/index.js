@@ -98,12 +98,13 @@ class FormFieldsList extends React.Component {
       }
 
       return (
-        <ListItem key={item.id} bottomDivider>
-          <Icon name="description" />
-          <ListItem.Content>
-            <ListItem.Title>{item.label}</ListItem.Title>
-          </ListItem.Content>
-        </ListItem>
+        <View />
+        // <ListItem key={item.id} bottomDivider>
+        //   <Icon name="description" />
+        //   <ListItem.Content>
+        //     <ListItem.Title>{item.label}</ListItem.Title>
+        //   </ListItem.Content>
+        // </ListItem>
       );
     }
   };

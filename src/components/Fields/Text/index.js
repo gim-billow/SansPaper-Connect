@@ -11,7 +11,13 @@ import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;
-  const {updateFieldsValue, goToGoogleMapScreen, isEditable} = props;
+  const {
+    updateFieldsValue,
+    goToGoogleMapScreen,
+    isEditable,
+    draftId,
+    draftFormHasChanges,
+  } = props;
   const [text, setText] = useState('');
   const [selection, setSelection] = useState(
     Platform.OS === 'android' ? {start: 0} : null,
@@ -23,11 +29,13 @@ const SPText = (props) => {
 
   const onChangeText = (updatedText) => {
     setText(updatedText);
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank, value: updatedText});
   };
 
   const onUpdateMapAddress = (address) => {
     setText(address);
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank, value: address});
   };
 

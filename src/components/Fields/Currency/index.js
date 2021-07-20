@@ -90,9 +90,10 @@ class Currency extends Component {
   }
 
   onValueChange(value) {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     const found = this.state.data.find((cur) => cur.id === value[0]);
 
+    if (draftId) draftFormHasChanges(true);
     this.setState({selected: [...value]});
     updateFieldsValue({rank: item.rank, value: found.value});
   }

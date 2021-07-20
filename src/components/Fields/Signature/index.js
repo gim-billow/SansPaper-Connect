@@ -12,7 +12,7 @@ const Signature = (props) => {
   let refInput = createRef();
   const refInputIOS = useRef();
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue, isEditable} = props;
+  const {updateFieldsValue, isEditable, draftFormHasChanges, draftId} = props;
   const [iosSig, setIosSig] = useState('');
   const [androidSig, setAndroidSig] = useState('');
   const [firstLoadAndroid, setFirstLoadAndroid] = useState(false);
@@ -62,6 +62,8 @@ const Signature = (props) => {
   };
 
   const _onSaveEvent = (result) => {
+    if (draftId) draftFormHasChanges(true);
+
     if (Platform.OS === 'android') {
       updateFieldsValue({rank: rank, value: result.encoded});
     } else {

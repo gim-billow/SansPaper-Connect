@@ -10,7 +10,6 @@ import {red} from '@styles/colors';
 import {uniqueKey} from '@util/general';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 
 const _mapToColour = (id) => {
   if (id === '0') {
@@ -48,7 +47,14 @@ const _mapToColour = (id) => {
 
 const ToggleButton = (props) => {
   const [selected, setOption] = useState();
-  const {item, id, updateFieldsValue, isEditable} = props;
+  const {
+    item,
+    id,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const {label, seloptions, rank, mandatory} = item;
 
   let dataOptions = map((option) => {
@@ -82,6 +88,8 @@ const ToggleButton = (props) => {
       return item.name === option;
     });
     setOption(option);
+
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: rank, value: value[0].id});
   };
 

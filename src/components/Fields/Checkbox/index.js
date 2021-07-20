@@ -8,7 +8,13 @@ import {darkRed, white} from 'styles/colors';
 import {commonStyles} from '@styles/common';
 
 const Checkbox = (props) => {
-  const {item, updateFieldsValue, isEditable} = props;
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   useEffect(() => {
@@ -21,6 +27,7 @@ const Checkbox = (props) => {
   }, []);
 
   const onToggleCheckBox = (value) => {
+    if (draftId) draftFormHasChanges(true);
     setToggleCheckBox(value);
     const checkboxVal = value ? '1' : '0';
     updateFieldsValue({rank: item.rank, value: checkboxVal});

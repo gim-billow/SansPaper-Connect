@@ -11,7 +11,13 @@ import {commonStyles} from '@styles/common';
 import MandatoryField from '../MandatoryField';
 
 const DatePicker = (props) => {
-  const {item, updateFieldsValue, isEditable} = props;
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const [label, setLabel] = useState('Select date');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -46,6 +52,7 @@ const DatePicker = (props) => {
     setLabel(dateFormat);
     setChangeTheme(true);
     updateFieldsValue({rank: item.rank, value: date.getTime()});
+    if (draftId) draftFormHasChanges(true);
 
     hideDatePicker();
   };

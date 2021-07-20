@@ -16,7 +16,7 @@ const imgQuality = Platform.OS === 'android' ? 0.9 : 0.75;
 
 const Photo = (props) => {
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue, isEditable} = props;
+  const {updateFieldsValue, isEditable, draftFormHasChanges, draftId} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -52,6 +52,7 @@ const Photo = (props) => {
           setModalVisible(!modalVisible);
         }
         setThumbnailImage(image.path);
+        if (draftId) draftFormHasChanges(true);
         updateFieldsValue({rank: rank, value: [image]});
         setChangeTheme(true);
         setTitle('Retake photo');
@@ -76,6 +77,7 @@ const Photo = (props) => {
               setModalVisible(!modalVisible);
             }
             setThumbnailImage(images[0].path);
+            if (draftId) draftFormHasChanges(true);
             updateFieldsValue({rank: rank, value: images});
             setChangeTheme(true);
             setTitle('Retake ' + label);

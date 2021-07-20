@@ -22,9 +22,15 @@ class Select extends PureComponent {
   async componentDidMount() {
     let selected = [];
     const {seloptions, type, value} = this.props.item;
-    if (value !== '') {
+
+    if (value !== '' && type !== 'user') {
       selected = R.split('|', value);
     }
+
+    if (type === 'user') {
+      selected = [value];
+    }
+
     const {
       organization,
       projectValue,
@@ -70,6 +76,8 @@ class Select extends PureComponent {
       offlineProjectValue,
       offline = false,
       formId,
+      draftFormHasChanges,
+      draftId,
     } = this.props;
 
     if (offline) {
@@ -85,6 +93,8 @@ class Select extends PureComponent {
           };
 
           const options = await getOptionsFromDB(params);
+
+          if (draftId) draftFormHasChanges(true);
           this.updateSetOptions(options, [item.value]);
         }
       }

@@ -25,7 +25,6 @@ import FAIcon from 'react-native-vector-icons/FontAwesome';
 import {createStructuredSelector} from 'reselect';
 import auth from '@react-native-firebase/auth';
 import * as yup from 'yup';
-import analytics from '@react-native-firebase/analytics';
 
 //styles
 import styles, {iconProps} from './styles';

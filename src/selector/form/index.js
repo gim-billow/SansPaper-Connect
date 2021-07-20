@@ -14,6 +14,9 @@ export const selectOfflineFormList = (state) => state.formReducer.offlineForms;
 export const selectOfflineCurrentForm = (state) =>
   state.formReducer.offlineCurrentForm;
 
+export const selectDraftFormHasChanges = (state) =>
+  state.formReducer.draftFormHasChanges;
+
 export const selectOutbox = (state) => state.formReducer.outbox;
 
 export const selectOfflineCurrentFormFields = createSelector(

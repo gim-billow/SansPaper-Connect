@@ -11,7 +11,13 @@ import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const TimePicker = (props) => {
-  const {item, updateFieldsValue, isEditable} = props;
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const [label, setLabel] = useState('Select time');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
@@ -51,6 +57,7 @@ const TimePicker = (props) => {
     setLabel(timeFormat);
     setChangeTheme(true);
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: time.getTime()});
 
     hideTimePicker();

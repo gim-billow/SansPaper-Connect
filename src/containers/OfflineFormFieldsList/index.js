@@ -88,6 +88,7 @@ class FormFieldsList extends React.Component {
       draftId,
       screen,
       networkInfo,
+      draftFormHasChanges,
     } = this.props;
 
     if (has(item.type, Fields)) {
@@ -106,18 +107,20 @@ class FormFieldsList extends React.Component {
           updateScrollEnabled: this.updateScrollEnabled,
           ...fieldsProps[item.type],
           goToGoogleMapScreen,
+          draftFormHasChanges,
         });
         return FieldElement;
       }
     } else {
       return (
-        <ListItem key={item.id} bottomDivider>
-          <Icon name="file-text-o" type="font-awesome" />
-          <ListItem.Content>
-            <ListItem.Title>{item.label}</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
+        <View />
+        // <ListItem key={item.id} bottomDivider>
+        //   <Icon name="file-text-o" type="font-awesome" />
+        //   <ListItem.Content>
+        //     <ListItem.Title>{item.label}</ListItem.Title>
+        //   </ListItem.Content>
+        //   <ListItem.Chevron />
+        // </ListItem>
       );
     }
   };

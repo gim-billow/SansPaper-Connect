@@ -1,6 +1,6 @@
 //library
 import React from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import {find, propEq, findIndex} from 'ramda';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
@@ -23,8 +23,14 @@ import {
   selectOfflineFormList,
   selectOfflineCurrentForm,
   selectOfflineCurrentFormId,
+  selectDraftFormHasChanges,
 } from 'selector/form';
-import {submitForm, saveAsDraft, syncOfflineForm} from '@store/forms';
+import {
+  submitForm,
+  saveAsDraft,
+  syncOfflineForm,
+  draftFormHasChanges,
+} from '@store/forms';
 
 const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
 
@@ -32,6 +38,10 @@ const setIcon = (name) => <FAIcon key={name} name={name} size={20} />;
  * This is used in the form lists
  */
 class OfflineFormFieldsScreen extends NavigationComponent {
+  componentDidMount() {
+    Navigation.events().bindComponent(this);
+  }
+
   componentDidAppear() {
     Navigation.events().registerComponentDidAppearListener(
       async ({componentName, componentType}) => {
@@ -43,6 +53,61 @@ class OfflineFormFieldsScreen extends NavigationComponent {
         }
       },
     );
+
+    if (this.props.draftId) {
+      Navigation.mergeOptions(screens.OfflineFormFieldsScreen, {
+        topBar: {
+          backButton: {
+            popStackOnPress: false,
+          },
+        },
+      });
+    } else {
+      Navigation.mergeOptions(screens.OfflineFormFieldsScreen, {
+        topBar: {
+          backButton: {
+            popStackOnPress: true,
+          },
+        },
+      });
+    }
+  }
+
+  onBackPressButton() {
+    Alert.alert(
+      '',
+      'All changes will be lost, do you want to go back?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('cancel pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Go Back',
+          onPress: () => {
+            Navigation.pop(screens.OfflineFormScreen);
+            this.props.draftFormHasChanges(false);
+          },
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+  }
+
+  navigationButtonPressed({buttonId}) {
+    const {draftFromHasChanges} = this.props;
+
+    if (buttonId === 'RNN.back') {
+      if (this.props.draftId) {
+        draftFromHasChanges
+          ? this.onBackPressButton()
+          : Navigation.pop(screens.OfflineFormScreen);
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -68,6 +133,7 @@ class OfflineFormFieldsScreen extends NavigationComponent {
       offlineForms,
       syncOfflineForm,
       offlineCurrentForm,
+      draftFormHasChanges,
     } = this.props;
     // check if the current form is already synced offline
     const offlineFormIndex = findIndex(propEq('id', offlineFormId))(
@@ -114,9 +180,11 @@ class OfflineFormFieldsScreen extends NavigationComponent {
                 offline: true,
                 status: 'draft',
               });
+              draftFormHasChanges(false);
               return;
             }
             submitForm(true);
+            draftFormHasChanges(false);
             break;
           case 1:
             // if not internet, just do nothing
@@ -135,12 +203,14 @@ class OfflineFormFieldsScreen extends NavigationComponent {
                 formId: offlineCurrentForm.id,
                 dlFirst: true,
               });
+              draftFormHasChanges(false);
               return;
             }
             saveAsDraft({
               offline: true,
               status: buttonIndex === 0 ? 'submitted' : 'draft',
             });
+            draftFormHasChanges(false);
             break;
           /**
            * TODO: Will add back once background fetch functionality is added
@@ -167,11 +237,14 @@ class OfflineFormFieldsScreen extends NavigationComponent {
   };
 
   render() {
-    const screen = this.props.screen;
+    const {screen, draftFormHasChanges} = this.props;
 
     return (
       <View style={styles.container}>
-        <OfflineFormFieldsList screen={screen} />
+        <OfflineFormFieldsList
+          screen={screen}
+          draftFormHasChanges={draftFormHasChanges}
+        />
       </View>
     );
   }
@@ -242,6 +315,7 @@ const mapState = createStructuredSelector({
   offlineCurrentForm: selectOfflineCurrentForm,
   netInfo: selectNetworkInfo,
   onScreen: selectActiveScreen,
+  draftFromHasChanges: selectDraftFormHasChanges,
 });
 
 export default connect(mapState, {
@@ -249,4 +323,5 @@ export default connect(mapState, {
   saveAsDraft,
   syncOfflineForm,
   activeScreen,
+  draftFormHasChanges,
 })(connectActionSheet(OfflineFormFieldsScreen));

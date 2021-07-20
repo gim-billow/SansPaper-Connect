@@ -41,8 +41,10 @@ class Duration extends Component {
   }
 
   ComputeWorkHours(hrs, mins) {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     const total = Number(hrs) * 60 + Number(mins);
+
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: total.toString()});
   }
 

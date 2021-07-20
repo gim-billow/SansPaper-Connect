@@ -41,6 +41,7 @@ export const FORM_REDUCER_ACTIONS = {
   RESET_CURRENT_FORM_DETAILS: 'formActions/RESET_CURRENT_FORM_DETAILS',
   RESET_CURRENT_FORM: 'formActions/RESET_CURRENT_FORM',
   RESET_CURRENT_OFFLINE_FORM: 'formActions/RESET_CURRENT_OFFLINE_FORM',
+  DRAFT_FORM_HAS_CHANGES: 'formActions/DRAFT_FORM_HAS_CHANGES',
 };
 
 export const deleteOutboxForm = (payload) => ({
@@ -140,4 +141,9 @@ export const resetCurrentOfflineForm = () => ({
 
 export const offlineFormSync = () => ({
   type: FORM_ACTION.OFFLINE_FORM_SYNC,
+});
+
+export const draftFormHasChanges = (payload) => ({
+  type: FORM_REDUCER_ACTIONS.DRAFT_FORM_HAS_CHANGES,
+  payload,
 });

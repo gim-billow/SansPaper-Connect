@@ -111,7 +111,13 @@ class DrawingBoard extends React.Component {
 
   onSave = async () => {
     this.setState({saving: true});
-    const {item, updateFieldsValue, organization} = this.props;
+    const {
+      item,
+      updateFieldsValue,
+      organization,
+      draftFormHasChanges,
+      draftId,
+    } = this.props;
     const {value, id, rank} = item;
     const {fileStat, base64} = this.state;
 
@@ -125,6 +131,9 @@ class DrawingBoard extends React.Component {
 
     if (response.status === 200) {
       this.setState({changeTheme: true, signatureSaved: true, saving: false});
+
+      if (draftId) draftFormHasChanges(true);
+
       updateFieldsValue({
         rank: rank,
         value: {
