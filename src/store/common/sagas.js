@@ -314,7 +314,6 @@ function* loadProfilePictureOffline() {
       payload: profilePicture,
     });
 
-    yield delay(5000);
     updateProfileLoadingScreen(false);
   } catch (error) {
     crashlytics().recordError(error);
