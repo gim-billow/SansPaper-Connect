@@ -12,6 +12,7 @@ import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
 import {firebase} from '@react-native-firebase/firestore';
 import crashlytics from '@react-native-firebase/crashlytics';
+import * as R from 'ramda';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import moment from 'moment-timezone';
 
@@ -162,6 +163,8 @@ function* init({payload}) {
         type: USER_SAGA_ACTIONS.ON_LOAD_USER_PROFILE,
         payload: profPic,
       });
+
+      updateProfileLoadingScreen(false);
     } else {
       updateProfileLoadingScreen(false);
     }

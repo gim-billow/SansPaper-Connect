@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, Alert, Linking, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  Alert,
+  Linking,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import styles from './styles';
 
 import {getReadableVersion} from 'react-native-device-info';
@@ -102,11 +109,11 @@ class Profile extends Component {
       <>
         <View style={styles.container}>
           <View style={styles.top}>
-            {loadingImg && (
+            {loadingImg ? (
               <View style={styles.loader}>
                 <ActivityIndicator style={styles.activityLoader} color="#fff" />
               </View>
-            )}
+            ) : null}
             {profilePicture ? (
               <Image
                 source={{uri: profilePicture}}
