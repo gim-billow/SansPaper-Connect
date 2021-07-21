@@ -43,14 +43,14 @@ import {
   getBokFeatureExpiry,
   saveBokFeatureExpiryDate,
   removeBokFeatureExpiryDate,
-  removeProfileImageInStorage,
+  onFeatureSubscription,
 } from 'api/user';
 import {
   showActivityIndicator,
   dismissActivityIndicator,
   updateProfileLoadingScreen,
 } from 'navigation';
-import {selectSaveUser, selectUID} from '@selector/user';
+import {selectSaveUser, selectUID, selectEmail} from '@selector/user';
 import {selectUser} from '@selector/sanspaper';
 import {selectNetworkInfo} from '@selector/common';
 import {firebase} from '@react-native-firebase/firestore';
@@ -253,7 +253,27 @@ function* signUpEmailUser({payload}) {
 
     const signUpResponse = yield signUpEmailUserInterest(email);
     if (signUpResponse.success) {
-      Alert.alert('Alert', signUpResponse.message);
+      Alert.alert('', signUpResponse.message);
+    }
+
+    dismissActivityIndicator();
+  } catch (error) {
+    crashlytics().recordError(error);
+    dismissActivityIndicator();
+  }
+}
+
+function* requestFeatureSubscription({payload}) {
+  try {
+    crashlytics().log('requestFeatureSubscription');
+    const userEmail = yield select(selectEmail);
+    const type = payload;
+
+    showActivityIndicator('Sending');
+
+    const signUpResponse = yield onFeatureSubscription(userEmail, type);
+    if (signUpResponse.success) {
+      Alert.alert('', signUpResponse.message);
     }
 
     dismissActivityIndicator();
@@ -518,6 +538,10 @@ export default all([
   takeLatest(USER_ACTIONS.LOGIN, loginUser),
   takeLatest(USER_ACTIONS.FORGO_PASSWORD, forgotPasswordUser),
   takeLatest(USER_ACTIONS.SIGN_UP_EMAIL, signUpEmailUser),
+  takeLatest(
+    USER_ACTIONS.REQUEST_FEATURE_SUBSCRIPTION,
+    requestFeatureSubscription,
+  ),
   takeLatest(USER_ACTIONS.GOOGLE_LOGIN, loginWithGoogle),
   takeLatest(USER_ACTIONS.APPLE_LOGIN, loginWithApple),
   takeLatest(USER_SAGA_ACTIONS.UPDATE_USER_DETAILS, updateUserDetails),

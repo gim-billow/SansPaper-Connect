@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-import {red, darkRed, altRed, white, darkGrey} from './colors';
-import {small, regular, questrial, robotoMedium, medium} from './font';
+import {red, darkRed, altRed, white, darkGrey, purple} from './colors';
+import {small, regular, questrial, robotoMedium} from './font';
 
 const {height} = Dimensions.get('screen');
 export const customHeight = height / 1.5;
@@ -91,5 +91,33 @@ export const searchBarStyle = StyleSheet.create({
     fontSize: regular,
     letterSpacing: 0.2,
     color: white,
+  },
+});
+
+export const subscriptionStyle = StyleSheet.create({
+  subscriptionContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subscriptionBottomText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: darkGrey,
+    marginHorizontal: 30,
+    textAlign: 'center',
+  },
+  subscribeBtn: {
+    marginTop: 30,
+    marginBottom: 10,
+    borderRadius: 10,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+  },
+  subscribeText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
   },
 });

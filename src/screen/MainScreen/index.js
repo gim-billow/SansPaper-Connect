@@ -14,13 +14,12 @@ import {
   Image,
   Dimensions,
   Platform,
-  ActivityIndicator,
 } from 'react-native';
 import {createStructuredSelector} from 'reselect';
 import Markdown from 'react-native-markdown-display';
 import VersionCheck from 'react-native-version-check';
 import InAppReview from 'react-native-in-app-review';
-import {Divider, SearchBar} from 'react-native-elements';
+import {Divider, SearchBar, Button} from 'react-native-elements';
 import memoize from 'memoize-one';
 import R from 'ramda';
 
@@ -36,8 +35,9 @@ import {selectSortedNews} from '@selector/common';
 import {selectBokAccess, selectBetaAccess} from '@selector/user';
 import styles from './styles';
 import {veryLightGrey} from '@styles/colors';
-import {searchBarStyle} from '@styles/common';
+import {searchBarStyle, subscriptionStyle} from '@styles/common';
 import {hasAppReview, setAppReview} from '@api/user';
+import {requestFeatureSubscription} from '@store/user';
 
 const {width} = Dimensions.get('screen');
 
@@ -202,7 +202,12 @@ class MainScreen extends NavigationComponent {
 
   render() {
     const {searchKeyword} = this.state;
-    const {updatedNews, betaAccess, bokAccess} = this.props;
+    const {
+      updatedNews,
+      betaAccess,
+      bokAccess,
+      requestFeatureSubscription,
+    } = this.props;
     const filteredNews = this.getFilteredNews(updatedNews, searchKeyword);
 
     if (!updatedNews.length) {
@@ -226,21 +231,38 @@ class MainScreen extends NavigationComponent {
               }}
             />
           </View>
-          <View style={styles.noItemsContainer}>
-            {!betaAccess && !bokAccess ? (
+          {/* <View style={styles.noItemsContainer}> */}
+          {!betaAccess && !bokAccess ? (
+            <View style={subscriptionStyle.subscriptionContainer}>
               <Image
-                source={require('../../assets/BOK-subscribe.jpg')}
+                source={require('../../assets/subscribe.png')}
                 resizeMode="contain"
-                style={{width: width}}
+                style={{width: width, height: width / 2}}
               />
-            ) : (
+              <Button
+                type="outline"
+                title="Subscribe"
+                titleStyle={subscriptionStyle.subscribeText}
+                buttonStyle={subscriptionStyle.subscribeBtn}
+                onPress={() => requestFeatureSubscription('Body of Knowledge')}
+              />
+              <Text style={subscriptionStyle.subscriptionBottomText}>
+                Email us to unlock the body of knowledge feature.
+              </Text>
+            </View>
+          ) : (
+            <View style={subscriptionStyle.subscriptionContainer}>
               <Image
-                source={require('../../assets/no-items.jpeg')}
+                source={require('../../assets/empty-page.png')}
                 resizeMode="contain"
-                style={{width: width - 100}}
+                style={{width: width, height: width / 2}}
               />
-            )}
-          </View>
+              <Text style={subscriptionStyle.subscriptionBottomText}>
+                No current items listed at the moment.
+              </Text>
+            </View>
+          )}
+          {/* </View> */}
         </View>
       );
     }
@@ -265,14 +287,23 @@ class MainScreen extends NavigationComponent {
             }}
           />
         </View>
-        {/* FIXME: it shows here */}
         {!betaAccess && !bokAccess ? (
-          <View style={styles.noItemsContainer}>
+          <View style={subscriptionStyle.subscriptionContainer}>
             <Image
-              source={require('../../assets/BOK-subscribe.jpg')}
+              source={require('../../assets/subscribe.png')}
               resizeMode="contain"
-              style={{width: width}}
+              style={{width: width, height: width / 2}}
             />
+            <Button
+              type="outline"
+              title="Subscribe"
+              titleStyle={subscriptionStyle.subscribeText}
+              buttonStyle={subscriptionStyle.subscribeBtn}
+              onPress={() => requestFeatureSubscription('Body of Knowledge')}
+            />
+            <Text style={subscriptionStyle.subscriptionBottomText}>
+              Email us to unlock the body of knowledge feature.
+            </Text>
           </View>
         ) : (
           <FlatList
@@ -295,4 +326,6 @@ const mapState = createStructuredSelector({
   orgPath: selectOrganistationPath,
 });
 
-export default connect(mapState, {updateFormList})(MainScreen);
+export default connect(mapState, {updateFormList, requestFeatureSubscription})(
+  MainScreen,
+);
