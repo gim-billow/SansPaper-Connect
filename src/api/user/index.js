@@ -6,6 +6,8 @@ import axios from 'axios';
 // import {appleAuth} from '@invertase/react-native-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {spcFirebaseFunctionURL} from '@constant/Keys';
+
 export const login = async (loginProps) => {
   try {
     const {username, password} = loginProps;
@@ -186,13 +188,33 @@ export const signUpEmailUserInterest = async (email) => {
   try {
     const newOptions = {
       method: 'POST',
-      url:
-        'https://us-central1-billow-software.cloudfunctions.net/EmailsFunctions-sendInterestEmail',
+      url: `${spcFirebaseFunctionURL}EmailsFunctions-sendInterestEmail`,
       headers: {
         'Content-Type': 'application/json',
       },
       data: {
         email,
+      },
+    };
+
+    const response = await axios(newOptions);
+    return response.data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const onFeatureSubscription = async (email, type) => {
+  try {
+    const newOptions = {
+      method: 'POST',
+      url: `${spcFirebaseFunctionURL}EmailsFunctions-featureSubscriptionEmail`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        email,
+        typeSub: type,
       },
     };
 

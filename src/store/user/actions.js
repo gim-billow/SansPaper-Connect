@@ -8,6 +8,7 @@ export const USER_ACTIONS = {
   SAVE_USER: 'userActions/SAVE_USER',
   FORGO_PASSWORD: 'userActions/FORGOT_PASSWORD',
   SIGN_UP_EMAIL: 'userActions/SIGN_UP_EMAIL',
+  REQUEST_FEATURE_SUBSCRIPTION: 'userActions/REQUEST_FEATURE_SUBSCRIPTION',
   SAVE_PROFILE_PIC: 'userActions/SAVE_PROFILE_PIC',
   REMOVE_ALL_DOWNLOAD_FORMS: 'userActions/REMOVE_ALL_DOWNLOAD_FORMS',
 };
@@ -72,6 +73,11 @@ export const saveUser = (payload) => ({
 
 export const signUpEmail = (payload) => ({
   type: USER_ACTIONS.SIGN_UP_EMAIL,
+  payload,
+});
+
+export const requestFeatureSubscription = (payload) => ({
+  type: USER_ACTIONS.REQUEST_FEATURE_SUBSCRIPTION,
   payload,
 });
 
