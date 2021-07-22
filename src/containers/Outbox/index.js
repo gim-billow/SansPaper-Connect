@@ -16,7 +16,7 @@ import {
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
 import {filter, includes, findIndex} from 'ramda';
-import {Icon, Card, SearchBar, Button} from 'react-native-elements';
+import {Icon, Card, SearchBar} from 'react-native-elements';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 import {
@@ -36,14 +36,8 @@ import styles from './styles';
 import {red, lightGrey, white, veryLightGrey} from '@styles/colors';
 import {displayDate} from '@util/general';
 import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
-import {
-  cardStyle,
-  searchBarStyle,
-  commonStyles,
-  subscriptionStyle,
-} from '@styles/common';
+import {cardStyle, searchBarStyle, commonStyles} from '@styles/common';
 import {CommonImages} from '@constant/Images';
-import {requestFeatureSubscription} from '@store/user';
 
 const {width} = Dimensions.get('screen');
 
@@ -319,12 +313,7 @@ class Outbox extends React.Component {
 
   render() {
     const {searchKeyword, filterLabel, sortBy, orderBy} = this.state;
-    const {
-      outbox,
-      offlineFeature,
-      betaAccess,
-      requestFeatureSubscription,
-    } = this.props;
+    const {outbox, offlineFeature, betaAccess} = this.props;
     const filteredOutbox = this.getFilteredFormlist(outbox, searchKeyword);
 
     if (!offlineFeature && !betaAccess) {
@@ -383,23 +372,24 @@ class Outbox extends React.Component {
                 </View>
               </TouchableHighlight>
             </View>
+            {/* <View style={styles.itemView}>
+              {!filteredOutbox.length ? (
+                <Text style={styles.itemText}>No items</Text>
+              ) : filteredOutbox.length === 1 ? (
+                <Text style={styles.itemText}>1 item</Text>
+              ) : (
+                <Text style={styles.itemText}>{`${length(
+                  filteredOutbox,
+                )} items`}</Text>
+              )}
+            </View> */}
           </View>
-          <View style={subscriptionStyle.subscriptionContainer}>
+          <View style={styles.emptyContainer}>
             <Image
-              source={require('../../assets/offline.png')}
+              source={require('../../assets/offline-unlock.jpg')}
               resizeMode="contain"
-              style={{width: width, height: width / 2}}
+              style={{width: width}}
             />
-            <Button
-              type="outline"
-              title="Subscribe"
-              titleStyle={subscriptionStyle.subscribeText}
-              buttonStyle={subscriptionStyle.subscribeBtn}
-              onPress={() => requestFeatureSubscription('Offline')}
-            />
-            <Text style={subscriptionStyle.subscriptionBottomText}>
-              Email us to unlock the offline feature.
-            </Text>
           </View>
         </>
       );
@@ -460,6 +450,17 @@ class Outbox extends React.Component {
               </View>
             </TouchableHighlight>
           </View>
+          {/* <View style={styles.itemView}>
+            {!filteredOutbox.length ? (
+              <Text style={styles.itemText}>No items</Text>
+            ) : filteredOutbox.length === 1 ? (
+              <Text style={styles.itemText}>1 item</Text>
+            ) : (
+              <Text style={styles.itemText}>{`${length(
+                filteredOutbox,
+              )} items`}</Text>
+            )}
+          </View> */}
         </View>
         <View style={styles.container}>
           {filteredOutbox && filteredOutbox.length > 0 ? (
@@ -501,5 +502,4 @@ export default connect(mapState, {
   saveAsDraft,
   loadAllOutbox,
   filterOutboxBy,
-  requestFeatureSubscription,
 })(connectActionSheet(Outbox));

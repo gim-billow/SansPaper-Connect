@@ -12,10 +12,9 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import {Icon, Card, Button} from 'react-native-elements';
+import {Icon, Card} from 'react-native-elements';
 
 import {selectOfflineFeature, selectBetaAccess} from '@selector/user';
-import {requestFeatureSubscription} from '@store/user';
 import {updateOfflineCurrentFormId, deleteOfflineForm} from '@store/forms';
 import {screens} from '@constant/ScreenConstants';
 import {
@@ -25,7 +24,7 @@ import {
 
 import styles from './styles';
 import {red, lightGrey} from '@styles/colors';
-import {cardStyle, subscriptionStyle} from '@styles/common';
+import {cardStyle} from '@styles/common';
 import {selectNetworkInfo} from '@selector/common';
 
 const {width} = Dimensions.get('screen');
@@ -113,27 +112,16 @@ class OfflineFormList extends React.Component {
       offlineFeature,
       betaAccess,
       networkInfo,
-      requestFeatureSubscription,
     } = this.props;
 
     if (!offlineFeature && !betaAccess) {
       return (
-        <View style={subscriptionStyle.subscriptionContainer}>
+        <View style={styles.emptyContainer}>
           <Image
-            source={require('../../assets/offline.png')}
+            source={require('../../assets/offline-unlock.jpg')}
             resizeMode="contain"
-            style={{width: width, height: width / 2}}
+            style={{width: width}}
           />
-          <Button
-            type="outline"
-            title="Subscribe"
-            titleStyle={subscriptionStyle.subscribeText}
-            buttonStyle={subscriptionStyle.subscribeBtn}
-            onPress={() => requestFeatureSubscription('Offline')}
-          />
-          <Text style={subscriptionStyle.subscriptionBottomText}>
-            Email us to unlock the offline feature.
-          </Text>
         </View>
       );
     }
@@ -189,5 +177,4 @@ export default connect(mapState, {
   updateOfflineCurrentFormId,
   goToOfflineFormFieldsScreen,
   deleteOfflineForm,
-  requestFeatureSubscription,
 })(OfflineFormList);

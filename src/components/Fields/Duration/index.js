@@ -17,36 +17,34 @@ class Duration extends Component {
     const {value} = this.props.item;
 
     if (value) {
-      this.convertWorkHours(value, true);
+      this.convertWorkHours(value);
     }
   }
 
-  convertWorkHours(value, hasVal) {
+  convertWorkHours(value) {
     value = Number(value);
     const hours = Math.floor(value / 60);
     const minutes = value % 60;
 
-    this.hoursChangeHandler(hours + '', hasVal);
-    this.minutesChangeHandler(minutes + '', hasVal);
+    this.hoursChangeHandler(hours + '');
+    this.minutesChangeHandler(minutes + '');
   }
 
-  hoursChangeHandler(value, hasVal) {
+  hoursChangeHandler(value) {
     this.setState({hours: value});
-    this.ComputeWorkHours(value, this.state.minutes, hasVal);
+    this.ComputeWorkHours(value, this.state.minutes);
   }
 
-  minutesChangeHandler(value, hasVal) {
+  minutesChangeHandler(value) {
     this.setState({minutes: value});
-    this.ComputeWorkHours(this.state.hours, value, hasVal);
+    this.ComputeWorkHours(this.state.hours, value);
   }
 
-  ComputeWorkHours(hrs, mins, hasValue = null) {
+  ComputeWorkHours(hrs, mins) {
     const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     const total = Number(hrs) * 60 + Number(mins);
 
-    if (!hasValue && draftId) {
-      draftFormHasChanges(true);
-    }
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: total.toString()});
   }
 
