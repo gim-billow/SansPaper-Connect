@@ -352,7 +352,7 @@ function* watchNetworkState() {
       });
 
       yield put({
-        type: USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
+        type: USER_SAGA_ACTIONS.WATCH_SUBSCRIPTION_FEATURE_EXPIRY,
         payload: userEmail,
       });
     }
