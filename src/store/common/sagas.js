@@ -142,12 +142,7 @@ function* init({payload}) {
     });
 
     yield put({
-      type: USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
-      payload: email,
-    });
-
-    yield put({
-      type: USER_SAGA_ACTIONS.ON_WATCH_BOK_SUBSCRIPTION,
+      type: USER_SAGA_ACTIONS.WATCH_SUBSCRIPTION_FEATURE_EXPIRY,
       payload: email,
     });
 
@@ -332,7 +327,7 @@ function* watchNetworkState() {
       const previousNetworkInfo = yield select(selectNetworkInfo);
       const userEmail = yield select(selectEmail);
 
-      if (!isInternetReachable) {
+      if (isInternetReachable === false) {
         yield watchOfflineFeatureExpiry();
         yield watchBetaAccessExpiry();
         yield watchBokAccessExpiry();

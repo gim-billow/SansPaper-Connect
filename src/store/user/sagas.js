@@ -36,14 +36,12 @@ import {
   addProfImageToFirestore,
   loadProfilePicture,
   checkOfflineFeature,
-  getSanspaperIdOfflineExpiry,
+  getSanspaperIdSubscriptionFeature,
   saveBetaAccessExpiryDate,
   saveOfflineFeatureExpiryDate,
   removeOfflineFeatureExpiryDate,
-  getBokFeatureExpiry,
   saveBokFeatureExpiryDate,
   removeBokFeatureExpiryDate,
-  removeProfileImageInStorage,
 } from 'api/user';
 import {
   showActivityIndicator,
@@ -381,10 +379,10 @@ function* watchBetaAccessExpiryDate() {
   }
 }
 
-function subscribeOnOfflineFeatureExpiryDateChange(formsRef, sanspaperId) {
+function subscribeFeatureExpiryDateChange(formsRef, sanspaperId) {
   return eventChannel((emitter) => {
     formsRef.onSnapshot(async () => {
-      const offline = await getSanspaperIdOfflineExpiry(sanspaperId);
+      const offline = await getSanspaperIdSubscriptionFeature(sanspaperId);
       emitter(offline);
     });
 
@@ -392,38 +390,69 @@ function subscribeOnOfflineFeatureExpiryDateChange(formsRef, sanspaperId) {
   });
 }
 
-function* watchOfflineFeatureExpiryDate({payload}) {
+function* watchSubscriptionFeatureExpiryDate({payload}) {
   const sanspaperId = payload;
 
   const formsRef = yield firebase.firestore().collection('sanspaperid');
-  const offlineFeatureRef = yield call(
-    subscribeOnOfflineFeatureExpiryDateChange,
+  const subFeatureRef = yield call(
+    subscribeFeatureExpiryDateChange,
     formsRef,
     sanspaperId,
   );
 
   try {
-    crashlytics().log('watchOfflineFeatureExpiryDate');
+    crashlytics().log('watchSubscriptionFeatureExpiryDate');
 
     while (true) {
-      const offlineFeature = yield take(offlineFeatureRef);
-      if (offlineFeature.exists) {
-        const offlineFeatureExpiryDate = offlineFeature.data();
-        const date = offlineFeatureExpiryDate.offline.seconds * 1000;
+      const featureRef = yield take(subFeatureRef);
+      if (featureRef.exists) {
+        const subFeature = featureRef.data();
 
-        yield saveOfflineFeatureExpiryDate(date);
+        if (subFeature.bok) {
+          const date = subFeature.bok.seconds * 1000;
 
-        const accessFeature = Date.now() < new Date(date) ? true : false;
+          yield saveBokFeatureExpiryDate(date);
 
-        yield put({
-          type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
-          payload: accessFeature,
-        });
+          const accessFeature = Date.now() < new Date(date) ? true : false;
+
+          yield put({
+            type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
+            payload: accessFeature,
+          });
+        } else {
+          yield put({
+            type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
+            payload: false,
+          });
+        }
+
+        if (subFeature.offline) {
+          const date = subFeature.offline.seconds * 1000;
+
+          yield saveOfflineFeatureExpiryDate(date);
+
+          const accessFeature = Date.now() < new Date(date) ? true : false;
+
+          yield put({
+            type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+            payload: accessFeature,
+          });
+        } else {
+          yield put({
+            type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+            payload: false,
+          });
+        }
       } else {
         yield removeOfflineFeatureExpiryDate();
+        yield removeBokFeatureExpiryDate();
 
         yield put({
           type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
+          payload: false,
+        });
+        yield put({
+          type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
           payload: false,
         });
       }
@@ -434,70 +463,14 @@ function* watchOfflineFeatureExpiryDate({payload}) {
       type: USER_REDUCER_ACTIONS.SET_USER_ACCESS_OFFLINE,
       payload: false,
     });
-    console.log('watchOfflineFeatureExpiryDate error', error);
-  } finally {
-    if (yield cancelled()) {
-      offlineFeatureRef.close();
-    }
-  }
-}
-
-function subscribeWatchBokAccess(formsRef, sanspaperId) {
-  return eventChannel((emitter) => {
-    formsRef.onSnapshot(async () => {
-      const offline = await getBokFeatureExpiry(sanspaperId);
-      emitter(offline);
-    });
-
-    return () => formsRef;
-  });
-}
-
-function* watchBokAccess({payload}) {
-  const sanspaperId = payload;
-
-  const formsRef = yield firebase.firestore().collection('sanspaperbok');
-  const bokFeatureRef = yield call(
-    subscribeWatchBokAccess,
-    formsRef,
-    sanspaperId,
-  );
-
-  try {
-    crashlytics().log('watchBokAccess');
-    while (true) {
-      const bokFeature = yield take(bokFeatureRef);
-      if (bokFeature.exists) {
-        const bokFeatureExpiryDate = bokFeature.data();
-        const date = bokFeatureExpiryDate.expiry.seconds * 1000;
-
-        yield saveBokFeatureExpiryDate(date);
-
-        const accessFeature = Date.now() < new Date(date) ? true : false;
-
-        yield put({
-          type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
-          payload: accessFeature,
-        });
-      } else {
-        yield removeBokFeatureExpiryDate();
-
-        yield put({
-          type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
-          payload: false,
-        });
-      }
-    }
-  } catch (error) {
-    crashlytics().recordError(error);
     yield put({
       type: USER_REDUCER_ACTIONS.SET_USER_BOK_FEATURE,
       payload: false,
     });
-    console.log('watchBokAccess error', error);
+    console.log('watchOfflineFeatureExpiryDate error', error);
   } finally {
     if (yield cancelled()) {
-      bokFeatureRef.close();
+      subFeatureRef.close();
     }
   }
 }
@@ -529,9 +502,8 @@ export default all([
     watchBetaAccessExpiryDate,
   ),
   takeLatest(
-    USER_SAGA_ACTIONS.ON_USER_ACCESS_OFFLINE_DATE,
-    watchOfflineFeatureExpiryDate,
+    USER_SAGA_ACTIONS.WATCH_SUBSCRIPTION_FEATURE_EXPIRY,
+    watchSubscriptionFeatureExpiryDate,
   ),
-  takeLatest(USER_SAGA_ACTIONS.ON_WATCH_BOK_SUBSCRIPTION, watchBokAccess),
   takeLatest(USER_ACTIONS.REMOVE_ALL_DOWNLOAD_FORMS, removeAllDownloadForms),
 ]);

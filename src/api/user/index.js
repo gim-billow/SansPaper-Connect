@@ -305,7 +305,7 @@ export const checkOfflineFeature = async () => {
   }
 };
 
-export const getSanspaperIdOfflineExpiry = async (userEmail) => {
+export const getSanspaperIdSubscriptionFeature = async (userEmail) => {
   try {
     const docSnapshot = await firebase
       .firestore()
@@ -315,20 +315,6 @@ export const getSanspaperIdOfflineExpiry = async (userEmail) => {
 
     return docSnapshot;
   } catch (error) {
-    console.warn('Error getSanspaperIdOfflineExpiry', error);
-  }
-};
-
-export const getBokFeatureExpiry = async (userEmail) => {
-  try {
-    const docSnapshot = await firebase
-      .firestore()
-      .collection('sanspaperbok')
-      .doc(userEmail)
-      .get();
-
-    return docSnapshot;
-  } catch (error) {
-    console.warn('Error getBokFeatureExpiry', error);
+    console.warn('Error getSanspaperIdSubscriptionFeature', error);
   }
 };
