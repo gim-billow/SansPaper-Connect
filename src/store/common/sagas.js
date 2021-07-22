@@ -7,7 +7,6 @@ import {
   cancelled,
   select,
   take,
-  delay,
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';
