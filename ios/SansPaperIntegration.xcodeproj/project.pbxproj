@@ -17,6 +17,9 @@
 		74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDD81F25BD669100BDF5A2 /* AppCenter-Config.plist */; };
 		758F1412BA298B6A881847ED /* libPods-SansPaperIntegration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */; };
+		F11B51EC267BDEC4001244B8 /* Questrial-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */; };
+		F1D93452267E7940008D7353 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1D93450267E793F008D7353 /* Roboto-Medium.ttf */; };
+		F1D93453267E7940008D7353 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1D93451267E7940008D7353 /* Roboto-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +84,10 @@
 		CEDC2AB41BCB704063337202 /* libPods-SansPaperIntegration.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SansPaperIntegration.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Questrial-Regular.ttf"; sourceTree = "<group>"; };
 		F12C62D52635CA4A00C2A80A /* SansPaperIntegration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SansPaperIntegration.entitlements; path = SansPaperIntegration/SansPaperIntegration.entitlements; sourceTree = "<group>"; };
+		F1D93450267E793F008D7353 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		F1D93451267E7940008D7353 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		F6EC794B728A15AFB7C7DC3D /* Pods-SansPaperIntegration.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration.debug.xcconfig"; sourceTree = "<group>"; };
 		FDC51EA6F3513144A79130D2 /* Pods-SansPaperIntegration-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		FFF3525F26F59A41639DEBD1 /* Pods-SansPaperIntegration-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SansPaperIntegration-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SansPaperIntegration-tvOS/Pods-SansPaperIntegration-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +171,9 @@
 		74CFDE56253DE1EF00A31EE6 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				F1D93450267E793F008D7353 /* Roboto-Medium.ttf */,
+				F1D93451267E7940008D7353 /* Roboto-Regular.ttf */,
+				F11B51EB267BDEC4001244B8 /* Questrial-Regular.ttf */,
 				74CFDE57253DE1EF00A31EE6 /* Fontisto.ttf */,
 				74CFDE58253DE1EF00A31EE6 /* Octicons.ttf */,
 				74CFDE59253DE1EF00A31EE6 /* Feather.ttf */,
@@ -271,6 +280,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				4A5BFB5BBAECEA312CFC1D10 /* [CP] Copy Pods Resources */,
 				A480C0B226354FA2D4F4C90C /* [CP-User] [RNFB] Core Configuration */,
+				4D8CF284DB90D02E68F79B21 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -348,8 +358,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				74CFDE7C253DE5CF00A31EE6 /* LaunchScreen.storyboard in Resources */,
+				F1D93453267E7940008D7353 /* Roboto-Regular.ttf in Resources */,
 				74DDD82125BD669200BDF5A2 /* AppCenter-Config.plist in Resources */,
+				F1D93452267E7940008D7353 /* Roboto-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F11B51EC267BDEC4001244B8 /* Questrial-Regular.ttf in Resources */,
 				74CFDE2B253DDC3500A31EE6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -430,6 +443,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SansPaperIntegration/Pods-SansPaperIntegration-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4D8CF284DB90D02E68F79B21 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
 		4EACD777A711CEF05BB9201E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -650,7 +677,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SansPaperIntegration/SansPaperIntegration.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = FJM48A99P4;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -662,7 +689,7 @@
 					"$(PROJECT_DIR)/Pods/CocoaLibEvent/lib",
 					"$(PROJECT_DIR)/Pods/OpenSSL-Universal/ios/lib",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -685,7 +712,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SansPaperIntegration/SansPaperIntegration.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = FJM48A99P4;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = SansPaperIntegration/Info.plist;
@@ -696,7 +723,7 @@
 					"$(PROJECT_DIR)/Pods/CocoaLibEvent/lib",
 					"$(PROJECT_DIR)/Pods/OpenSSL-Universal/ios/lib",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

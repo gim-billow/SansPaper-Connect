@@ -1,4 +1,5 @@
 import {Navigation} from 'react-native-navigation';
+import {screens} from '@constant/ScreenConstants';
 
 export const pushToLinkedItem = (props) => {
   const {componentId, passProps} = props;
@@ -6,6 +7,17 @@ export const pushToLinkedItem = (props) => {
     component: {
       id: 'LinkedItems',
       name: 'LinkedItems',
+      passProps,
+    },
+  });
+};
+
+export const pushToOfflineLinkedItem = (props) => {
+  const {componentId, passProps} = props;
+  Navigation.push(componentId, {
+    component: {
+      id: 'OfflineLinkedItems',
+      name: 'OfflineLinkedItems',
       passProps,
     },
   });
@@ -21,6 +33,21 @@ export const pushToFormFieldsScreen = (props) => {
         ...passProps,
         form: {...currentForm},
         items: [...currentLinkedItems],
+      },
+    },
+  });
+};
+
+export const pushToOfflineFormFieldsScreen = (props) => {
+  const {componentId, headerData, passProps} = props;
+
+  Navigation.push(componentId, {
+    component: {
+      id: 'OfflineFormFieldsScreen',
+      name: 'OfflineFormFieldsScreen',
+      passProps: {
+        ...passProps,
+        headerData,
       },
     },
   });

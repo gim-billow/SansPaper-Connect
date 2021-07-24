@@ -1,18 +1,23 @@
 import React, {useEffect, useState, memo} from 'react';
-import {TextInput} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Input} from 'react-native-elements';
 import {Text, View, Platform, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
+import {darkGrey, lightGrey, red} from '@styles/colors';
 import {hasLocationPermission} from '@store/forms';
 
 const SPText = (props) => {
   const {type, label, rank, value, mandatory} = props.item;
-  const {updateFieldsValue, goToGoogleMapScreen} = props;
+  const {
+    updateFieldsValue,
+    goToGoogleMapScreen,
+    isEditable,
+    draftId,
+    draftFormHasChanges,
+  } = props;
   const [text, setText] = useState('');
   const [selection, setSelection] = useState(
     Platform.OS === 'android' ? {start: 0} : null,
@@ -24,11 +29,13 @@ const SPText = (props) => {
 
   const onChangeText = (updatedText) => {
     setText(updatedText);
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank, value: updatedText});
   };
 
   const onUpdateMapAddress = (address) => {
     setText(address);
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank, value: address});
   };
 
@@ -74,9 +81,9 @@ const SPText = (props) => {
     label.toLowerCase().includes('address')
   ) {
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.textContainer}>
-          <Text style={commonStyles.text}>{label}</Text>
+          <Text style={commonStyles.title}>{label}</Text>
           {mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -84,55 +91,74 @@ const SPText = (props) => {
           )}
           <View style={styles.textInputMap}>
             <View style={styles.inputWrapper}>
-              <TextInput
+              <Input
+                disabled={!isEditable}
                 onFocus={onInputFocus}
                 onBlur={onBlurInput}
-                style={styles.textInputWithIcon}
+                inputStyle={styles.textInput}
                 value={text}
-                label="Insert here"
-                mode="outlined"
+                placeholder="Insert here"
+                placeholderTextColor={lightGrey}
+                containerStyle={styles.input}
+                selectionColor={darkGrey}
                 selection={selection}
                 keyboardType={keyboard(type)}
                 multiline={type === 'textarea' ? true : false}
                 onChangeText={(updatedText) => onChangeText(updatedText)}
               />
             </View>
-            <TouchableOpacity
-              style={styles.iconWrapper}
-              onPress={enableLocation}>
-              <Icon size={40} style={styles.map} name="place" />
-            </TouchableOpacity>
+            {props.isInternetReachable ? (
+              <TouchableOpacity
+                disabled={!isEditable}
+                style={styles.iconWrapper}
+                onPress={enableLocation}>
+                <Icon color={red} size={40} style={styles.map} name="place" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                disabled={true}
+                style={styles.iconWrapper}
+                onPress={enableLocation}>
+                <Icon
+                  color={darkGrey}
+                  size={40}
+                  style={styles.map}
+                  name="location-off"
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.textContainer}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
-        <TextInput
+        <Input
+          disabled={!isEditable}
           onFocus={onInputFocus}
           onBlur={onBlurInput}
-          style={styles.textInput}
+          inputStyle={styles.textInput}
           value={text}
-          label="Insert here"
-          mode="outlined"
+          containerStyle={styles.input}
+          placeholder="Insert here"
+          placeholderTextColor={lightGrey}
+          selectionColor={darkGrey}
           selection={selection}
           keyboardType={keyboard(type)}
           multiline={type === 'textarea' ? true : false}
           onChangeText={(updatedText) => onChangeText(updatedText)}
         />
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

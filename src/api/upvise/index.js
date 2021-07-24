@@ -49,7 +49,7 @@ export const getStorageUserId = async () => {
 };
 
 export const clearStorageUserId = async () => {
-  await AsyncStorage.setItem('@userid', '');
+  await AsyncStorage.removeItem('@userid');
 };
 
 export const getUser = () => {
@@ -285,6 +285,7 @@ const postSansPaperUpviseForm = async (form, orgPath) => {
       .collection('submittedUpviseForms')
       .doc(id);
 
+    console.log('formattedForm', formattedForm);
     batch.set(submitFormRef, formattedForm);
     const response = await batch.commit();
     return 'true';

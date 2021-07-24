@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-// import {Icon, Picker} from 'native-base';
-import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import {findIndex, propEq} from 'ramda';
 
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import {commonStyles} from '@styles/common';
 
 class Currency extends Component {
   state = {
-    selected: [0],
+    selected: [],
     data: [
       {
         name: 'Australian Dollars',
@@ -77,35 +75,49 @@ class Currency extends Component {
     ],
   };
 
+  componentDidMount() {
+    const {value} = this.props.item;
+    const {data} = this.state;
+    const foundIndex = findIndex(propEq('value', value))(data);
+
+    if (foundIndex > -1) {
+      this.setDefaultValue(foundIndex);
+    }
+  }
+
+  setDefaultValue(index) {
+    this.setState({selected: [index]});
+  }
+
   onValueChange(value) {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     const found = this.state.data.find((cur) => cur.id === value[0]);
 
+    if (draftId) draftFormHasChanges(true);
     this.setState({selected: [...value]});
     updateFieldsValue({rank: item.rank, value: found.value});
   }
 
-  // populatePicker = (data) => {
-  //   const pickerOptions = data.sort().map((item, index) => {
-  //     return (
-  //       <Picker.Item
-  //         label={item.split(':')[1]}
-  //         value={item.split(':')[0]}
-  //         key={index.toString()}
-  //       />
-  //     );
-  //   });
-  //   return pickerOptions;
-  // };
   render() {
-    const {item} = this.props;
+    const {item, isEditable} = this.props;
     const {data, selected} = this.state;
-    const {container, selectToggle, button, itemText, topContainer} = styles;
+    const {
+      container,
+      selectToggle,
+      button,
+      itemText,
+      confirmText,
+      searchBar,
+      selectToggleText,
+      chipsWrapper,
+      chipText,
+      chipContainer,
+    } = styles;
 
     return (
-      <ItemWrapper>
-        <View style={topContainer}>
-          <Text style={commonStyles.text}>{item.label}</Text>
+      <>
+        <View style={styles.topContainer}>
+          <Text style={commonStyles.title}>{item.label}</Text>
           {item.mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -113,35 +125,32 @@ class Currency extends Component {
           )}
           <View>
             <SectionedMultiSelect
+              disabled={!isEditable}
               styles={{
+                confirmText,
                 container,
+                searchBar,
                 selectToggle,
                 button,
                 itemText,
+                selectToggleText,
+                chipsWrapper,
+                chipText,
+                chipContainer,
               }}
               items={data}
-              searchPlaceholderText="Search from items"
               IconRenderer={Icon}
+              showCancelButton
               uniqueKey="id"
               single={true}
-              showCancelButton
-              selectText="Select from options"
+              selectText="Search from items"
+              searchPlaceholderText="Search from items"
               onSelectedItemsChange={this.onValueChange.bind(this)}
               selectedItems={selected}
             />
-            {/* <Picker
-              mode="dropdown"
-              style={styles.container}
-              placeholder="Select from options"
-              iosIcon={<Icon name="chevron-down" />}
-              selectedValue={selected}
-              onValueChange={this.onValueChange.bind(this)}>
-              {this.populatePicker(data)}
-            </Picker> */}
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }

@@ -1,36 +1,46 @@
-import React, {useState, memo, useEffect, useCallback} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-import {Divider} from 'react-native-elements';
+import CheckB from '@react-native-community/checkbox';
 
-import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import {darkRed, white} from 'styles/colors';
 import {commonStyles} from '@styles/common';
 
 const Checkbox = (props) => {
-  const {item, updateFieldsValue} = props;
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   useEffect(() => {
-    onToggleCheckBox(toggleCheckBox);
-  }, [onToggleCheckBox, toggleCheckBox]);
+    const {value} = item;
 
-  const onToggleCheckBox = useCallback(
-    (value) => {
-      const checkboxVal = value ? '1' : '0';
-      updateFieldsValue({rank: item.rank, value: checkboxVal});
-    },
-    [item.rank, updateFieldsValue],
-  );
+    if (value) {
+      const toggleVal = value === '0' ? false : true;
+      setToggleCheckBox(toggleVal);
+    }
+  }, []);
+
+  const onToggleCheckBox = (value) => {
+    if (draftId) draftFormHasChanges(true);
+    setToggleCheckBox(value);
+    const checkboxVal = value ? '1' : '0';
+    updateFieldsValue({rank: item.rank, value: checkboxVal});
+  };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <TouchableOpacity onPress={() => setToggleCheckBox(!toggleCheckBox)}>
+        <TouchableOpacity
+          onPress={() => onToggleCheckBox(!toggleCheckBox)}
+          disabled={!isEditable}>
           <View style={styles.box} pointerEvents="none">
-            <CheckBox
-              disabled={false}
+            <CheckB
               onTintColor="transparent"
               value={toggleCheckBox}
               tintColors={{
@@ -38,22 +48,15 @@ const Checkbox = (props) => {
               }}
               onCheckColor={white}
               onFillColor={darkRed}
-              onValueChange={() => {}}
             />
-            <Text style={commonStyles.text}>{item.label}</Text>
+            <Text style={[commonStyles.text, {marginLeft: 20}]}>
+              {item.label}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 
-const areEqual = (prevProps, nextProps) => {
-  if (prevProps.item.value === nextProps.item.value) {
-    return true;
-  }
-  return false;
-};
-
-export default memo(Checkbox, areEqual);
+export default Checkbox;

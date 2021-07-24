@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {regular} from 'styles/font';
-import {red, veryLightGrey} from '@styles/colors';
-import {spaceMedium, spaceRegular, superSmall, spaceSmall} from '@styles/space';
+import {regular, questrial} from 'styles/font';
+import {red, veryLightGrey, darkGrey, lightGrey} from '@styles/colors';
+import {spaceMedium, superSmall, spaceSmall} from '@styles/space';
 
 export default StyleSheet.create({
   topContainer: {
@@ -9,6 +9,8 @@ export default StyleSheet.create({
   },
   itemText: {
     fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
     paddingVertical: superSmall,
   },
   container: {
@@ -18,16 +20,29 @@ export default StyleSheet.create({
     right: 0,
     top: 100,
     bottom: 100,
+    borderRadius: 15,
   },
   selectToggle: {
     marginTop: superSmall,
-    marginHorizontal: spaceRegular,
     paddingHorizontal: spaceSmall,
-    paddingVertical: spaceRegular,
-    borderRadius: 10,
-    backgroundColor: veryLightGrey,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: lightGrey,
   },
   button: {
     backgroundColor: red,
+  },
+  searchBar: {
+    backgroundColor: veryLightGrey,
+  },
+  selectToggleText: {
+    fontFamily: questrial,
+    color: darkGrey,
+  },
+  confirmText: {
+    fontFamily: questrial,
+    fontSize: 16,
+    letterSpacing: 0.2,
+    paddingVertical: 5,
   },
 });

@@ -1,13 +1,12 @@
 import React from 'react';
-import {View, Text, Platform, ActivityIndicator} from 'react-native';
+import {View, Text, Platform, Image as RNImage} from 'react-native';
 import {SketchCanvas} from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
-import {Divider} from 'react-native-elements';
-import {Button} from 'react-native-paper';
+import {Button} from 'react-native-elements';
+// import {Button} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 
-import ItemWrapper from '../ItemWrapper';
 import Stroke from './Stroke';
 import {selectOrganistation} from '@selector/sanspaper';
 import MandatoryField from '../MandatoryField';
@@ -21,6 +20,7 @@ class DrawingBoard extends React.Component {
     changeTheme: false,
     imageDownloaded: false,
     base64: '',
+    draftImage: '',
     fileStat: {},
     path:
       dirs.DocumentDir +
@@ -53,11 +53,42 @@ class DrawingBoard extends React.Component {
   };
 
   componentDidMount() {
-    const {value} = this.props.item;
+    const {item, draftId} = this.props;
+    const {value} = item;
+    let imageUrl = '';
+    let imageValue = '';
 
-    const imageUrl = `https://www.upvise.com/uws/downloadfile/?id=${
-      value ? value : '6A4A9F42DDFBDE79D92681F6BCD54B'
+    if (value && typeof value === 'object') {
+      imageValue = value.oldValue;
+    } else {
+      imageValue = value;
+    }
+
+    imageUrl = `https://www.upvise.com/uws/downloadfile/?id=${
+      imageValue ? imageValue : '6A4A9F42DDFBDE79D92681F6BCD54B'
     }&auth=iqb4EdxZxm8%2BwWBg50ImWk4sta3MT4IB`;
+
+    // this is only to display the saved value for the draft
+    if (draftId && value) {
+      let draftImg = '';
+      if (value && typeof value === 'object') {
+        draftImg = value.newValue;
+      } else {
+        draftImg = value;
+      }
+      const draftImage = `https://www.upvise.com/uws/downloadfile/?id=${
+        draftImg ? draftImg : '6A4A9F42DDFBDE79D92681F6BCD54B'
+      }&auth=iqb4EdxZxm8%2BwWBg50ImWk4sta3MT4IB`;
+
+      RNFetchBlob.fetch('GET', draftImage).then((res) => {
+        this.setState({
+          imageDownloaded: true,
+          draftImage: `data:image/jpeg;base64,${res.data}`,
+          changeTheme: true,
+          signatureSaved: true,
+        });
+      });
+    }
 
     RNFetchBlob.fetch('GET', imageUrl).then((res) => {
       RNFetchBlob.fs.writeFile(this.state.path, res.data, 'base64').then(() => {
@@ -66,27 +97,50 @@ class DrawingBoard extends React.Component {
     });
   }
 
-  onClear = () => {
-    this.setState({changeTheme: false, signatureSaved: false});
+  onClear = async () => {
+    const {item, updateFieldsValue} = this.props;
+    const {value} = item;
+
+    updateFieldsValue({
+      rank: item.rank,
+      value: typeof value === 'object' ? value.oldValue : value,
+    });
+    this.setState({changeTheme: false, signatureSaved: false, draftImage: ''});
     this.canvas.clear();
   };
 
   onSave = async () => {
     this.setState({saving: true});
-    const {item, updateFieldsValue, organization} = this.props;
+    const {
+      item,
+      updateFieldsValue,
+      organization,
+      draftFormHasChanges,
+      draftId,
+    } = this.props;
+    const {value, id, rank} = item;
     const {fileStat, base64} = this.state;
 
     const response = await syncImageInUpvise({
-      imgId: item.value,
+      imgId: typeof value === 'object' ? value.newValue : value,
       base64,
       fileStat,
-      fieldId: item.id,
+      fieldId: id,
       token: organization.upviseToken,
     });
 
     if (response.status === 200) {
       this.setState({changeTheme: true, signatureSaved: true, saving: false});
-      updateFieldsValue({rank: item.rank, value: response.valueImgId});
+
+      if (draftId) draftFormHasChanges(true);
+
+      updateFieldsValue({
+        rank: rank,
+        value: {
+          oldValue: typeof value === 'object' ? value.oldValue : value,
+          newValue: response.valueImgId,
+        },
+      });
 
       await RNFetchBlob.fs.unlink(this.state.path);
     }
@@ -122,16 +176,17 @@ class DrawingBoard extends React.Component {
   };
 
   render() {
+    const {isEditable} = this.props;
     const {label, mandatory} = this.props.item;
-    const {changeTheme, saving, signatureSaved} = this.state;
+    const {changeTheme, saving, signatureSaved, draftImage} = this.state;
 
     if (!this.state.imageDownloaded) {
       return <View />;
     }
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.topContainer}>
-          <Text style={commonStyles.text}>{label}</Text>
+          <Text style={commonStyles.title}>{label}</Text>
           {mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -141,56 +196,56 @@ class DrawingBoard extends React.Component {
             <View style={styles.button}>
               <View style={{paddingRight: 10}}>
                 <Button
-                  mode="contained"
+                  disabled={!isEditable}
+                  disabledTitleStyle={styles.disableText}
+                  disabledStyle={styles.disable}
+                  type="outline"
                   style={styles.buttonColor}
-                  onPress={() => {
-                    this.onClear();
-                  }}>
-                  <Text style={styles.text}>Clear</Text>
-                </Button>
+                  title="Clear"
+                  titleStyle={styles.title}
+                  buttonStyle={styles.btnContainer}
+                  onPress={this.onClear}
+                />
               </View>
               <View>
                 <Button
-                  mode="contained"
-                  style={
-                    changeTheme === true
-                      ? styles.ChangeButtonColor
-                      : styles.buttonColor
-                  }
-                  onPress={() => {
-                    this.onSave();
-                  }}>
-                  <Text
-                    style={
-                      changeTheme === true
-                        ? styles.ChangeTextColor
-                        : styles.text
-                    }>
-                    {changeTheme === true
-                      ? 'Saved'
-                      : saving
-                      ? 'Saving...'
-                      : 'Save'}
-                  </Text>
-                </Button>
+                  disabled={!isEditable || changeTheme}
+                  disabledTitleStyle={styles.disableText}
+                  disabledStyle={styles.disable}
+                  type={changeTheme ? 'solid' : 'outline'}
+                  style={styles.buttonColor}
+                  title={changeTheme ? 'Saved' : saving ? 'Saving...' : 'Save'}
+                  titleStyle={styles.title}
+                  buttonStyle={styles.btnContainer}
+                  onPress={this.onSave}
+                />
               </View>
             </View>
             <View style={{flex: 1}}>
-              <SketchCanvas
-                style={styles.sketch}
-                strokeColor={this.state.color}
-                strokeWidth={5}
-                onStrokeStart={() => this.handleOnStrokeStart(false)}
-                localSourceImage={{
-                  filename: this.state.path,
-                }}
-                ref={(ref) => (this.canvas = ref)}
-                onStrokeEnd={() => {
-                  this.handleOnStrokeStart(true);
-                  this.saveBase64Img();
-                }}
-                touchEnabled={!signatureSaved && !saving}
-              />
+              {draftImage ? (
+                <RNImage
+                  source={{uri: draftImage}}
+                  resizeMode="center"
+                  resizeMethod="scale"
+                  style={styles.image}
+                />
+              ) : (
+                <SketchCanvas
+                  style={styles.sketch}
+                  strokeColor={this.state.color}
+                  strokeWidth={5}
+                  onStrokeStart={() => this.handleOnStrokeStart(false)}
+                  localSourceImage={{
+                    filename: this.state.path,
+                  }}
+                  ref={(ref) => (this.canvas = ref)}
+                  onStrokeEnd={() => {
+                    this.handleOnStrokeStart(true);
+                    this.saveBase64Img();
+                  }}
+                  touchEnabled={isEditable && !signatureSaved && !saving}
+                />
+              )}
             </View>
             <View style={styles.canvasContainer}>
               <View style={styles.canvasWrapper}>
@@ -212,10 +267,8 @@ class DrawingBoard extends React.Component {
               </View>
             </View>
           </View>
-          {/* {this.state.signatureSaved && <View style={styles.dimmedSingature} />} */}
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }

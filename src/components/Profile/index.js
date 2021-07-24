@@ -3,40 +3,23 @@ import {
   Text,
   View,
   Alert,
-  Modal,
-  TextInput,
-  ScrollView,
   Linking,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import styles from './styles';
 
-import auth from '@react-native-firebase/auth';
-
-// api
-import {clearStorageUserId} from '@api/upvise';
-
 import {getReadableVersion} from 'react-native-device-info';
 
-import {Button, List} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
-
-// icons
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {List} from 'react-native-paper';
+import {Divider, Image} from 'react-native-elements';
 
 // svg icon
 import MailIcon from './SvgIcon/MailIcon';
 import LogoutIcon from './SvgIcon/LogoutIcon';
 import UpdatedIcon from './SvgIcon/UpdatedIcon';
 import PrivacyPolicyIcon from './SvgIcon/PrivacyPolicyIcon';
-
-//redux
-import {connect} from 'react-redux';
-import {createStructuredSelector} from 'reselect';
-
-//redux, selector
-import {logoutUser} from '@store/user';
-import {selectEmail} from 'selector/user';
-import {selectUser, selectOrganistation} from 'selector/sanspaper';
+import {darkGrey, red} from '@styles/colors';
 
 class Profile extends Component {
   state = {
@@ -60,10 +43,30 @@ class Profile extends Component {
     });
   };
 
+  showNoInternetAlert = () =>
+    Alert.alert('', 'No internet available. Logout once internet is back');
+
   onPressLogoutHandler = () => {
+    const {
+      networkInfo,
+      logoutUser,
+      removeAllDownloadForms,
+      betaAccess,
+      offlineFeature,
+    } = this.props;
+
+    let message = '';
+
+    if (!betaAccess && !offlineFeature) {
+      message = 'Are you sure you want to logout?';
+    } else {
+      message =
+        'Are you sure with this action? Logging out will clear all the stored forms data from your phone for offline usage.';
+    }
+
     Alert.alert(
-      'Log out',
-      'Are you sure with this action? Logging out will clear all the stored forms data from your phone for offline usage.',
+      'Logout',
+      message,
       [
         {
           text: 'Cancel',
@@ -71,12 +74,20 @@ class Profile extends Component {
           style: 'cancel',
         },
         {
-          text: 'Yes',
+          text: 'Logout',
           onPress: async () => {
-            await auth().signOut();
-            await clearStorageUserId();
-            this.props.logoutUser();
+            if (!networkInfo.isInternetReachable) {
+              this.showNoInternetAlert();
+              return;
+            }
+
+            if (offlineFeature || betaAccess) {
+              removeAllDownloadForms();
+            }
+
+            logoutUser();
           },
+          style: 'destructive',
         },
       ],
       {cancelable: false},
@@ -84,48 +95,64 @@ class Profile extends Component {
   };
 
   render() {
-    const {email, user, organization} = this.props;
+    const {
+      email,
+      user,
+      organization,
+      openActionSheet,
+      profilePicture,
+      loadingImg,
+    } = this.props;
     const name = user?._data?.name;
 
     return (
       <>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Text style={styles.name}>{name}</Text>
-            <Text style={styles.subText}>{organization.name}</Text>
+            {loadingImg ? (
+              <View style={styles.loader}>
+                <ActivityIndicator style={styles.activityLoader} color="#fff" />
+              </View>
+            ) : null}
+            {profilePicture ? (
+              <Image
+                source={{uri: profilePicture}}
+                resizeMethod="resize"
+                onPress={openActionSheet}
+                style={styles.profileImg}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/user.png')}
+                resizeMode="contain"
+                resizeMethod="auto"
+                onPress={openActionSheet}
+                style={styles.profileLogo}
+              />
+            )}
+            <View style={styles.topHeader}>
+              <Text style={styles.name}>{name}</Text>
+              <Text style={styles.subText}>{organization.name}</Text>
+            </View>
           </View>
-          <Divider />
+
           {/* email */}
           <View style={styles.listContainer}>
             <List.Item
               style={styles.list}
               titleStyle={styles.title}
               title="Email"
+              descriptionStyle={styles.description}
               description={email}
               left={() => (
                 <View style={styles.listIcon}>
-                  <MailIcon width={30} height={40} color="green" />
+                  <MailIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
-          {/* change password */}
-          {/* <View style={styles.listContainer}>
-            <List.Item
-              onPress={this.showModal}
-              style={styles.list}
-              titleStyle={styles.title}
-              title="Change Password"
-              description="*********"
-              left={() => (
-                <View style={styles.listIcon}>
-                  <MaterialIcons name="lock" size={30} color="green" />
-                </View>
-              )}
-            />
-          </View>
-          <Divider /> */}
+
           {/* update */}
           <View style={styles.listContainer}>
             <List.Item
@@ -144,12 +171,13 @@ class Profile extends Component {
               descriptionStyle={styles.updateText}
               left={() => (
                 <View style={styles.listIcon}>
-                  <UpdatedIcon width={30} height={40} color="green" />
+                  <UpdatedIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
+
           {/* Privacy Policy */}
           <View style={styles.listContainer}>
             <List.Item
@@ -158,15 +186,16 @@ class Profile extends Component {
               }
               style={styles.list}
               titleStyle={styles.title}
-              title="Privacy and Policy"
+              title="Privacy Policy"
               left={() => (
                 <View style={styles.listIcon}>
-                  <PrivacyPolicyIcon width={30} height={40} color="green" />
+                  <PrivacyPolicyIcon width={30} height={40} color={darkGrey} />
                 </View>
               )}
             />
+            <Divider />
           </View>
-          <Divider />
+
           {/* logout */}
           <View style={styles.listContainer}>
             <List.Item
@@ -176,53 +205,15 @@ class Profile extends Component {
               title="Logout"
               left={() => (
                 <View style={styles.listIcon}>
-                  <LogoutIcon width={30} height={40} color="red" />
+                  <LogoutIcon width={30} height={40} color={red} />
                 </View>
               )}
             />
           </View>
-          <Divider />
         </View>
-
-        {/* <Modal
-          animationType="fade"
-          transparent={true}
-          visible={this.state.visible}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.changePasswordText}>Change Password</Text>
-              <Text style={styles.passwordTextStyle}>Old Password</Text>
-              <TextInput style={styles.textInput} />
-              <Text style={styles.passwordTextStyle}>New Password</Text>
-              <TextInput style={styles.textInput} />
-              <Text style={styles.passwordTextStyle}>Retype Password</Text>
-              <TextInput style={styles.textInput} />
-              <View style={styles.changePasswordSubContainer}>
-                <Button
-                  style={styles.marginLeftRegular}
-                  mode="contained"
-                  onPress={this.hideModal}>
-                  <Text>Cancel</Text>
-                </Button>
-                <Button
-                  style={styles.marginLeftSmall}
-                  mode="contained"
-                  onPress={() => {}}>
-                  <Text>Confirm</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-        </Modal> */}
       </>
     );
   }
 }
 
-const mapState = createStructuredSelector({
-  email: selectEmail,
-  user: selectUser,
-  organization: selectOrganistation,
-});
-
-export default connect(mapState, {logoutUser})(Profile);
+export default Profile;

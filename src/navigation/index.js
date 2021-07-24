@@ -1,28 +1,38 @@
-import {screens} from '@constant/ScreenConstants';
-import {red} from '@styles/colors';
 import {Navigation} from 'react-native-navigation';
-import FontAwesome5, {FA5Style} from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
-import {regular} from '@styles/font';
+
+import {screens} from '@constant/ScreenConstants';
+import {red, white, darkGrey} from '@styles/colors';
+import {regular, questrial} from '@styles/font';
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
     layout: {
       orientation: ['portrait'],
     },
+    statusBar: {
+      style: 'light',
+      backgroundColor: red,
+    },
     topBar: {
-      animate: true,
-      hideOnScroll: false,
       background: {
         color: red,
       },
+      noBorder: true,
+      elevation: 0,
       title: {
-        color: 'white',
+        color: white,
         fontSize: regular,
+        fontFamily: questrial,
       },
       backButton: {
-        color: 'white',
+        color: white,
       },
+    },
+    bottomTabs: {
+      backgroundColor: white,
+      hideShadow: true,
+      elevation: 0,
+      titleDisplayMode: 'alwaysShow',
     },
   });
 };
@@ -62,22 +72,10 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const userIcon = await FontAwesome5.getImageSource('user', 25);
-  const userIconSelect = await FontAwesome5.getImageSource(
-    'user',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const clipboardIcon = await Feather.getImageSource('clipboard', 25);
-  const clipboardIconSelect = await FontAwesome5.getImageSource(
-    'clipboard',
-    25,
-    red,
-    FA5Style.solid,
-  );
-  const bookOpenIcon = await Feather.getImageSource('book-open', 25);
-  const bookOpenIconSelect = await FontAwesome5.getImageSource('book-open', 25);
+  const bookOpenIcon = require('../assets/book.png');
+  const clipboardIcon = require('../assets/form.png');
+  const userIcon = require('../assets/profile.png');
+  const outboxIcon = require('../assets/outbox.png');
 
   return Navigation.setRoot({
     root: {
@@ -95,6 +93,16 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-BOK',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Body Of Knowledge',
+                            },
+                          },
+                        },
                       },
                     },
                   },
@@ -102,9 +110,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'BoK',
+                  text: 'BOK',
                   icon: bookOpenIcon,
-                  selectedIcon: bookOpenIconSelect,
+                  iconColor: darkGrey,
+                  fontFamily: questrial,
+                  selectedIcon: bookOpenIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -122,6 +132,24 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-FORMS',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Forms',
+                            },
+                          },
+                        },
+                        rightButtons: [
+                          {
+                            id: screens.SyncButton,
+                            component: {
+                              name: screens.SyncButton,
+                            },
+                          },
+                        ],
                       },
                     },
                   },
@@ -129,9 +157,50 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Form',
+                  text: 'FORM',
+                  fontFamily: questrial,
                   icon: clipboardIcon,
-                  selectedIcon: clipboardIconSelect,
+                  iconColor: darkGrey,
+                  selectedIcon: clipboardIcon,
+                  selectedIconColor: red,
+                  selectedTextColor: red,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'OFFLINE_FORM_TAB',
+              children: [
+                {
+                  component: {
+                    id: screens.OfflineFormScreen,
+                    name: screens.OfflineFormScreen,
+                    options: {
+                      topBar: {
+                        visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-OUTBOX',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Outbox (Local Storage)',
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'OUTBOX',
+                  fontFamily: questrial,
+                  iconColor: darkGrey,
+                  icon: outboxIcon,
+                  selectedIcon: outboxIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -149,16 +218,31 @@ export const showMainScreen = async () => {
                     options: {
                       topBar: {
                         visible: true,
+                        title: {
+                          component: {
+                            id: 'HeaderScreen-PROFILE',
+                            name: screens.HeaderScreen,
+                            alignment: 'fill',
+                            passProps: {
+                              title: 'Profile',
+                            },
+                          },
+                        },
                       },
+                    },
+                    passProps: {
+                      loadingImg: true,
                     },
                   },
                 },
               ],
               options: {
                 bottomTab: {
-                  text: 'Profile',
+                  text: 'PROFILE',
+                  fontFamily: questrial,
+                  iconColor: darkGrey,
                   icon: userIcon,
-                  selectedIcon: userIconSelect,
+                  selectedIcon: userIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -171,7 +255,7 @@ export const showMainScreen = async () => {
   });
 };
 
-export const showActivityIndicator = () => {
+export const showActivityIndicator = (messages = '') => {
   Navigation.showOverlay({
     component: {
       id: screens.ActivityIndicatorOverlay,
@@ -184,10 +268,19 @@ export const showActivityIndicator = () => {
           componentBackgroundColor: 'transparent',
         },
       },
+      passProps: {
+        messages,
+      },
     },
   });
 };
 
 export const dismissActivityIndicator = () => {
   Navigation.dismissOverlay(screens.ActivityIndicatorOverlay);
+};
+
+export const updateProfileLoadingScreen = (loading) => {
+  Navigation.updateProps(screens.ProfileScreen, {
+    loadingImg: loading,
+  });
 };

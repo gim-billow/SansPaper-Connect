@@ -1,28 +1,37 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import {commonStyles} from '@styles/common';
 
 const TimePicker = (props) => {
-  const {item, updateFieldsValue} = props;
-  const [label, setLabel] = useState('Select Time');
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
+  const [label, setLabel] = useState('Select time');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
   useEffect(() => {
-    const value = props.item.value;
-    if (value && value.includes('Date')) {
-      setLabel(moment().format('h:mm a'));
+    let value = props.item.value.toString();
+    if (value) {
+      if (value.includes('Date')) {
+        setLabel(moment().format('h:mm a'));
+      } else {
+        setLabel(moment(parseInt(value, 10)).format('h:mm a'));
+      }
+
       setChangeTheme(true);
-      updateFieldsValue({rank: props.item.rank, value: Date.now()});
     }
   }, []);
 
@@ -48,48 +57,42 @@ const TimePicker = (props) => {
     setLabel(timeFormat);
     setChangeTheme(true);
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: item.rank, value: time.getTime()});
 
     hideTimePicker();
   };
 
   const cancel = () => {
-    if (label !== 'Select Time') {
+    if (label !== 'Select time') {
       Toast.show('Success, remove the time ' + label.toString());
-      setLabel('Select Time');
+      setLabel('Select time');
       setChangeTheme(false);
       updateFieldsValue({rank: item.rank, value: ''});
     }
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{item.label}</Text>
+        <Text style={commonStyles.title}>{item.label}</Text>
         {item.mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
         <View style={styles.date}>
-          <TouchableRipple onLongPress={cancel} onPress={showTimePicker}>
-            <Button
-              mode="contained"
-              style={
-                changeTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }>
-              <Text
-                style={
-                  changeTheme === true
-                    ? styles.ChangeTextColor
-                    : styles.TextColor
-                }>
-                {label.toString()}
-              </Text>
-            </Button>
-          </TouchableRipple>
+          <Button
+            disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={label.toString()}
+            type={changeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.container}
+            onPress={showTimePicker}
+            onLongPress={cancel}
+          />
           <DateTimePickerModal
             isVisible={isTimePickerVisible}
             mode="time"
@@ -99,8 +102,7 @@ const TimePicker = (props) => {
           />
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

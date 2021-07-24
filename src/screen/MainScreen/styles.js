@@ -1,19 +1,19 @@
 import {StyleSheet, Platform} from 'react-native';
 import {backgroundColor, white, darkGrey, red} from '@styles/colors';
 import {spaceRegular, spaceSmall, spaceMedium, superSmall} from '@styles/space';
-import {regular, medium, small} from '@styles/font';
+import {regular, medium, small, large, questrial} from '@styles/font';
 
 export default StyleSheet.create({
   noItemsContainer: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: white,
+    // backgroundColor: white,
   },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor,
+    // padding: 20,
+    backgroundColor: white,
   },
   scrollView: {
     flex: 1,
@@ -36,28 +36,42 @@ export default StyleSheet.create({
     fontSize: small,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spaceRegular,
-    marginBottom: spaceMedium,
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // marginTop: spaceRegular,
+    // marginBottom: spaceMedium,
+    backgroundColor: red,
+    // height: 170,
+    // borderBottomLeftRadius: 25,
+    // borderBottomRightRadius: 25,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   headerText: {
-    fontSize: medium,
-    fontWeight: 'bold',
-    color: darkGrey,
+    fontSize: large,
+    color: white,
+    fontFamily: questrial,
+    letterSpacing: 0.5,
   },
   divider: {
     marginBottom: spaceSmall,
   },
   showMoreBtn: {
     backgroundColor,
-    margin: spaceRegular,
+    marginTop: 10,
+    // margin: spaceRegular,
     alignSelf: 'flex-start',
     padding: spaceSmall,
     borderRadius: 10,
   },
   showMoreText: {
     color: darkGrey,
+    fontFamily: questrial,
+  },
+  markDownView: {
+    paddingVertical: 4,
+    margin: 30,
   },
 
   /**
@@ -65,7 +79,8 @@ export default StyleSheet.create({
    */
   body: {
     lineHeight: 29,
-    paddingHorizontal: spaceRegular,
+    // paddingHorizontal: spaceRegular,
+    fontFamily: questrial,
     color: darkGrey,
     fontSize: regular,
   },

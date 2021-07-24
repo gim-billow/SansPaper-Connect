@@ -1,37 +1,35 @@
-import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceMedium, spaceRegular, superSmall} from 'styles/space';
-import {regular, medium} from 'styles/font';
-import {lightRed, darkRed, red} from '@styles/colors';
+import {StyleSheet, Dimensions} from 'react-native';
+import {spaceMedium, spaceRegular, superSmall, spaceSmall} from 'styles/space';
+import {regular, questrial, medium} from 'styles/font';
+import {white, red, darkGrey} from '@styles/colors';
+
+const width = Dimensions.get('screen').width;
 
 export default StyleSheet.create({
   topContainer: {
     marginVertical: spaceMedium,
   },
-  buttonColor: {
-    backgroundColor: 'white',
-  },
-  ChangeButtonColor: {
-    backgroundColor: darkRed,
-  },
-  TextColor: {
-    color: lightRed,
-  },
-  ChangeTextColor: {
-    color: 'white',
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-  },
   button: {
+    marginTop: spaceSmall,
+  },
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
     fontSize: regular,
-    marginHorizontal: spaceRegular,
+  },
+  btnContainer: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    width: width / 2,
+  },
+  disableText: {
+    color: white,
+  },
+  disable: {
+    backgroundColor: red,
   },
   Thumbnail: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   thumbnailStyle: {
     marginVertical: spaceRegular,
@@ -55,21 +53,32 @@ export default StyleSheet.create({
    * Overlay styles
    */
   closeTxtOverlay: {
-    color: red,
+    // color: red,
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
   },
   closeBtnOverlay: {
     width: 200,
-    marginTop: 20,
-    borderColor: red,
-    paddingVertical: 7,
+    borderRadius: 5,
+  },
+  closeContainer: {
+    marginVertical: 10,
   },
   overlayBtn: {
     width: 200,
     backgroundColor: red,
-    marginBottom: 10,
+    borderRadius: 5,
+    marginBottom: 5,
   },
   iconSpace: {
-    padding: 10,
+    paddingRight: 10,
+  },
+  overlayText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    paddingVertical: 5,
+    letterSpacing: 0.2,
   },
   overlayHeaderText: {
     marginBottom: 20,
@@ -82,7 +91,18 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   overlay: {
-    borderRadius: 5,
+    borderRadius: 20,
     padding: 30,
+  },
+  photoText: {
+    fontFamily: questrial,
+    fontSize: medium,
+    letterSpacing: 0.2,
+  },
+  subPhotoText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    color: darkGrey,
   },
 });

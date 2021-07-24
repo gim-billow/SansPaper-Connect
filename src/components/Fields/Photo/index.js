@@ -1,20 +1,13 @@
-import React, {useState, memo} from 'react';
-import {Text, View, Platform} from 'react-native';
+import React, {useState, useEffect, memo} from 'react';
+import {View, Platform} from 'react-native';
 import {Thumbnail} from 'native-base';
 import Toast from 'react-native-simple-toast';
-import {Button, TouchableRipple} from 'react-native-paper';
-import {
-  Divider,
-  Overlay,
-  Button as RNEButton,
-  Text as RNEText,
-} from 'react-native-elements';
+import {Overlay, Button, Text} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './styles';
 import {commonStyles} from '@styles/common';
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 
 const imgWidth = Platform.OS === 'android' ? 500 : 300;
@@ -23,13 +16,23 @@ const imgQuality = Platform.OS === 'android' ? 0.9 : 0.75;
 
 const Photo = (props) => {
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue} = props;
+  const {updateFieldsValue, isEditable, draftFormHasChanges, draftId} = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
   const [thumbnailImage, setThumbnailImage] = useState('');
-  const [title, setTitle] = useState('Add a Photo');
+  const [title, setTitle] = useState('Add a photo');
+
+  useEffect(() => {
+    const {value} = props.item;
+
+    if (value && value[0].path) {
+      setThumbnailImage(value[0].path);
+      setChangeTheme(true);
+      setTitle('Retake photo');
+    }
+  }, [props.item]);
 
   function takePicture(fromCamera) {
     if (fromCamera) {
@@ -49,9 +52,10 @@ const Photo = (props) => {
           setModalVisible(!modalVisible);
         }
         setThumbnailImage(image.path);
+        if (draftId) draftFormHasChanges(true);
         updateFieldsValue({rank: rank, value: [image]});
         setChangeTheme(true);
-        setTitle('Retake Photo');
+        setTitle('Retake photo');
       });
     } else {
       ImagePicker.clean()
@@ -73,6 +77,7 @@ const Photo = (props) => {
               setModalVisible(!modalVisible);
             }
             setThumbnailImage(images[0].path);
+            if (draftId) draftFormHasChanges(true);
             updateFieldsValue({rank: rank, value: images});
             setChangeTheme(true);
             setTitle('Retake ' + label);
@@ -93,9 +98,9 @@ const Photo = (props) => {
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
@@ -113,28 +118,17 @@ const Photo = (props) => {
           </View>
         )}
         <View style={styles.button}>
-          <TouchableRipple
+          <Button
+            disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={title}
+            type={changeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.btnContainer}
+            onPress={() => setModalVisible(true)}
             onLongPress={cancel}
-            onPress={() => {
-              setModalVisible(true);
-            }}>
-            <Button
-              mode="contained"
-              style={
-                changeTheme === true
-                  ? styles.ChangeButtonColor
-                  : styles.buttonColor
-              }>
-              <Text
-                style={
-                  changeTheme === true
-                    ? styles.ChangeTextColor
-                    : styles.TextColor
-                }>
-                {title.toString()}
-              </Text>
-            </Button>
-          </TouchableRipple>
+          />
         </View>
 
         <Overlay
@@ -144,47 +138,49 @@ const Photo = (props) => {
           isVisible={modalVisible}>
           <View style={styles.overlayHeader}>
             <View style={styles.overlayHeaderText}>
-              <RNEText h4>Add Photo</RNEText>
-              <Text>in this selected field</Text>
+              <Text style={styles.photoText}>Add Photo</Text>
+              <Text style={styles.subPhotoText}>in this selected field</Text>
             </View>
-            <RNEButton
-              title="From Camera"
+            <Button
+              title="From camera"
               onPress={() => takePicture(true)}
+              titleStyle={styles.overlayText}
               icon={
                 <Icon
                   name="camera"
-                  size={18}
+                  size={16}
                   color="white"
                   style={styles.iconSpace}
                 />
               }
               buttonStyle={styles.overlayBtn}
             />
-            <RNEButton
-              title="From Gallery"
+            <Button
+              title="From gallery"
               onPress={() => takePicture(false)}
+              titleStyle={styles.overlayText}
               icon={
                 <Icon
                   name="image"
-                  size={18}
+                  size={17}
                   color="white"
                   style={styles.iconSpace}
                 />
               }
               buttonStyle={styles.overlayBtn}
             />
-            <RNEButton
+            <Button
               title="Close"
               onPress={() => setModalVisible(!modalVisible)}
               buttonStyle={styles.closeBtnOverlay}
               type="outline"
               titleStyle={styles.closeTxtOverlay}
+              containerStyle={styles.closeContainer}
             />
           </View>
         </Overlay>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

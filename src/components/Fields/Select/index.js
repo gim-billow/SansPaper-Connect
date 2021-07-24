@@ -1,18 +1,17 @@
 import React, {PureComponent} from 'react';
 import {Text, View} from 'react-native';
-import {Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import R from 'ramda';
 
-import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 import MandatoryField from '../MandatoryField';
-import {getQueryByOptions} from './helper';
-import {selectProjectValue} from 'selector/form';
+import {getQueryByOptions, getOptionsFromDB} from './helper';
+import {selectProjectValue, selectOfflineProjectValue} from 'selector/form';
 import {commonStyles} from '@styles/common';
+import {projectDependant} from '@store/forms';
 
 class Select extends PureComponent {
   state = {
@@ -22,40 +21,100 @@ class Select extends PureComponent {
 
   async componentDidMount() {
     let selected = [];
-    const {seloptions, type} = this.props.item;
-    const {organization, projectValue, item} = this.props;
-    const options = await getQueryByOptions(
-      seloptions,
-      type,
+    const {seloptions, type, value} = this.props.item;
+
+    if (value !== '' && type !== 'user') {
+      selected = R.split('|', value);
+    }
+
+    if (type === 'user') {
+      selected = [value];
+    }
+
+    const {
       organization,
       projectValue,
-    );
+      offlineProjectValue,
+      offline = false,
+      formId,
+    } = this.props;
+    let options = [];
+    if (offline) {
+      let projectVal = '';
 
-    if (item.type === 'selectmulti' && item.value) {
-      selected = item.value.split('|');
+      for (const project of projectDependant) {
+        if (R.includes(project, seloptions)) {
+          projectVal = offlineProjectValue;
+        }
+      }
+
+      const params = {
+        formId,
+        seloptions,
+        type,
+        projectValue: projectVal,
+      };
+
+      options = await getOptionsFromDB(params);
     } else {
-      selected = [item.value];
+      options = await getQueryByOptions(
+        seloptions,
+        type,
+        organization,
+        projectValue,
+      );
     }
 
     this.updateSetOptions(options, selected);
   }
 
   async componentDidUpdate(prevProps) {
-    const {item, organization, projectValue} = this.props;
-    if (prevProps.projectValue !== projectValue) {
-      if (item.seloptions.includes('projects.milestones')) {
-        this.resetSelOptions();
-        const option = `=Query.options('projects.milestones', "projectid='${projectValue}'")`;
+    const {
+      item,
+      organization,
+      projectValue,
+      offlineProjectValue,
+      offline = false,
+      formId,
+      draftFormHasChanges,
+      draftId,
+    } = this.props;
 
-        const options = await getQueryByOptions(
-          option,
-          item.type,
-          organization,
-          projectValue,
-        );
+    if (offline) {
+      if (prevProps.offlineProjectValue !== offlineProjectValue) {
+        if (item.seloptions.includes('projects.milestones')) {
+          this.resetSelOptions();
 
-        this.updateSetOptions(options, [item.value]);
-        return;
+          const params = {
+            formId,
+            seloptions: item.seloptions,
+            type: item.type,
+            projectValue: offlineProjectValue,
+          };
+
+          const options = await getOptionsFromDB(params);
+
+          if (draftId) draftFormHasChanges(true);
+          this.updateSetOptions(options, [item.value]);
+        }
+      }
+    } else {
+      if (prevProps.projectValue !== projectValue) {
+        if (item.seloptions.includes('projects.milestones')) {
+          this.resetSelOptions();
+
+          const option = `=Query.options('projects.milestones', "projectid='${projectValue}'")`;
+
+          const options = await getQueryByOptions(
+            option,
+            item.type,
+            organization,
+            projectValue,
+          );
+
+          this.updateSetOptions(options, [item.value]);
+          return;
+        }
       }
     }
   }
@@ -76,7 +135,7 @@ class Select extends PureComponent {
   };
 
   onSelectedItemsChange = (selectedItems) => {
-    const {item, updateFieldsValue} = this.props;
+    const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
     let value = '';
 
     // if single, remove the selected option
@@ -105,6 +164,7 @@ class Select extends PureComponent {
 
     this.setState({options: R.filter((x) => x !== '', selectedItems)});
 
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({
       rank: item.rank,
       value: item.type === 'selectmulti' ? value : selectedItems[0],
@@ -112,14 +172,25 @@ class Select extends PureComponent {
   };
 
   render() {
-    const {item, single = true} = this.props;
+    const {item, single = true, isEditable} = this.props;
     const {selOptions} = this.state;
-    const {container, selectToggle, button, itemText, chipsWrapper} = styles;
+    const {
+      container,
+      selectToggle,
+      button,
+      itemText,
+      chipsWrapper,
+      searchBar,
+      confirmText,
+      selectToggleText,
+      chipText,
+      chipContainer,
+    } = styles;
 
     return (
-      <ItemWrapper>
+      <>
         <View style={styles.topContainer}>
-          <Text style={commonStyles.text}>{item.label}</Text>
+          <Text style={commonStyles.title}>{item.label}</Text>
           {item.mandatory === 1 ? (
             <MandatoryField />
           ) : (
@@ -127,33 +198,40 @@ class Select extends PureComponent {
           )}
           <View>
             <SectionedMultiSelect
+              disabled={!isEditable}
               styles={{
+                confirmText,
                 container,
+                searchBar,
                 selectToggle,
                 button,
                 itemText,
+                selectToggleText,
                 chipsWrapper,
+                chipText,
+                chipContainer,
               }}
               items={selOptions}
-              searchPlaceholderText="Search from items"
               IconRenderer={Icon}
+              showCancelButton
               uniqueKey="id"
               single={single}
-              showCancelButton
-              selectText="Select from options"
+              selectText="Search from items"
+              searchPlaceholderText="Search from items"
               onSelectedItemsChange={this.onSelectedItemsChange}
               selectedItems={this.state.options}
+              hideChipRemove={!isEditable}
             />
           </View>
         </View>
-        <Divider />
-      </ItemWrapper>
+      </>
     );
   }
 }
 
 const mapState = createStructuredSelector({
   projectValue: selectProjectValue,
+  offlineProjectValue: selectOfflineProjectValue,
 });
 
 export default connect(mapState)(Select);

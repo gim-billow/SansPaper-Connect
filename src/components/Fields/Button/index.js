@@ -1,30 +1,29 @@
 import React, {memo} from 'react';
 import {Text, View} from 'react-native';
-import {Button as RNButton} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Button as RNButton} from 'react-native-elements';
 import {commonStyles} from '@styles/common';
-import ItemWrapper from '../ItemWrapper';
 import styles from './styles';
 
 const Button = (props) => {
-  const {item} = props;
+  const {item, isEditable} = props;
 
   return (
-    <ItemWrapper>
-      <View style={styles.container}>
-        <Text style={commonStyles.text}>{item.label}</Text>
+    <>
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.title}>{item.label}</Text>
         <View style={styles.button}>
           <RNButton
-            mode="contained"
-            disabled={item.label.includes('new') ? true : false}
-            style={item.label.includes('new') ? null : styles.buttonColor}
-            onPress={() => {}}>
-            <Text style={styles.text}>{item.label}</Text>
-          </RNButton>
+            disabled={!isEditable && item.label.includes('new') ? true : false}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={item.label}
+            titleStyle={styles.title}
+            buttonStyle={styles.container}
+            onPress={() => {}}
+          />
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

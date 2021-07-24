@@ -6,6 +6,7 @@ import {Navigation} from 'react-native-navigation';
 import React from 'react';
 // import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -14,14 +15,18 @@ import createSagaMiddleware from 'redux-saga';
 import Reactotron from 'reactotron-react-native';
 
 import {Provider} from 'react-redux';
-import {Provider as PaperProvider} from 'react-native-paper';
+
+// React native elements customization
+import {ThemeProvider} from 'react-native-elements';
+import {theme} from './rn-elements';
 
 // redux
 import {rootSaga, rootReducer} from './src/store';
 import {appScreens, startApp} from './src/screen';
 
-// react native paper theme
-import {theme} from 'styles/papertheme';
+// import push notification & fcm
+import messaging from '@react-native-firebase/messaging';
+import './notificationService';
 
 const sagaMiddleware = createSagaMiddleware({
   sagaMonitor: Reactotron.createSagaMonitor(),
@@ -47,13 +52,11 @@ appScreens.forEach((ScreenComponent, key) => {
     key,
     () => (props) => (
       <Provider store={store}>
-        <PaperProvider
-          theme={theme}
-          settings={{
-            icon: (props) => <MaterialIcon {...props} />,
-          }}>
-          <ScreenComponent {...props} style={{backgroundColor: 'white'}} />
-        </PaperProvider>
+        <ActionSheetProvider>
+          <ThemeProvider theme={theme}>
+            <ScreenComponent {...props} style={{backgroundColor: 'white'}} />
+          </ThemeProvider>
+        </ActionSheetProvider>
       </Provider>
     ),
     () => ScreenComponent,
@@ -61,5 +64,9 @@ appScreens.forEach((ScreenComponent, key) => {
 });
 
 Navigation.events().registerAppLaunchedListener(() => {
+  messaging().setBackgroundMessageHandler(async (remoteMsg) => {
+    console.log('Message is handled in background', remoteMsg);
+  });
+
   startApp();
 });

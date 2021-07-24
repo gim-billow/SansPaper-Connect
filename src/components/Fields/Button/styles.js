@@ -1,22 +1,32 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {spaceMedium, spaceRegular} from 'styles/space';
-import {regular} from 'styles/font';
-import {lightRed, white} from '@styles/colors';
+import {regular, questrial} from 'styles/font';
+import {red, white} from '@styles/colors';
+
+const width = Dimensions.get('screen').width;
 
 export default StyleSheet.create({
-  container: {
+  topContainer: {
     marginVertical: spaceMedium,
+  },
+  container: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    width: width / 2,
   },
   button: {
     fontSize: regular,
-    paddingHorizontal: spaceRegular,
-    paddingTop: spaceRegular,
+    marginTop: spaceRegular,
   },
-  text: {
-    color: lightRed,
+  disableText: {
+    color: white,
+  },
+  disable: {
+    backgroundColor: red,
+  },
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
     fontSize: regular,
-  },
-  buttonColor: {
-    backgroundColor: white,
   },
 });

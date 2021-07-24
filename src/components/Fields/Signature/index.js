@@ -1,12 +1,9 @@
-import React, {useState, createRef, useRef} from 'react';
-import {View, Text, Platform} from 'react-native';
-import {Divider} from 'react-native-elements';
-// import SignaturePad from 'react-native-signature-pad'; // ios
+import React, {useState, useEffect, createRef, useRef} from 'react';
+import {View, Text, Platform, Image} from 'react-native';
+import {Button} from 'react-native-elements';
 import SignatureScreen from 'react-native-signature-canvas'; // ios
 import SignatureCapture from 'react-native-signature-capture'; // android
-import {Button} from 'react-native-paper';
 
-import ItemWrapper from '../ItemWrapper';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
 import {commonStyles} from '@styles/common';
@@ -15,36 +12,41 @@ const Signature = (props) => {
   let refInput = createRef();
   const refInputIOS = useRef();
   const {label, rank, mandatory} = props.item;
-  const {updateFieldsValue} = props;
-  // const [signature, setSignature] = useState('');
+  const {updateFieldsValue, isEditable, draftFormHasChanges, draftId} = props;
+  const [iosSig, setIosSig] = useState('');
+  const [androidSig, setAndroidSig] = useState('');
+  const [firstLoadAndroid, setFirstLoadAndroid] = useState(false);
   const [signatureSaved, setSignaturesSaved] = useState(false);
-  const [show, setShow] = useState(true);
   const [changeTheme, setChangeTheme] = useState(false);
 
-  // const signaturePadError = (error) => {
-  //   console.error(error);
-  // };
+  useEffect(() => {
+    const {value} = props.item;
+
+    if (value) {
+      if (Platform.OS === 'android') {
+        setAndroidSig('data:image/png;base64,' + value);
+        setFirstLoadAndroid(true);
+      } else if (Platform.OS === 'ios') {
+        setIosSig('data:image/png;base64,' + value);
+      }
+      setSignaturesSaved(true);
+      setChangeTheme(true);
+    }
+  }, [props.item]);
 
   const signaturePadClear = () => {
     if (Platform.OS === 'android') {
       refInput.resetImage();
+      setFirstLoadAndroid(false);
     } else {
       refInputIOS.current.clearSignature();
     }
 
     setChangeTheme(false);
-    setShow(false);
-    setTimeout(() => {
-      setShow(true);
-    }, 0);
     updateFieldsValue({rank: rank, value: ''});
 
     setSignaturesSaved(false);
   };
-
-  // const signaturePadChange = ({base64DataUrl}) => {
-  //   setSignature(base64DataUrl.replace('data:image/png;base64,', ''));
-  // };
 
   const signaturePadSave = () => {
     setChangeTheme(true);
@@ -60,6 +62,8 @@ const Signature = (props) => {
   };
 
   const _onSaveEvent = (result) => {
+    if (draftId) draftFormHasChanges(true);
+
     if (Platform.OS === 'android') {
       updateFieldsValue({rank: rank, value: result.encoded});
     } else {
@@ -98,15 +102,15 @@ const Signature = (props) => {
   `;
 
   return (
-    <ItemWrapper>
-      <View style={styles.container}>
-        <Text style={commonStyles.text}>{label}</Text>
+    <>
+      <View style={styles.topContainer}>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
           <View style={commonStyles.spacing} />
         )}
-        <View>
+        <View style={styles.container}>
           {Platform.OS === 'android' ? (
             <View style={styles.signView}>
               <SignatureCapture
@@ -119,70 +123,65 @@ const Signature = (props) => {
                 showTitleLabel={false}
                 viewMode={'portrait'}
               />
-              {signatureSaved && <View style={styles.dimmedSingature} />}
+              {(!isEditable || signatureSaved) && (
+                <View style={styles.dimmedSingature}>
+                  {firstLoadAndroid ? (
+                    <Image
+                      style={styles.dimmedSingature}
+                      source={{uri: androidSig}}
+                    />
+                  ) : null}
+                </View>
+              )}
             </View>
           ) : (
             <View style={styles.signature}>
               <SignatureScreen
                 ref={refInputIOS}
+                dataURL={iosSig}
                 onBegin={onBeginSign}
                 onEnd={onEndSign}
                 backgroundColor="#ffffff"
                 onOK={_onSaveEvent}
                 webStyle={iosStyle}
               />
-              {/* {show ? (
-                <SignatureScreen
-                  ref={refInputIOS}
-                  onBegin={onBeginSign}
-                  onEnd={onEndSign}
-                  backgroundColor="#ffffff"
-                  onOK={_onSaveEvent}
-                  webStyle={iosStyle}
-                />
-              ) : <SignaturePad
-                  onError={signaturePadError}
-                  onChange={signaturePadChange}
-                  style={styles.signatureColor}
-                  resizeHeight={200}
-                  resizeWidth={300}
-                />
-              null} */}
-              {signatureSaved && <View style={styles.dimmedSingature} />}
+              {(!isEditable || signatureSaved) && (
+                <View style={styles.dimmedSingature} />
+              )}
             </View>
           )}
 
           <View style={styles.buttonContainer}>
             <View style={styles.leftButton}>
               <Button
-                mode="contained"
+                disabled={!isEditable}
+                disabledTitleStyle={styles.disableText}
+                disabledStyle={styles.disable}
+                type="outline"
                 style={styles.buttonColor}
-                onPress={signaturePadClear}>
-                <Text style={styles.text}>Clear Signature</Text>
-              </Button>
+                title="Clear signature"
+                titleStyle={styles.title}
+                buttonStyle={styles.btnContainer}
+                onPress={signaturePadClear}
+              />
             </View>
             <View style={styles.rightButton}>
               <Button
-                mode="contained"
-                style={
-                  changeTheme === true
-                    ? styles.ChangeButtonColor
-                    : styles.buttonColor
-                }
-                onPress={signaturePadSave}>
-                <Text
-                  style={
-                    changeTheme === true ? styles.ChangeTextColor : styles.text
-                  }>
-                  {changeTheme === true ? 'Signature Saved' : 'Save Signature'}
-                </Text>
-              </Button>
+                disabled={!isEditable || changeTheme}
+                disabledTitleStyle={styles.disableText}
+                disabledStyle={styles.disable}
+                type={changeTheme ? 'solid' : 'outline'}
+                style={styles.buttonColor}
+                title={changeTheme ? 'Signature saved' : 'Save signature'}
+                titleStyle={styles.title}
+                buttonStyle={styles.btnContainer}
+                onPress={signaturePadSave}
+              />
             </View>
           </View>
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

@@ -8,6 +8,10 @@ export const convertDate = (date) => {
   return moment(date).format('MM/DD/YYYY HH:mm');
 };
 
+export const displayDate = (date) => {
+  return moment(date).format('ddd MMM DD, H:mm a');
+};
+
 export const diff = function (a, b) {
   return new Date(b.date).getTime() - new Date(a.date).getTime();
 };

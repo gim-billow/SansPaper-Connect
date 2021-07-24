@@ -1,11 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
+import {NavigationComponent, Navigation} from 'react-native-navigation';
 
 import LinkedItemsList from '@containers/LinkedItemsList';
 import styles from './styles';
-import {red} from '@styles/colors';
 
-class LinkedItems extends React.Component {
+class LinkedItems extends NavigationComponent {
   static options = () => {
     const option = {
       topBar: {
@@ -16,14 +17,25 @@ class LinkedItems extends React.Component {
           showTitle: false,
         },
       },
-      statusBar: {
-        visible: true,
-        backgroundColor: red,
-        styles: 'light',
+      bottomTabs: {
+        visible: false,
       },
     };
     return option;
   };
+
+  componentDidAppear() {
+    Navigation.events().registerComponentDidAppearListener(
+      async ({componentName, componentType}) => {
+        if (componentType === 'Component') {
+          await analytics().logScreenView({
+            screen_name: componentName,
+            screen_class: componentName,
+          });
+        }
+      },
+    );
+  }
 
   render() {
     const {linkedItemName} = this.props;

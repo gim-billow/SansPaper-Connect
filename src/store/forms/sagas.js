@@ -13,20 +13,36 @@ import {
   cancelled,
   put,
   select,
+  delay,
 } from 'redux-saga/effects';
+import Toast from 'react-native-simple-toast';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
-import {assoc, adjust, forEach} from 'ramda';
+import crashlytics from '@react-native-firebase/crashlytics';
+// import {
+//   assoc,
+//   map,
+//   adjust,
+//   find,
+//   propEq,
+//   forEach,
+//   includes,
+//   findIndex,
+// } from 'ramda';
+import * as R from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 import moment from 'moment';
+import 'react-native-get-random-values';
+import {nanoid} from 'nanoid';
 
 import AlertMessages from '@constant/AlertMessages';
-import {getUpviseTemplate} from '@api/forms';
-import {submitUpviseForm} from '@api/upvise';
-
+import {getUpviseTemplate, getFormFields} from '@api/forms';
+import {submitUpviseForm, queryUpviseTable} from '@api/upvise';
+import {UpviseTablesMap} from '@constant/UpviseTablesMap';
 import {screens} from '@constant/ScreenConstants';
+import {getQueryByOptions} from '@components/Fields/Select/helper';
 import {
   FORM_SAGA_ACTIONS,
   FORM_REDUCER_ACTIONS,
@@ -38,9 +54,22 @@ import {
 import {
   selectCurrentForm,
   selectCurrentFormUnfillMandatoryFields,
+  selectOfflineCurrentFormUnfillMandatoryFields,
+  selectOfflineStartAndFinishDate,
   selectStartAndFinishDate,
+  selectFormList,
+  selectOfflineCurrentForm,
+  selectOfflineFormList,
 } from '@selector/form';
+import {
+  selectOrganistation,
+  selectUpviseTemplatePath,
+} from '@selector/sanspaper';
+import {selectNetworkInfo, selectActiveScreen} from '@selector/common';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
+import {selectType, projectDependant} from './contants';
+import * as database from '@database';
+import {activeScreen} from '../common';
 
 async function hasLocationPermissionIOS() {
   const openSetting = () => {
@@ -133,7 +162,10 @@ function* watchFormsTemplatesUpdates({payload}) {
   try {
     while (true) {
       const forms = yield take(channel);
-      yield put({type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST, payload: forms});
+      yield put({
+        type: FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST,
+        payload: forms,
+      });
     }
   } finally {
     if (yield cancelled()) {
@@ -144,11 +176,12 @@ function* watchFormsTemplatesUpdates({payload}) {
 
 function* updateFormFieldValue({payload}) {
   try {
+    crashlytics().log('updateFormFieldValue');
     const {rank, value} = payload;
     const currentForm = yield select(selectCurrentForm);
-    const updatedForm = adjust(
+    const updatedForm = R.adjust(
       rank - 1,
-      (i) => assoc('value', value, i),
+      (i) => R.assoc('value', value, i),
       currentForm.fields,
     );
     yield put({
@@ -156,27 +189,49 @@ function* updateFormFieldValue({payload}) {
       payload: updatedForm,
     });
   } catch (error) {
+    crashlytics().recordError(error);
     console.log('loginUser error', error);
   }
 }
 
-async function submitForm(form) {
+function* updateOfflineFormFieldValue({payload}) {
   try {
-    showActivityIndicator();
+    crashlytics().log('updateOfflineFormFieldValue');
+    const {rank, value} = payload;
+    const currentForm = yield select(selectOfflineCurrentForm);
+    const updatedForm = R.adjust(
+      rank - 1,
+      (i) => R.assoc('value', value, i),
+      currentForm.fields,
+    );
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_FIELDS,
+      payload: updatedForm,
+    });
+  } catch (error) {
+    crashlytics().recordError(error);
+    console.log('loginUser error', error);
+  }
+}
+
+async function submitForm(form, screen) {
+  try {
+    crashlytics().log('submitForm');
+    // showActivityIndicator();
     const permission = await hasLocationPermission();
     if (permission) {
       Geolocation.getCurrentPosition(
         async (position) => {
           const geo =
             '' + position.coords.latitude + ',' + position.coords.longitude;
-          let updatedForm = assoc('geo', geo, form);
+          let updatedForm = R.assoc('geo', geo, form);
 
           const addr = await Geocoder.from([
             position.coords.latitude,
             position.coords.longitude,
           ]);
 
-          updatedForm = assoc(
+          updatedForm = R.assoc(
             'address',
             addr.results[0].formatted_address,
             updatedForm,
@@ -186,48 +241,102 @@ async function submitForm(form) {
 
           if (isSubmitted) {
             dismissActivityIndicator();
-            Navigation.popToRoot(screens.FormScreen);
-            Alert.alert('Alert', 'Form submitted');
+
+            if (screen === 'outbox') {
+              Navigation.popToRoot(screens.OfflineFormScreen);
+            } else {
+              Navigation.popToRoot(screens.FormScreen);
+            }
+
+            Alert.alert('', 'Form submitted and saved to outbox');
           } else {
             dismissActivityIndicator();
-            Alert.alert('Alert', 'Form not submitted');
+            Alert.alert('', 'Form not submitted');
           }
         },
         (error) => {
+          crashlytics().recordError(error);
           dismissActivityIndicator();
           Alert.alert(
-            'Alert',
+            '',
             'Unable to retrieve your current location, please check if GPS is turn on and try again, form not submitted',
           );
-          console.log('Geo Location not attached', error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 15000},
       );
     } else {
       dismissActivityIndicator();
-      Alert.alert('Alert', 'Location Permission Error: Form not submitted');
+      Alert.alert('', 'Location Permission Error: Form not submitted');
     }
+
+    // dismissActivityIndicator();
   } catch (error) {
-    dismissActivityIndicator();
-    Alert.alert('Alert', 'Error submitting form, please contact support');
+    crashlytics().recordError(error);
+    // dismissActivityIndicator();
+    Alert.alert('', 'Error submitting form, please contact support');
   }
 }
 
 function* preSubmitForm({payload}) {
   try {
-    yield showActivityIndicator();
+    crashlytics().log('preSubmitForm');
+    showActivityIndicator();
+
+    // if there is no internet
+    const {isInternetReachable} = yield select(selectNetworkInfo);
+    const screen = yield select(selectActiveScreen);
+    if (!isInternetReachable) {
+      dismissActivityIndicator();
+      Alert.alert(
+        '',
+        'Internet is not available at the moment. Please check your internet.',
+      );
+      yield put(activeScreen(''));
+      return;
+    }
+
     yield put(updateSubmittingForm(true));
+
     const alertConfig = [
       {
         text: 'Ok',
         style: 'cancel',
       },
     ];
-    const form = payload;
-    const unfilledMandatoryFields = yield select(
-      selectCurrentFormUnfillMandatoryFields,
-    );
-    const startAndFinishDateTime = yield select(selectStartAndFinishDate);
+    const offline = payload;
+    let form = {};
+    let unfilledMandatoryFields = {};
+    let startAndFinishDateTime = {};
+
+    if (offline) {
+      form = yield select(selectOfflineCurrentForm);
+      unfilledMandatoryFields = yield select(
+        selectOfflineCurrentFormUnfillMandatoryFields,
+      );
+      startAndFinishDateTime = yield select(selectOfflineStartAndFinishDate);
+    } else {
+      form = yield select(selectCurrentForm);
+      unfilledMandatoryFields = yield select(
+        selectCurrentFormUnfillMandatoryFields,
+      );
+      startAndFinishDateTime = yield select(selectStartAndFinishDate);
+    }
+
+    /**
+     * convert value object to string and get the new value string
+     */
+    form = {...form};
+    const newFormFields = [...form.fields];
+    const newFields = newFormFields.map((field) => {
+      if (field.type === 'drawing') {
+        const newField = {...field, value: ''};
+        newField.value = field.value.newValue || '';
+        field = {...newField};
+      }
+      return field;
+    });
+    form.fields = newFields;
+
     let dateTimeError = '';
     const {
       mandatoryError,
@@ -237,17 +346,20 @@ function* preSubmitForm({payload}) {
 
     // check if there is an empty value in a mandatory field
     if (unfilledMandatoryFields.length > 0) {
+      dismissActivityIndicator();
       const {rank} = unfilledMandatoryFields[0];
       const scrollToIndex = rank === 1 ? rank : rank - 1;
       yield put(updateSubmitTriggered());
       yield put(updateScrollToMandatory(scrollToIndex));
 
-      yield Alert.alert('Alert', mandatoryError, alertConfig, {
+      yield Alert.alert('', mandatoryError, alertConfig, {
         cancelable: false,
       });
+      yield put(activeScreen(''));
+      yield put(updateSubmittingForm(false));
     } else {
       let scrollToIndex = null;
-      forEach(({startDateTime, finishDateTime, rank}) => {
+      R.forEach(({startDateTime, finishDateTime, rank}) => {
         const hours = moment
           .duration(finishDateTime - startDateTime, 'milliseconds')
           .asHours();
@@ -269,15 +381,17 @@ function* preSubmitForm({payload}) {
         dismissActivityIndicator();
         yield put(updateSubmitTriggered());
         yield put(updateScrollToMandatory(scrollToIndex));
-        yield Alert.alert('Alert', dateTimeErrorMessage, alertConfig, {
+        yield Alert.alert('', dateTimeErrorMessage, alertConfig, {
           cancelable: false,
         });
+        yield put(activeScreen(''));
+        yield put(updateSubmittingForm(false));
       } else if (dateTimeError === 'hoursExceededError') {
         dismissActivityIndicator();
         yield put(updateSubmitTriggered());
         yield put(updateScrollToMandatory(scrollToIndex));
         yield Alert.alert(
-          'Alert',
+          '',
           hoursExceededError,
           [
             {
@@ -287,29 +401,466 @@ function* preSubmitForm({payload}) {
             {
               text: 'Yes',
               onPress: async () => {
-                await submitForm(form);
+                // showActivityIndicator();
+                submitForm(form, screen);
+                // Navigation.popToRoot(screens.FormScreen);
               },
             },
           ],
           {cancelable: false},
         );
-      } else {
-        dismissActivityIndicator();
-        yield submitForm(form);
+        yield put(activeScreen(''));
         yield put(updateSubmittingForm(false));
-        return;
+      } else {
+        submitForm(form, screen);
+        // Navigation.popToRoot(screens.FormScreen);
       }
     }
 
+    if (!dateTimeError && unfilledMandatoryFields.length <= 0) {
+      // sync form to offline
+      const offlineForms = yield select(selectOfflineFormList);
+      const offlineFormIndex = R.findIndex(R.propEq('id', form.id))(
+        offlineForms,
+      );
+      if (offlineFormIndex === -1) {
+        yield syncOfflineForm({
+          payload: {
+            linkedTable: form.linkedtable,
+            formId: form.id,
+            dlFirst: true,
+            submitSync: 'submitted',
+          },
+        });
+      } else {
+        yield saveAsDraft({
+          payload: {
+            offline,
+            status: 'submitted',
+          },
+        });
+      }
+    }
+
+    // dismissActivityIndicator();
+  } catch (error) {
+    crashlytics().recordError(error);
+    // save to draft if submit failed
+    /**
+     * TODO: Will add back once background fetch functionality is added
+     * change draft to pending
+     */
+    yield saveAsDraft({
+      payload: {
+        offline: false,
+        status: 'draft',
+      },
+    });
+
     dismissActivityIndicator();
     yield put(updateSubmittingForm(false));
-  } catch (error) {
+
     console.log('submitForm error', error);
+  }
+}
+
+function* syncOfflineForm({payload = {}}) {
+  try {
+    crashlytics().log('syncOfflineForm');
+
+    const {
+      linkedTable,
+      formId,
+      dlFirst = false,
+      submitSync = null,
+      multiple = false,
+    } = payload;
+    if (!multiple) {
+      showActivityIndicator();
+    }
+    const dateNow = new Date();
+    const upviseTemplatePath = yield select(selectUpviseTemplatePath);
+    const organisation = yield select(selectOrganistation);
+    const forms = yield select(selectFormList);
+    const selectedForm = R.find(R.propEq('id', formId))(forms);
+    const fieldsPath = `${upviseTemplatePath}/${formId}/upviseFields`;
+
+    //sync forms
+    const currentFormFields = yield getFormFields({fieldsPath});
+    const currentForm = R.assoc('fields', currentFormFields, selectedForm);
+    const currentFormPayload = {
+      id: formId,
+      createdAt: dateNow.toISOString(),
+      updatedAt: dateNow.toISOString(),
+      value: JSON.stringify(currentForm),
+    };
+
+    yield database.InsertForm(currentFormPayload);
+    //sync linked item
+    if (linkedTable && linkedTable !== '') {
+      const linkedItemName =
+        UpviseTablesMap[payload?.linkedTable.toLowerCase()];
+      const linkedItems = yield queryUpviseTable({
+        table: linkedItemName,
+        organisation,
+      });
+
+      if (linkedItems?.data) {
+        const {lastBuildDate, items} = linkedItems?.data;
+        const linkedItemsDBPayload = {
+          id: linkedItemName,
+          createdAt: lastBuildDate,
+          updatedAt: lastBuildDate,
+          value: JSON.stringify(items),
+        };
+
+        yield database.InsertLinkedItems(linkedItemsDBPayload);
+      }
+    }
+
+    //sync forms fields
+    let projectList = [];
+    for (const field of currentFormFields) {
+      const {seloptions, type} = field;
+
+      if (R.includes(type, selectType)) {
+        let isProjectDependant = false;
+        for (const project of projectDependant) {
+          if (R.includes(project, seloptions)) {
+            isProjectDependant = true;
+          }
+        }
+
+        const options = yield getQueryByOptions(
+          seloptions,
+          type,
+          organisation,
+          '',
+        );
+
+        if (type === 'project') {
+          projectList = [...options];
+        }
+
+        if (isProjectDependant) {
+          for (const project of projectList) {
+            const projectOptions = yield getQueryByOptions(
+              seloptions,
+              type,
+              organisation,
+              project.id,
+            );
+
+            if (projectOptions && projectOptions.length) {
+              const selectOptionsPayload = {
+                formId,
+                seloptions,
+                projectId: project.id,
+                type,
+                value: JSON.stringify(projectOptions),
+              };
+              database.InsertSelectOptions(selectOptionsPayload);
+            }
+          }
+        } else {
+          // const options = yield getQueryByOptions(
+          //   seloptions,
+          //   type,
+          //   organisation,
+          //   '',
+          // );
+
+          //storing project list to iterate for milestone and categorytools
+          if (options) {
+            const selectOptionsPayload = {
+              formId,
+              seloptions,
+              projectId: '',
+              type,
+              value: JSON.stringify(options),
+            };
+            database.InsertSelectOptions(selectOptionsPayload);
+          }
+        }
+      }
+    }
+
+    if (!multiple) {
+      if (dlFirst) {
+        yield saveAsDraft({
+          payload: {
+            offline: false,
+            status: submitSync || 'draft',
+          },
+        });
+      }
+
+      yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+      Toast.show('Form will be available offline.', Toast.LONG);
+      dismissActivityIndicator();
+    }
+  } catch (error) {
+    crashlytics().recordError(error);
+    const {multiple = false} = payload;
+    if (!multiple) {
+      dismissActivityIndicator();
+    }
+    console.log('error', error);
+  }
+}
+
+// function* loadFormFields({payload = {}}) {
+//   try {
+//     const {rank, value} = payload;
+//     const currentForm = yield select(selectCurrentForm);
+//     const updatedForm = R.adjust(
+//       rank - 1,
+//       (i) => R.assoc('value', value, i),
+//       currentForm.fields,
+//     );
+//     yield put({
+//       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
+//       payload: updatedForm,
+//     });
+//   } catch (error) {
+//     console.log('loginUser error', error);
+//   }
+// }
+
+function* loadOfflineForms() {
+  const offlineFormsString = yield database.getOfflineForms();
+  const offlineForms = R.map(
+    (form) => JSON.parse(form.value),
+    offlineFormsString,
+  );
+
+  yield put({
+    type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST,
+    payload: offlineForms,
+  });
+}
+
+function* loadOutbox() {
+  const outboxString = yield database.getAllFromOutbox();
+  const outboxItems = R.map(
+    (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+    outboxString,
+  );
+
+  yield put({
+    type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+    payload: outboxItems,
+  });
+}
+
+function* loadOutboxByStatus({payload}) {
+  try {
+    crashlytics().log('loadOutboxByStatus');
+    const outboxString = yield database.getOutboxFormsByStatus({
+      status: payload,
+    });
+    const outboxItems = R.map(
+      (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+      outboxString,
+    );
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+      payload: outboxItems,
+    });
+  } catch (error) {
+    crashlytics().recordError(error);
+    console.log('loadOutboxByStatus error', error);
+  }
+}
+
+function* filterOutboxBy({payload}) {
+  try {
+    const {orderBy, sortBy, status} = payload;
+
+    let order = '',
+      sortedBoxItems = [];
+    if (orderBy === 'updated') {
+      order = 'updatedAt';
+    } else if (orderBy === 'submitted') {
+      order = 'createdAt';
+    }
+
+    let outboxString;
+    if (status === 'all') {
+      outboxString = yield database.getAllFromOutbox();
+    } else {
+      outboxString = yield database.getOutboxFormsByStatus({
+        status,
+      });
+    }
+
+    const outboxItems = R.map(
+      (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+      outboxString,
+    );
+
+    if (sortBy === 'asc') {
+      const sortOrderBy = R.ascend(R.prop(order));
+      sortedBoxItems = R.sort(sortOrderBy, outboxItems);
+    } else {
+      const sortOrderBy = R.descend(R.prop(order));
+      sortedBoxItems = R.sort(sortOrderBy, outboxItems);
+    }
+
+    yield put({
+      type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
+      payload: sortedBoxItems,
+    });
+  } catch (error) {
+    console.log('filterOutboxBy error', error);
+  }
+}
+
+function* saveAsDraft({payload}) {
+  try {
+    crashlytics().log('saveAsDraft');
+    const dateNow = new Date();
+
+    const {offline, status, changeStatus = false, filterBy = 'all'} = payload;
+
+    let form = {};
+    if (offline) {
+      form = yield select(selectOfflineCurrentForm);
+    } else {
+      form = yield select(selectCurrentForm);
+    }
+    const {draftId = null, ...payloadForm} = form;
+    const dbPayload = {
+      id: draftId ? draftId : nanoid(),
+      createdAt: dateNow.toISOString(),
+      updatedAt: dateNow.toISOString(),
+      value: JSON.stringify(payloadForm),
+      status,
+    };
+
+    yield database.InsertToOutbox(dbPayload);
+    if (changeStatus) {
+      if (filterBy === 'all') {
+        yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+      } else {
+        yield put({
+          type: FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS,
+          payload: status === 'draft' ? 'pending' : 'draft',
+        });
+      }
+      yield Alert.alert('', 'Form status changed.');
+      return;
+    }
+
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+    yield put(activeScreen(''));
+
+    if (status === 'draft' && !changeStatus) {
+      yield Alert.alert('', 'Form saved as draft.');
+      Navigation.popToRoot(screens.FormScreen);
+    } else if (status === 'pending' && !changeStatus) {
+      yield Alert.alert('', 'Form saved as pending.');
+      Navigation.popToRoot(screens.FormScreen);
+    }
+  } catch (error) {
+    crashlytics().recordError(error);
+    yield Alert.alert('', 'Form not saved. Something went wrong!');
+    console.log('saveAsDraft error', error);
+  }
+}
+
+function* deleteOfflineForm({payload}) {
+  try {
+    crashlytics().log('deleteOfflineForm');
+    const formId = payload;
+    yield database.deleteFormById({formId: formId});
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+  } catch (error) {
+    crashlytics().recordError(error);
+    yield Alert.alert('', 'Error in deleting the offline form');
+    console.log('deleteOfflineForm error', error);
+  }
+}
+
+function* deleteOutboxForm({payload}) {
+  try {
+    crashlytics().log('deleteOutboxForm');
+    const {draftId, status} = payload;
+    yield database.deleteOutboxById({draftId: draftId});
+
+    if (status === 'all') {
+      yield put({type: FORM_SAGA_ACTIONS.LOAD_OUTBOX});
+      return;
+    }
+
+    yield loadOutboxByStatus(status);
+  } catch (error) {
+    crashlytics().recordError(error);
+    yield Alert.alert('', 'Error in deleting the outbox form');
+    console.log('deleteOutboxForm error', error);
+  }
+}
+
+function* offlineFormSync() {
+  try {
+    crashlytics().log('offlineFormSync');
+    // if there is no internet
+    const {isInternetReachable} = yield select(selectNetworkInfo);
+    if (!isInternetReachable) {
+      Alert.alert('', 'Unable to sync form. No current internet');
+      return;
+    }
+
+    const offlineForms = yield select(selectOfflineFormList);
+    const formCount = R.length(offlineForms);
+    const offlineFormsCopy = R.clone(offlineForms);
+
+    if (!formCount) {
+      Alert.alert('', 'No offline forms to be synced.');
+      return;
+    }
+
+    showActivityIndicator('Syncing offline forms');
+
+    yield database.deleteAllForms();
+    yield delay(3000);
+    yield all(
+      offlineFormsCopy.map((form) => {
+        return syncOfflineForm({
+          payload: {
+            linkedTable: form.linkedtable,
+            formId: form.id,
+            multiple: true,
+          },
+        });
+      }),
+    );
+
+    yield put({type: FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM});
+    dismissActivityIndicator();
+  } catch (error) {
+    crashlytics().recordError(error);
+    console.log('ERROR', error);
+    dismissActivityIndicator();
   }
 }
 
 export default all([
   takeLatest(FORM_SAGA_ACTIONS.WATCH_FORM_UPDATES, watchFormsTemplatesUpdates),
   takeLatest(FORM_ACTION.UPDATE_FORM_FIELD_VALUE, updateFormFieldValue),
+  takeLatest(
+    FORM_ACTION.UPDATE_OFFLINE_FORM_FIELD_VALUE,
+    updateOfflineFormFieldValue,
+  ),
   takeLatest(FORM_ACTION.PRE_SUBMIT_FORM, preSubmitForm),
+  takeLatest(FORM_ACTION.SYNC_OFFLINE_FORM, syncOfflineForm),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OFFLINE_FORM, loadOfflineForms),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX, loadOutbox),
+  takeLatest(FORM_SAGA_ACTIONS.LOAD_OUTBOX_BY_STATUS, loadOutboxByStatus),
+  takeLatest(FORM_SAGA_ACTIONS.FILTER_OUTBOX_BY, filterOutboxBy),
+  takeLatest(FORM_ACTION.SAVE_AS_DRAFT, saveAsDraft),
+  takeLatest(FORM_ACTION.DELETE_OFFLINE_FORM, deleteOfflineForm),
+  takeLatest(FORM_ACTION.DELETE_OUTBOX_FORM, deleteOutboxForm),
+  takeLatest(FORM_ACTION.OFFLINE_FORM_SYNC, offlineFormSync),
 ]);

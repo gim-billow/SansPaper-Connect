@@ -1,25 +1,32 @@
-import {StyleSheet} from 'react-native';
-import {spaceSmall, spaceRegular, spaceMedium} from 'styles/space';
-import {regular} from 'styles/font';
-import {lightRed, darkRed} from '@styles/colors';
+import {StyleSheet, Dimensions} from 'react-native';
+import {spaceRegular, spaceMedium} from 'styles/space';
+import {regular, questrial} from 'styles/font';
+import {lightRed, darkRed, white, red} from '@styles/colors';
+
+const width = Dimensions.get('screen').width;
 
 export default StyleSheet.create({
   topContainer: {
     marginVertical: spaceMedium,
   },
+  container: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    width: width / 2,
+  },
   date: {
-    marginHorizontal: spaceRegular,
+    fontSize: regular,
+    marginTop: spaceRegular,
   },
-  buttonColor: {
-    backgroundColor: 'white',
+  disableText: {
+    color: white,
   },
-  ChangeButtonColor: {
-    backgroundColor: darkRed,
+  disable: {
+    backgroundColor: red,
   },
-  TextColor: {
-    color: lightRed,
-  },
-  ChangeTextColor: {
-    color: 'white',
+  title: {
+    fontFamily: questrial,
+    letterSpacing: 0.5,
+    fontSize: regular,
   },
 });

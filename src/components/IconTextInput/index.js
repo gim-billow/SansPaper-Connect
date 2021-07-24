@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {lightGrey, darkGrey, red} from 'styles/colors';
+import {questrial} from 'styles/font';
 import {spaceRegular} from 'styles/space';
 import {Input} from 'react-native-elements';
 
@@ -26,6 +27,7 @@ const IconTextInput = ({secureTextEntry = false, ...props}) => {
             <Icon {...iconEyeProps} onPress={() => onPressIcon()} />
           ) : null
         }
+        selectionColor={darkGrey}
         autoCapitalize="none"
         secureTextEntry={secureTextEntry}
         inputContainerStyle={!error ? styles.inputContainer : styles.error}
@@ -45,17 +47,19 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 15,
     borderColor: lightGrey,
     paddingHorizontal: 10,
   },
   text: {
     paddingHorizontal: 5,
     color: darkGrey,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
   },
   error: {
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 15,
     borderColor: red,
     paddingHorizontal: 10,
   },
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
   },
   disable: {
     backgroundColor: lightGrey,
-    borderRadius: 10,
+    borderRadius: 15,
   },
 });
 

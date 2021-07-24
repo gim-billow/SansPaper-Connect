@@ -1,31 +1,63 @@
 import {StyleSheet} from 'react-native';
-import {spaceMedium} from 'styles/space';
-import {regular} from 'styles/font';
-import {darkGrey} from '@styles/colors';
+import {regular, questrial, medium} from 'styles/font';
+import {red, white} from '@styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   top: {
-    paddingVertical: 40,
-    paddingHorizontal: 10,
-    alignItems: 'center',
+    backgroundColor: red,
+    flexDirection: 'row',
+    // height: 170,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 23,
+    paddingBottom: 23,
+  },
+  topHeader: {
+    flex: 1,
+    marginLeft: 20,
+    justifyContent: 'center',
+  },
+  profileImg: {
+    borderRadius: 50,
+    width: 75,
+    height: 75,
+  },
+  profileLogo: {
+    width: 75,
+    height: 75,
+  },
+  loader: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 50,
+    width: 75,
+    height: 75,
+    left: 20,
+    top: 23,
+    zIndex: 100,
+  },
+  activityLoader: {
+    marginTop: 25,
   },
   name: {
-    fontSize: 25,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    fontSize: medium,
+    marginBottom: 5,
+    letterSpacing: 1,
+    color: white,
+    fontFamily: questrial,
   },
   subText: {
-    textAlign: 'center',
-    color: darkGrey,
-    fontSize: regular,
-    marginHorizontal: spaceMedium,
+    color: white,
+    fontSize: regular - 2,
+    fontFamily: questrial,
   },
   listContainer: {
     paddingHorizontal: 30,
+    justifyContent: 'center',
   },
   list: {
     paddingVertical: 20,
@@ -35,17 +67,24 @@ export default StyleSheet.create({
     marginRight: 10,
   },
   title: {
-    fontWeight: 'bold',
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    color: '#000',
   },
   description: {
-    fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+    paddingTop: 3,
   },
   updateText: {
+    fontFamily: questrial,
+    paddingVertical: 3,
     color: 'gray',
     fontSize: 10,
   },
   updateVersion: {
     color: 'green',
+    fontFamily: questrial,
   },
 
   // modal styles

@@ -1,6 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {lightGrey, lightRed, darkGrey, red, blue} from '@styles/colors';
-import {small} from '@styles/font';
+import {lightGrey, darkGrey, red, blue, white} from '@styles/colors';
+import {regular, questrial} from '@styles/font';
+import {medium} from '../../styles/font';
 
 const {width} = Dimensions.get('screen');
 
@@ -9,14 +10,19 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginBottom: 20,
+    backgroundColor: white,
   },
   new_submitBtn: {
     marginHorizontal: 30,
     marginTop: 10,
   },
   new_submitBtnStyle: {
-    paddingVertical: 10,
-    backgroundColor: lightRed,
+    paddingVertical: 15,
+    backgroundColor: red,
+    borderRadius: 15,
+  },
+  loginIcon: {
+    marginRight: 10,
   },
   divider: {
     marginVertical: 20,
@@ -29,9 +35,11 @@ export default StyleSheet.create({
     marginVertical: 20,
   },
   connectText: {
-    fontSize: small,
+    fontSize: regular,
     color: darkGrey,
     marginHorizontal: 10,
+    fontFamily: questrial,
+    letterSpacing: 0.5,
   },
   new_logo: {
     width: 200,
@@ -65,15 +73,23 @@ export default StyleSheet.create({
     marginLeft: 5,
     fontWeight: '400',
     color: darkGrey,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
+  },
+  loginText: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.5,
   },
   forgot: {
     alignSelf: 'center',
     backgroundColor: 'transparent',
-    // marginTop: 5,
     padding: 13,
   },
   forgotText: {
     color: darkGrey,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
   },
 
   /**
@@ -134,47 +150,60 @@ export default StyleSheet.create({
    */
   closeTxtOverlay: {
     color: '#fff',
+    fontFamily: questrial,
+    letterSpacing: 0.2,
   },
   closeBtnOverlay: {
     alignSelf: 'stretch',
     backgroundColor: red,
-    paddingVertical: 10,
+    paddingVertical: 15,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 20,
+    borderRadius: 15,
     marginHorizontal: 10,
   },
   iconSpace: {
     padding: 10,
   },
   overlayHeaderText: {
-    marginBottom: 20,
-    alignItems: 'center',
+    fontFamily: questrial,
+    fontSize: medium,
+    letterSpacing: 0.2,
   },
   overlaySubText: {
-    marginTop: 20,
+    marginTop: 10,
     textAlign: 'center',
     color: darkGrey,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
   },
   overlayHeader: {
     alignItems: 'center',
+    marginBottom: 15,
   },
   backdrop: {
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   overlay: {
-    borderRadius: 5,
+    borderRadius: 20,
     width: width - 50,
     padding: 20,
   },
+  overlayTitle: {
+    fontFamily: questrial,
+    fontSize: regular,
+    letterSpacing: 0.2,
+    paddingLeft: 5,
+  },
   inputContainer: {
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 15,
     borderColor: lightGrey,
     paddingHorizontal: 10,
   },
   error: {
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 15,
     borderColor: red,
     paddingHorizontal: 10,
   },

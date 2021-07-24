@@ -1,15 +1,21 @@
 import {StyleSheet} from 'react-native';
 
-import {red} from '@styles/colors';
-import {spaceRegular, superSmall} from 'styles/space';
-import {small} from '@styles/font';
+import {darkRed} from '@styles/colors';
+import {superSmall} from 'styles/space';
+import {small, questrial} from '@styles/font';
 
 export default StyleSheet.create({
+  topContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 3,
+  },
   text: {
     paddingVertical: superSmall,
-    paddingLeft: spaceRegular,
     fontSize: small,
-    textAlign: 'left',
-    color: red,
+    fontFamily: questrial,
+    color: darkRed,
   },
 });

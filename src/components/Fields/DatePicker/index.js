@@ -1,28 +1,37 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, memo, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import moment from 'moment';
-import {Button} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import {commonStyles} from '@styles/common';
 import MandatoryField from '../MandatoryField';
 
 const DatePicker = (props) => {
-  const {item, updateFieldsValue} = props;
-  const [label, setLabel] = useState('Select Date');
+  const {
+    item,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
+  const [label, setLabel] = useState('Select date');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [changeTheme, setChangeTheme] = useState(false);
 
   useEffect(() => {
-    const value = props.item.value;
-    if (value && value.includes('Date')) {
-      setLabel(moment().format('D/M/YYYY'));
+    let value = props.item.value.toString();
+    if (value) {
+      if (value.includes('Date')) {
+        setLabel(moment().format('D/M/YYYY'));
+      } else {
+        setLabel(moment(parseInt(value, 10)).format('D/M/YYYY'));
+      }
+
       setChangeTheme(true);
-      updateFieldsValue({rank: props.item.rank, value: Date.now()});
     }
   }, []);
 
@@ -43,6 +52,7 @@ const DatePicker = (props) => {
     setLabel(dateFormat);
     setChangeTheme(true);
     updateFieldsValue({rank: item.rank, value: date.getTime()});
+    if (draftId) draftFormHasChanges(true);
 
     hideDatePicker();
   };
@@ -57,9 +67,9 @@ const DatePicker = (props) => {
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{item.label}</Text>
+        <Text style={commonStyles.title}>{item.label}</Text>
         {item.mandatory === 1 ? (
           <MandatoryField />
         ) : (
@@ -67,22 +77,16 @@ const DatePicker = (props) => {
         )}
         <View style={styles.date}>
           <Button
-            onLongPress={cancel}
+            disabled={!isEditable}
+            disabledTitleStyle={styles.disableText}
+            disabledStyle={styles.disable}
+            title={label.toString()}
+            type={changeTheme ? 'solid' : 'outline'}
+            titleStyle={styles.title}
+            buttonStyle={styles.container}
             onPress={showDatePicker}
-            mode="contained"
-            style={[
-              styles.button,
-              changeTheme === true
-                ? styles.alternativeBtnStyle
-                : styles.defaultBtnStyle,
-            ]}>
-            <Text
-              style={
-                changeTheme === true ? styles.btnTxt : styles.alterBtnText
-              }>
-              {label.toString()}
-            </Text>
-          </Button>
+            onLongPress={cancel}
+          />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
@@ -91,8 +95,7 @@ const DatePicker = (props) => {
           />
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

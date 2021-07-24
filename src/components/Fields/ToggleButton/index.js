@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
@@ -10,7 +10,6 @@ import {red} from '@styles/colors';
 import {uniqueKey} from '@util/general';
 import MandatoryField from '../MandatoryField';
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 
 const _mapToColour = (id) => {
   if (id === '0') {
@@ -48,14 +47,15 @@ const _mapToColour = (id) => {
 
 const ToggleButton = (props) => {
   const [selected, setOption] = useState();
-  const {item, id, updateFieldsValue} = props;
+  const {
+    item,
+    id,
+    updateFieldsValue,
+    isEditable,
+    draftFormHasChanges,
+    draftId,
+  } = props;
   const {label, seloptions, rank, mandatory} = item;
-
-  const options = map((option) => {
-    return split(':', option)[1]
-      ? split(':', option)[1]
-      : split(':', option)[0];
-  }, split('|', seloptions));
 
   let dataOptions = map((option) => {
     return {
@@ -70,12 +70,12 @@ const ToggleButton = (props) => {
     return option === selected;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const {value} = props.item;
 
     if (value !== '' && value !== '-1') {
       const defaultVal = find(propEq('id', value))(dataOptions);
-      setOption(defaultVal.name);
+      setOption(defaultVal?.name);
       updateFieldsValue({rank: rank, value: value});
       return;
     }
@@ -88,13 +88,15 @@ const ToggleButton = (props) => {
       return item.name === option;
     });
     setOption(option);
+
+    if (draftId) draftFormHasChanges(true);
     updateFieldsValue({rank: rank, value: value[0].id});
   };
 
   return (
-    <ItemWrapper>
+    <>
       <View style={styles.topContainer}>
-        <Text style={commonStyles.text}>{label}</Text>
+        <Text style={commonStyles.title}>{label}</Text>
         {mandatory === 1 ? (
           <MandatoryField />
         ) : (
@@ -107,6 +109,7 @@ const ToggleButton = (props) => {
 
             return (
               <TouchableOpacity
+                disabled={!isEditable}
                 key={uniqueKey()}
                 style={[
                   colorControl.button,
@@ -166,8 +169,7 @@ const ToggleButton = (props) => {
           }, dataOptions)}
         </View>
       </View>
-      <Divider />
-    </ItemWrapper>
+    </>
   );
 };
 

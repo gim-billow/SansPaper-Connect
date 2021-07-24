@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {FORM_REDUCER_ACTIONS, FORM_ACTION} from './actions';
+import {FORM_REDUCER_ACTIONS} from './actions';
 
 const INIT_STATE = {
   currentFormId: '',
@@ -10,11 +10,26 @@ const INIT_STATE = {
   submitTriggered: 0,
   submittingForm: false,
   currentLinkedItems: [{}],
-  forms: {},
+  forms: [],
+  outbox: [],
+  sendingOutbox: false,
+  offlineCurrentFormId: '',
+  offlineForms: {},
+  offlineCurrentForm: {},
+  offlineCurrentLinkedItems: [{}],
+  offlineScrollToMandatory: null,
+  offlineSubmitTriggered: 0,
+  offlineSubmittingFrom: false,
+  draftFormHasChanges: false,
 };
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
+    case FORM_REDUCER_ACTIONS.UPDATE_SENDING_OUTBOX: {
+      return produce(state, (draftState) => {
+        draftState.currentFormId = action.payload;
+      });
+    }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_ID: {
       return produce(state, (draftState) => {
         draftState.currentFormId = action.payload;
@@ -25,6 +40,11 @@ export default (state = INIT_STATE, action) => {
         draftState.currentForm = action.payload;
       });
     }
+    case FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST: {
+      return produce(state, (draftState) => {
+        draftState.outbox = action.payload;
+      });
+    }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_LINKED_TABLE: {
       return produce(state, (draftState) => {
         draftState.currentLinkedItems = action.payload;
@@ -33,6 +53,31 @@ export default (state = INIT_STATE, action) => {
     case FORM_REDUCER_ACTIONS.UPDATE_FORM_LIST: {
       return produce(state, (draftState) => {
         draftState.forms = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_ID: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentFormId = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_FORM_LIST: {
+      return produce(state, (draftState) => {
+        draftState.offlineForms = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_LINKED_TABLE: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentLinkedItems = action.payload;
+      });
+    }
+    case FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM_FIELDS: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm.fields = action.payload;
       });
     }
     case FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS: {
@@ -55,9 +100,28 @@ export default (state = INIT_STATE, action) => {
         draftState.submittingForm = action.payload;
       });
     }
+    case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM: {
+      return produce(state, (draftState) => {
+        draftState.currentForm = {
+          fields: [],
+        };
+        draftState.currentFormId = '';
+      });
+    }
     case FORM_REDUCER_ACTIONS.RESET_CURRENT_FORM_DETAILS: {
       return produce(state, (draftState) => {
         draftState.currentForm.fields = [];
+      });
+    }
+    case FORM_REDUCER_ACTIONS.RESET_CURRENT_OFFLINE_FORM: {
+      return produce(state, (draftState) => {
+        draftState.offlineCurrentForm = {};
+        draftState.offlineCurrentFormId = '';
+      });
+    }
+    case FORM_REDUCER_ACTIONS.DRAFT_FORM_HAS_CHANGES: {
+      return produce(state, (draftState) => {
+        draftState.draftFormHasChanges = action.payload;
       });
     }
     default:

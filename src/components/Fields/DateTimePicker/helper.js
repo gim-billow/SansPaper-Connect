@@ -41,6 +41,7 @@ export const getTime = async () => {
 
 export const setDateTime = (date, time) => {
   const formattedDate = swapDateNum(date);
+
   const dateTime = `${formattedDate} ${time}`;
 
   return new Date(dateTime).getTime();

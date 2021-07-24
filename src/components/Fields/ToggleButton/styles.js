@@ -1,16 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {regular} from '@styles/font';
-import {spaceSmall, superSmall, spaceMedium} from '@styles/space';
-import {
-  red,
-  white,
-  veryLightRed,
-  lightGrey,
-  orange,
-  lightGreen,
-  lightOrange,
-  darkGrey,
-} from '@styles/colors';
+import {regular, questrial} from '@styles/font';
+import {spaceSmall, superSmall, spaceMedium, spaceRegular} from '@styles/space';
+import {red, white, lightGrey, darkGrey} from '@styles/colors';
 
 export default StyleSheet.create({
   btn: {
@@ -23,24 +14,27 @@ export default StyleSheet.create({
     marginVertical: spaceMedium,
   },
   container: {
-    marginHorizontal: spaceSmall + 4,
     flexDirection: 'row',
-    justifyContent: 'center',
+    marginTop: spaceRegular,
     flexWrap: 'wrap',
   },
   text: {
     fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
     paddingVertical: spaceSmall,
     paddingLeft: superSmall,
   },
   selectedText: {
     fontSize: regular,
+    fontFamily: questrial,
+    letterSpacing: 0.2,
     paddingVertical: spaceSmall,
   },
   redButton: {
     borderWidth: 1,
     flexBasis: 150,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
@@ -49,7 +43,7 @@ export default StyleSheet.create({
   greenButton: {
     borderWidth: 1,
     flexBasis: 150,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
@@ -58,7 +52,7 @@ export default StyleSheet.create({
   orangeButton: {
     borderWidth: 1,
     flexBasis: 150,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
@@ -67,7 +61,7 @@ export default StyleSheet.create({
   blueButton: {
     borderWidth: 1,
     flexBasis: 150,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: lightGrey,
     justifyContent: 'center',
     alignItems: 'center',
