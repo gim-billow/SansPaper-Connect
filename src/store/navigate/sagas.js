@@ -277,16 +277,24 @@ function* goToFormFieldsScreen({payload = {}}) {
     const upviseTemplatePath = yield select(selectUpviseTemplatePath);
     const currentFormInfo = yield select(selectFormByCurrentId);
     const currentLinkedItems = yield select(selectCurrentLinkedItems);
-
     const fieldsPath = `${upviseTemplatePath}/${currentFormId}/upviseFields`;
     const currentFormFields = yield getFormFields({fieldsPath});
     let currentForm = {};
+
     if (linkedItemId && linkedItemId !== '') {
-      const currentLinkedItem = R.find(R.propEq('id', linkedItemId[0]))(
+      let itemId;
+
+      if (Array.isArray(linkedItemId)) {
+        itemId = linkedItemId[0];
+      } else {
+        itemId = linkedItemId;
+      }
+
+      const currentLinkedItem = R.find(R.propEq('id', itemId))(
         currentLinkedItems,
       );
 
-      let updatedFormInfo = R.assoc('linkedid', linkedItemId, currentFormInfo);
+      let updatedFormInfo = R.assoc('linkedid', itemId, currentFormInfo);
       updatedFormInfo = R.assoc(
         'linkedItemName',
         currentLinkedItem.name,
