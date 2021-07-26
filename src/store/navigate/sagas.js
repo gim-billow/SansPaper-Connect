@@ -162,7 +162,8 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
     }
 
     if (linkedItemId) {
-      let linkedId = null;
+      let linkedId = null,
+        updatedCurrentForm;
 
       if (Array.isArray(linkedItemId)) {
         linkedId = linkedItemId[0];
@@ -171,19 +172,29 @@ function* goToOfflineFormFieldsScreen({payload = {}}) {
         const currentLinkedItem = R.find(R.propEq('id', linkedItemId[0]))(
           currentLinkedItems,
         );
-        const updatedCurrentForm = R.assoc(
+        updatedCurrentForm = R.assoc(
           'linkedItemName',
           currentLinkedItem.name,
           currentForm,
         );
-
-        yield put({
-          type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
-          payload: updatedCurrentForm,
-        });
       } else {
         linkedId = linkedItemId;
+
+        currentForm = R.assoc('linkedid', linkedItemId, offlineCurrentForm);
+        const currentLinkedItem = R.find(R.propEq('id', linkedItemId))(
+          currentLinkedItems,
+        );
+        updatedCurrentForm = R.assoc(
+          'linkedItemName',
+          currentLinkedItem.name,
+          currentForm,
+        );
       }
+
+      yield put({
+        type: FORM_REDUCER_ACTIONS.UPDATE_OFFLINE_CURRENT_FORM,
+        payload: updatedCurrentForm,
+      });
 
       title = name;
       subForm = R.find(R.propEq('id', linkedId))(currentLinkedItems);
