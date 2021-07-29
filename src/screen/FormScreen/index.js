@@ -1,12 +1,5 @@
-//library
 import React from 'react';
-// import produce from 'immer';
-import {
-  // Dimensions,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View} from 'react-native';
 // import {TabView, TabBar} from 'react-native-tab-view';
 import analytics from '@react-native-firebase/analytics';
 import {SearchBar} from 'react-native-elements';
@@ -24,8 +17,6 @@ import {searchBarStyle} from '@styles/common';
 import {activeScreen} from '@store/common';
 import {selectSortedFormList, selectOfflineFormList} from '@selector/form';
 import {selectNetworkInfo} from '@selector/common';
-
-// const width = Dimensions.get('window').width;
 class FormScreen extends NavigationComponent {
   constructor(props) {
     super(props);

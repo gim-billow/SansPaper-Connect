@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';

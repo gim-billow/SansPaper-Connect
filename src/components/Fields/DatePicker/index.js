@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, memo, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Toast from 'react-native-simple-toast';
@@ -27,10 +26,10 @@ const DatePicker = (props) => {
     if (value) {
       if (value.includes('Date')) {
         setLabel(moment().format('D/M/YYYY'));
+        updateFieldsValue({rank: item.rank, value: new Date().getTime()});
       } else {
         setLabel(moment(parseInt(value, 10)).format('D/M/YYYY'));
       }
-
       setChangeTheme(true);
     }
   }, []);

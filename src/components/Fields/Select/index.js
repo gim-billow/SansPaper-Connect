@@ -167,7 +167,9 @@ class Select extends PureComponent {
     if (draftId) draftFormHasChanges(true);
     updateFieldsValue({
       rank: item.rank,
-      value: item.type === 'selectmulti' ? value : selectedItems[0],
+      // value: item.type === 'selectmulti' ? value : selectedItems[0],
+      value:
+        item.type === 'selectmulti' ? value : 'BF8B8AF2C492D5A3806AFD974DC5FA',
     });
   };
 

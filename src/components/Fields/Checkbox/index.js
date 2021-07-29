@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import CheckB from '@react-native-community/checkbox';

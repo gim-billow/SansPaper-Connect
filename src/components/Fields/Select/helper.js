@@ -16,40 +16,6 @@ const getQueryOptions = async (seloptions, organization) => {
   );
 };
 
-// TODO:
-const getProjectMilestonesOptions = async (organization, project) => {
-  // const startOfQuery = project.indexOf('Query.options');
-  // const startOfQuery = (x) => {
-  //   const index = x.indexOf('Query.options');
-  //   return x.substring(index, x.length - 1);
-  // };
-  // const endOfQuery = (y) => {
-  //   const idx = y.indexOf(';');
-  //   return y.substring(0, idx);
-  // };
-
-  // const getQueryForMilestone = pipe(startOfQuery, endOfQuery)(project);
-  // const getMilestoneTable = getQueryForMilestone
-  //   .replace('Query.options(', '')
-  //   .replace(/'/g, '');
-  // const finalTable = getMilestoneTable.split(',')[0];
-
-  const queryHandle = project.split(',');
-
-  const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
-  const query = queryHandle[1]
-    .replace(')', '')
-    .replace(/"/g, '')
-    .replace(/'/g, '"')
-    .trim();
-
-  const queriedOptions = await getOptions(table, query, organization);
-  return map(
-    (options) => pick(['id', 'name'], options),
-    queriedOptions?.data?.items,
-  );
-};
-
 const getProjectOptions = async (organization, project) => {
   const queryHandle = project.split(',');
   const table = queryHandle[0].replace('=Query.options(', '').replace(/'/g, '');
@@ -176,7 +142,6 @@ export const getQueryByOptions = async (
       } else if (seloptions.includes('tools.tools')) {
         return getToolsOptions(organization, seloptions);
       } else if (seloptions.includes('projects.milestones')) {
-        // return getProjectMilestonesOptions(organization, seloptions);
         return getMilestoneOptions(organization, projectValue);
       } else if (seloptions.includes('projects.projects')) {
         return getProjectOptions(organization, seloptions);
