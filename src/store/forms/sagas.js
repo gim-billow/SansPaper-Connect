@@ -634,10 +634,14 @@ function* loadOfflineForms() {
 
 function* loadOutbox() {
   const outboxString = yield database.getAllFromOutbox();
-  const outboxItems = R.map(
-    (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
-    outboxString,
+  const outboxItems = R.reverse(
+    R.map(
+      (outbox) => ({...outbox, value: JSON.parse(outbox.value)}),
+      outboxString,
+    ),
   );
+
+  console.log(outboxItems);
 
   yield put({
     type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
