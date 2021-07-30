@@ -338,7 +338,12 @@ class Outbox extends React.Component {
             />
           </View>
           <View style={styles.filterView}>
-            <View style={{flexDirection: 'row', paddingLeft: 20}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingLeft: 20,
+                alignItems: 'center',
+              }}>
               <TouchableHighlight
                 underlayColor="transparent"
                 onPress={this.onFilterOutboxList}>
@@ -355,7 +360,12 @@ class Outbox extends React.Component {
                 underlayColor="transparent"
                 onPress={this.onOrderFormBy}>
                 <View style={styles.filter}>
-                  <Icon type="font-awesome" name="sort" color={white} />
+                  <Icon
+                    type="font-awesome"
+                    name="sort"
+                    color={white}
+                    size={20}
+                  />
                   <Text style={styles.filterText}>{orderBy}</Text>
                 </View>
               </TouchableHighlight>
@@ -366,6 +376,7 @@ class Outbox extends React.Component {
                   <Icon
                     type="font-awesome"
                     name={`sort-alpha-${sortBy}`}
+                    size={18}
                     color={white}
                   />
                   <Text style={styles.filterText}>{sortBy}</Text>
@@ -416,7 +427,12 @@ class Outbox extends React.Component {
           />
         </View>
         <View style={styles.filterView}>
-          <View style={{flexDirection: 'row', paddingLeft: 20}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingLeft: 20,
+              alignItems: 'center',
+            }}>
             <TouchableHighlight
               underlayColor="transparent"
               onPress={this.onFilterOutboxList}>
@@ -433,7 +449,7 @@ class Outbox extends React.Component {
               underlayColor="transparent"
               onPress={this.onOrderFormBy}>
               <View style={styles.filter}>
-                <Icon type="font-awesome" name="sort" color={white} />
+                <Icon type="font-awesome" name="sort" color={white} size={20} />
                 <Text style={styles.filterText}>{orderBy}</Text>
               </View>
             </TouchableHighlight>
@@ -444,6 +460,7 @@ class Outbox extends React.Component {
                 <Icon
                   type="font-awesome"
                   name={`sort-alpha-${sortBy}`}
+                  size={18}
                   color={white}
                 />
                 <Text style={styles.filterText}>{sortBy}</Text>

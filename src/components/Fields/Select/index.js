@@ -64,7 +64,6 @@ class Select extends PureComponent {
         projectValue,
       );
     }
-
     this.updateSetOptions(options, selected);
   }
 
@@ -126,16 +125,26 @@ class Select extends PureComponent {
   };
 
   updateSetOptions = (options, value) => {
+    const {item} = this.props;
     const filteredOptions = R.pipe(
       R.sortBy(R.compose(R.toLower, R.prop('name'))),
       R.filter((option) => !R.isNil(option)),
     )(options);
 
-    this.setState({selOptions: [...filteredOptions], options: value});
+    let foundUser = null;
+    if (item.type === 'user') {
+      foundUser = R.find(R.propEq('name', value[0]))(filteredOptions);
+    }
+
+    this.setState({
+      selOptions: [...filteredOptions],
+      options: foundUser ? [foundUser.id] : value,
+    });
   };
 
   onSelectedItemsChange = (selectedItems) => {
     const {item, updateFieldsValue, draftFormHasChanges, draftId} = this.props;
+    const {selOptions} = this.state;
     let value = '';
 
     // if single, remove the selected option
@@ -165,6 +174,18 @@ class Select extends PureComponent {
     this.setState({options: R.filter((x) => x !== '', selectedItems)});
 
     if (draftId) draftFormHasChanges(true);
+
+    if (item.type === 'user') {
+      const user = R.find(R.propEq('id', selectedItems[0]))(selOptions);
+
+      updateFieldsValue({
+        rank: item.rank,
+        value: user.name,
+      });
+
+      return;
+    }
+
     updateFieldsValue({
       rank: item.rank,
       value: item.type === 'selectmulti' ? value : selectedItems[0],

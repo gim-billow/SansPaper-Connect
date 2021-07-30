@@ -24,9 +24,7 @@ import {
 import {goToOfflineFormFieldsScreen} from '@store/navigate';
 import {screens} from '@constant/ScreenConstants';
 import styles from './styles';
-import ItemWrapper from '@components/Fields/ItemWrapper';
 import R from 'ramda';
-import {commonStyles} from '@styles/common';
 
 class OfflineLinkedItemsList extends React.Component {
   state = {

@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Divider} from 'react-native-elements';
 import {Text, View, Image as RNImage} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import styles from './styles';
-import ItemWrapper from '../ItemWrapper';
 import {commonStyles} from '@styles/common';
 
 const Image = (props) => {

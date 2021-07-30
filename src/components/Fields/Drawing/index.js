@@ -3,7 +3,6 @@ import {View, Text, Platform, Image as RNImage} from 'react-native';
 import {SketchCanvas} from '@terrylinla/react-native-sketch-canvas';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Button} from 'react-native-elements';
-// import {Button} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 

@@ -1,14 +1,8 @@
 import {StyleSheet} from 'react-native';
+
 import {spaceSmall, superSmall, spaceMedium, spaceRegular} from '@styles/space';
 import {questrial, regular} from '@styles/font';
-import {
-  lightRed,
-  darkRed,
-  white,
-  superLightRed,
-  red,
-  lightGrey,
-} from '@styles/colors';
+import {white, red, lightGrey} from '@styles/colors';
 
 export default StyleSheet.create({
   dimmedSingature: {

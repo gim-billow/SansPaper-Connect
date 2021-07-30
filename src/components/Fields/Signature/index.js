@@ -85,10 +85,14 @@ const Signature = (props) => {
   };
 
   const iosStyle = `
+    html, body {
+      height: 200px;
+    }
+
     .m-signature-pad {
-      position: absolute;
       border: none;
       box-shadow: none;
+      margin: 0px;
     }
 
     .m-signature-pad--body {
@@ -99,8 +103,12 @@ const Signature = (props) => {
       border: 1.5px dashed #bfbfbf;
       box-shadow: none;
     }
-  `;
 
+    .m-signature-pad--footer {
+      margin: 0px !important;
+      display: none;
+    }
+  `;
   return (
     <>
       <View style={styles.topContainer}>

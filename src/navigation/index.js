@@ -1,5 +1,7 @@
 import {Navigation} from 'react-native-navigation';
 
+import Octicons from 'react-native-vector-icons/Octicons';
+
 import {screens} from '@constant/ScreenConstants';
 import {red, white, darkGrey} from '@styles/colors';
 import {regular, questrial} from '@styles/font';
@@ -72,10 +74,16 @@ export const showLoginScreen = () => {
 };
 
 export const showMainScreen = async () => {
-  const bookOpenIcon = require('../assets/book.png');
-  const clipboardIcon = require('../assets/form.png');
-  const userIcon = require('../assets/profile.png');
-  const outboxIcon = require('../assets/outbox.png');
+  // const bookOpenIcon = require('../assets/book.png');
+  // const clipboardIcon = require('../assets/form.png');
+  // const userIcon = require('../assets/profile.png');
+  // const outboxIcon = require('../assets/outbox.png');
+
+  // vector icon source
+  const vectorBookIcon = await Octicons.getImageSource('book', 25);
+  const vectorFormIcon = await Octicons.getImageSource('clippy', 25);
+  const vectorOutboxIcon = await Octicons.getImageSource('inbox', 25);
+  const vectorUserIcon = await Octicons.getImageSource('organization', 25);
 
   return Navigation.setRoot({
     root: {
@@ -110,11 +118,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'BOK',
-                  icon: bookOpenIcon,
+                  text: 'BoK',
+                  icon: vectorBookIcon,
                   iconColor: darkGrey,
                   fontFamily: questrial,
-                  selectedIcon: bookOpenIcon,
+                  selectedIcon: vectorBookIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -157,11 +165,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'FORM',
+                  text: 'Form',
                   fontFamily: questrial,
-                  icon: clipboardIcon,
+                  icon: vectorFormIcon,
                   iconColor: darkGrey,
-                  selectedIcon: clipboardIcon,
+                  selectedIcon: vectorFormIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -196,11 +204,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'OUTBOX',
+                  text: 'Outbox',
                   fontFamily: questrial,
                   iconColor: darkGrey,
-                  icon: outboxIcon,
-                  selectedIcon: outboxIcon,
+                  icon: vectorOutboxIcon,
+                  selectedIcon: vectorOutboxIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },
@@ -238,11 +246,11 @@ export const showMainScreen = async () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'PROFILE',
+                  text: 'Profile',
                   fontFamily: questrial,
                   iconColor: darkGrey,
-                  icon: userIcon,
-                  selectedIcon: userIcon,
+                  icon: vectorUserIcon,
+                  selectedIcon: vectorUserIcon,
                   selectedIconColor: red,
                   selectedTextColor: red,
                 },

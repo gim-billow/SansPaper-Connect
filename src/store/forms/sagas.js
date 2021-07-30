@@ -19,16 +19,6 @@ import Toast from 'react-native-simple-toast';
 import {Navigation} from 'react-native-navigation';
 import {firebase} from '@react-native-firebase/firestore';
 import crashlytics from '@react-native-firebase/crashlytics';
-// import {
-//   assoc,
-//   map,
-//   adjust,
-//   find,
-//   propEq,
-//   forEach,
-//   includes,
-//   findIndex,
-// } from 'ramda';
 import * as R from 'ramda';
 import {eventChannel} from 'redux-saga';
 import Geolocation from 'react-native-geolocation-service';
@@ -65,6 +55,7 @@ import {
   selectOrganistation,
   selectUpviseTemplatePath,
 } from '@selector/sanspaper';
+import {selectEmail} from '@selector/user';
 import {selectNetworkInfo, selectActiveScreen} from '@selector/common';
 import {showActivityIndicator, dismissActivityIndicator} from 'navigation';
 import {selectType, projectDependant} from './contants';
@@ -285,6 +276,7 @@ function* preSubmitForm({payload}) {
     // if there is no internet
     const {isInternetReachable} = yield select(selectNetworkInfo);
     const screen = yield select(selectActiveScreen);
+
     if (!isInternetReachable) {
       dismissActivityIndicator();
       Alert.alert(
@@ -333,8 +325,10 @@ function* preSubmitForm({payload}) {
         newField.value = field.value.newValue || '';
         field = {...newField};
       }
+
       return field;
     });
+
     form.fields = newFields;
 
     let dateTimeError = '';
@@ -441,8 +435,6 @@ function* preSubmitForm({payload}) {
         });
       }
     }
-
-    // dismissActivityIndicator();
   } catch (error) {
     crashlytics().recordError(error);
     // save to draft if submit failed
@@ -609,24 +601,6 @@ function* syncOfflineForm({payload = {}}) {
   }
 }
 
-// function* loadFormFields({payload = {}}) {
-//   try {
-//     const {rank, value} = payload;
-//     const currentForm = yield select(selectCurrentForm);
-//     const updatedForm = R.adjust(
-//       rank - 1,
-//       (i) => R.assoc('value', value, i),
-//       currentForm.fields,
-//     );
-//     yield put({
-//       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
-//       payload: updatedForm,
-//     });
-//   } catch (error) {
-//     console.log('loginUser error', error);
-//   }
-// }
-
 function* loadOfflineForms() {
   const offlineFormsString = yield database.getOfflineForms();
   const offlineForms = R.map(
@@ -648,8 +622,6 @@ function* loadOutbox() {
       outboxString,
     ),
   );
-
-  console.log(outboxItems);
 
   yield put({
     type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
