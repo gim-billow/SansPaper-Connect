@@ -601,24 +601,6 @@ function* syncOfflineForm({payload = {}}) {
   }
 }
 
-// function* loadFormFields({payload = {}}) {
-//   try {
-//     const {rank, value} = payload;
-//     const currentForm = yield select(selectCurrentForm);
-//     const updatedForm = R.adjust(
-//       rank - 1,
-//       (i) => R.assoc('value', value, i),
-//       currentForm.fields,
-//     );
-//     yield put({
-//       type: FORM_REDUCER_ACTIONS.UPDATE_CURRENT_FORM_FIELDS,
-//       payload: updatedForm,
-//     });
-//   } catch (error) {
-//     console.log('loginUser error', error);
-//   }
-// }
-
 function* loadOfflineForms() {
   const offlineFormsString = yield database.getOfflineForms();
   const offlineForms = R.map(
@@ -640,8 +622,6 @@ function* loadOutbox() {
       outboxString,
     ),
   );
-
-  console.log(outboxItems);
 
   yield put({
     type: FORM_REDUCER_ACTIONS.UPDATE_OUTBOX_LIST,
