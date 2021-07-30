@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import {connectActionSheet} from '@expo/react-native-action-sheet';
 import memoize from 'memoize-one';
-import {filter, includes, findIndex, reverse} from 'ramda';
+import {filter, includes, findIndex} from 'ramda';
 import {Icon, Card, SearchBar} from 'react-native-elements';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
@@ -140,15 +140,13 @@ class Outbox extends React.Component {
   keyExtractor = (item, index) => index?.toString();
 
   getFilteredFormlist = memoize((outbox, searchKeyword) => {
-    return reverse(
-      filter(
-        (item) =>
-          includes(
-            searchKeyword?.toLowerCase(),
-            item?.value?.name?.toLowerCase(),
-          ),
-        outbox,
-      ),
+    return filter(
+      (item) =>
+        includes(
+          searchKeyword?.toLowerCase(),
+          item?.value?.name?.toLowerCase(),
+        ),
+      outbox,
     );
   });
 
