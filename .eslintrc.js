@@ -7,5 +7,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     curly: 0,
     'no-shadow': 0,
+    'no-unused-vars': 1,
   },
 };
