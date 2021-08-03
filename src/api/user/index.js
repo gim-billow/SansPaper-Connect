@@ -336,15 +336,32 @@ export const getUserDoc = async (userEmail) => {
 
 export const addDevice = async (userEmail, deviceUniqueId) => {
   try {
-    const docSnapshot = await firebase
+    await firebase
       .firestore()
       .collection('sanspaperid')
       .doc(userEmail)
       .update({
         devices: firebase.firestore.FieldValue.arrayUnion(deviceUniqueId),
       });
+    return;
+  } catch (error) {
+    console.warn('Error getUserDoc', error);
+  }
+};
 
-    return docSnapshot;
+export const removeDevice = async (userEmail, deviceUniqueId) => {
+  console.log(userEmail);
+  console.log(deviceUniqueId);
+  try {
+    await firebase
+      .firestore()
+      .collection('sanspaperid')
+      .doc(userEmail)
+      .update({
+        devices: firebase.firestore.FieldValue.arrayRemove(deviceUniqueId),
+      });
+
+    return;
   } catch (error) {
     console.warn('Error getUserDoc', error);
   }

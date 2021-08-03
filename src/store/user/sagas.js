@@ -12,6 +12,8 @@ import {
 } from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 import crashlytics from '@react-native-firebase/crashlytics';
+import {getUniqueId} from 'react-native-device-info';
+
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
 
@@ -48,7 +50,7 @@ import {
   dismissActivityIndicator,
   updateProfileLoadingScreen,
 } from 'navigation';
-import {selectSaveUser, selectUID} from '@selector/user';
+import {selectSaveUser, selectUID, selectEmail} from '@selector/user';
 import {selectUser} from '@selector/sanspaper';
 import {selectNetworkInfo} from '@selector/common';
 import {firebase} from '@react-native-firebase/firestore';
@@ -57,6 +59,7 @@ import {
   updateChangePass,
   clearStorageUserId,
 } from '@api/upvise';
+import {removeDevice} from '../../api/user';
 
 function* loginUser({payload}) {
   try {
@@ -165,8 +168,9 @@ function* logoutUser({payload}) {
     crashlytics().log('logoutUser');
     showActivityIndicator();
     const {email, uid, status, loginCode} = payload;
-
+    const userEmail = yield select(selectEmail);
     // set changepass back to false
+
     yield updateChangePass();
 
     yield put({
@@ -192,6 +196,7 @@ function* logoutUser({payload}) {
     //   yield auth().signOut();
     // }
 
+    yield removeDevice(userEmail, getUniqueId());
     yield logout();
   } catch (e) {
     crashlytics().recordError(e);

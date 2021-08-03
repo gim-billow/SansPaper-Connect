@@ -169,7 +169,7 @@ class LoginScreen extends React.Component {
 
   isLoginLimit = async (username) => {
     const result = await getUserDoc(username);
-    return result._data.devices.length > 2 ? true : false;
+    return result._data.devices.length > 1 ? true : false;
   };
 
   onUserNameChange = (username) => {
