@@ -14,7 +14,7 @@ import {firebase} from '@react-native-firebase/firestore';
 import crashlytics from '@react-native-firebase/crashlytics';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import moment from 'moment-timezone';
-
+import {getUniqueId} from 'react-native-device-info';
 import {COMMON_ACTIONS, COMMON_REDUCER_ACTIONS} from './actions';
 import {getOrgNews} from '@api/common';
 import {showMainScreen} from '@navigation';
@@ -40,6 +40,7 @@ import {
   updateProfileLoadingScreen,
 } from '../../navigation';
 import {getExtension} from '@util/string';
+import {addDevice} from '../../api/user';
 
 function subscribeAppStateChannel() {
   return eventChannel((emmiter) => {
@@ -58,6 +59,10 @@ function subscribeNetworkStateChannel() {
 function* init({payload}) {
   try {
     crashlytics().log('Initialize');
+
+    //add device
+    yield addDevice(payload.email, getUniqueId());
+
     //init DB
     yield DB.openDBConnection();
     yield database.CreateTable();

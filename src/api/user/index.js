@@ -333,3 +333,19 @@ export const getUserDoc = async (userEmail) => {
     console.warn('Error getUserDoc', error);
   }
 };
+
+export const addDevice = async (userEmail, deviceUniqueId) => {
+  try {
+    const docSnapshot = await firebase
+      .firestore()
+      .collection('sanspaperid')
+      .doc(userEmail)
+      .update({
+        devices: firebase.firestore.FieldValue.arrayUnion(deviceUniqueId),
+      });
+
+    return docSnapshot;
+  } catch (error) {
+    console.warn('Error getUserDoc', error);
+  }
+};
