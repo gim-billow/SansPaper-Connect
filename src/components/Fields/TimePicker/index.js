@@ -27,6 +27,7 @@ const TimePicker = (props) => {
     if (value) {
       if (value.includes('Date')) {
         setLabel(moment().format('h:mm a'));
+        updateFieldsValue({rank: item.rank, value: new Date().getTime()});
       } else {
         setLabel(moment(parseInt(value, 10)).format('h:mm a'));
       }

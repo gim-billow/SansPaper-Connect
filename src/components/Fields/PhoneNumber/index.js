@@ -40,8 +40,8 @@ const PhoneNumber = (props) => {
         )}
         <View style={styles.container}>
           <View style={styles.content}>
+            {!isEditable && <View style={styles.disablePhoneNum} />}
             <PhoneInput
-              disabled={!isEditable}
               ref={phoneInput}
               containerStyle={styles.phoneContainer}
               textContainerStyle={styles.phoneTextContainer}
