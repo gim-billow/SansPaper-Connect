@@ -54,6 +54,8 @@ import {init} from '@store/common';
 import {screens} from '@constant/ScreenConstants';
 import {readUserEmail} from '@api/user';
 import {darkGrey} from '../../styles/colors';
+import {getUserDoc} from '../../api/user';
+import {Alert} from 'react-native';
 
 const forgotEmailSchema = yup.object().shape({
   forgotPassEmail: yup.string().required().email(),
@@ -165,6 +167,11 @@ class LoginScreen extends React.Component {
     }
   };
 
+  isLoginLimit = async (username) => {
+    const result = await getUserDoc(username);
+    return result._data.devices.length > 2 ? true : false;
+  };
+
   onUserNameChange = (username) => {
     this.setState({username});
   };
@@ -191,7 +198,13 @@ class LoginScreen extends React.Component {
       this.setState({errorPass: '', errorUser: ''});
     }
 
+    if (await this.isLoginLimit(username)) {
+      Alert.alert('Login Limit');
+      return;
+    }
+
     const payload = {username, password};
+
     try {
       await loginSchema.validate(payload);
       Keyboard.dismiss();

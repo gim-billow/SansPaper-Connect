@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import auth from '@react-native-firebase/auth';
 import {firebase} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -316,5 +317,19 @@ export const getSanspaperIdSubscriptionFeature = async (userEmail) => {
     return docSnapshot;
   } catch (error) {
     console.warn('Error getSanspaperIdSubscriptionFeature', error);
+  }
+};
+
+export const getUserDoc = async (userEmail) => {
+  try {
+    const docSnapshot = await firebase
+      .firestore()
+      .collection('sanspaperid')
+      .doc(userEmail)
+      .get();
+
+    return docSnapshot;
+  } catch (error) {
+    console.warn('Error getUserDoc', error);
   }
 };
