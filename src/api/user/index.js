@@ -350,8 +350,6 @@ export const addDevice = async (userEmail, deviceUniqueId) => {
 };
 
 export const removeDevice = async (userEmail, deviceUniqueId) => {
-  console.log(userEmail);
-  console.log(deviceUniqueId);
   try {
     await firebase
       .firestore()
@@ -362,6 +360,20 @@ export const removeDevice = async (userEmail, deviceUniqueId) => {
       });
 
     return;
+  } catch (error) {
+    console.warn('Error getUserDoc', error);
+  }
+};
+
+export const getLimitUserDevice = async (userEmail, deviceUniqueId) => {
+  try {
+    const docSnapShot = await firebase
+      .firestore()
+      .collection('sanspaperbeta')
+      .doc('limitUserDevice')
+      .get();
+
+    return docSnapShot;
   } catch (error) {
     console.warn('Error getUserDoc', error);
   }
